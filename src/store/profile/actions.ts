@@ -33,8 +33,17 @@ export function profileThunkFetch(userString: string, gamemode: number): ThunkAc
 
         try {
             // cant do in parallel just yet, as the profile call updates the user stats and will change the scores
-            const profileResponse = await axios.get(`/api/profiles/${userString}/stats/${gamemode}`);
-            const scoresResponse = await axios.get(`/api/profiles/${userString}/scores/${gamemode}`);
+            const profileResponse = await axios.get(`/api/profiles/stats/${userString}/${gamemode}`, {
+                params: {
+                    "user_id_type": "username"
+                }
+            });
+            const scoresResponse = await axios.get(`/api/profiles/scores`, {
+                params: {
+                    "user_id": profileResponse.data["user"]["id"],
+                    "gamemode": gamemode
+                }
+            });
             
             const profileData: ProfileData = {
                 userData: {
