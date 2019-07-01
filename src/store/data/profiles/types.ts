@@ -1,11 +1,17 @@
 import { Action } from "redux";
 
-import { UserData } from "../me/types";
-
 // Models
 
-export interface ProfileData {
-    userData: UserData;
+export interface OsuUser {
+    id: number;
+    username: string;
+    country: string;
+    joinDate: Date;
+}
+
+export interface UserStats {
+    id: number;
+    osuUserId: number;
     gamemode: number;
     playcount: number;
     playtime: number;
@@ -46,7 +52,8 @@ export interface Beatmap {
 }
 
 export interface Score {
-    beatmap: Beatmap;
+    id: number;
+    beatmapId: number;
     score: number;
     count300: number;
     count100: number;
@@ -72,32 +79,40 @@ export interface Score {
 
 // State
 
-export interface ProfileState {
-    profileData: ProfileData | null;
-    scores: Score[];
-    isFetching: boolean;
+export interface ProfilesState {
+    osuUsers: { [id: number]: OsuUser };
+    userStats: { [id: number]: UserStats };
+    beatmaps: { [id: number]: Beatmap };
+    scores: { [id: number]: Score };
 }
 
 // Actions
 
-export enum ProfileActionType {
-    Request = "PROFILE_REQUEST",
-    Success = "PROFILE_SUCCESS",
-    Failure = "PROFILE_FAILURE"
+export enum ProfilesActionType {
+    AddOsuUsers = "ADD_OSUSUSERS",
+    AddUserStats = "ADD_USERSTATS",
+    AddBeatmaps = "ADD_BEATMAPS",
+    AddScores = "ADD_SCORES",
 }
 
-export interface ProfileRequest extends Action {
-    type: ProfileActionType.Request;
+export interface ProfilesAddOsuUsers extends Action {
+    type: ProfilesActionType.AddOsuUsers;
+    osuUsers: OsuUser[];
 }
 
-export interface ProfileSuccess extends Action {
-    type: ProfileActionType.Success;
-    profileData: ProfileData;
+export interface ProfilesAddUserStats extends Action {
+    type: ProfilesActionType.AddUserStats;
+    userStats: UserStats[];
+}
+
+export interface ProfilesAddBeatmaps extends Action {
+    type: ProfilesActionType.AddBeatmaps;
+    beatmaps: Beatmap[];
+}
+
+export interface ProfilesAddScores extends Action {
+    type: ProfilesActionType.AddScores;
     scores: Score[];
 }
 
-export interface ProfileFailure extends Action {
-    type: ProfileActionType.Failure;
-}
-
-export type ProfileAction = ProfileRequest | ProfileSuccess | ProfileFailure;
+export type ProfilesAction = ProfilesAddOsuUsers | ProfilesAddUserStats | ProfilesAddBeatmaps | ProfilesAddScores;

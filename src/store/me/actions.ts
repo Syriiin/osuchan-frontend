@@ -1,7 +1,12 @@
+import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import axios from "axios";
 
-import { MeActionType, MeRequest, MeSuccess, MeFailure, MeState, MeAction, UserData } from "./types";
+import { StoreState } from "../reducers";
+import { OsuUser } from "../data/profiles/types";
+import { addOsuUsers } from "../data/profiles/actions";
+import { osuUserFromJson } from "../data/profiles/deserialisers";
+import { MeActionType, MeRequest, MeSuccess, MeFailure } from "./types";
 
 // Actions
 
@@ -11,10 +16,10 @@ export function meRequest(): MeRequest {
     }
 }
 
-export function meSuccess(userData: UserData): MeSuccess {
+export function meSuccess(osuUserId: number): MeSuccess {
     return {
         type: MeActionType.Success,
-        userData
+        osuUserId
     }
 }
 
@@ -26,21 +31,18 @@ export function meFailure(): MeFailure {
 
 // Thunks
 
-export function meThunkFetch(): ThunkAction<void, MeState, null, MeAction> {
+export function meThunkFetch(): ThunkAction<void, StoreState, null, Action> {
     return async function(dispatch, getState) {
         dispatch(meRequest());
 
         try {
             const response = await axios.get("/osuauth/me");
 
-            const userData: UserData = {
-                id: response.data["id"],
-                username: response.data["username"],
-                country: response.data["country"],
-                joinDate: new Date(response.data["join_date"])
-            }
+            const osuUser: OsuUser = osuUserFromJson(response.data);
 
-            dispatch(meSuccess(userData));
+            dispatch(addOsuUsers(osuUser));
+
+            dispatch(meSuccess(osuUser.id));
         } catch (error) {
             dispatch(meFailure());
         }

@@ -1,7 +1,7 @@
 import { MeState, MeAction, MeActionType } from "./types";
 
 const initialState: MeState = {
-    userData: null,
+    osuUserId: null,
     isFetching: false
 }
 
@@ -10,19 +10,19 @@ function meReducer(state: MeState = initialState, action: MeAction): MeState {
         case MeActionType.Request:
             return {
                 ...state,
-                userData: null,
+                osuUserId: null,
                 isFetching: true
             }
         case MeActionType.Success:
             return {
                 ...state,
-                userData: action.userData,
+                osuUserId: action.osuUserId,
                 isFetching: false
             }
         case MeActionType.Failure:
             return {
                 ...state,
-                userData: null,
+                osuUserId: null,
                 isFetching: false
             }
         default:

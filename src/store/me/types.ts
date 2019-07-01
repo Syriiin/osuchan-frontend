@@ -1,18 +1,9 @@
 import { Action } from "redux";
 
-// Models
-
-export interface UserData {
-    id: number;
-    username: string;
-    country: string;
-    joinDate: Date;
-}
-
 // State
 
 export interface MeState {
-    userData: UserData | null;
+    osuUserId: number | null;
     isFetching: boolean;
 }
 
@@ -30,7 +21,7 @@ export interface MeRequest extends Action {
 
 export interface MeSuccess extends Action {
     type: MeActionType.Success;
-    userData: UserData;
+    osuUserId: number;
 }
 
 export interface MeFailure extends Action {
