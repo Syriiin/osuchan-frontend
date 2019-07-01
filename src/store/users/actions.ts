@@ -52,8 +52,8 @@ export function usersThunkFetch(userString: string, gamemode: number): ThunkActi
             
             const osuUser: OsuUser = osuUserFromJson(usersResponse.data["user"]);
             const userStats: UserStats = userStatsFromJson(usersResponse.data);
-            const beatmaps: Beatmap[] = scoresResponse.data.map((scoreData: any) => beatmapFromJson(scoreData["beatmap"]));
-            const scores: Score[] = scoresResponse.data.map((scoreData: any) => scoreFromJson(scoreData));
+            const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
+            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             dispatch(addOsuUsers(osuUser));
             dispatch(addUserStats(userStats));

@@ -6,7 +6,7 @@ import { Menu, Input, Image } from "semantic-ui-react";
 
 import { MeState } from "../store/me/types";
 import { StoreState } from "../store/reducers";
-import { ProfilesState } from "../store/data/profiles/types";
+import { ProfilesDataState } from "../store/data/profiles/types";
 
 function Navbar(props: NavbarProps) {
     const [searchValue, setSearchValue] = useState("");
@@ -59,7 +59,7 @@ function Navbar(props: NavbarProps) {
 
 interface NavbarProps extends RouteComponentProps {
     me: MeState,
-    profiles: ProfilesState
+    profiles: ProfilesDataState
 }
 
 function mapStateToProps(state: StoreState) {

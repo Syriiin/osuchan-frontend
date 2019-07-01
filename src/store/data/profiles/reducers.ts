@@ -1,13 +1,13 @@
-import { ProfilesState, ProfilesAction, ProfilesActionType, Beatmap, Score, UserStats, OsuUser } from "./types";
+import { ProfilesDataState, ProfilesAction, ProfilesActionType, Beatmap, Score, UserStats, OsuUser } from "./types";
 
-const initialState: ProfilesState = {
+const initialState: ProfilesDataState = {
     osuUsers: {},
     userStats: {},
     beatmaps: {},
-    scores: {},
+    scores: {}
 }
 
-function profilesReducer(state: ProfilesState = initialState, action: ProfilesAction): ProfilesState {
+function profilesReducer(state: ProfilesDataState = initialState, action: ProfilesAction): ProfilesDataState {
     switch (action.type) {
         case ProfilesActionType.AddOsuUsers:
             const osuUsers: { [id: number]: OsuUser } = {};

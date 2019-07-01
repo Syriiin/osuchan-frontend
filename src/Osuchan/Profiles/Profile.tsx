@@ -10,7 +10,7 @@ import { gamemodeIdFromName } from "../../utils/osu";
 import { StoreState } from "../../store/reducers";
 import { UsersState } from "../../store/users/types";
 import { usersThunkFetch } from "../../store/users/actions";
-import { ProfilesState } from "../../store/data/profiles/types";
+import { ProfilesDataState } from "../../store/data/profiles/types";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
@@ -23,8 +23,8 @@ function Profile(props: ProfileProps) {
         usersThunkFetch(userString, gamemodeId);
     }, [usersThunkFetch, userString, gamemodeId]);
 
-    const userStats = props.users.currentUserStatsId ? props.profiles.userStats[props.users.currentUserStatsId] : null;
-    const osuUser = userStats ? props.profiles.osuUsers[userStats.osuUserId] : null;
+    const userStats = props.users.currentUserStatsId ? props.profilesData.userStats[props.users.currentUserStatsId] : null;
+    const osuUser = userStats ? props.profilesData.osuUsers[userStats.osuUserId] : null;
 
     // use effect to update title
     const { isFetching } = props.users;
@@ -155,8 +155,8 @@ function Profile(props: ProfileProps) {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {props.users.scoreIds.map(id => props.profiles.scores[id]).map((score, i) => {
-                                        const beatmap = props.profiles.beatmaps[score.beatmapId];
+                                    {props.users.scoreIds.map(id => props.profilesData.scores[id]).map((score, i) => {
+                                        const beatmap = props.profilesData.beatmaps[score.beatmapId];
                                         return (
                                             <Table.Row key={i}>
                                                 <Table.Cell>{i+1}</Table.Cell>
@@ -166,7 +166,7 @@ function Profile(props: ProfileProps) {
                                                 <Table.Cell>{score.pp.toFixed(0)}pp</Table.Cell>
                                                 <Table.Cell>{formatScoreResult(score.result)}</Table.Cell>
                                             </Table.Row>
-                                        )
+                                        );
                                     })}
                                 </Table.Body>
                             </Table>
@@ -186,13 +186,13 @@ interface RouteParams {
 interface ProfileProps extends RouteComponentProps<RouteParams> {
     usersThunkFetch: (userString: string, gamemode: number) => void;
     users: UsersState;
-    profiles: ProfilesState;
+    profilesData: ProfilesDataState;
 }
 
 function mapStateToProps(state: StoreState) {
     return {
         users: state.users,
-        profiles: state.data.profiles
+        profilesData: state.data.profiles
     }
 }
 

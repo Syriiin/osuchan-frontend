@@ -79,7 +79,7 @@ export interface Score {
 
 // State
 
-export interface ProfilesState {
+export interface ProfilesDataState {
     osuUsers: { [id: number]: OsuUser };
     userStats: { [id: number]: UserStats };
     beatmaps: { [id: number]: Beatmap };
