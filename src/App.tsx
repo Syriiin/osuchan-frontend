@@ -11,7 +11,6 @@ import Home from "./Osuchan/Osuchan";
 const GlobalStyle = createGlobalStyle`
     body {
         background-color: ${props => props.theme.colours.backdrop};
-        color: #fff;
 
         #root {
             display: flex;

@@ -4,28 +4,70 @@ import { Action } from "redux";
 
 export interface MeState {
     osuUserId: number | null;
+    leaderboardIds: number[];
+    inviteIds: number[];
     isFetching: boolean;
+    isPosting: boolean;
+    isDeleting: boolean;
 }
 
 // Actions
 
 export enum MeActionType {
-    Request = "ME_REQUEST",
-    Success = "ME_SUCCESS",
-    Failure = "ME_FAILURE"
+    GetRequest = "ME_GET_REQUEST",
+    GetSuccess = "ME_GET_SUCCESS",
+    GetFailure = "ME_GET_FAILURE",
+    JoinLeaderboardPostRequest = "ME_JOIN_LEADERBOARD_POST_REQUEST",
+    JoinLeaderboardPostSuccess = "ME_JOIN_LEADERBOARD_POST_SUCCESS",
+    JoinLeaderboardPostFailure = "ME_JOIN_LEADERBOARD_POST_FAILURE",
+    LeaveLeaderboardDeleteRequest = "ME_LEAVE_LEADERBOARD_DELETE_REQUEST",
+    LeaveLeaderboardDeleteSuccess = "ME_LEAVE_LEADERBOARD_DELETE_SUCCESS",
+    LeaveLeaderboardDeleteFailure = "ME_LEAVE_LEADERBOARD_DELETE_FAILURE"
 }
 
-export interface MeRequest extends Action {
-    type: MeActionType.Request;
+export interface MeGetRequest extends Action {
+    type: MeActionType.GetRequest;
 }
 
-export interface MeSuccess extends Action {
-    type: MeActionType.Success;
+export interface MeGetSuccess extends Action {
+    type: MeActionType.GetSuccess;
     osuUserId: number;
+    leaderboardIds: number[];
+    inviteIds: number[];
 }
 
-export interface MeFailure extends Action {
-    type: MeActionType.Failure;
+export interface MeGetFailure extends Action {
+    type: MeActionType.GetFailure;
 }
 
-export type MeAction = MeRequest | MeSuccess | MeFailure;
+export interface MeJoinLeaderboardPostRequest extends Action {
+    type: MeActionType.JoinLeaderboardPostRequest;
+}
+
+export interface MeJoinLeaderboardPostSuccess extends Action {
+    type: MeActionType.JoinLeaderboardPostSuccess;
+    leaderboardId: number;
+}
+
+export interface MeJoinLeaderboardPostFailure extends Action {
+    type: MeActionType.JoinLeaderboardPostFailure;
+}
+
+export interface MeLeaveLeaderboardDeleteRequest extends Action {
+    type: MeActionType.LeaveLeaderboardDeleteRequest;
+}
+
+export interface MeLeaveLeaderboardDeleteSuccess extends Action {
+    type: MeActionType.LeaveLeaderboardDeleteSuccess;
+    leaderboardId: number;
+}
+
+export interface MeLeaveLeaderboardDeleteFailure extends Action {
+    type: MeActionType.LeaveLeaderboardDeleteFailure;
+}
+
+export type MeAction = (
+    MeGetRequest | MeGetSuccess | MeGetFailure |
+    MeJoinLeaderboardPostRequest | MeJoinLeaderboardPostSuccess | MeJoinLeaderboardPostFailure |
+    MeLeaveLeaderboardDeleteRequest | MeLeaveLeaderboardDeleteSuccess | MeLeaveLeaderboardDeleteFailure
+);

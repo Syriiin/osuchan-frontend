@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import styled from "styled-components";
 
-import { meThunkFetch } from "../store/me/actions";
+import { meGetThunk } from "../store/me/actions";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -19,10 +19,10 @@ const OsuchanContainer = styled(Container)`
 
 function Osuchan(props: OsuchanProps) {
     // call fetch me action on mount
-    const { meThunkFetch } = props;
+    const { meGetThunk } = props;
     useEffect(() => {
-        meThunkFetch();
-    }, [meThunkFetch]);
+        meGetThunk();
+    }, [meGetThunk]);
 
     return (
         <>
@@ -41,11 +41,11 @@ function Osuchan(props: OsuchanProps) {
 }
 
 interface OsuchanProps {
-    meThunkFetch: () => void;
+    meGetThunk: () => void;
 }
 
 const mapDispatchToProps = {
-    meThunkFetch
+    meGetThunk
 }
 
 export default connect(null, mapDispatchToProps)(Osuchan);

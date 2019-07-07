@@ -52,15 +52,15 @@ export function formatMods(enabledMods: number) {
     }
 
     if (mods.includes("NC")) {
-        mods.splice(mods.indexOf("DT"));
+        mods.splice(mods.indexOf("DT"), 1);
     }
     if (mods.includes("PF")) {
-        mods.splice(mods.indexOf("SD"));
+        mods.splice(mods.indexOf("SD"), 1);
     }
 
     mods.sort((a: string, b: string) => allMods[a] - allMods[b]);
 
-    return mods.length > 0 ? `+${mods.join(", ")}` : "";
+    return mods.length > 0 ? mods.join(", ") : "";
 }
 
 export function formatScoreResult(result: number) {
@@ -77,5 +77,20 @@ export function formatScoreResult(result: number) {
             return "Clear";
         default:
             return "Error";
+    }
+}
+
+export function formatGamemodeName(gamemodeId: number) {
+    switch (gamemodeId) {
+        case 0:
+            return "osu!";
+        case 1:
+            return "osu!taiko";
+        case 2:
+            return "osu!catch";
+        case 3:
+            return "osu!mania";
+        default:
+            return "Unknown";
     }
 }

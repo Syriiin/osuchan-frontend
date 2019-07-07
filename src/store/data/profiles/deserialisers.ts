@@ -59,6 +59,7 @@ export function scoreFromJson(scoreData: any): Score {
     return {
         id: scoreData["id"],
         beatmapId: scoreData["beatmap"]["id"],
+        userStatsId: scoreData["user_stats"]["id"],
         score: scoreData["score"],
         count300: scoreData["count_300"],
         count100: scoreData["count_100"],

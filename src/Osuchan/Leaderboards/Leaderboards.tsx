@@ -1,8 +1,16 @@
 import React from "react";
+import { Switch, Route, Redirect } from "react-router";
+
+import LeaderboardList from "./LeaderboardList";
+import Leaderboard from "./Leaderboard/Leaderboard";
 
 function Leaderboards() {
     return (
-        <h1>Leaderboards</h1>
+        <Switch>
+            <Route exact path="/leaderboards" component={LeaderboardList} />
+            <Route path="/leaderboards/:leaderboardId" component={Leaderboard} />
+            <Redirect to="/leaderboards" />
+        </Switch>
     );
 }
 

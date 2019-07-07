@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { Header, Image, Segment, Menu, Grid, Sticky, Ref, Divider, Statistic, Table, Icon, Loader } from "semantic-ui-react";
+import { Header, Image, Segment, Menu, Grid, Divider, Statistic, Table, Icon, Loader, Item, Label } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import countries from "i18n-iso-countries";
 
@@ -11,6 +11,7 @@ import { StoreState } from "../../store/reducers";
 import { UsersState } from "../../store/users/types";
 import { usersThunkFetch } from "../../store/users/actions";
 import { ProfilesDataState } from "../../store/data/profiles/types";
+import { LeaderboardsDataState } from "../../store/data/leaderboards/types";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
@@ -38,8 +39,6 @@ function Profile(props: ProfileProps) {
         }
     }, [isFetching, osuUser]);
 
-    const contextRef = useRef();
-
     // TODO: split into smaller components
     return (
         <Segment inverted placeholder={props.users.isFetching}>
@@ -50,57 +49,53 @@ function Profile(props: ProfileProps) {
                 <Grid inverted divided>
                     <Grid.Row>
                         <Grid.Column columns={2} width={3}>
-                            <Sticky context={contextRef} offset={15}>
-                                <Image centered rounded size="small" src={`https://a.ppy.sh/${osuUser.id}`} />
-                                <Header textAlign="center" inverted as="h1">
-                                    {osuUser.username}
-                                </Header>
-                                <Header textAlign="center" inverted size="small">
-                                    <Image src={`https://osu.ppy.sh/images/flags/${osuUser.country}.png`} />
-                                    {countries.getName(osuUser.country, "en")}
-                                </Header>
-                                <Header textAlign="center" inverted size="tiny">
-                                    <Icon name="calendar" />
-                                    {osuUser.joinDate.toDateString()}
-                                </Header>
-                            </Sticky>
+                            <Image centered rounded size="small" src={`https://a.ppy.sh/${osuUser.id}`} />
+                            <Header textAlign="center" inverted as="h1">
+                                {osuUser.username}
+                            </Header>
+                            <Header textAlign="center" inverted size="small">
+                                <Image src={`https://osu.ppy.sh/images/flags/${osuUser.country}.png`} />
+                                {countries.getName(osuUser.country, "en")}
+                            </Header>
+                            <Header textAlign="center" inverted size="tiny">
+                                <Icon name="calendar" />
+                                {osuUser.joinDate.toDateString()}
+                            </Header>
                         </Grid.Column>
-                        <Ref innerRef={contextRef}>
-                            <Grid.Column width={13}>
-                                <Menu widths={4} inverted pointing secondary>
-                                    <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/osu`} active={gamemodeId === 0}>osu!</Menu.Item>
-                                    <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/taiko`} active={gamemodeId === 1}>osu!taiko</Menu.Item>
-                                    <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/catch`} active={gamemodeId === 2}>osu!catch</Menu.Item>
-                                    <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/mania`} active={gamemodeId === 3}>osu!mania</Menu.Item>
-                                </Menu>
-                                <Statistic.Group inverted size="small" widths={3}>
-                                    <Statistic>
-                                        <Statistic.Label>Performance</Statistic.Label>
-                                        <Statistic.Value>{userStats.pp.toFixed(0)}</Statistic.Value>
-                                    </Statistic>
-                                    <Statistic>
-                                        <Statistic.Label>Global Rank</Statistic.Label>
-                                        <Statistic.Value>#{userStats.rank}</Statistic.Value>
-                                    </Statistic>
-                                    <Statistic>
-                                        <Statistic.Label>Country Rank</Statistic.Label>
-                                        <Statistic.Value>#{userStats.countryRank}</Statistic.Value>
-                                    </Statistic>
-                                    <Statistic>
-                                        <Statistic.Label>No-choke Performance</Statistic.Label>
-                                        <Statistic.Value>{userStats.gamemode === 0 ? userStats.nochokePp.toFixed(0) : "-"}</Statistic.Value>
-                                    </Statistic>
-                                    <Statistic>
-                                        <Statistic.Label>No-choke Global Rank</Statistic.Label>
-                                        <Statistic.Value>-</Statistic.Value>
-                                    </Statistic>
-                                    <Statistic>
-                                        <Statistic.Label>No-choke Country Rank</Statistic.Label>
-                                        <Statistic.Value>-</Statistic.Value>
-                                    </Statistic>
-                                </Statistic.Group>
-                            </Grid.Column>
-                        </Ref>
+                        <Grid.Column width={13}>
+                            <Menu widths={4} inverted pointing secondary>
+                                <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/osu`} active={gamemodeId === 0}>osu!</Menu.Item>
+                                <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/taiko`} active={gamemodeId === 1}>osu!taiko</Menu.Item>
+                                <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/catch`} active={gamemodeId === 2}>osu!catch</Menu.Item>
+                                <Menu.Item as={NavLink} to={`/users/${props.match.params.userString}/mania`} active={gamemodeId === 3}>osu!mania</Menu.Item>
+                            </Menu>
+                            <Statistic.Group inverted size="small" widths={3}>
+                                <Statistic>
+                                    <Statistic.Label>Performance</Statistic.Label>
+                                    <Statistic.Value>{userStats.pp.toFixed(0)}</Statistic.Value>
+                                </Statistic>
+                                <Statistic>
+                                    <Statistic.Label>Global Rank</Statistic.Label>
+                                    <Statistic.Value>#{userStats.rank}</Statistic.Value>
+                                </Statistic>
+                                <Statistic>
+                                    <Statistic.Label>Country Rank</Statistic.Label>
+                                    <Statistic.Value>#{userStats.countryRank}</Statistic.Value>
+                                </Statistic>
+                                <Statistic>
+                                    <Statistic.Label>No-choke Performance</Statistic.Label>
+                                    <Statistic.Value>{userStats.gamemode === 0 ? userStats.nochokePp.toFixed(0) : "-"}</Statistic.Value>
+                                </Statistic>
+                                <Statistic>
+                                    <Statistic.Label>No-choke Global Rank</Statistic.Label>
+                                    <Statistic.Value>-</Statistic.Value>
+                                </Statistic>
+                                <Statistic>
+                                    <Statistic.Label>No-choke Country Rank</Statistic.Label>
+                                    <Statistic.Value>-</Statistic.Value>
+                                </Statistic>
+                            </Statistic.Group>
+                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column>
@@ -155,7 +150,8 @@ function Profile(props: ProfileProps) {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {props.users.scoreIds.map(id => props.profilesData.scores[id]).map((score, i) => {
+                                    {props.users.scoreIds.map((scoreId, i) => {
+                                        const score = props.profilesData.scores[scoreId];
                                         const beatmap = props.profilesData.beatmaps[score.beatmapId];
                                         return (
                                             <Table.Row key={i}>
@@ -170,6 +166,33 @@ function Profile(props: ProfileProps) {
                                     })}
                                 </Table.Body>
                             </Table>
+
+                            <Divider horizontal inverted>
+                                Community Leaderboards
+                            </Divider>
+
+                            <Item.Group divided>
+                                {props.users.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]).filter(leaderboard => leaderboard.accessType !== 0).map((leaderboard, i) => {
+                                    const owner = props.profilesData.osuUsers[leaderboard.ownerId!];
+                                    return (
+                                        <Item as={NavLink} to={`/leaderboards/${leaderboard.id}`}>
+                                            <Item.Image size="tiny" src="https://syrin.me/static/img/osu!next_icons/mod-EZ.png" />
+                                            <Item.Content verticalAlign="middle">
+                                                <Item.Header>{leaderboard.name}</Item.Header>
+                                                <Item.Description>
+                                                    <Label as="a" image>
+                                                        <img alt="Avatar" src={`https://a.ppy.sh/${owner.id}`} />
+                                                        {owner.username}
+                                                    </Label>
+                                                    {leaderboard.accessType === 3 && (
+                                                        <Label color="grey">PRIVATE</Label>
+                                                    )}
+                                                </Item.Description>
+                                            </Item.Content>
+                                        </Item>
+                                    );
+                                })}
+                            </Item.Group>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -187,12 +210,14 @@ interface ProfileProps extends RouteComponentProps<RouteParams> {
     usersThunkFetch: (userString: string, gamemode: number) => void;
     users: UsersState;
     profilesData: ProfilesDataState;
+    leaderboardsData: LeaderboardsDataState;
 }
 
 function mapStateToProps(state: StoreState) {
     return {
         users: state.users,
-        profilesData: state.data.profiles
+        profilesData: state.data.profiles,
+        leaderboardsData: state.data.leaderboards
     }
 }
 

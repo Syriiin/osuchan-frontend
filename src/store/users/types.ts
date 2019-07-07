@@ -5,6 +5,7 @@ import { Action } from "redux";
 export interface UsersState {
     currentUserStatsId: number | null;
     scoreIds: number[];
+    leaderboardIds: number[];
     isFetching: boolean;
 }
 
@@ -24,6 +25,7 @@ export interface UsersSuccess extends Action {
     type: UsersActionType.Success;
     userStatsId: number;
     scoreIds: number[];
+    leaderboardIds: number[];
 }
 
 export interface UsersFailure extends Action {

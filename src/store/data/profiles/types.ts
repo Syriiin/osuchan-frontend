@@ -54,6 +54,7 @@ export interface Beatmap {
 export interface Score {
     id: number;
     beatmapId: number;
+    userStatsId: number;
     score: number;
     count300: number;
     count100: number;
@@ -89,7 +90,7 @@ export interface ProfilesDataState {
 // Actions
 
 export enum ProfilesActionType {
-    AddOsuUsers = "ADD_OSUSUSERS",
+    AddOsuUsers = "ADD_OSUUSERS",
     AddUserStats = "ADD_USERSTATS",
     AddBeatmaps = "ADD_BEATMAPS",
     AddScores = "ADD_SCORES",
