@@ -42,28 +42,24 @@ export function usersThunkFetch(userString: string, gamemode: number): ThunkActi
 
         try {
             // cant do in parallel just yet, as the users call updates the user stats and will change the scores
-            const usersResponse = await axios.get(`/api/profiles/stats/${userString}/${gamemode}`, {
+            const usersResponse = await axios.get(`/api/profiles/${userString}/${gamemode}`, {
                 params: {
                     "user_id_type": "username"
                 }
             });
-            const scoresResponse = await axios.get(`/api/profiles/scores`, {
-                params: {
-                    "user_id": usersResponse.data["user"]["id"],
-                    "gamemode": gamemode
-                }
-            });
+            const osuUser: OsuUser = osuUserFromJson(usersResponse.data["user"]);
+            const userStats: UserStats = userStatsFromJson(usersResponse.data);
+
+            const scoresResponse = await axios.get(`/api/profiles/${osuUser.id}/${gamemode}/scores`);
+            const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
+            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
+            
             const leaderboardsResponse = await axios.get(`/api/leaderboards/leaderboards`, {
                 params: {
                     "user_id": usersResponse.data["user"]["id"],
                     "gamemode": gamemode
                 }
             });
-            
-            const osuUser: OsuUser = osuUserFromJson(usersResponse.data["user"]);
-            const userStats: UserStats = userStatsFromJson(usersResponse.data);
-            const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
-            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
             const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
             const owners: OsuUser[] = leaderboardsResponse.data.filter((l: any) => l["owner"]).map((data: any) => osuUserFromJson(data["owner"]));
 
