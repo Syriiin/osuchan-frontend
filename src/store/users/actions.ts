@@ -42,7 +42,7 @@ export function usersThunkFetch(userString: string, gamemode: number): ThunkActi
 
         try {
             // cant do in parallel just yet, as the users call updates the user stats and will change the scores
-            const usersResponse = await axios.get(`/api/profiles/${userString}/${gamemode}`, {
+            const usersResponse = await axios.get(`/api/profiles/users/${userString}/${gamemode}`, {
                 params: {
                     "user_id_type": "username"
                 }
@@ -50,7 +50,7 @@ export function usersThunkFetch(userString: string, gamemode: number): ThunkActi
             const osuUser: OsuUser = osuUserFromJson(usersResponse.data["user"]);
             const userStats: UserStats = userStatsFromJson(usersResponse.data);
 
-            const scoresResponse = await axios.get(`/api/profiles/${osuUser.id}/${gamemode}/scores`);
+            const scoresResponse = await axios.get(`/api/profiles/users/${osuUser.id}/${gamemode}/scores`);
             const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
             
