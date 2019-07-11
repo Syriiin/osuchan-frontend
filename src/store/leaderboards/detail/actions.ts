@@ -78,11 +78,7 @@ export function leaderboardsDetailGetThunk(leaderboardId: number): ThunkAction<v
 
         try {
             const leaderboardResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
-            const membersResponse = await axios.get(`/api/leaderboards/members`, {
-                params: {
-                    "leaderboard_id": leaderboardId
-                }
-            });
+            const membersResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
             
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
             const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
@@ -131,8 +127,7 @@ export function leaderboardsDetailPostInviteThunk(leaderboardId: number, userId:
         dispatch(leaderboardsDetailPostInviteRequest());
 
         try {
-            await axios.post(`/api/leaderboards/invites`, {
-                "leaderboard_id": leaderboardId,
+            await axios.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
                 "user_id": userId
             }, {
                 headers: {

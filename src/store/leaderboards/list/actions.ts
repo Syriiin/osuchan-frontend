@@ -60,7 +60,6 @@ export function leaderboardsListGetThunk(): ThunkAction<void, StoreState, null, 
 
         try {
             const leaderboardsResponse = await axios.get(`/api/leaderboards/leaderboards`);
-            
             const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
             const owners: OsuUser[] = leaderboardsResponse.data.filter((l: any) => l["owner"]).map((data: any) => osuUserFromJson(data["owner"]));
 
@@ -123,7 +122,6 @@ export function leaderboardsListPostThunk(
                     "X-CSRFToken": Cookies.get("csrftoken")
                 }
             });
-            
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
             const owner: OsuUser = osuUserFromJson(leaderboardResponse.data["owner"]);
 

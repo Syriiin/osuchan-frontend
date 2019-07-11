@@ -58,8 +58,8 @@ export function beatmapFromJson(beatmapData: any): Beatmap {
 export function scoreFromJson(scoreData: any): Score {
     return {
         id: scoreData["id"],
-        beatmapId: scoreData["beatmap"]["id"],
-        userStatsId: scoreData["user_stats"]["id"],
+        beatmapId: typeof scoreData["beatmap"] === "object" ? scoreData["beatmap"]["id"] : scoreData["beatmap"],
+        userStatsId: typeof scoreData["user_stats"] === "object" ? scoreData["user_stats"]["id"] : scoreData["user_stats"],
         score: scoreData["score"],
         count300: scoreData["count_300"],
         count100: scoreData["count_100"],

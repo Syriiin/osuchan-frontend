@@ -82,7 +82,6 @@ export function meGetThunk(): ThunkAction<void, StoreState, null, Action> {
 
         try {
             const meResponse = await axios.get("/osuauth/me");
-
             const osuUser: OsuUser = osuUserFromJson(meResponse.data);
 
             const leaderboardsResponse = await axios.get("/api/leaderboards/leaderboards", {
@@ -90,17 +89,11 @@ export function meGetThunk(): ThunkAction<void, StoreState, null, Action> {
                     "user_id": osuUser.id
                 }
             });
-            
             const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
 
-            const invitesResponse = await axios.get("/api/leaderboards/invites", {
-                params: {
-                    "user_id": osuUser.id
-                }
-            });
-
-            const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data))
-            const inviteLeaderboards: Leaderboard[] = invitesResponse.data.map((data: any) => leaderboardFromJson(data["leaderboard"]))
+            const invitesResponse = await axios.get(`/api/profiles/users/${osuUser.id}/invites`);
+            const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
+            const inviteLeaderboards: Leaderboard[] = invitesResponse.data.map((data: any) => leaderboardFromJson(data["leaderboard"]));
 
             dispatch(addOsuUsers(osuUser));
             dispatch(addLeaderboards(...leaderboards, ...inviteLeaderboards));
@@ -118,9 +111,7 @@ export function meJoinLeaderboardPostThunk(leaderboardId: number): ThunkAction<v
         dispatch(meJoinLeaderboardPostRequest());
 
         try {
-            await axios.post("/api/leaderboards/members", {
-                "leaderboard_id": leaderboardId
-            }, {
+            await axios.post(`/api/leaderboards/leaderboards/${leaderboardId}/members`, {}, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")
                 }
@@ -141,10 +132,7 @@ export function meLeaveLeaderboardDeleteThunk(leaderboardId: number): ThunkActio
         const { osuUserId } = getState().me;
 
         try {
-            await axios.delete(`/api/leaderboards/members/${osuUserId}`, {
-                params: {
-                    "leaderboard_id": leaderboardId
-                },
+            await axios.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${osuUserId}`, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")
                 }

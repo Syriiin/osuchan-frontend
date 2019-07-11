@@ -41,20 +41,11 @@ export function leaderboardsUserThunkFetch(leaderboardId: number, userId: number
         dispatch(leaderboardsUserRequest());
 
         try {
-            const membershipResponse = await axios.get(`/api/leaderboards/members/${userId}`, {
-                params: {
-                    "leaderboard_id": leaderboardId
-                }
-            });
-            const scoresResponse = await axios.get(`/api/leaderboards/scores`, {
-                params: {
-                    "leaderboard_id": leaderboardId,
-                    "user_id": userId
-                }
-            });
-            
+            const membershipResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}`);
             const membership: Membership = membershipFromJson(membershipResponse.data);
             const osuUser: OsuUser = osuUserFromJson(membershipResponse.data["user"]);
+            
+            const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
             const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
 

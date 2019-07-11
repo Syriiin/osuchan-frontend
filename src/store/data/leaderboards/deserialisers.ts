@@ -42,8 +42,8 @@ export function inviteFromJson(inviteData: any): Invite {
     return {
         id: inviteData["id"],
         message: inviteData["message"],
-        leaderboardId: inviteData["leaderboard"]["id"],
-        osuUserId: inviteData["user"]["id"],
+        leaderboardId: typeof inviteData["leaderboard"] == "object" ? inviteData["leaderboard"]["id"] : inviteData["leaderboard"],
+        osuUserId: typeof inviteData["user"] === "object" ? inviteData["user"]["id"] : inviteData["user"],
         inviteDate: new Date(inviteData["invite_date"])
     }
 }
