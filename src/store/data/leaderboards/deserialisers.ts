@@ -22,8 +22,7 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
         lowestAccuracy: leaderboardData["lowest_accuracy"],
         highestAccuracy: leaderboardData["highest_accuracy"],
         ownerId: leaderboardData["owner"] ? leaderboardData["owner"]["id"] : null,
-        creationTime: new Date(leaderboardData["creation_time"]),
-        memberCount: leaderboardData["member_count"]
+        creationTime: new Date(leaderboardData["creation_time"])
     }
 }
 

@@ -24,7 +24,6 @@ export interface Leaderboard {
     highestAccuracy: number | null;
     ownerId: number | null;
     creationTime: Date;
-    memberCount: number;
 }
 
 export interface Membership {
