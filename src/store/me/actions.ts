@@ -118,6 +118,7 @@ export function meJoinLeaderboardPostThunk(leaderboardId: number): ThunkAction<v
             });
             
             dispatch(leaderboardsDetailGetThunk(leaderboardId));
+            
             dispatch(meJoinLeaderboardPostSuccess(leaderboardId));
         } catch (error) {
             dispatch(meJoinLeaderboardPostFailure());

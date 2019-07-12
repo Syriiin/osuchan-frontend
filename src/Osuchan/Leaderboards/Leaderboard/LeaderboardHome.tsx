@@ -139,23 +139,24 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             )}
                         </List>
 
+                        {/* If not global leaderboard */}
                         {leaderboard.accessType !== 0 && props.me.osuUserId && (
                             <>
-                                {/* Delete button if owner */}
+                                {/* If owner */}
                                 {leaderboard.ownerId === props.me.osuUserId && (
                                     <>
+                                        {/* Delete button */}
                                         <Button color="red" onClick={handleDelete}>Delete Leaderboard</Button>
 
-                                        {/* Either private or public invite-only */}
+                                        {/* Invite button if either private or public invite-only */}
                                         {(leaderboard.accessType === 2 || leaderboard.accessType === 3) && (
                                             <Button color="blue" onClick={() => setModelOpen(true)}>Invite Player</Button>
                                         )}
                                     </>
                                 )}
 
-
-                                {/* Join button if not member */}
-                                {!props.me.leaderboardIds.includes(leaderboard.id) && (
+                                {/* Join button if public or pending invite, and not member */}
+                                {(leaderboard.accessType === 1 || props.me.inviteIds.find(i => props.leaderboardsData.invites[i].leaderboardId === leaderboard.id) !== undefined) && !props.me.leaderboardIds.includes(leaderboard.id) && (
                                     <Button color="blue" onClick={handleJoin}>Join Leaderboard</Button>
                                 )}
 
