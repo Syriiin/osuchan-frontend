@@ -166,7 +166,7 @@ function Profile(props: ProfileProps) {
                                             <Typography variant="h6" noWrap align="center">
                                                 No-choke Perf.
                                             </Typography>
-                                            <Tooltip title={`${userStats.nochokePp.toFixed(2)}pp`}>
+                                            <Tooltip title={userStats.gamemode === 0 ? `${userStats.nochokePp.toFixed(2)}pp` : "-"}>
                                                 <Typography variant="h4" align="center">
                                                     {userStats.gamemode === 0 ? `${userStats.nochokePp.toFixed(0)}pp` : "-"}
                                                 </Typography>
