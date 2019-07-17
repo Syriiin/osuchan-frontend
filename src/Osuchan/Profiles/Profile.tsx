@@ -302,7 +302,7 @@ function Profile(props: ProfileProps) {
 
                                         return (
                                             <ListItem button component={Link} to={`/leaderboards/${leaderboard.id}`}>
-                                                <img className={classes.leaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard icon" />
+                                                <img className={classes.leaderboardImage} src={leaderboard.iconUrl || "https://osu.ppy.sh/images/badges/mods/mod_coop@2x.png"} alt="Leaderboard icon" />
                                                 <ListItemText
                                                     primary={leaderboard.name}
                                                     primaryTypographyProps={{

@@ -159,19 +159,19 @@ function LeaderboardList(props: LeaderboardListProps) {
                         <Grid item xs={12} md={6} lg={4}>
                             <Card>
                                 <Link className={classes.cardLink} to={`/leaderboards/${leaderboard.id}`}>
-                                <CardContent>
-                                    <div className={classes.globalLeaderboardDetails}>
-                                        <div className={classes.globalLeaderboardText}>
-                                            <Typography variant="h5">
-                                                {leaderboard.name}
-                                            </Typography>
-                                            <Typography variant="subtitle1" color="textSecondary" paragraph>
-                                                {leaderboard.description}
-                                            </Typography>
+                                    <CardContent>
+                                        <div className={classes.globalLeaderboardDetails}>
+                                            <div className={classes.globalLeaderboardText}>
+                                                <Typography variant="h5">
+                                                    {leaderboard.name}
+                                                </Typography>
+                                                <Typography variant="subtitle1" color="textSecondary" paragraph>
+                                                    {leaderboard.description}
+                                                </Typography>
+                                            </div>
+                                            <img className={classes.globalLeaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard" />
                                         </div>
-                                        <img className={classes.globalLeaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard" />
-                                    </div>
-                                </CardContent>
+                                    </CardContent>
                                 </Link>
                             </Card>
                         </Grid>
@@ -316,7 +316,7 @@ function LeaderboardList(props: LeaderboardListProps) {
 
                             return (
                                 <ListItem button component={Link} to={`/leaderboards/${leaderboard.id}`}>
-                                    <img className={classes.communityLeaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard icon" />
+                                    <img className={classes.communityLeaderboardImage} src={leaderboard.iconUrl || "https://osu.ppy.sh/images/badges/mods/mod_coop@2x.png"} alt="Leaderboard icon" />
                                     <ListItemText
                                         primary={leaderboard.name}
                                         primaryTypographyProps={{
