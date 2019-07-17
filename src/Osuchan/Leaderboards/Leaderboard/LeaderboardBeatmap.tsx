@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { Header, Segment, Divider, Table, Statistic, Loader } from "semantic-ui-react";
 
 import { StoreState } from "../../../store/reducers";
 import { ProfilesDataState } from "../../../store/data/profiles/types";
@@ -10,8 +9,31 @@ import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
 import { LeaderboardsBeatmapState } from "../../../store/leaderboards/beatmap/types";
 import { leaderboardsBeatmapThunkFetch } from "../../../store/leaderboards/beatmap/actions";
 import { formatTime, formatMods, formatScoreResult } from "../../../utils/formatting";
+import { makeStyles, Theme, createStyles, CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, Tooltip } from "@material-ui/core";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    loader: {
+        textAlign: "center",
+        marginTop: 150
+    },
+    paperHeader: {
+        padding: theme.spacing(2)
+    },
+    beatmapStats: {
+        padding: theme.spacing(2)
+    },
+    tableLink: {
+        color: "inherit",
+        textDecoration: "none",
+        "&:hover": {
+            textDecoration: "underline"
+        }
+    }
+}));
 
 function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
+    const classes = useStyles();
+
     // use effect to fetch leaderboards data
     const leaderboardId = parseInt(props.match.params.leaderboardId);
     const beatmapId = parseInt(props.match.params.beatmapId);
@@ -35,83 +57,130 @@ function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
     }, [isFetching, beatmap]);
 
     return (
-        <Segment inverted placeholder={props.leaderboardsBeatmap.isFetching}>
+        <>
             {props.leaderboardsBeatmap.isFetching && (
-                <Loader active size="massive">Loading</Loader>
+                <div className={classes.loader}>
+                    <CircularProgress color="inherit" size={70} />
+                    <Typography variant="h4" align="center">Loading</Typography>
+                </div>
             )}
             {beatmap && (
-                <>
-                    {/* Title */}
-                    <Header inverted textAlign="center" as="h1">
-                        {beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]
-                        <Header.Subheader>by {beatmap.creatorName}</Header.Subheader>
-                    </Header>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography className={classes.paperHeader} variant="h4" align="center">
+                                {beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]
+                                <Typography variant="subtitle1" color="textSecondary" align="center">
+                                    by {beatmap.creatorName}
+                                </Typography>
+                            </Typography>
+                            <div className={classes.beatmapStats}>
+                                <Grid container justify="center">
+                                    <Grid item xs={6} sm={4} lg={2}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            {beatmap.gamemode === 3 ? "Keys" : "Circle Size"}
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {beatmap.circleSize.toFixed(beatmap.gamemode === 3 ? 0 : 1)}
+                                        </Typography>
+                                    </Grid>
+                                    {(beatmap.gamemode === 0 || beatmap.gamemode === 2) && (
+                                        <Grid item xs={6} sm={4} lg={2}>
+                                            <Typography variant="h6" noWrap align="center">
+                                                Approach Rate
+                                            </Typography>
+                                            <Typography variant="h4" align="center">
+                                                {beatmap.approachRate.toFixed(1)}
+                                            </Typography>
+                                        </Grid>
+                                    )}
+                                    <Grid item xs={6} sm={4} lg={2}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            Overall Difficulty
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {beatmap.overallDifficulty.toFixed(1)}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={4} lg={2}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            Star Rating
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {beatmap.starRating.toFixed(2)}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={4} lg={2}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            BPM
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {beatmap.bpm.toFixed(0)}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={4} lg={2}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            Length
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {formatTime(beatmap.drainTime)}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography className={classes.paperHeader} variant="h5" align="center">
+                                Scores
+                            </Typography>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell>Player</TableCell>
+                                        <TableCell align="center">Mods</TableCell>
+                                        <TableCell align="center">Accuracy</TableCell>
+                                        <TableCell align="center">PP</TableCell>
+                                        <TableCell align="center">Result</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {props.leaderboardsBeatmap.scoreIds.map((scoreId, i) => {
+                                        const score = props.profilesData.scores[scoreId];
+                                        const userStats = props.profilesData.userStats[score.userStatsId];
+                                        const osuUser = props.profilesData.osuUsers[userStats.osuUserId];
 
-                    {/* Details: star rating, bpm, length, cs, ar, od */}
-                    <Statistic.Group inverted widths={6} size="small">
-                        <Statistic>
-                            <Statistic.Label>Star Rating</Statistic.Label>
-                            <Statistic.Value>{beatmap.starRating.toFixed(2)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>BPM</Statistic.Label>
-                            <Statistic.Value>{beatmap.bpm.toFixed(0)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Length</Statistic.Label>
-                            <Statistic.Value>{formatTime(beatmap.drainTime)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Circle Size</Statistic.Label>
-                            <Statistic.Value>{beatmap.circleSize.toFixed(1)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Approach Rate</Statistic.Label>
-                            <Statistic.Value>{beatmap.approachRate.toFixed(1)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Overall Difficulty</Statistic.Label>
-                            <Statistic.Value>{beatmap.overallDifficulty.toFixed(1)}</Statistic.Value>
-                        </Statistic>
-                    </Statistic.Group>
-
-                    <Divider horizontal inverted>Scores</Divider>
-
-                    {/* Score table */}
-                    <Table fixed singleLine selectable inverted>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={1}></Table.HeaderCell>
-                                <Table.HeaderCell width={8}>Player</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Mods</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Accuracy</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>PP</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Result</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {props.leaderboardsBeatmap.scoreIds.map((scoreId, i) => {
-                                const score = props.profilesData.scores[scoreId];
-                                const userStats = props.profilesData.userStats[score.userStatsId];
-                                const osuUser = props.profilesData.osuUsers[userStats.osuUserId];
-                                return (
-                                    <Table.Row>
-                                        <Table.Cell>{i + 1}</Table.Cell>
-                                        <Table.Cell>
-                                            <Link to={`/leaderboards/${leaderboardId}/users/${osuUser.id}`}>{osuUser.username}</Link>
-                                        </Table.Cell>
-                                        <Table.Cell>{formatMods(score.mods)}</Table.Cell>
-                                        <Table.Cell>{score.accuracy.toFixed(2)}%</Table.Cell>
-                                        <Table.Cell>{score.pp.toFixed(0)}pp</Table.Cell>
-                                        <Table.Cell>{formatScoreResult(score.result)}</Table.Cell>
-                                    </Table.Row>
-                                )
-                            })}
-                        </Table.Body>
-                    </Table>
-                </>
+                                        return (
+                                            <TableRow hover>
+                                                <TableCell>{i+1}</TableCell>
+                                                <TableCell><Link className={classes.tableLink} to={`/leaderboards/${leaderboardId}/users/${osuUser.id}`}>{osuUser.username}</Link></TableCell>
+                                                <TableCell align="center">{formatMods(score.mods)}</TableCell>
+                                                <TableCell align="center">{score.accuracy.toFixed(2)}%</TableCell>
+                                                <TableCell align="center">
+                                                    <Tooltip title={`${score.pp.toFixed(2)}pp`}>
+                                                        <Typography>{score.pp.toFixed(0)}pp</Typography>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell align="center">{formatScoreResult(score.result)}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    </Grid>
+                </Grid>
             )}
-        </Segment>
+            {!isFetching && !beatmap && (
+                <div className={classes.loader}>
+                    <Typography variant="h3" align="center">
+                        Leaderboard beatmap not found!
+                    </Typography>
+                </div>
+            )}
+        </>
     );
 }
 

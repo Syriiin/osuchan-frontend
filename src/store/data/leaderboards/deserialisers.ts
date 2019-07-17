@@ -7,6 +7,7 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
         accessType: leaderboardData["access_type"],
         name: leaderboardData["name"],
         description: leaderboardData["description"],
+        iconUrl: leaderboardData["icon_url"],
         allowPastScores: leaderboardData["allow_past_scores"],
         allowedBeatmapStatus: leaderboardData["allowed_beatmap_status"],
         oldestBeatmapDate: leaderboardData["oldest_beatmap_date"] ? new Date(leaderboardData["oldest_beatmap_date"]) : null,

@@ -1,25 +1,23 @@
 import React from "react";
-import { Segment, Container, List } from "semantic-ui-react";
-import styled from "styled-components";
+import { makeStyles, Theme, createStyles, Container, Typography } from "@material-ui/core";
 
-const FooterSegment = styled(Segment)`
-    &&& {
-        margin-top: 5em;
-        padding-top: 2em;
-        padding-bottom: 2em;
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    footer: {
+        paddingTop: theme.spacing(3),
+        marginTop: "auto"
     }
-`;
+}));
 
 function Footer() {
+    const classes = useStyles();
+    
     return (
-        <FooterSegment inverted vertical>
-            <Container textAlign="center">
-                <List horizontal inverted divided>
-                    <List.Item>&copy; osu!chan 2019</List.Item>
-                    <List.Item>Made by Syrin</List.Item>
-                </List>
+        <footer className={classes.footer}>
+            <Container>
+                <Typography align="center" variant="subtitle1" color="textSecondary">&copy; osu!chan 2019 | Team osu!chan</Typography>
+                {/* <Typography align="center" variant="subtitle2" color="textSecondary">Terms of Use | Privacy policy</Typography> */}
             </Container>
-        </FooterSegment>
+        </footer>
     );
 }
 

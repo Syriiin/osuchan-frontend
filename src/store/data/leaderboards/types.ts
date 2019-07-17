@@ -8,6 +8,7 @@ export interface Leaderboard {
     accessType: number;
     name: string;
     description: string;
+    iconUrl: string;
     allowPastScores: boolean | null;
     allowedBeatmapStatus: number;
     oldestBeatmapDate: Date | null;

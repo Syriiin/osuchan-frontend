@@ -3,6 +3,8 @@ import { ThunkAction } from "redux-thunk";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import history from "../../../history";
+
 import { StoreState } from "../../reducers";
 import { LeaderboardsDetailActionType, LeaderboardsDetailGetRequest, LeaderboardsDetailGetSuccess, LeaderboardsDetailGetFailure, LeaderboardsDetailDeleteRequest, LeaderboardsDetailDeleteSuccess, LeaderboardsDetailDeleteFailure, LeaderboardsDetailPostInviteRequest, LeaderboardsDetailPostInviteSuccess, LeaderboardsDetailPostInviteFailure } from "./types";
 import { leaderboardFromJson, membershipFromJson } from "../../data/leaderboards/deserialisers";
@@ -115,6 +117,9 @@ export function leaderboardsDetailDeleteThunk(leaderboardId: number): ThunkActio
             // TODO: remove leaderboard from data. not necessary, but good practice
 
             dispatch(leaderboardsDetailDeleteSuccess(leaderboardId));
+
+            // Navigate to leaderboard ist page after deletion
+            history.push("/leaderboards");
         } catch (error) {
             console.log(error);
             dispatch(leaderboardsDetailDeleteFailure());

@@ -6,6 +6,7 @@ const initialState: MeState = {
     inviteIds: [],
     isFetching: false,
     isPosting: false,
+    isPostingScore: false,
     isDeleting: false
 }
 
@@ -51,6 +52,21 @@ function meReducer(state: MeState = initialState, action: MeAction): MeState {
             return {
                 ...state,
                 isPosting: false
+            }
+        case MeActionType.ScorePostRequest:
+            return {
+                ...state,
+                isPostingScore: true
+            }
+        case MeActionType.ScorePostSuccess:
+            return {
+                ...state,
+                isPostingScore: false
+            }
+        case MeActionType.ScorePostFailure:
+            return {
+                ...state,
+                isPostingScore: false
             }
         case MeActionType.LeaveLeaderboardDeleteRequest:
             return {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { Header, Segment, Divider, Table, Statistic, Loader } from "semantic-ui-react";
+import { CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Theme, createStyles, Tooltip } from "@material-ui/core";
 
 import { StoreState } from "../../../store/reducers";
 import { ProfilesDataState } from "../../../store/data/profiles/types";
@@ -11,7 +11,29 @@ import { LeaderboardsUserState } from "../../../store/leaderboards/user/types";
 import { leaderboardsUserThunkFetch } from "../../../store/leaderboards/user/actions";
 import { formatMods, formatScoreResult } from "../../../utils/formatting";
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    loader: {
+        textAlign: "center",
+        marginTop: 150
+    },
+    paperHeader: {
+        padding: theme.spacing(2)
+    },
+    memberStats: {
+        padding: theme.spacing(2)
+    },
+    tableLink: {
+        color: "inherit",
+        textDecoration: "none",
+        "&:hover": {
+            textDecoration: "underline"
+        }
+    }
+}));
+
 function LeaderboardUser(props: LeaderboardUserProps) {
+    const classes = useStyles();
+
     // use effect to fetch leaderboards data
     const leaderboardId = parseInt(props.match.params.leaderboardId);
     const userId = parseInt(props.match.params.userId);
@@ -36,69 +58,94 @@ function LeaderboardUser(props: LeaderboardUserProps) {
     }, [isFetching, osuUser]);
 
     return (
-        <Segment inverted placeholder={props.leaderboardsUser.isFetching}>
+        <>
             {props.leaderboardsUser.isFetching && (
-                <Loader active size="massive">Loading</Loader>
+                <div className={classes.loader}>
+                    <CircularProgress color="inherit" size={70} />
+                    <Typography variant="h4" align="center">Loading</Typography>
+                </div>
             )}
             {membership && osuUser && (
-                <>
-                    {/* Name */}
-                    <Header inverted textAlign="center" as="h1">
-                        {osuUser.username}
-                    </Header>
-
-                    {/* Stats: pp, rank, score count */}
-                    <Statistic.Group inverted widths={3}>
-                        <Statistic>
-                            <Statistic.Label>Performance</Statistic.Label>
-                            <Statistic.Value>{membership.pp.toFixed(0)}</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Rank</Statistic.Label>
-                            <Statistic.Value>-</Statistic.Value>
-                        </Statistic>
-                        <Statistic>
-                            <Statistic.Label>Scores</Statistic.Label>
-                            <Statistic.Value>{membership.scoreCount}</Statistic.Value>
-                        </Statistic>
-                    </Statistic.Group>            
-
-                    <Divider horizontal inverted>Scores</Divider>
-
-                    {/* Score table */}
-                    <Table fixed singleLine selectable inverted>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={1}></Table.HeaderCell>
-                                <Table.HeaderCell width={8}>Beatmap</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Mods</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Accuracy</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>PP</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>Result</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {props.leaderboardsUser.scoreIds.map((scoreId, i) => {
-                                const score = props.profilesData.scores[scoreId];
-                                const beatmap = props.profilesData.beatmaps[score.beatmapId];
-                                return (
-                                    <Table.Row key={i}>
-                                        <Table.Cell>{i+1}</Table.Cell>
-                                        <Table.Cell>
-                                            <Link to={`/leaderboards/${leaderboardId}/beatmaps/${beatmap.id}`}>{beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]</Link>
-                                        </Table.Cell>
-                                        <Table.Cell>{formatMods(score.mods)}</Table.Cell>
-                                        <Table.Cell>{score.accuracy.toFixed(2)}%</Table.Cell>
-                                        <Table.Cell>{score.pp.toFixed(0)}pp</Table.Cell>
-                                        <Table.Cell>{formatScoreResult(score.result)}</Table.Cell>
-                                    </Table.Row>
-                                );
-                            })}
-                        </Table.Body>
-                    </Table>
-                </>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography className={classes.paperHeader} variant="h4" align="center">
+                                {osuUser.username}
+                            </Typography>
+                            <div className={classes.memberStats}>
+                                <Grid container>
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            Performance
+                                        </Typography>
+                                        <Tooltip title={`${membership.pp.toFixed(2)}pp`}>
+                                            <Typography variant="h4" align="center">
+                                                {membership.pp.toFixed(0)}pp
+                                            </Typography>
+                                        </Tooltip>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="h6" noWrap align="center">
+                                            Score Count
+                                        </Typography>
+                                        <Typography variant="h4" align="center">
+                                            {membership.scoreCount}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography className={classes.paperHeader} variant="h5" align="center">
+                                Scores
+                            </Typography>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell>Beatmap</TableCell>
+                                        <TableCell align="center">Mods</TableCell>
+                                        <TableCell align="center">Accuracy</TableCell>
+                                        <TableCell align="center">PP</TableCell>
+                                        <TableCell align="center">Result</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {props.leaderboardsUser.scoreIds.map((scoreId, i) => {
+                                        const score = props.profilesData.scores[scoreId];
+                                        const beatmap = props.profilesData.beatmaps[score.beatmapId];
+                                        
+                                        return (
+                                            <TableRow hover>
+                                                <TableCell>{i+1}</TableCell>
+                                                <TableCell><Link className={classes.tableLink} to={`/leaderboards/${leaderboardId}/beatmaps/${beatmap.id}`}>{beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]</Link></TableCell>
+                                                <TableCell align="center">{formatMods(score.mods)}</TableCell>
+                                                <TableCell align="center">{score.accuracy.toFixed(2)}%</TableCell>
+                                                <TableCell align="center">
+                                                    <Tooltip title={`${score.pp.toFixed(2)}pp`}>
+                                                        <Typography>{score.pp.toFixed(0)}pp</Typography>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell align="center">{formatScoreResult(score.result)}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    </Grid>
+                </Grid>
             )}
-        </Segment>
+            {!isFetching && !osuUser && (
+                <div className={classes.loader}>
+                    <Typography variant="h3" align="center">
+                        Leaderboard user not found!
+                    </Typography>
+                </div>
+            )}
+        </>
     );
 }
 

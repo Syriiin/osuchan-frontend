@@ -7,7 +7,7 @@ import { StoreState } from "../reducers";
 import { OsuUser } from "../data/profiles/types";
 import { addOsuUsers } from "../data/profiles/actions";
 import { osuUserFromJson } from "../data/profiles/deserialisers";
-import { MeActionType, MeGetRequest, MeGetSuccess, MeGetFailure, MeJoinLeaderboardPostRequest, MeJoinLeaderboardPostSuccess, MeJoinLeaderboardPostFailure, MeLeaveLeaderboardDeleteRequest, MeLeaveLeaderboardDeleteSuccess, MeLeaveLeaderboardDeleteFailure } from "./types";
+import { MeActionType, MeGetRequest, MeGetSuccess, MeGetFailure, MeJoinLeaderboardPostRequest, MeJoinLeaderboardPostSuccess, MeJoinLeaderboardPostFailure, MeLeaveLeaderboardDeleteRequest, MeLeaveLeaderboardDeleteSuccess, MeLeaveLeaderboardDeleteFailure, MeScorePostRequest, MeScorePostSuccess, MeScorePostFailure } from "./types";
 import { Leaderboard, Invite } from "../data/leaderboards/types";
 import { leaderboardFromJson, inviteFromJson } from "../data/leaderboards/deserialisers";
 import { addLeaderboards, addInvites } from "../data/leaderboards/actions";
@@ -52,6 +52,24 @@ export function meJoinLeaderboardPostSuccess(leaderboardId: number): MeJoinLeade
 export function meJoinLeaderboardPostFailure(): MeJoinLeaderboardPostFailure {
     return {
         type: MeActionType.JoinLeaderboardPostFailure
+    }
+}
+
+export function meScorePostRequest(): MeScorePostRequest {
+    return {
+        type: MeActionType.ScorePostRequest
+    }
+}
+
+export function meScorePostSuccess(): MeScorePostSuccess {
+    return {
+        type: MeActionType.ScorePostSuccess
+    }
+}
+
+export function meScorePostFailure(): MeScorePostFailure {
+    return {
+        type: MeActionType.ScorePostFailure
     }
 }
 
@@ -122,6 +140,26 @@ export function meJoinLeaderboardPostThunk(leaderboardId: number): ThunkAction<v
             dispatch(meJoinLeaderboardPostSuccess(leaderboardId));
         } catch (error) {
             dispatch(meJoinLeaderboardPostFailure());
+        }
+    }
+}
+
+export function meScorePostThunk(userId: number, beatmapId: number, gamemodeId: number): ThunkAction<void, StoreState, null, Action> {
+    return async function(dispatch, getState) {
+        dispatch(meScorePostRequest());
+
+        try {
+            await axios.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
+                "beatmap_id": beatmapId
+            }, {
+                headers: {
+                    "X-CSRFToken": Cookies.get("csrftoken")
+                }
+            });
+            
+            dispatch(meScorePostSuccess());
+        } catch (error) {
+            dispatch(meScorePostFailure());
         }
     }
 }

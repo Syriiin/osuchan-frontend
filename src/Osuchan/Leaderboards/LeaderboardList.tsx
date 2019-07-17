@@ -1,22 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { Header, Segment, Card, Item, Label, Image, Loader, Button, Divider, Modal, Form } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { makeStyles, Theme, createStyles, Typography, CircularProgress, Paper, Grid, CardContent, Card, Divider, List, ListItem, ListItemText, Chip, Avatar, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox } from "@material-ui/core";
 
 import { StoreState } from "../../store/reducers";
 import { LeaderboardsListState } from "../../store/leaderboards/list/types";
 import { leaderboardsListGetThunk, leaderboardsListPostThunk } from "../../store/leaderboards/list/actions"
 import { LeaderboardsDataState } from "../../store/data/leaderboards/types";
 import { ProfilesDataState } from "../../store/data/profiles/types";
-import styled from "styled-components";
 import { MeState } from "../../store/me/types";
 
-// temp styled component to create makeshift inverted SUI Items
-const WhiteSpan = styled.span`
-    color: #fff;
-`;
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    loader: {
+        textAlign: "center",
+        marginTop: 150
+    },
+    cardLink: {
+        color: "inherit",
+        textDecoration: "none"
+    },
+    globalLeaderboardsPaper: {
+        padding: theme.spacing(2)
+    },
+    globalLeaderboardDetails: {
+        display: "flex"
+    },
+    globalLeaderboardText: {
+        flexGrow: 1
+    },
+    globalLeaderboardImage: {
+        alignSelf: "center"
+    },
+    createButton: {
+        margin: theme.spacing(2),
+        width: theme.spacing(32)
+    },
+    formHeading: {
+        marginTop: theme.spacing(2)
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 200
+    },
+    communityLeaderboardImage: {
+        margin: theme.spacing(1)
+    },
+    communityLeaderboardChip: {
+        marginRight: theme.spacing(1)
+    }
+}));
 
 function LeaderboardList(props: LeaderboardListProps) {
+    const classes = useStyles();
+
     // use effect to fetch leaderboards data
     const { leaderboardsListGetThunk } = props;
     useEffect(() => {
@@ -33,12 +69,12 @@ function LeaderboardList(props: LeaderboardListProps) {
         }
     }, [isFetching]);
 
-    const [gamemode, setGamemode] = useState();
-    const [accessType, setAccessType] = useState();
+    const [gamemode, setGamemode] = useState(0);
+    const [accessType, setAccessType] = useState(1);
     const [name, setName] = useState();
     const [description, setDescription] = useState();
-    const [allowPastScores, setAllowPastScores] = useState();
-    const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState();
+    const [allowPastScores, setAllowPastScores] = useState(true);
+    const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(1);
     const [oldestBeatmapDate, setOldestBeatmapDate] = useState();
     const [newestBeatmapDate, setNewestBeatmapDate] = useState();
     const [lowestAr, setLowestAr] = useState();
@@ -47,20 +83,22 @@ function LeaderboardList(props: LeaderboardListProps) {
     const [highestOd, setHighestOd] = useState();
     const [lowestCs, setLowestCs] = useState();
     const [highestCs, setHighestCs] = useState();
-    const [requiredMods, setRequiredMods] = useState();
-    const [disqualifiedMods, setDisqualifiedMods] = useState();
+    const [requiredMods, setRequiredMods] = useState<number[]>([]);
+    const [disqualifiedMods, setDisqualifiedMods] = useState<number[]>([]);
     const [lowestAccuracy, setLowestAccuracy] = useState();
     const [highestAccuracy, setHighestAccuracy] = useState();
 
-    const handleSubmit = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
         // dispatch create action
         props.leaderboardsListPostThunk(
-            parseInt(gamemode),
-            parseInt(accessType),
+            gamemode,
+            accessType,
             name,
             description || "",
-            allowPastScores ? allowPastScores === "true" : null,
-            parseInt(allowedBeatmapStatus) || 0,
+            allowPastScores,
+            allowedBeatmapStatus,
             oldestBeatmapDate ? new Date(oldestBeatmapDate) : null,
             newestBeatmapDate ? new Date(newestBeatmapDate) : null,
             lowestAr ? parseFloat(lowestAr) : null,
@@ -69,124 +107,240 @@ function LeaderboardList(props: LeaderboardListProps) {
             highestOd ? parseFloat(highestOd) : null,
             lowestCs ? parseFloat(lowestCs) : null,
             highestCs ? parseFloat(highestCs) : null,
-            parseInt(requiredMods) || 0,
-            parseInt(disqualifiedMods) || 0,
+            requiredMods.reduce((total, value) => total | value, 0),
+            disqualifiedMods.reduce((total, value) => total | value, 0),
             lowestAccuracy ? parseFloat(lowestAccuracy) : null,
             highestAccuracy ? parseFloat(highestAccuracy) : null
         )
 
-        setModalOpen(false);
+        setCreateDialogOpen(false);
+    }
+    const handleClose = () => {
+        setGamemode(0);
+        setAccessType(1);
+        setName(null);
+        setDescription(null);
+        setAllowPastScores(true);
+        setAllowedBeatmapStatus(1);
+        setOldestBeatmapDate(null);
+        setNewestBeatmapDate(null);
+        setLowestAr(null);
+        setHighestAr(null);
+        setLowestOd(null);
+        setHighestOd(null);
+        setLowestCs(null);
+        setHighestCs(null);
+        setRequiredMods([]);
+        setDisqualifiedMods([]);
+        setLowestAccuracy(null);
+        setHighestAccuracy(null);
+
+        setCreateDialogOpen(false);
     }
 
-    const [modalOpen, setModalOpen] = useState(false);
+    const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
     const leaderboards = props.leaderboardsList.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]);
 
     return (
         <>
-            <Header as="h2" inverted attached="top" textAlign="center">Featured Leaderboards</Header>
-            <Segment inverted attached placeholder={props.leaderboardsList.isFetching}>
-                {props.leaderboardsList.isFetching ? (
-                    <Loader active size="massive">Loading</Loader>
-                ) : (
-                    <Card.Group centered>
-                        {leaderboards.filter(leaderboard => leaderboard.accessType === 0).map((leaderboard, i) => (
-                            <Card key={i} as={NavLink} to={`/leaderboards/${leaderboard.id}`}>
-                                <Card.Content>
-                                    <Image size="tiny" floated="right" src="https://syrin.me/static/img/osu!next_icons/mod-HD.png" />
-                                    <Card.Header>{leaderboard.name}</Card.Header>
-                                    <Card.Meta>Global</Card.Meta>
-                                    <Card.Description>{leaderboard.description}</Card.Description>
-                                </Card.Content>
+        {props.leaderboardsList.isFetching ? (
+            <div className={classes.loader}>
+                <CircularProgress color="inherit" size={70} />
+                <Typography variant="h4" align="center">Loading</Typography>
+            </div>
+        ) : (
+            <>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Global Leaderboards
+                </Typography>
+                <Grid container spacing={2} justify="center">
+                    {leaderboards.filter(leaderboard => leaderboard.accessType === 0).map((leaderboard) => (
+                        <Grid item xs={12} md={6} lg={4}>
+                            <Card>
+                                <Link className={classes.cardLink} to={`/leaderboards/${leaderboard.id}`}>
+                                <CardContent>
+                                    <div className={classes.globalLeaderboardDetails}>
+                                        <div className={classes.globalLeaderboardText}>
+                                            <Typography variant="h5">
+                                                {leaderboard.name}
+                                            </Typography>
+                                            <Typography variant="subtitle1" color="textSecondary" paragraph>
+                                                {leaderboard.description}
+                                            </Typography>
+                                        </div>
+                                        <img className={classes.globalLeaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard" />
+                                    </div>
+                                </CardContent>
+                                </Link>
                             </Card>
-                        ))}
-                    </Card.Group>
-                )}
-            </Segment>
+                        </Grid>
+                    ))}
+                </Grid>
 
-            <Header as="h2" inverted attached="top" textAlign="center">Community Leaderboards</Header>
-            <Segment inverted attached placeholder={props.leaderboardsList.isFetching}>
-                {props.leaderboardsList.isFetching ? (
-                    <Loader active size="massive">Loading</Loader>
-                ) : (
-                    <>
-                        {props.me.osuUserId && (
-                            <>
-                                <Button onClick={() => setModalOpen(true)}>Create</Button>
-                                <Divider />
-                            </>
-                        )}
-                        <Item.Group divided>
-                            {leaderboards.filter(leaderboard => leaderboard.accessType !== 0).map((leaderboard, i) => {
-                                const owner = props.profilesData.osuUsers[leaderboard.ownerId!];
-                                return (
-                                    <Item key={i} as={NavLink} to={`/leaderboards/${leaderboard.id}`}>
-                                        <Item.Image size="tiny" src="https://syrin.me/static/img/osu!next_icons/mod-EZ.png" />
-                                        <Item.Content verticalAlign="middle">
-                                            <Item.Header>
-                                                <WhiteSpan>{leaderboard.name}</WhiteSpan>
-                                            </Item.Header>
-                                            <Item.Description>
-                                                <Label as="a" image>
-                                                    <img alt="Avatar" src={`https://a.ppy.sh/${owner.id}`} />
-                                                    {owner.username}
-                                                </Label>
+                <br />
+                
+                <Typography variant="h4" align="center" gutterBottom>
+                    Community Leaderboards
+                </Typography>
+
+                <Paper>
+                    {props.me.osuUserId && (
+                        <>
+                            {props.leaderboardsList.isPosting ? (
+                                <Button color="primary" disabled className={classes.createButton} variant="contained" size="large">
+                                    <CircularProgress size={26} color="inherit" />
+                                </Button>
+                            ) : (
+                                <Button color="primary" className={classes.createButton} variant="contained" size="large" onClick={() => setCreateDialogOpen(true)}>
+                                    Create new leaderboard
+                                </Button>
+                            )}
+                            <Dialog fullWidth open={createDialogOpen} onClose={handleClose}>
+                                <form onSubmit={handleSubmit}>
+                                    <DialogTitle>Create new leaderboard</DialogTitle>
+                                    <DialogContent>
+                                        {/* Basic details */}
+                                        <TextField className={classes.formControl} onChange={e => setName(e.currentTarget.value)} margin="dense" fullWidth required label="Name" />
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="gamemode_select">Gamemode</InputLabel>
+                                            <Select inputProps={{ id: "gamemode_select" }} value={gamemode} onChange={e => setGamemode(parseInt(e.target.value as string))}>
+                                                <MenuItem value={0}>osu!</MenuItem>
+                                                <MenuItem value={1}>osu!taiko</MenuItem>
+                                                <MenuItem value={2}>osu!catch</MenuItem>
+                                                <MenuItem value={3}>osu!mania</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="access_type_select">Type</InputLabel>
+                                            <Select inputProps={{ id: "access_type_select" }} value={accessType} onChange={e => setAccessType(parseInt(e.target.value as string))}>
+                                                <MenuItem value={1}>Public</MenuItem>
+                                                <MenuItem value={2}>Public (Invite-only)</MenuItem>
+                                                <MenuItem value={3}>Private</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <TextField className={classes.formControl} multiline onChange={e => setDescription(e.currentTarget.value)} margin="dense" fullWidth label="Description" />
+                                    
+                                        {/* Score filters */}
+                                        <Typography className={classes.formHeading} variant="h6">Score filters</Typography>
+                                        {/* Past scores */}
+                                        <FormControlLabel className={classes.formControl} label="Allow scores prior to member joining" control={
+                                            <Checkbox checked={allowPastScores} value="checkedAllowPastScores" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAllowPastScores(e.target.checked)} />
+                                        } />
+                                        <br />
+                                        {/* Beatmap status */}
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="allowed_beatmap_status_select">Allowed Beatmap Status</InputLabel>
+                                            <Select inputProps={{ id: "allowed_beatmap_status_select" }} value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value as string))}>
+                                                <MenuItem value={0}>Ranked or Loved</MenuItem>
+                                                <MenuItem value={1}>Ranked only</MenuItem>
+                                                <MenuItem value={2}>Loved only</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <br />
+                                        {/* Dates */}
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}"}} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} margin="dense" label="Oldest Beatmap Date" placeholder="YYYY-MM-DD" />
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}"}} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} margin="dense" label="Newest Beatmap Date" placeholder="YYYY-MM-DD" />
+                                        <br />
+                                        {/* Mods */}
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="required_mods_select">Required mods</InputLabel>
+                                            <Select inputProps={{ id: "required_mods_select" }} multiple value={requiredMods} onChange={e => setRequiredMods(e.target.value as number[])}>
+                                                {/* Common mods */}
+                                                {gamemode === 3 && <MenuItem value={1048576}>FI</MenuItem>}
+                                                <MenuItem value={8}>HD</MenuItem>
+                                                {gamemode !== 3 && <MenuItem value={16}>HR</MenuItem>}
+                                                <MenuItem value={64}>DT</MenuItem>
+                                                <MenuItem value={512}>NC</MenuItem>
+                                                <MenuItem value={1024}>FL</MenuItem>
+                                                <MenuItem value={2}>EZ</MenuItem>
+                                                <MenuItem value={256}>HT</MenuItem>
+                                                {/* Special mods */}
+                                                <MenuItem value={1}>NF</MenuItem>
+                                                <MenuItem value={32}>SD</MenuItem>
+                                                <MenuItem value={16384}>PF</MenuItem>
+                                                {gamemode === 0 && <MenuItem value={4096}>SO</MenuItem>}
+                                                {gamemode === 0 && <MenuItem value={4}>TD</MenuItem>}
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="disqualified_mods_select">Disqualified mods</InputLabel>
+                                            <Select inputProps={{ id: "disqualified_mods_select" }} multiple value={disqualifiedMods} onChange={e => setDisqualifiedMods(e.target.value as number[])}>
+                                                {/* Common mods */}
+                                                {gamemode === 3 && <MenuItem value={1048576}>FI</MenuItem>}
+                                                <MenuItem value={8}>HD</MenuItem>
+                                                {gamemode !== 3 && <MenuItem value={16}>HR</MenuItem>}
+                                                <MenuItem value={64}>DT</MenuItem>
+                                                <MenuItem value={512}>NC</MenuItem>
+                                                <MenuItem value={1024}>FL</MenuItem>
+                                                <MenuItem value={2}>EZ</MenuItem>
+                                                <MenuItem value={256}>HT</MenuItem>
+                                                {/* Special mods */}
+                                                <MenuItem value={1}>NF</MenuItem>
+                                                <MenuItem value={32}>SD</MenuItem>
+                                                <MenuItem value={16384}>PF</MenuItem>
+                                                {gamemode === 0 && <MenuItem value={4096}>SO</MenuItem>}
+                                                {gamemode === 0 && <MenuItem value={4}>TD</MenuItem>}
+                                            </Select>
+                                        </FormControl>
+                                        {/* Ranges */}
+                                        {(gamemode === 0 || gamemode === 2) && (
+                                            <>
+                                                <TextField className={classes.formControl} onChange={e => setLowestAr(e.currentTarget.value)} margin="dense" label="Min AR" />
+                                                <TextField className={classes.formControl} onChange={e => setHighestAr(e.currentTarget.value)} margin="dense" label="Max AR" />
+                                            </>
+                                        )}
+                                        <TextField className={classes.formControl} onChange={e => setLowestOd(e.currentTarget.value)} margin="dense" label="Min OD" />
+                                        <TextField className={classes.formControl} onChange={e => setHighestOd(e.currentTarget.value)} margin="dense" label="Max OD" />
+                                        <TextField className={classes.formControl} onChange={e => setLowestCs(e.currentTarget.value)} margin="dense" label={gamemode === 3 ? "Min Keys" : "Min CS"} />
+                                        <TextField className={classes.formControl} onChange={e => setHighestCs(e.currentTarget.value)} margin="dense" label={gamemode === 3 ? "Max Keys" : "Max CS"} />
+                                        <TextField className={classes.formControl} onChange={e => setLowestAccuracy(e.currentTarget.value)} margin="dense" label="Min Accuracy (%)" />
+                                        <TextField className={classes.formControl} onChange={e => setHighestAccuracy(e.currentTarget.value)} margin="dense" label="Max Accuracy (%)" />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit">
+                                            Create
+                                        </Button>
+                                    </DialogActions>
+                                </form>
+                            </Dialog>
+                            <Divider />
+                        </>
+                    )}
+                    <List>
+                        {props.leaderboardsList.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]).filter(leaderboard => leaderboard.accessType !== 0).map((leaderboard) => {
+                            const owner = props.profilesData.osuUsers[leaderboard.ownerId!];
+
+                            return (
+                                <ListItem button component={Link} to={`/leaderboards/${leaderboard.id}`}>
+                                    <img className={classes.communityLeaderboardImage} src={leaderboard.iconUrl} alt="Leaderboard icon" />
+                                    <ListItemText
+                                        primary={leaderboard.name}
+                                        primaryTypographyProps={{
+                                            variant: "h6"
+                                        }}
+                                        secondary={
+                                            <>
+                                                <Chip className={classes.communityLeaderboardChip} size="small" label={owner.username} avatar={<Avatar src={`https://a.ppy.sh/${owner.id}`} />} />
                                                 {leaderboard.accessType === 2 && (
-                                                    <Label color="grey">INVITE-ONLY</Label>
+                                                    <Chip className={classes.communityLeaderboardChip} size="small" label="INVITE-ONLY" />
                                                 )}
                                                 {leaderboard.accessType === 3 && (
-                                                    <Label color="grey">PRIVATE</Label>
+                                                    <Chip className={classes.communityLeaderboardChip} size="small" label="PRIVATE" />
                                                 )}
-                                            </Item.Description>
-                                        </Item.Content>
-                                    </Item>
-                                );
-                            })}
-                        </Item.Group>
-                    </>
-                )}
-            </Segment>
-
-            <Modal open={modalOpen} onClose={() => setModalOpen(false)} small="true">
-                <Modal.Header>Create a leaderboard</Modal.Header>
-                <Modal.Content>
-                    <Form onSubmit={handleSubmit}>
-                        {/* Basic details */}
-                        <Form.Input onChange={e => setName(e.currentTarget.value)} required name="name" label="Name" />
-                        <Form.Select onChange={(e, { value }) => setGamemode(value)} required name="gamemode" label="Gamemode" options={[
-                            { text: "osu!", value: 0},
-                            { text: "osu!taiko", value: 1},
-                            { text: "osu!catch", value: 2},
-                            { text: "osu!mania", value: 3}
-                        ]} />
-                        <Form.Select onChange={(e, { value }) => setAccessType(value)} required name="accessType" label="Type" options={[
-                            { text: "Public", value: 1},
-                            { text: "Public (Invite-only)", value: 2},
-                            { text: "Private", value: 3}
-                        ]} />
-                        <Form.TextArea onChange={e => setDescription(e.currentTarget.value)} name="description" label="Description" />
-
-                        {/* Score filters */}
-                        <Header>Score filters</Header>
-                        <Form.Input onChange={e => setAllowPastScores(e.currentTarget.value)} label="Include scores before member joins" />
-                        <Form.Input onChange={e => setAllowedBeatmapStatus(e.currentTarget.value)} label="Beatmap Status" />
-                        <Form.Input onChange={e => setOldestBeatmapDate(e.currentTarget.value)} label="Oldest Beatmap Date" placeholder="YYYY-MM-DD" />
-                        <Form.Input onChange={e => setNewestBeatmapDate(e.currentTarget.value)} label="Newest Beatmap Date" placeholder="YYYY-MM-DD" />
-                        <Form.Input onChange={e => setRequiredMods(e.currentTarget.value)} label="Required Mods" />
-                        <Form.Input onChange={e => setDisqualifiedMods(e.currentTarget.value)} label="Disqualified Mods" />
-                        <Form.Input onChange={e => setLowestAr(e.currentTarget.value)} label="Min AR" />
-                        <Form.Input onChange={e => setHighestAr(e.currentTarget.value)} label="Max AR" />
-                        <Form.Input onChange={e => setLowestOd(e.currentTarget.value)} label="Min OD" />
-                        <Form.Input onChange={e => setHighestOd(e.currentTarget.value)} label="Max OD" />
-                        <Form.Input onChange={e => setLowestCs(e.currentTarget.value)} label="Min CS" />
-                        <Form.Input onChange={e => setHighestCs(e.currentTarget.value)} label="Max CS" />
-                        <Form.Input onChange={e => setLowestAccuracy(e.currentTarget.value)} label="Min Accuracy" />
-                        <Form.Input onChange={e => setHighestAccuracy(e.currentTarget.value)} label="Max Accuracy" />
-
-                        <Form.Button>Create Leaderboard</Form.Button>
-                    </Form>
-                </Modal.Content>
-            </Modal>
+                                            </>
+                                        }
+                                    />
+                                </ListItem>
+                            );
+                        })}
+                    </List>
+                </Paper>
+            </>
+        )}
         </>
     );
 }

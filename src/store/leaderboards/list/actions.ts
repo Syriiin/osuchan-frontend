@@ -3,6 +3,8 @@ import { ThunkAction } from "redux-thunk";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import history from "../../../history";
+
 import { StoreState } from "../../reducers";
 import { LeaderboardsListActionType, LeaderboardsListGetRequest, LeaderboardsListGetSuccess, LeaderboardsListGetFailure, LeaderboardsListPostRequest, LeaderboardsListPostSuccess, LeaderboardsListPostFailure } from "./types";
 import { leaderboardFromJson } from "../../data/leaderboards/deserialisers";
@@ -129,6 +131,9 @@ export function leaderboardsListPostThunk(
             dispatch(addLeaderboards(leaderboard));
 
             dispatch(leaderboardsListPostSuccess(leaderboard.id));
+
+            // Navigate to leaderboard page after creation
+            history.push(`/leaderboards/${leaderboard.id}`);
         } catch (error) {
             console.log(error);
             dispatch(leaderboardsListPostFailure());

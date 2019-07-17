@@ -6,6 +6,7 @@ export function gamemodeIdFromName(gamemodeName: string | undefined): number {
         case "taiko":
             return 1;
         case "catch":
+        case "fruits":
             return 2;
         case "mania":
             return 3;

@@ -8,6 +8,7 @@ export interface MeState {
     inviteIds: number[];
     isFetching: boolean;
     isPosting: boolean;
+    isPostingScore: boolean;
     isDeleting: boolean;
 }
 
@@ -20,6 +21,9 @@ export enum MeActionType {
     JoinLeaderboardPostRequest = "ME_JOIN_LEADERBOARD_POST_REQUEST",
     JoinLeaderboardPostSuccess = "ME_JOIN_LEADERBOARD_POST_SUCCESS",
     JoinLeaderboardPostFailure = "ME_JOIN_LEADERBOARD_POST_FAILURE",
+    ScorePostRequest = "ME_SCORE_POST_REQUEST",
+    ScorePostSuccess = "ME_SCORE_POST_SUCCESS",
+    ScorePostFailure = "ME_SCORE_POST_FAILURE",
     LeaveLeaderboardDeleteRequest = "ME_LEAVE_LEADERBOARD_DELETE_REQUEST",
     LeaveLeaderboardDeleteSuccess = "ME_LEAVE_LEADERBOARD_DELETE_SUCCESS",
     LeaveLeaderboardDeleteFailure = "ME_LEAVE_LEADERBOARD_DELETE_FAILURE"
@@ -53,6 +57,18 @@ export interface MeJoinLeaderboardPostFailure extends Action {
     type: MeActionType.JoinLeaderboardPostFailure;
 }
 
+export interface MeScorePostRequest extends Action {
+    type: MeActionType.ScorePostRequest;
+}
+
+export interface MeScorePostSuccess extends Action {
+    type: MeActionType.ScorePostSuccess;
+}
+
+export interface MeScorePostFailure extends Action {
+    type: MeActionType.ScorePostFailure;
+}
+
 export interface MeLeaveLeaderboardDeleteRequest extends Action {
     type: MeActionType.LeaveLeaderboardDeleteRequest;
 }
@@ -69,5 +85,6 @@ export interface MeLeaveLeaderboardDeleteFailure extends Action {
 export type MeAction = (
     MeGetRequest | MeGetSuccess | MeGetFailure |
     MeJoinLeaderboardPostRequest | MeJoinLeaderboardPostSuccess | MeJoinLeaderboardPostFailure |
+    MeScorePostRequest | MeScorePostSuccess | MeScorePostFailure |
     MeLeaveLeaderboardDeleteRequest | MeLeaveLeaderboardDeleteSuccess | MeLeaveLeaderboardDeleteFailure
 );

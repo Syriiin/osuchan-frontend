@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { Container } from "semantic-ui-react";
-import styled from "styled-components";
+import Container from "@material-ui/core/Container";
 
 import { meGetThunk } from "../store/me/actions";
 
@@ -11,13 +10,25 @@ import Footer from "./Footer";
 import Home from "./Home/Home";
 import Profiles from "./Profiles/Profiles";
 import Leaderboards from "./Leaderboards/Leaderboards";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
-// Flex on container ensures the navbar stays at the top, and footer stays at the bottom
-const OsuchanContainer = styled(Container)`
-    flex: 1;
-`;
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        display: "flex"
+    },
+    content: {
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        flexGrow: 1,
+        padding: theme.spacing(3)
+    },
+    toolbar: theme.mixins.toolbar
+}));
 
 function Osuchan(props: OsuchanProps) {
+    const classes = useStyles();
+    
     // call fetch me action on mount
     const { meGetThunk } = props;
     useEffect(() => {
@@ -25,18 +36,21 @@ function Osuchan(props: OsuchanProps) {
     }, [meGetThunk]);
 
     return (
-        <>
+        <div className={classes.root}>
             <Navbar />
-            <OsuchanContainer>
-                <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/users" component={Profiles} />
-                    <Route path="/leaderboards" component={Leaderboards} />
-                    <Redirect to="/" />
-                </Switch>
-            </OsuchanContainer>
-            <Footer />
-        </>
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Container maxWidth="lg">
+                    <Switch>
+                        <Route path="/" exact component={Home} />
+                        <Route path="/users" component={Profiles} />
+                        <Route path="/leaderboards" component={Leaderboards} />
+                        <Redirect to="/" />
+                    </Switch>
+                </Container>
+                <Footer />
+            </main>
+        </div>
     );
 }
 
