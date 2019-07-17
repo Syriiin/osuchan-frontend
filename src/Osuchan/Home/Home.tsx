@@ -14,7 +14,7 @@ const Homepage: FunctionComponent = () => (
         <Typography variant="body1" paragraph>
             Please remember this is a beta, so expect to encounter bugs and inconsistencies.
             <br />
-            If you run into any bugs, please let me know in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+            If you run into any bugs, please let me know in the <Link color="secondary" href="https://discord.gg/z7c9tD6">discord server</Link>.
         </Typography>
 
         <br />
