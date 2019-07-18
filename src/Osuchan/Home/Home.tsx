@@ -77,11 +77,13 @@ const Homepage: FunctionComponent = () => (
             <em>I created a leaderboard, but it isn't showing up in the leaderboard list. Why?</em>
         </Typography>
         <Typography variant="body2">
-            The Community Leaderboard list at the moment only displays the top 25 leaderboards (by number of members) that are visible to you (public leaderboards and private leaderboards you are a member of).
+            The Community Leaderboard list at the moment only displays the top 25 public leaderboards (by number of members).
             <br />
             You can view all the leaderboards a user has joined (except private ones you aren't a member of) in their profile.
             <br />
             You will be able to see any leaderboards you create in your profile too.
+            <br />
+            To view any private leaderboards you are a member of, you need to check the list in your profile.
         </Typography>
     </>
 );
