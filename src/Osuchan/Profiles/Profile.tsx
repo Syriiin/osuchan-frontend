@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         width: 30,
         marginRight: theme.spacing(1)
     },
+    countryName: {
+        maxWidth: theme.spacing(17)
+    },
     calendarIcon: {
         marginRight: theme.spacing(1)
     },
@@ -124,7 +127,7 @@ function Profile(props: ProfileProps) {
                                     </div>
                                     <div className={classes.userDetailsLine}>
                                         <img className={classes.userFlag} src={`https://osu.ppy.sh/images/flags/${osuUser.country}.png`} alt="Flag" />
-                                        <Typography variant="h6" align="center">
+                                        <Typography className={classes.countryName} variant="h6" align="center">
                                             {countries.getName(osuUser.country, "en")}
                                         </Typography>
                                     </div>
