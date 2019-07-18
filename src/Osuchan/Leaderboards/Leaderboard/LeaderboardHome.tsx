@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { Typography, Paper, Chip, Avatar, makeStyles, Theme, createStyles, Grid, CircularProgress, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Tooltip } from "@material-ui/core";
+import { Typography, Paper, Chip, Avatar, makeStyles, Theme, createStyles, Grid, CircularProgress, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Tooltip, Link as UILink } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 
 import { StoreState } from "../../../store/reducers";
@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     inviteButton: {
         width: theme.spacing(15)
+    },
+    myProfileButton: {
+        margin: theme.spacing(2)
     },
     paperHeader: {
         padding: theme.spacing(2)
@@ -282,6 +285,11 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             <Typography className={classes.paperHeader} variant="h5" align="center">
                                 Rankings
                             </Typography>
+                            {props.me.osuUserId && (
+                                <UILink component={Link} to={`/leaderboards/${leaderboardId}/users/${props.me.osuUserId}`}>
+                                    <Button color="secondary" variant="contained" className={classes.myProfileButton}>My profile</Button>
+                                </UILink>
+                            )}
                             <Table>
                                 <TableHead>
                                     <TableRow>
