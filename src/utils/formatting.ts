@@ -51,10 +51,10 @@ export function formatMods(enabledMods: number) {
         }
     }
 
-    if (mods.includes("NC")) {
+    if (mods.includes("NC") && mods.includes("DT")) {
         mods.splice(mods.indexOf("DT"), 1);
     }
-    if (mods.includes("PF")) {
+    if (mods.includes("PF") && mods.includes("SD")) {
         mods.splice(mods.indexOf("SD"), 1);
     }
 
