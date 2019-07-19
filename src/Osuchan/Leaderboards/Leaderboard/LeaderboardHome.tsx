@@ -88,11 +88,15 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
-        const userUrlRe = /osu.ppy.sh\/users\/(\d+)/;
-        const userUrlMatch = inviteUserUrl.match(userUrlRe);
-        if (userUrlMatch !== null) {
-            const userId = parseInt(userUrlMatch[1]);
-            props.leaderboardsDetailPostInviteThunk(leaderboard!.id, userId);
+        const userUrlRe = new RegExp(/osu.ppy.sh\/users\/(\d+)/, "g");
+        let match;
+        const userIds = [];
+        while ((match = userUrlRe.exec(inviteUserUrl)) !== null) {
+            userIds.push(parseInt(match[1]));
+        }
+
+        if (userIds.length > 0) {
+            props.leaderboardsDetailPostInviteThunk(leaderboard!.id, userIds);
             setInviteDialogOpen(false);
         }
     }
@@ -222,16 +226,17 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                                             <DialogTitle>Invite player</DialogTitle>
                                                             <DialogContent>
                                                                 <DialogContentText>
-                                                                    Enter a player's osu! profile URL to invite them.
+                                                                    Enter osu! profile URLs to invite players.
                                                                     <br />
-                                                                    URL must be from the new site so it matches the format below.
+                                                                    URLs must be from the new site so they matches the format below.
                                                                 </DialogContentText>
                                                                 <TextField
                                                                     autoFocus
                                                                     margin="dense"
-                                                                    label="osu! profile URL"
+                                                                    label="osu! profile URL(s)"
                                                                     placeholder="https://osu.ppy.sh/users/5701575"
                                                                     fullWidth
+                                                                    multiline
                                                                     required
                                                                     onChange={e => setInviteUserUrl(e.currentTarget.value)}
                                                                 />
@@ -341,7 +346,7 @@ interface RouteParams {
 interface LeaderboardHomeProps extends RouteComponentProps<RouteParams> {
     leaderboardsDetailGetThunk: (leaderboardId: number) => void;
     leaderboardsDetailDeleteThunk: (leaderboardId: number) => void;
-    leaderboardsDetailPostInviteThunk: (leaderboardId: number, userId: number) => void;
+    leaderboardsDetailPostInviteThunk: (leaderboardId: number, userIds: number[]) => void;
     meJoinLeaderboardPostThunk: (leaderboardId: number) => void;
     meLeaveLeaderboardDeleteThunk: (leaderboardId: number) => void;
     leaderboardsDetail: LeaderboardsDetailState;

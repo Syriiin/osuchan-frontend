@@ -127,13 +127,13 @@ export function leaderboardsDetailDeleteThunk(leaderboardId: number): ThunkActio
     }
 }
 
-export function leaderboardsDetailPostInviteThunk(leaderboardId: number, userId: number): ThunkAction<void, StoreState, null, Action> {
+export function leaderboardsDetailPostInviteThunk(leaderboardId: number, userIds: number[]): ThunkAction<void, StoreState, null, Action> {
     return async function(dispatch, getState) {
         dispatch(leaderboardsDetailPostInviteRequest());
 
         try {
             await axios.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
-                "user_id": userId
+                "user_ids": userIds
             }, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")

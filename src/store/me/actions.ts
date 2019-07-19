@@ -144,13 +144,13 @@ export function meJoinLeaderboardPostThunk(leaderboardId: number): ThunkAction<v
     }
 }
 
-export function meScorePostThunk(userId: number, beatmapId: number, gamemodeId: number): ThunkAction<void, StoreState, null, Action> {
+export function meScorePostThunk(userId: number, beatmapIds: number[], gamemodeId: number): ThunkAction<void, StoreState, null, Action> {
     return async function(dispatch, getState) {
         dispatch(meScorePostRequest());
 
         try {
             await axios.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
-                "beatmap_id": beatmapId
+                "beatmap_ids": beatmapIds
             }, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")

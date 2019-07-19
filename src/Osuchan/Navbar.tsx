@@ -110,13 +110,20 @@ function Navbar(props: NavbarProps) {
         
         const userUrlRe = /osu.ppy.sh\/users\/(\d+)/;
         const userUrlMatch = addScoreUserUrl.match(userUrlRe);
-        const beatmapUrlRe = /osu.ppy.sh\/beatmapsets\/\d+#(osu|taiko|fruits|mania)\/(\d+)/;
-        const beatmapUrlMatch = addScoreBeatmapUrl.match(beatmapUrlRe);
-        if (userUrlMatch !== null && beatmapUrlMatch !== null) {
+        const beatmapUrlRe = new RegExp(/osu.ppy.sh\/beatmapsets\/\d+#(osu|taiko|fruits|mania)\/(\d+)/, "g");
+        
+        let match;
+        let gamemode;
+        const beatmapIds = [];
+        while ((match = beatmapUrlRe.exec(addScoreBeatmapUrl)) !== null) {
+            gamemode = match[1];
+            beatmapIds.push(parseInt(match[2]));
+        }
+
+        if (userUrlMatch !== null && beatmapIds.length > 0) {
             const userId = parseInt(userUrlMatch[1]);
-            const beatmapId = parseInt(beatmapUrlMatch[2]);
-            const gamemodeId = gamemodeIdFromName(beatmapUrlMatch[1]);
-            props.meScorePostThunk(userId, beatmapId, gamemodeId);
+            const gamemodeId = gamemodeIdFromName(gamemode);
+            props.meScorePostThunk(userId, beatmapIds, gamemodeId);
             setAddScoreDialogOpen(false);
         }
     }
@@ -220,7 +227,7 @@ function Navbar(props: NavbarProps) {
                                             <DialogTitle>Add scores</DialogTitle>
                                             <DialogContent>
                                                 <DialogContentText>
-                                                    Enter a player's osu! profile URL and beatmap URL to add scores from that beatmap.
+                                                    Enter a player's osu! profile URL and beatmap URL(s) to add scores from those beatmaps.
                                                     <br />
                                                     URLs must be from the new site so they match the format below.
                                                 </DialogContentText>
@@ -235,10 +242,11 @@ function Navbar(props: NavbarProps) {
                                                 />
                                                 <TextField
                                                     margin="dense"
-                                                    label="Beatmap URL"
+                                                    label="Beatmap URL(s)"
                                                     placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
                                                     required
                                                     fullWidth
+                                                    multiline
                                                     onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)}
                                                 />
                                             </DialogContent>
@@ -269,7 +277,7 @@ interface NavbarProps extends RouteComponentProps {
     me: MeState,
     profilesData: ProfilesDataState,
     leaderboardsData: LeaderboardsDataState,
-    meScorePostThunk: (userId: number, gamemodeId: number, beatmapId: number) => void
+    meScorePostThunk: (userId: number, beatmapIds: number[], gamemodeId: number) => void
 }
 
 function mapStateToProps(state: StoreState) {
