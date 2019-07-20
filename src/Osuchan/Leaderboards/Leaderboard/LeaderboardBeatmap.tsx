@@ -9,7 +9,7 @@ import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
 import { LeaderboardsBeatmapState } from "../../../store/leaderboards/beatmap/types";
 import { leaderboardsBeatmapThunkFetch } from "../../../store/leaderboards/beatmap/actions";
 import { formatTime, formatMods, formatScoreResult } from "../../../utils/formatting";
-import { makeStyles, Theme, createStyles, CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, Tooltip } from "@material-ui/core";
+import { makeStyles, Theme, createStyles, CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, Tooltip, Link as UILink } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loader: {
@@ -69,10 +69,12 @@ function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
                     <Grid item xs={12}>
                         <Paper>
                             <Typography className={classes.paperHeader} variant="h4" align="center">
-                                {beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]
-                                <Typography variant="subtitle1" color="textSecondary" align="center">
-                                    by {beatmap.creatorName}
-                                </Typography>
+                                <UILink color="inherit" href={`https://osu.ppy.sh/b/${beatmapId}`}>
+                                    {beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]
+                                    <Typography variant="subtitle1" color="textSecondary" align="center">
+                                        by {beatmap.creatorName}
+                                    </Typography>
+                                </UILink>
                             </Typography>
                             <div className={classes.beatmapStats}>
                                 <Grid container justify="center">

@@ -292,7 +292,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             </Typography>
                             {props.me.osuUserId && (
                                 <UILink component={Link} to={`/leaderboards/${leaderboardId}/users/${props.me.osuUserId}`}>
-                                    <Button color="secondary" variant="contained" className={classes.myProfileButton}>My profile</Button>
+                                    <Button color="secondary" variant="contained" className={classes.myProfileButton}>My scores</Button>
                                 </UILink>
                             )}
                             <Table>

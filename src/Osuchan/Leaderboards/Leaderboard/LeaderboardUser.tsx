@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Theme, createStyles, Tooltip } from "@material-ui/core";
+import { CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Theme, createStyles, Tooltip, Link as UILink } from "@material-ui/core";
 
 import { StoreState } from "../../../store/reducers";
 import { ProfilesDataState } from "../../../store/data/profiles/types";
@@ -70,7 +70,9 @@ function LeaderboardUser(props: LeaderboardUserProps) {
                     <Grid item xs={12}>
                         <Paper>
                             <Typography className={classes.paperHeader} variant="h4" align="center">
-                                {osuUser.username}
+                                <UILink color="inherit" component={Link} to={`/users/${osuUser.username}`}>
+                                    {osuUser.username}
+                                </UILink>
                             </Typography>
                             <div className={classes.memberStats}>
                                 <Grid container>
