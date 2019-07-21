@@ -166,6 +166,13 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                 {leaderboard.newestBeatmapDate !== null && (
                                     <li>Newest Beatmap Date: {leaderboard.newestBeatmapDate.toLocaleDateString()}</li>
                                 )}
+                                {/* Score date */}
+                                {leaderboard.oldestScoreDate !== null && (
+                                    <li>Oldest Score Date: {leaderboard.oldestScoreDate.toLocaleDateString()}</li>
+                                )}
+                                {leaderboard.newestScoreDate !== null && (
+                                    <li>Newest Score Date: {leaderboard.newestScoreDate.toLocaleDateString()}</li>
+                                )}
                                 {/* Accuracy */}
                                 {leaderboard.lowestAccuracy !== null && (
                                     <li>Min Accuracy: {leaderboard.lowestAccuracy}</li>

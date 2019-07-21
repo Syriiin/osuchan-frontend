@@ -77,6 +77,8 @@ function LeaderboardList(props: LeaderboardListProps) {
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(1);
     const [oldestBeatmapDate, setOldestBeatmapDate] = useState();
     const [newestBeatmapDate, setNewestBeatmapDate] = useState();
+    const [oldestScoreDate, setOldestScoreDate] = useState();
+    const [newestScoreDate, setNewestScoreDate] = useState();
     const [lowestAr, setLowestAr] = useState();
     const [highestAr, setHighestAr] = useState();
     const [lowestOd, setLowestOd] = useState();
@@ -101,6 +103,8 @@ function LeaderboardList(props: LeaderboardListProps) {
             allowedBeatmapStatus,
             oldestBeatmapDate ? new Date(oldestBeatmapDate) : null,
             newestBeatmapDate ? new Date(newestBeatmapDate) : null,
+            oldestScoreDate ? new Date(oldestScoreDate) : null,
+            newestScoreDate ? new Date(newestScoreDate) : null,
             lowestAr ? parseFloat(lowestAr) : null,
             highestAr ? parseFloat(highestAr) : null,
             lowestOd ? parseFloat(lowestOd) : null,
@@ -114,8 +118,9 @@ function LeaderboardList(props: LeaderboardListProps) {
         )
 
         setCreateDialogOpen(false);
+        clearInputs();
     }
-    const handleClose = () => {
+    const clearInputs = () => {
         setGamemode(0);
         setAccessType(1);
         setName(null);
@@ -124,6 +129,8 @@ function LeaderboardList(props: LeaderboardListProps) {
         setAllowedBeatmapStatus(1);
         setOldestBeatmapDate(null);
         setNewestBeatmapDate(null);
+        setOldestScoreDate(null);
+        setNewestScoreDate(null);
         setLowestAr(null);
         setHighestAr(null);
         setLowestOd(null);
@@ -196,7 +203,7 @@ function LeaderboardList(props: LeaderboardListProps) {
                                     Create new leaderboard
                                 </Button>
                             )}
-                            <Dialog fullWidth open={createDialogOpen} onClose={handleClose}>
+                            <Dialog fullWidth open={createDialogOpen} onClose={clearInputs}>
                                 <form onSubmit={handleSubmit}>
                                     <DialogTitle>Create new leaderboard</DialogTitle>
                                     <DialogContent>
@@ -239,8 +246,10 @@ function LeaderboardList(props: LeaderboardListProps) {
                                         </FormControl>
                                         <br />
                                         {/* Dates */}
-                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}"}} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} margin="dense" label="Oldest Beatmap Date" placeholder="YYYY-MM-DD" />
-                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}"}} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} margin="dense" label="Newest Beatmap Date" placeholder="YYYY-MM-DD" />
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?"}} value={oldestBeatmapDate} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} margin="dense" label="Oldest Beatmap Date" placeholder="YYYY-MM-DD" />
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?"}} value={newestBeatmapDate} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} margin="dense" label="Newest Beatmap Date" placeholder="YYYY-MM-DD" />
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?"}} value={oldestScoreDate} onChange={e => setOldestScoreDate(e.currentTarget.value)} margin="dense" label="Oldest Score Date" placeholder="YYYY-MM-DD" />
+                                        <TextField className={classes.formControl} inputProps={{ "pattern": "\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?"}} value={newestScoreDate} onChange={e => setNewestScoreDate(e.currentTarget.value)} margin="dense" label="Newest Score Date" placeholder="YYYY-MM-DD" />
                                         <br />
                                         {/* Mods */}
                                         <FormControl className={classes.formControl}>
@@ -298,7 +307,7 @@ function LeaderboardList(props: LeaderboardListProps) {
                                         <TextField className={classes.formControl} onChange={e => setHighestAccuracy(e.currentTarget.value)} margin="dense" label="Max Accuracy (%)" />
                                     </DialogContent>
                                     <DialogActions>
-                                        <Button onClick={handleClose}>
+                                        <Button onClick={clearInputs}>
                                             Cancel
                                         </Button>
                                         <Button type="submit">
@@ -356,6 +365,8 @@ interface LeaderboardListProps {
         allowedBeatmapStatus: number,
         oldestBeatmapDate: Date | null,
         newestBeatmapDate: Date | null,
+        oldestScoreDate: Date | null,
+        newestScoreDate: Date | null,
         lowestAr: number | null,
         highestAr: number | null,
         lowestOd: number | null,

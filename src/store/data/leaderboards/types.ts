@@ -13,6 +13,8 @@ export interface Leaderboard {
     allowedBeatmapStatus: number;
     oldestBeatmapDate: Date | null;
     newestBeatmapDate: Date | null;
+    oldestScoreDate: Date | null;
+    newestScoreDate: Date | null;
     lowestAr: number | null;
     highestAr: number | null;
     lowestOd: number | null;

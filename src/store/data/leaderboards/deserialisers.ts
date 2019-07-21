@@ -12,6 +12,8 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
         allowedBeatmapStatus: leaderboardData["allowed_beatmap_status"],
         oldestBeatmapDate: leaderboardData["oldest_beatmap_date"] ? new Date(leaderboardData["oldest_beatmap_date"]) : null,
         newestBeatmapDate: leaderboardData["newest_beatmap_date"] ? new Date(leaderboardData["newest_beatmap_date"]) : null,
+        oldestScoreDate: leaderboardData["oldest_score_date"] ? new Date(leaderboardData["oldest_score_date"]) : null,
+        newestScoreDate: leaderboardData["newest_score_date"] ? new Date(leaderboardData["newest_score_date"]) : null,
         lowestAr: leaderboardData["lowest_ar"],
         highestAr: leaderboardData["highest_ar"],
         lowestOd: leaderboardData["lowest_od"],
