@@ -5,6 +5,7 @@ import { Action } from "redux";
 export interface LeaderboardsDetailState {
     leaderboardId: number | null;
     rankingIds: number[];
+    topScoreIds: number[];
     isFetching: boolean;
     isDeleting: boolean;
     isPostingInvite: boolean;
@@ -32,6 +33,7 @@ export interface LeaderboardsDetailGetSuccess extends Action {
     type: LeaderboardsDetailActionType.GetSuccess;
     leaderboardId: number;
     rankingIds: number[];
+    topScoreIds: number[];
 }
 
 export interface LeaderboardsDetailGetFailure extends Action {

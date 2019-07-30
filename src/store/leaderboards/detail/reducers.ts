@@ -3,6 +3,7 @@ import { LeaderboardsDetailState, LeaderboardsDetailAction, LeaderboardsDetailAc
 const initialState: LeaderboardsDetailState = {
     leaderboardId: null,
     rankingIds: [],
+    topScoreIds: [],
     isFetching: false,
     isDeleting: false,
     isPostingInvite: false
@@ -15,6 +16,7 @@ function leaderboardsDetailReducer(state: LeaderboardsDetailState = initialState
                 ...state,
                 leaderboardId: null,
                 rankingIds: [],
+                topScoreIds: [],
                 isFetching: true
             }
         case LeaderboardsDetailActionType.GetSuccess:
@@ -22,6 +24,7 @@ function leaderboardsDetailReducer(state: LeaderboardsDetailState = initialState
                 ...state,
                 leaderboardId: action.leaderboardId,
                 rankingIds: action.rankingIds,
+                topScoreIds: action.topScoreIds,
                 isFetching: false
             }
         case LeaderboardsDetailActionType.GetFailure:
@@ -29,6 +32,7 @@ function leaderboardsDetailReducer(state: LeaderboardsDetailState = initialState
                 ...state,
                 leaderboardId: null,
                 rankingIds: [],
+                topScoreIds: [],
                 isFetching: false
             }
         case LeaderboardsDetailActionType.DeleteRequest:
@@ -41,6 +45,7 @@ function leaderboardsDetailReducer(state: LeaderboardsDetailState = initialState
                 ...state,
                 leaderboardId: null,
                 rankingIds: [],
+                topScoreIds: [],
                 isDeleting: false
             }
         case LeaderboardsDetailActionType.DeleteFailure:

@@ -10,7 +10,7 @@ import { ProfilesDataState } from "../../../store/data/profiles/types";
 import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
 import { LeaderboardsDetailState } from "../../../store/leaderboards/detail/types";
 import { leaderboardsDetailGetThunk, leaderboardsDetailDeleteThunk, leaderboardsDetailPostInviteThunk } from "../../../store/leaderboards/detail/actions";
-import { formatGamemodeName, formatMods } from "../../../utils/formatting";
+import { formatGamemodeName, formatMods, formatScoreResult } from "../../../utils/formatting";
 import { MeState } from "../../../store/me/types";
 import { meJoinLeaderboardPostThunk, meLeaveLeaderboardDeleteThunk } from "../../../store/me/actions";
 
@@ -290,6 +290,50 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     )}
                                 </>
                             )}
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography className={classes.paperHeader} variant="h5" align="center">
+                                Top Scores
+                            </Typography>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell>Player</TableCell>
+                                        <TableCell>Beatmap</TableCell>
+                                        <TableCell align="center">Mods</TableCell>
+                                        <TableCell align="center">Accuracy</TableCell>
+                                        <TableCell align="center">PP</TableCell>
+                                        <TableCell align="center">Result</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {props.leaderboardsDetail.topScoreIds.map((scoreId, i) => {
+                                        const score = props.profilesData.scores[scoreId];
+                                        const userStats = props.profilesData.userStats[score.userStatsId];
+                                        const osuUser = props.profilesData.osuUsers[userStats.osuUserId];
+                                        const beatmap = props.profilesData.beatmaps[score.beatmapId];
+
+                                        return (
+                                            <TableRow hover>
+                                                <TableCell>{i+1}</TableCell>
+                                                <TableCell><Link className={classes.tableLink} to={`/leaderboards/${leaderboardId}/users/${osuUser.id}`}>{osuUser.username}</Link></TableCell>
+                                                <TableCell><Link className={classes.tableLink} to={`/leaderboards/${leaderboardId}/beatmaps/${beatmap.id}`}>{beatmap.artist} - {beatmap.title} [{beatmap.difficultyName}]</Link></TableCell>
+                                                <TableCell align="center">{formatMods(score.mods)}</TableCell>
+                                                <TableCell align="center">{score.accuracy.toFixed(2)}%</TableCell>
+                                                <TableCell align="center">
+                                                    <Tooltip title={`${score.pp.toFixed(2)}pp`}>
+                                                        <Typography>{score.pp.toFixed(0)}pp</Typography>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell align="center">{formatScoreResult(score.result)}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>

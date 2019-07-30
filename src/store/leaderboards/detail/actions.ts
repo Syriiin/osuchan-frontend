@@ -10,9 +10,9 @@ import { LeaderboardsDetailActionType, LeaderboardsDetailGetRequest, Leaderboard
 import { leaderboardFromJson, membershipFromJson } from "../../data/leaderboards/deserialisers";
 import { Leaderboard, Membership } from "../../data/leaderboards/types";
 import { addLeaderboards, addMemberships } from "../../data/leaderboards/actions";
-import { OsuUser } from "../../data/profiles/types";
-import { osuUserFromJson } from "../../data/profiles/deserialisers";
-import { addOsuUsers } from "../../data/profiles/actions";
+import { OsuUser, Score, UserStats, Beatmap } from "../../data/profiles/types";
+import { osuUserFromJson, userStatsFromJson, beatmapFromJson, scoreFromJson } from "../../data/profiles/deserialisers";
+import { addOsuUsers, addUserStats, addBeatmaps, addScores } from "../../data/profiles/actions";
 
 // Actions
 
@@ -22,11 +22,12 @@ export function leaderboardsDetailGetRequest(): LeaderboardsDetailGetRequest {
     }
 }
 
-export function leaderboardsDetailGetSuccess(leaderboardId: number, rankingIds: number[]): LeaderboardsDetailGetSuccess {
+export function leaderboardsDetailGetSuccess(leaderboardId: number, rankingIds: number[], topScoreIds: number[]): LeaderboardsDetailGetSuccess {
     return {
         type: LeaderboardsDetailActionType.GetSuccess,
         leaderboardId,
-        rankingIds
+        rankingIds,
+        topScoreIds
     }
 }
 
@@ -80,12 +81,18 @@ export function leaderboardsDetailGetThunk(leaderboardId: number): ThunkAction<v
 
         try {
             const leaderboardResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
-            const membersResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
-            
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            
+            const membersResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
             const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
             const osuUsers: OsuUser[] = membersResponse.data.map((data: any) => osuUserFromJson(data["user"]));
-    
+            
+            const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/scores`);
+            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
+            const userStats: UserStats[] = scoresResponse.data.map((data: any) => userStatsFromJson(data["user_stats"]));
+            osuUsers.push(...scoresResponse.data.map((data: any) => osuUserFromJson(data["user_stats"]["user"])));
+            const beatmaps: Beatmap[] = scoresResponse.data.map((data: any) => beatmapFromJson(data["beatmap"]));
+
             if (leaderboard.accessType !== 0) {
                 const owner: OsuUser = osuUserFromJson(leaderboardResponse.data["owner"]);
                 dispatch(addOsuUsers(owner));
@@ -94,8 +101,11 @@ export function leaderboardsDetailGetThunk(leaderboardId: number): ThunkAction<v
             dispatch(addLeaderboards(leaderboard));
             dispatch(addMemberships(...members));
             dispatch(addOsuUsers(...osuUsers));
+            dispatch(addScores(...scores));
+            dispatch(addUserStats(...userStats));
+            dispatch(addBeatmaps(...beatmaps));
 
-            dispatch(leaderboardsDetailGetSuccess(leaderboard.id, members.map(m => m.id)));
+            dispatch(leaderboardsDetailGetSuccess(leaderboard.id, members.map(m => m.id), scores.map(s => s.id)));
         } catch (error) {
             console.log(error);
             dispatch(leaderboardsDetailGetFailure());
