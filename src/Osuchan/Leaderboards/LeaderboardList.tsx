@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles, Theme, createStyles, Typography, CircularProgress, Paper, Grid, CardContent, Card, Divider, List, ListItem, ListItemText, Chip, Avatar, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox } from "@material-ui/core";
+import { observer } from "mobx-react-lite";
 
-import { StoreState } from "../../store/reducers";
-import { LeaderboardsListState } from "../../store/leaderboards/list/types";
-import { leaderboardsListGetThunk, leaderboardsListPostThunk } from "../../store/leaderboards/list/actions"
-import { LeaderboardsDataState } from "../../store/data/leaderboards/types";
-import { ProfilesDataState } from "../../store/data/profiles/types";
-import { MeState } from "../../store/me/types";
+import { StoreContext } from "../../store";
+import { OsuUser } from "../../store/models/profiles/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loader: {
@@ -50,24 +46,28 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-function LeaderboardList(props: LeaderboardListProps) {
+function LeaderboardList() {
+    const store = useContext(StoreContext);
+    const listStore = store.leaderboardsStore.listStore;
+    const meStore = store.meStore;
+
     const classes = useStyles();
 
     // use effect to fetch leaderboards data
-    const { leaderboardsListGetThunk } = props;
+    const { loadLeaderboards } = listStore;
     useEffect(() => {
-        leaderboardsListGetThunk();
-    }, [leaderboardsListGetThunk]);
+        loadLeaderboards();
+    }, [loadLeaderboards]);
 
     // use effect to update title
-    const { isFetching } = props.leaderboardsList;
+    const { isLoading } = listStore;
     useEffect(() => {
-        if (isFetching) {
+        if (isLoading) {
             document.title = "Loading...";
         } else {
             document.title = "Leaderboards - osu!chan";
         }
-    }, [isFetching]);
+    }, [isLoading]);
 
     const [gamemode, setGamemode] = useState(0);
     const [accessType, setAccessType] = useState(1);
@@ -94,7 +94,7 @@ function LeaderboardList(props: LeaderboardListProps) {
         e.preventDefault();
 
         // dispatch create action
-        props.leaderboardsListPostThunk(
+        listStore.createLeaderboard(
             gamemode,
             accessType,
             name,
@@ -147,11 +147,11 @@ function LeaderboardList(props: LeaderboardListProps) {
 
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
-    const leaderboards = props.leaderboardsList.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]);
+    const leaderboards = listStore.leaderboards;
 
     return (
         <>
-        {props.leaderboardsList.isFetching ? (
+        {listStore.isLoading ? (
             <div className={classes.loader}>
                 <CircularProgress color="inherit" size={70} />
                 <Typography variant="h4" align="center">Loading</Typography>
@@ -192,9 +192,9 @@ function LeaderboardList(props: LeaderboardListProps) {
                 </Typography>
 
                 <Paper>
-                    {props.me.osuUserId && (
+                    {meStore.osuUser && (
                         <>
-                            {props.leaderboardsList.isPosting ? (
+                            {listStore.isCreating ? (
                                 <Button color="primary" disabled className={classes.createButton} variant="contained" size="large">
                                     <CircularProgress size={26} color="inherit" />
                                 </Button>
@@ -320,8 +320,8 @@ function LeaderboardList(props: LeaderboardListProps) {
                         </>
                     )}
                     <List>
-                        {props.leaderboardsList.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]).filter(leaderboard => leaderboard.accessType !== 0).map((leaderboard) => {
-                            const owner = props.profilesData.osuUsers[leaderboard.ownerId!];
+                        {listStore.leaderboards.filter(leaderboard => leaderboard.accessType !== 0).map(leaderboard => {
+                            const owner = leaderboard.owner as OsuUser;
 
                             return (
                                 <ListItem button component={Link} to={`/leaderboards/${leaderboard.id}`}>
@@ -354,48 +354,4 @@ function LeaderboardList(props: LeaderboardListProps) {
     );
 }
 
-interface LeaderboardListProps {
-    leaderboardsListGetThunk: () => void;
-    leaderboardsListPostThunk: (
-        gamemode: number,
-        accessType: number,
-        name: string,
-        description: string,
-        allowPastScores: boolean | null,
-        allowedBeatmapStatus: number,
-        oldestBeatmapDate: Date | null,
-        newestBeatmapDate: Date | null,
-        oldestScoreDate: Date | null,
-        newestScoreDate: Date | null,
-        lowestAr: number | null,
-        highestAr: number | null,
-        lowestOd: number | null,
-        highestOd: number | null,
-        lowestCs: number | null,
-        highestCs: number | null,
-        requiredMods: number,
-        disqualifiedMods: number,
-        lowestAccuracy: number | null,
-        highestAccuracy: number | null
-    ) => void;
-    leaderboardsList: LeaderboardsListState;
-    leaderboardsData: LeaderboardsDataState;
-    profilesData: ProfilesDataState;
-    me: MeState;
-}
-
-function mapStateToProps(state: StoreState) {
-    return {
-        leaderboardsList: state.leaderboards.list,
-        leaderboardsData: state.data.leaderboards,
-        profilesData: state.data.profiles,
-        me: state.me
-    }
-}
-
-const mapDispatchToProps = {
-    leaderboardsListGetThunk,
-    leaderboardsListPostThunk
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LeaderboardList);
+export default observer(LeaderboardList);

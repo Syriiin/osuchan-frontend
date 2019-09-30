@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useContext } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { Paper, CircularProgress, Typography, Grid, Tabs, Tab, Theme, createStyles, makeStyles, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, ListItemText, Chip, Avatar, Tooltip } from "@material-ui/core";
 import { CalendarToday as CalendarTodayIcon } from "@material-ui/icons";
 import countries from "i18n-iso-countries";
+import { observer } from "mobx-react-lite";
 
+import { StoreContext } from "../../store";
 import { formatTime, formatMods, formatScoreResult } from "../../utils/formatting";
 import { gamemodeIdFromName } from "../../utils/osu";
-import { StoreState } from "../../store/reducers";
-import { UsersState } from "../../store/users/types";
-import { usersThunkFetch } from "../../store/users/actions";
-import { ProfilesDataState } from "../../store/data/profiles/types";
-import { LeaderboardsDataState } from "../../store/data/leaderboards/types";
+import { OsuUser, Beatmap } from "../../store/models/profiles/types";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
@@ -79,35 +76,39 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 function Profile(props: ProfileProps) {
+    const store = useContext(StoreContext);
+    const usersStore = store.usersStore;
+
     const classes = useStyles();
 
     // use effect to fetch profile data
-    const { usersThunkFetch } = props;
+    const { loadUser } = usersStore;
     const { userString } = props.match.params;
     const gamemodeId = gamemodeIdFromName(props.match.params.gamemodeName);
     useEffect(() => {
-        usersThunkFetch(userString, gamemodeId);
-    }, [usersThunkFetch, userString, gamemodeId]);
+        loadUser(userString, gamemodeId);
+    }, [loadUser, userString, gamemodeId]);
 
-    const userStats = props.users.currentUserStatsId ? props.profilesData.userStats[props.users.currentUserStatsId] : null;
-    const osuUser = userStats ? props.profilesData.osuUsers[userStats.osuUserId] : null;
+    const userStats = usersStore.currentUserStats;
+
+    const osuUser = userStats && userStats.osuUser as OsuUser;
 
     // use effect to update title
-    const { isFetching } = props.users;
+    const { isLoading } = usersStore;
     useEffect(() => {
-        if (isFetching) {
+        if (isLoading) {
             document.title = "Loading...";
         } else if (osuUser) {
             document.title = `${osuUser.username} - osu!chan`;
         } else {
             document.title = "User not found - osu!chan";
         }
-    }, [isFetching, osuUser]);
+    }, [isLoading, osuUser]);
 
     // TODO: split into smaller components
     return (
         <>
-            {props.users.isFetching && (
+            {usersStore.isLoading && (
                 <div className={classes.loader}>
                     <CircularProgress color="inherit" size={70} />
                     <Typography variant="h4" align="center">Loading</Typography>
@@ -272,9 +273,8 @@ function Profile(props: ProfileProps) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.users.scoreIds.map((scoreId, i) => {
-                                            const score = props.profilesData.scores[scoreId];
-                                            const beatmap = props.profilesData.beatmaps[score.beatmapId];
+                                        {usersStore.scores.map((score, i) => {
+                                            const beatmap = score.beatmap as Beatmap;
                                             return (
                                                 <TableRow hover>
                                                     <TableCell>{i+1}</TableCell>
@@ -300,8 +300,8 @@ function Profile(props: ProfileProps) {
                                     Community Leaderboards
                                 </Typography>
                                 <List>
-                                    {props.users.leaderboardIds.map(id => props.leaderboardsData.leaderboards[id]).filter(leaderboard => leaderboard.accessType !== 0).map((leaderboard) => {
-                                        const owner = props.profilesData.osuUsers[leaderboard.ownerId!];
+                                    {usersStore.leaderboards.filter(leaderboard => leaderboard.accessType !== 0).map(leaderboard => {
+                                        const owner = leaderboard.owner as OsuUser;
 
                                         return (
                                             <ListItem button component={Link} to={`/leaderboards/${leaderboard.id}`}>
@@ -332,7 +332,7 @@ function Profile(props: ProfileProps) {
                     </Grid>
                 </>
             )}
-            {!isFetching && !osuUser && (
+            {!usersStore.isLoading && !osuUser && (
                 <div className={classes.loader}>
                     <Typography variant="h3" align="center">
                         User not found!
@@ -348,23 +348,6 @@ interface RouteParams {
     gamemodeName?: string;
 }
 
-interface ProfileProps extends RouteComponentProps<RouteParams> {
-    usersThunkFetch: (userString: string, gamemode: number) => void;
-    users: UsersState;
-    profilesData: ProfilesDataState;
-    leaderboardsData: LeaderboardsDataState;
-}
+interface ProfileProps extends RouteComponentProps<RouteParams> {}
 
-function mapStateToProps(state: StoreState) {
-    return {
-        users: state.users,
-        profilesData: state.data.profiles,
-        leaderboardsData: state.data.leaderboards
-    }
-}
-
-const mapDispatchToProps = {
-    usersThunkFetch
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default observer(Profile);

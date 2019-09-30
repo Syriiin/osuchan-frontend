@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Container from "@material-ui/core/Container";
-
-import { meGetThunk } from "../store/me/actions";
+import { observer } from "mobx-react-lite";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -11,6 +9,7 @@ import Home from "./Home/Home";
 import Profiles from "./Profiles/Profiles";
 import Leaderboards from "./Leaderboards/Leaderboards";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { StoreContext } from "../store";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -26,14 +25,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     toolbar: theme.mixins.toolbar
 }));
 
-function Osuchan(props: OsuchanProps) {
+function Osuchan() {
+    const store = useContext(StoreContext);
+    const meStore = store.meStore;
+
     const classes = useStyles();
     
     // call fetch me action on mount
-    const { meGetThunk } = props;
+    const { loadMe } = meStore;
     useEffect(() => {
-        meGetThunk();
-    }, [meGetThunk]);
+        loadMe();
+    }, [loadMe]);
 
     return (
         <div className={classes.root}>
@@ -54,12 +56,4 @@ function Osuchan(props: OsuchanProps) {
     );
 }
 
-interface OsuchanProps {
-    meGetThunk: () => void;
-}
-
-const mapDispatchToProps = {
-    meGetThunk
-}
-
-export default connect(null, mapDispatchToProps)(Osuchan);
+export default observer(Osuchan);

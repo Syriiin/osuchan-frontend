@@ -1,20 +1,16 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
 import { AppBar, Toolbar, IconButton, Typography, Button, Theme, createStyles, InputBase, Avatar, MenuItem, Menu, Badge, ListItemText, ListItemIcon, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from "@material-ui/core";
 import { Menu as MenuIcon, Search as SearchIcon, Mail as MailIcon } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/styles";
 import { fade } from "@material-ui/core/styles";
-
-import { MeState } from "../store/me/types";
-import { meScorePostThunk } from "../store/me/actions";
-import { StoreState } from "../store/reducers";
-import { ProfilesDataState } from "../store/data/profiles/types";
-import { LeaderboardsDataState } from "../store/data/leaderboards/types";
+import { observer } from "mobx-react-lite";
 
 import Sidebar from "./Sidebar";
 import { gamemodeIdFromName } from "../utils/osu";
+import { StoreContext } from "../store";
+import { Leaderboard } from "../store/models/leaderboards/types";
 
 const drawerWidth = 240;
 
@@ -80,6 +76,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 function Navbar(props: NavbarProps) {
+    const store = useContext(StoreContext);
+    const meStore = store.meStore;
+    
     const classes = useStyles();
     
     // State hooks
@@ -123,14 +122,14 @@ function Navbar(props: NavbarProps) {
         if (userUrlMatch !== null && beatmapIds.length > 0) {
             const userId = parseInt(userUrlMatch[1]);
             const gamemodeId = gamemodeIdFromName(gamemode);
-            props.meScorePostThunk(userId, beatmapIds, gamemodeId);
+            meStore.addScores(userId, beatmapIds, gamemodeId);
             setAddScoreDialogOpen(false);
         }
     }
     const handleCloseAddScoreDialog = () => setAddScoreDialogOpen(false);
 
     // Variables
-    const osuUser = props.me.osuUserId ? props.profilesData.osuUsers[props.me.osuUserId] : null;
+    const osuUser = meStore.osuUser;
     
     return (
         <>
@@ -157,7 +156,7 @@ function Navbar(props: NavbarProps) {
                         {osuUser ? (
                             <>
                                 <IconButton onClick={handleInviteMenuOpen} color="inherit">
-                                    <Badge badgeContent={props.me.inviteIds.length} color="secondary">
+                                    <Badge badgeContent={meStore.invites.length} color="secondary">
                                         <MailIcon />
                                     </Badge>
                                 </IconButton>
@@ -177,14 +176,14 @@ function Navbar(props: NavbarProps) {
                                     open={inviteMenuAnchorEl !== null}
                                     onClose={handleInviteMenuClose}
                                 >
-                                    {props.me.inviteIds.length > 0 ? props.me.inviteIds.map(inviteId => {
-                                        const invite = props.leaderboardsData.invites[inviteId];
-                                        const leaderboard = props.leaderboardsData.leaderboards[invite.leaderboardId];
+                                    {meStore.invites.length > 0 ? meStore.invites.map(invite => {
+                                        const leaderboard = invite.leaderboard as Leaderboard;
+                                        const ownerId = typeof leaderboard.owner === "number" ? leaderboard.owner : leaderboard.owner!.id;
                                         
                                         return (
                                             <MenuItem component={Link} to={`/leaderboards/${leaderboard.id}`}>
                                                 <ListItemIcon>
-                                                    <Avatar src={`https://a.ppy.sh/${leaderboard.ownerId}`} />
+                                                    <Avatar src={`https://a.ppy.sh/${ownerId}`} />
                                                 </ListItemIcon>
                                                 <ListItemText primary={leaderboard.name} />
                                             </MenuItem>
@@ -215,7 +214,7 @@ function Navbar(props: NavbarProps) {
                                     <MenuItem component={Link} to={`/users/${osuUser.username}`}>Profile</MenuItem>
                                     <MenuItem component="a" href="/osuauth/logout">Logout</MenuItem>
                                     <MenuItem disabled></MenuItem>
-                                    {props.me.isPostingScore ? (
+                                    {meStore.isAddingScores ? (
                                         <MenuItem disabled>
                                             <CircularProgress size={22} color="inherit" />
                                         </MenuItem>
@@ -273,23 +272,6 @@ function Navbar(props: NavbarProps) {
     );
 }
 
-interface NavbarProps extends RouteComponentProps {
-    me: MeState,
-    profilesData: ProfilesDataState,
-    leaderboardsData: LeaderboardsDataState,
-    meScorePostThunk: (userId: number, beatmapIds: number[], gamemodeId: number) => void
-}
+interface NavbarProps extends RouteComponentProps {}
 
-function mapStateToProps(state: StoreState) {
-    return {
-        me: state.me,
-        profilesData: state.data.profiles,
-        leaderboardsData: state.data.leaderboards
-    }
-}
-
-const mapDispatchToProps = {
-    meScorePostThunk
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));
+export default withRouter(observer(Navbar));

@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { Typography, Paper, Chip, Avatar, makeStyles, Theme, createStyles, Grid, CircularProgress, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Tooltip, Link as UILink } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
+import { observer } from "mobx-react-lite";
 
-import { StoreState } from "../../../store/reducers";
-import { ProfilesDataState } from "../../../store/data/profiles/types";
-import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
-import { LeaderboardsDetailState } from "../../../store/leaderboards/detail/types";
-import { leaderboardsDetailGetThunk, leaderboardsDetailDeleteThunk, leaderboardsDetailPostInviteThunk } from "../../../store/leaderboards/detail/actions";
 import { formatGamemodeName, formatMods, formatScoreResult } from "../../../utils/formatting";
-import { MeState } from "../../../store/me/types";
-import { meJoinLeaderboardPostThunk, meLeaveLeaderboardDeleteThunk } from "../../../store/me/actions";
+import { StoreContext } from "../../../store";
+import { OsuUser, Beatmap, UserStats } from "../../../store/models/profiles/types";
+import { Leaderboard } from "../../../store/models/leaderboards/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loader: {
@@ -55,32 +51,42 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 function LeaderboardHome(props: LeaderboardHomeProps) {
+    const store = useContext(StoreContext);
+    const detailStore = store.leaderboardsStore.detailStore;
+    const meStore = store.meStore;
+
     const classes = useStyles();
 
     // use effect to fetch leaderboards data
     const leaderboardId = parseInt(props.match.params.leaderboardId);
-    const { leaderboardsDetailGetThunk: leaderboardsDetailThunkFetch } = props;
+    const { loadLeaderboard } = detailStore;
     useEffect(() => {
-        leaderboardsDetailThunkFetch(leaderboardId);
-    }, [leaderboardsDetailThunkFetch, leaderboardId]);
+        loadLeaderboard(leaderboardId);
+    }, [loadLeaderboard, leaderboardId]);
 
-    const leaderboard = props.leaderboardsDetail.leaderboardId ? props.leaderboardsData.leaderboards[props.leaderboardsDetail.leaderboardId] : null;
+    const leaderboard = detailStore.leaderboard;
 
     // use effect to update title
-    const { isFetching } = props.leaderboardsDetail;
+    const { isLoading } = detailStore;
     useEffect(() => {
-        if (isFetching) {
+        if (isLoading) {
             document.title = "Loading...";
         } else if (leaderboard) {
             document.title = `${leaderboard.name} - osu!chan`;
         } else {
             document.title = "Leaderboard not found - osu!chan";
         }
-    }, [isFetching, leaderboard]);
+    }, [isLoading, leaderboard]);
 
-    const handleDelete = () => props.leaderboardsDetailDeleteThunk(leaderboard!.id);
-    const handleJoin = () => props.meJoinLeaderboardPostThunk(leaderboard!.id);
-    const handleLeave = () => props.meLeaveLeaderboardDeleteThunk(leaderboard!.id);
+    const handleDelete = () => detailStore.deleteLeaderboard(leaderboard!.id);
+    const handleJoin = async () => {
+        await meStore.joinLeaderboard(leaderboard!.id);
+        await detailStore.loadLeaderboard(leaderboard!.id);
+    }
+    const handleLeave = async () => {
+        await meStore.leaveLeaderboard(leaderboard!.id);
+        await detailStore.loadLeaderboard(leaderboard!.id);
+    }
     
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
     const [inviteUserUrl, setInviteUserUrl] = useState("");
@@ -96,7 +102,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
         }
 
         if (userIds.length > 0) {
-            props.leaderboardsDetailPostInviteThunk(leaderboard!.id, userIds);
+            detailStore.invitePlayers(leaderboard!.id, userIds);
             setInviteDialogOpen(false);
         }
     }
@@ -107,7 +113,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
 
     return (
         <>
-            {props.leaderboardsDetail.isFetching && (
+            {detailStore.isLoading && (
                 <div className={classes.loader}>
                     <CircularProgress color="inherit" size={70} />
                     <Typography variant="h4" align="center">Loading</Typography>
@@ -130,7 +136,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                 <Chip className={classes.chip} label="GLOBAL" />
                                 ) : (
                                 <>
-                                    <Chip className={classes.chip} label={props.profilesData.osuUsers[leaderboard.ownerId!].username} avatar={<Avatar src={`https://a.ppy.sh/${leaderboard.ownerId}`} />} />
+                                    <Chip className={classes.chip} label={(leaderboard.owner as OsuUser).username} avatar={<Avatar src={`https://a.ppy.sh/${(leaderboard.owner as OsuUser).id}`} />} />
                                     {leaderboard.accessType === 2 && (
                                         <Chip className={classes.chip} label="INVITE-ONLY" />
                                     )}
@@ -204,13 +210,13 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             </ul>
                             
                             {/* If not global leaderboard */}
-                            {leaderboard.accessType !== 0 && props.me.osuUserId && (
+                            {leaderboard.accessType !== 0 && meStore.osuUser && (
                                 <>
                                     {/* If owner */}
-                                    {leaderboard.ownerId === props.me.osuUserId && (
+                                    {(leaderboard.owner as OsuUser).id === meStore.osuUser.id && (
                                         <>
                                             {/* Delete button */}
-                                            {props.leaderboardsDetail.isDeleting ? (
+                                            {detailStore.isDeleting ? (
                                                 <Button disabled className={classes.deleteButton}>
                                                     <CircularProgress size={22} color="inherit" />
                                                 </Button>
@@ -221,7 +227,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                             {/* Invite button if either private or public invite-only */}
                                             {(leaderboard.accessType === 2 || leaderboard.accessType === 3) && (
                                                 <>
-                                                    {props.leaderboardsDetail.isPostingInvite ? (
+                                                    {detailStore.isInviting ? (
                                                         <Button className={classes.inviteButton} disabled>
                                                             <CircularProgress size={22} color="inherit" />
                                                         </Button>
@@ -264,9 +270,9 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     )}
                                     
                                     {/* Join button if public or pending invite, and not member */}
-                                    {(leaderboard.accessType === 1 || props.me.inviteIds.find(i => props.leaderboardsData.invites[i].leaderboardId === leaderboard.id) !== undefined) && !props.me.leaderboardIds.includes(leaderboard.id) && (
+                                    {(leaderboard.accessType === 1 || meStore.invites.find(i => (i.leaderboard as Leaderboard).id === leaderboard.id) !== undefined) && !meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
                                         <>
-                                            {props.me.isPosting ? (
+                                            {meStore.isJoiningLeaderboard ? (
                                                 <Button disabled className={classes.joinButton}>
                                                     <CircularProgress size={22} color="inherit" />
                                                 </Button>
@@ -277,9 +283,9 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     )}
 
                                     {/* Leave button if member and not owner */}
-                                    {leaderboard.ownerId !== props.me.osuUserId && props.me.leaderboardIds.includes(leaderboard.id) && (
+                                    {(leaderboard.owner as OsuUser).id !== meStore.osuUser.id && meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
                                         <>
-                                            {props.me.isDeleting ? (
+                                            {meStore.isLeavingLeaderboard ? (
                                                 <Button disabled className={classes.leaveButton}>
                                                     <CircularProgress size={22} color="inherit" />
                                                 </Button>
@@ -310,11 +316,10 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.leaderboardsDetail.topScoreIds.map((scoreId, i) => {
-                                        const score = props.profilesData.scores[scoreId];
-                                        const userStats = props.profilesData.userStats[score.userStatsId];
-                                        const osuUser = props.profilesData.osuUsers[userStats.osuUserId];
-                                        const beatmap = props.profilesData.beatmaps[score.beatmapId];
+                                    {detailStore.topScores.map((score, i) => {
+                                        const userStats = score.userStats as UserStats;
+                                        const osuUser = userStats.osuUser as OsuUser;
+                                        const beatmap = score.beatmap as Beatmap;
 
                                         return (
                                             <TableRow hover>
@@ -341,8 +346,8 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             <Typography className={classes.paperHeader} variant="h5" align="center">
                                 Rankings
                             </Typography>
-                            {props.me.osuUserId && (
-                                <UILink component={Link} to={`/leaderboards/${leaderboardId}/users/${props.me.osuUserId}`}>
+                            {meStore.osuUser && (
+                                <UILink component={Link} to={`/leaderboards/${leaderboardId}/users/${meStore.osuUser.id}`}>
                                     <Button color="secondary" variant="contained" className={classes.myProfileButton}>My scores</Button>
                                 </UILink>
                             )}
@@ -356,9 +361,8 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.leaderboardsDetail.rankingIds.map((membershipId, i) => {
-                                        const membership = props.leaderboardsData.memberships[membershipId];
-                                        const osuUser = props.profilesData.osuUsers[membership.osuUserId];
+                                    {detailStore.rankings.map((membership, i) => {
+                                        const osuUser = membership.osuUser as OsuUser;
 
                                         return (
                                             <TableRow hover>
@@ -379,7 +383,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                     </Grid>
                 </Grid>
             )}
-            {!isFetching && !leaderboard && (
+            {!detailStore.isLoading && !leaderboard && (
                 <div className={classes.loader}>
                     <Typography variant="h3" align="center">
                         Leaderboard not found!
@@ -394,33 +398,6 @@ interface RouteParams {
     leaderboardId: string;
 }
 
-interface LeaderboardHomeProps extends RouteComponentProps<RouteParams> {
-    leaderboardsDetailGetThunk: (leaderboardId: number) => void;
-    leaderboardsDetailDeleteThunk: (leaderboardId: number) => void;
-    leaderboardsDetailPostInviteThunk: (leaderboardId: number, userIds: number[]) => void;
-    meJoinLeaderboardPostThunk: (leaderboardId: number) => void;
-    meLeaveLeaderboardDeleteThunk: (leaderboardId: number) => void;
-    leaderboardsDetail: LeaderboardsDetailState;
-    leaderboardsData: LeaderboardsDataState;
-    profilesData: ProfilesDataState;
-    me: MeState;
-}
+interface LeaderboardHomeProps extends RouteComponentProps<RouteParams> {}
 
-function mapStateToProps(state: StoreState) {
-    return {
-        leaderboardsDetail: state.leaderboards.detail,
-        leaderboardsData: state.data.leaderboards,
-        profilesData: state.data.profiles,
-        me: state.me
-    }
-}
-
-const mapDispatchToProps = {
-    leaderboardsDetailGetThunk,
-    leaderboardsDetailDeleteThunk,
-    leaderboardsDetailPostInviteThunk,
-    meJoinLeaderboardPostThunk,
-    meLeaveLeaderboardDeleteThunk
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LeaderboardHome);
+export default observer(LeaderboardHome);

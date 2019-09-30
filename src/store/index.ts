@@ -1,13 +1,7 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { createContext } from "react";
 
-import osuchanApp from "./reducers";
+import { RootStore } from "./rootStore";
 
-// Create store with thunk middleware
+const store = new RootStore();
 
-const middleware = [thunk];
-
-const store = createStore(osuchanApp, composeWithDevTools(applyMiddleware(...middleware)));
-
-export default store;
+export const StoreContext = createContext(store);

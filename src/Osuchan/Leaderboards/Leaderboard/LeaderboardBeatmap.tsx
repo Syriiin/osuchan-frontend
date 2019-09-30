@@ -1,15 +1,12 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useContext } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
-import { StoreState } from "../../../store/reducers";
-import { ProfilesDataState } from "../../../store/data/profiles/types";
-import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
-import { LeaderboardsBeatmapState } from "../../../store/leaderboards/beatmap/types";
-import { leaderboardsBeatmapThunkFetch } from "../../../store/leaderboards/beatmap/actions";
 import { formatTime, formatMods, formatScoreResult } from "../../../utils/formatting";
 import { makeStyles, Theme, createStyles, CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, Tooltip, Link as UILink } from "@material-ui/core";
+import { StoreContext } from "../../../store";
+import { UserStats, OsuUser } from "../../../store/models/profiles/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loader: {
@@ -32,33 +29,36 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
+    const store = useContext(StoreContext);
+    const beatmapStore = store.leaderboardsStore.beatmapStore;
+
     const classes = useStyles();
 
     // use effect to fetch leaderboards data
     const leaderboardId = parseInt(props.match.params.leaderboardId);
     const beatmapId = parseInt(props.match.params.beatmapId);
-    const { leaderboardsBeatmapThunkFetch } = props;
+    const { loadBeatmap } = beatmapStore;
     useEffect(() => {
-        leaderboardsBeatmapThunkFetch(leaderboardId, beatmapId);
-    }, [leaderboardsBeatmapThunkFetch, leaderboardId, beatmapId]);
+        loadBeatmap(leaderboardId, beatmapId);
+    }, [loadBeatmap, leaderboardId, beatmapId]);
 
-    const beatmap = props.leaderboardsBeatmap.beatmapId ? props.profilesData.beatmaps[props.leaderboardsBeatmap.beatmapId] : null;
+    const beatmap = beatmapStore.beatmap;
 
     // use effect to update title
-    const { isFetching } = props.leaderboardsBeatmap;
+    const { isLoading } = beatmapStore;
     useEffect(() => {
-        if (isFetching) {
+        if (isLoading) {
             document.title = "Loading...";
         } else if (beatmap) {
             document.title = `${beatmap.title} - osu!chan`;
         } else {
             document.title = "Beatmap not found - osu!chan";
         }
-    }, [isFetching, beatmap]);
+    }, [isLoading, beatmap]);
 
     return (
         <>
-            {props.leaderboardsBeatmap.isFetching && (
+            {beatmapStore.isLoading && (
                 <div className={classes.loader}>
                     <CircularProgress color="inherit" size={70} />
                     <Typography variant="h4" align="center">Loading</Typography>
@@ -149,10 +149,9 @@ function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.leaderboardsBeatmap.scoreIds.map((scoreId, i) => {
-                                        const score = props.profilesData.scores[scoreId];
-                                        const userStats = props.profilesData.userStats[score.userStatsId];
-                                        const osuUser = props.profilesData.osuUsers[userStats.osuUserId];
+                                    {beatmapStore.scores.map((score, i) => {
+                                        const userStats = score.userStats as UserStats;
+                                        const osuUser = userStats.osuUser as OsuUser;
 
                                         return (
                                             <TableRow hover>
@@ -175,7 +174,7 @@ function LeaderboardBeatmap(props: LeaderboardBeatmapProps) {
                     </Grid>
                 </Grid>
             )}
-            {!isFetching && !beatmap && (
+            {!beatmapStore.isLoading && !beatmap && (
                 <div className={classes.loader}>
                     <Typography variant="h3" align="center">
                         Leaderboard beatmap not found!
@@ -191,23 +190,6 @@ interface RouteParams {
     leaderboardId: string;
 }
 
-interface LeaderboardBeatmapProps extends RouteComponentProps<RouteParams> {
-    leaderboardsBeatmapThunkFetch: (leaderboardId: number, beatmapId: number) => void;
-    leaderboardsBeatmap: LeaderboardsBeatmapState;
-    leaderboardsData: LeaderboardsDataState;
-    profilesData: ProfilesDataState;
-}
+interface LeaderboardBeatmapProps extends RouteComponentProps<RouteParams> {}
 
-function mapStateToProps(state: StoreState) {
-    return {
-        leaderboardsBeatmap: state.leaderboards.beatmap,
-        leaderboardsData: state.data.leaderboards,
-        profilesData: state.data.profiles
-    }
-}
-
-const mapDispatchToProps = {
-    leaderboardsBeatmapThunkFetch
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LeaderboardBeatmap);
+export default observer(LeaderboardBeatmap);

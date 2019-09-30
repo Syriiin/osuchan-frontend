@@ -1,4 +1,5 @@
 import { Leaderboard, Membership, Invite } from "./types";
+import { osuUserFromJson } from "../profiles/deserialisers";
 
 export function leaderboardFromJson(leaderboardData: any): Leaderboard {
     return {
@@ -24,7 +25,7 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
         disqualifiedMods: leaderboardData["disqualified_mods"],
         lowestAccuracy: leaderboardData["lowest_accuracy"],
         highestAccuracy: leaderboardData["highest_accuracy"],
-        ownerId: leaderboardData["owner"] ? leaderboardData["owner"]["id"] : null,
+        owner: leaderboardData["owner"] === null ? null : typeof leaderboardData["owner"] === "object" ? osuUserFromJson(leaderboardData["owner"]) : leaderboardData["owner"],
         creationTime: new Date(leaderboardData["creation_time"])
     }
 }
@@ -33,8 +34,8 @@ export function membershipFromJson(membershipData: any): Membership {
     return {
         id: membershipData["id"],
         pp: membershipData["pp"],
-        leaderboardId: membershipData["leaderboard"],
-        osuUserId: membershipData["user"]["id"],
+        leaderboard: typeof membershipData["leaderboard"] === "object" ? leaderboardFromJson(membershipData["leaderboard"]) : membershipData["leaderboard"],
+        osuUser: typeof membershipData["user"] === "object" ? osuUserFromJson(membershipData["user"]) : membershipData["user"],
         joinDate: new Date(membershipData["join_date"]),
         scoreCount: membershipData["score_count"]
     }
@@ -44,8 +45,8 @@ export function inviteFromJson(inviteData: any): Invite {
     return {
         id: inviteData["id"],
         message: inviteData["message"],
-        leaderboardId: typeof inviteData["leaderboard"] == "object" ? inviteData["leaderboard"]["id"] : inviteData["leaderboard"],
-        osuUserId: typeof inviteData["user"] === "object" ? inviteData["user"]["id"] : inviteData["user"],
+        leaderboard: typeof inviteData["leaderboard"] === "object" ? leaderboardFromJson(inviteData["leaderboard"]) : inviteData["leaderboard"],
+        osuUser: typeof inviteData["user"] === "object" ? osuUserFromJson(inviteData["user"]) : inviteData["user"],
         inviteDate: new Date(inviteData["invite_date"])
     }
 }

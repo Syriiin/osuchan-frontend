@@ -1,15 +1,12 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useContext } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { CircularProgress, Typography, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Theme, createStyles, Tooltip, Link as UILink } from "@material-ui/core";
+import { observer } from "mobx-react-lite";
 
-import { StoreState } from "../../../store/reducers";
-import { ProfilesDataState } from "../../../store/data/profiles/types";
-import { LeaderboardsDataState } from "../../../store/data/leaderboards/types";
-import { LeaderboardsUserState } from "../../../store/leaderboards/user/types";
-import { leaderboardsUserThunkFetch } from "../../../store/leaderboards/user/actions";
 import { formatMods, formatScoreResult } from "../../../utils/formatting";
+import { StoreContext } from "../../../store";
+import { Beatmap, OsuUser } from "../../../store/models/profiles/types";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loader: {
@@ -32,34 +29,37 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 function LeaderboardUser(props: LeaderboardUserProps) {
+    const store = useContext(StoreContext);
+    const userStore = store.leaderboardsStore.userStore;
+
     const classes = useStyles();
 
     // use effect to fetch leaderboards data
     const leaderboardId = parseInt(props.match.params.leaderboardId);
     const userId = parseInt(props.match.params.userId);
-    const { leaderboardsUserThunkFetch } = props;
+    const { loadUser } = userStore;
     useEffect(() => {
-        leaderboardsUserThunkFetch(leaderboardId, userId);
-    }, [leaderboardsUserThunkFetch, leaderboardId, userId]);
+        loadUser(leaderboardId, userId);
+    }, [loadUser, leaderboardId, userId]);
 
-    const membership = props.leaderboardsUser.membershipId ? props.leaderboardsData.memberships[props.leaderboardsUser.membershipId] : null;
-    const osuUser = membership ? props.profilesData.osuUsers[membership.osuUserId] : null;
+    const membership = userStore.membership;
+    const osuUser = membership ? membership.osuUser as OsuUser : null;
 
     // use effect to update title
-    const { isFetching } = props.leaderboardsUser;
+    const { isLoading } = userStore;
     useEffect(() => {
-        if (isFetching) {
+        if (isLoading) {
             document.title = "Loading...";
         } else if (osuUser) {
             document.title = `${osuUser.username} - osu!chan`;
         } else {
             document.title = "User not found - osu!chan";
         }
-    }, [isFetching, osuUser]);
+    }, [isLoading, osuUser]);
 
     return (
         <>
-            {props.leaderboardsUser.isFetching && (
+            {userStore.isLoading && (
                 <div className={classes.loader}>
                     <CircularProgress color="inherit" size={70} />
                     <Typography variant="h4" align="center">Loading</Typography>
@@ -115,9 +115,8 @@ function LeaderboardUser(props: LeaderboardUserProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.leaderboardsUser.scoreIds.map((scoreId, i) => {
-                                        const score = props.profilesData.scores[scoreId];
-                                        const beatmap = props.profilesData.beatmaps[score.beatmapId];
+                                    {userStore.scores.map((score, i) => {
+                                        const beatmap = score.beatmap as Beatmap;
                                         
                                         return (
                                             <TableRow hover>
@@ -140,7 +139,7 @@ function LeaderboardUser(props: LeaderboardUserProps) {
                     </Grid>
                 </Grid>
             )}
-            {!isFetching && !osuUser && (
+            {!userStore.isLoading && !osuUser && (
                 <div className={classes.loader}>
                     <Typography variant="h3" align="center">
                         Leaderboard user not found!
@@ -156,23 +155,6 @@ interface RouteParams {
     leaderboardId: string;
 }
 
-interface LeaderboardUserProps extends RouteComponentProps<RouteParams> {
-    leaderboardsUserThunkFetch: (leaderboardId: number, userId: number) => void;
-    leaderboardsUser: LeaderboardsUserState;
-    leaderboardsData: LeaderboardsDataState;
-    profilesData: ProfilesDataState;
-}
+interface LeaderboardUserProps extends RouteComponentProps<RouteParams> {}
 
-function mapStateToProps(state: StoreState) {
-    return {
-        leaderboardsUser: state.leaderboards.user,
-        leaderboardsData: state.data.leaderboards,
-        profilesData: state.data.profiles
-    }
-}
-
-const mapDispatchToProps = {
-    leaderboardsUserThunkFetch
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LeaderboardUser);
+export default observer(LeaderboardUser);

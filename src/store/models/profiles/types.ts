@@ -1,7 +1,3 @@
-import { Action } from "redux";
-
-// Models
-
 export interface OsuUser {
     id: number;
     username: string;
@@ -11,7 +7,7 @@ export interface OsuUser {
 
 export interface UserStats {
     id: number;
-    osuUserId: number;
+    osuUser: OsuUser | number;
     gamemode: number;
     playcount: number;
     playtime: number;
@@ -38,7 +34,7 @@ export interface Beatmap {
     gamemode: number;
     status: number;
     creatorName: string;
-    createId: number;
+    creator: OsuUser | number;
     bpm: number;
     drainTime: number;
     totalTime: number;
@@ -53,8 +49,8 @@ export interface Beatmap {
 
 export interface Score {
     id: number;
-    beatmapId: number;
-    userStatsId: number;
+    beatmap: Beatmap | number;
+    userStats: UserStats | number;
     score: number;
     count300: number;
     count100: number;
@@ -77,43 +73,3 @@ export interface Score {
     starRating: number;
     result: number;
 }
-
-// State
-
-export interface ProfilesDataState {
-    osuUsers: { [id: number]: OsuUser };
-    userStats: { [id: number]: UserStats };
-    beatmaps: { [id: number]: Beatmap };
-    scores: { [id: number]: Score };
-}
-
-// Actions
-
-export enum ProfilesActionType {
-    AddOsuUsers = "ADD_OSUUSERS",
-    AddUserStats = "ADD_USERSTATS",
-    AddBeatmaps = "ADD_BEATMAPS",
-    AddScores = "ADD_SCORES",
-}
-
-export interface ProfilesAddOsuUsers extends Action {
-    type: ProfilesActionType.AddOsuUsers;
-    osuUsers: OsuUser[];
-}
-
-export interface ProfilesAddUserStats extends Action {
-    type: ProfilesActionType.AddUserStats;
-    userStats: UserStats[];
-}
-
-export interface ProfilesAddBeatmaps extends Action {
-    type: ProfilesActionType.AddBeatmaps;
-    beatmaps: Beatmap[];
-}
-
-export interface ProfilesAddScores extends Action {
-    type: ProfilesActionType.AddScores;
-    scores: Score[];
-}
-
-export type ProfilesAction = ProfilesAddOsuUsers | ProfilesAddUserStats | ProfilesAddBeatmaps | ProfilesAddScores;

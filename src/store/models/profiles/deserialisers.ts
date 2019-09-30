@@ -12,7 +12,7 @@ export function osuUserFromJson(osuUserData: any): OsuUser {
 export function userStatsFromJson(userStatsData: any): UserStats {
     return {
         id: userStatsData["id"],
-        osuUserId: userStatsData["user"]["id"],
+        osuUser: typeof userStatsData["user"] === "object" ? osuUserFromJson(userStatsData["user"]) : userStatsData["user"],
         gamemode: userStatsData["gamemode"],
         playcount: userStatsData["playcount"],
         playtime: userStatsData["playtime"],
@@ -41,7 +41,7 @@ export function beatmapFromJson(beatmapData: any): Beatmap {
         gamemode: beatmapData["gamemode"],
         status: beatmapData["status"],
         creatorName: beatmapData["creator_name"],
-        createId: beatmapData["create_id"],
+        creator: typeof beatmapData["creator"] === "object" ? osuUserFromJson(beatmapData["creator"]) : beatmapData["creator"],
         bpm: beatmapData["bpm"],
         drainTime: beatmapData["drain_time"],
         totalTime: beatmapData["total_time"],
@@ -58,8 +58,8 @@ export function beatmapFromJson(beatmapData: any): Beatmap {
 export function scoreFromJson(scoreData: any): Score {
     return {
         id: scoreData["id"],
-        beatmapId: typeof scoreData["beatmap"] === "object" ? scoreData["beatmap"]["id"] : scoreData["beatmap"],
-        userStatsId: typeof scoreData["user_stats"] === "object" ? scoreData["user_stats"]["id"] : scoreData["user_stats"],
+        beatmap: typeof scoreData["beatmap"] === "object" ? beatmapFromJson(scoreData["beatmap"]) : scoreData["beatmap"],
+        userStats: typeof scoreData["user_stats"] === "object" ? userStatsFromJson(scoreData["user_stats"]) : scoreData["user_stats"],
         score: scoreData["score"],
         count300: scoreData["count_300"],
         count100: scoreData["count_100"],
