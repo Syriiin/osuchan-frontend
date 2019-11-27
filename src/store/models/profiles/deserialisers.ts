@@ -34,7 +34,7 @@ export function userStatsFromJson(userStatsData: any): UserStats {
 export function beatmapFromJson(beatmapData: any): Beatmap {
     return {
         id: beatmapData["id"],
-        setId: beatmapData["setId"],
+        setId: beatmapData["set_id"],
         artist: beatmapData["artist"],
         title: beatmapData["title"],
         difficultyName: beatmapData["difficulty_name"],
