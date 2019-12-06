@@ -1,101 +1,106 @@
 import React, { useState, useContext } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { RouteComponentProps } from "react-router";
-import { AppBar, Toolbar, IconButton, Typography, Button, Theme, createStyles, InputBase, Avatar, MenuItem, Menu, Badge, ListItemText, ListItemIcon, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from "@material-ui/core";
-import { Menu as MenuIcon, Search as SearchIcon, Mail as MailIcon } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/styles";
-import { fade } from "@material-ui/core/styles";
+import { Link, withRouter, LinkProps, RouteComponentProps, matchPath } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
-import Sidebar from "./Sidebar";
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
 import { Leaderboard } from "../store/models/leaderboards/types";
+import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button } from "../components";
 
-const drawerWidth = 240;
+const NavbarWrapper = styled.nav`
+    display: flex;
+    align-items: center;
+    height: 70px;
+    background-color: ${props => props.theme.colours.pillow};
+    padding: 0 50px;
+`;
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    appBar: {
-        marginLeft: drawerWidth,
-        zIndex: theme.zIndex.drawer + 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up("md")]: {
-            display: "none"
-        }
-    },
-    title: {
-        flexGrow: 1,
-        display: "none",
-        [theme.breakpoints.up("sm")]: {
-            display: "block"
-        }
-    },
-    search: {
-        position: "relative",
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        "&:hover": {
-            backgroundColor: fade(theme.palette.common.white, 0.25)
-        },
-        marginLeft: 0,
-        width: "100%",
-        [theme.breakpoints.up("sm")]: {
-            marginLeft: theme.spacing(1),
-            width: "auto"
-        }
-    },
-    searchIcon: {
-        width: theme.spacing(7),
-        height: "100%",
-        position: "absolute",
-        pointerEvents: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    inputRoot: {
-        color: "inherit"
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 7),
-        transition: theme.transitions.create("width"),
-        width: "100%",
-        [theme.breakpoints.up("sm")]: {
-            width: 120,
-            "&:focus": {
-                width: 200
-            }
-        }
-    },
-    auth: {
-        minWidth: theme.spacing(14),
-        marginLeft: theme.spacing(2)
+const LinksContainer = styled.div`
+    flex: 1;
+`;
+
+const NavbarLink = styled(Link)<NavbarLinkProps>`
+    margin: 10px;
+    font-size: 1.5em;
+    font-weight: ${props => props.active ? "normal" : "lighter"};
+    color: ${props => props.active ? props.theme.colours.mango : "#fff"};
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        color: ${props => props.active ? props.theme.colours.mango : props.theme.colours.timber};
     }
-}));
+`;
+
+interface NavbarLinkProps extends LinkProps {
+    active?: boolean;
+}
+
+const TitleHeader = styled.h1`
+    margin: 10px;
+    flex: 1;
+    font-weight: 400;
+    text-align: center;
+
+    a {
+        color: #fff;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+`;
+
+const UserMenuContainer = styled.div`
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+`;
+
+const SearchInput = styled(TextInput)`
+    margin: 10px;
+`;
+
+const LoginLink = styled.a`
+    margin: 10px;
+    text-decoration: none;
+`;
+
+const InviteIconWrapper = styled.div`
+    margin: 10px;
+    width: 50px;
+`;
+
+const UserAvatarWrapper = styled.div`
+    margin: 10px;
+    width: 50px;
+`;
+
+const UserAvatar = styled.img`
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
 
 function Navbar(props: NavbarProps) {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     
-    const classes = useStyles();
-    
     // State hooks
     const [searchValue, setSearchValue] = useState("");
-    const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<HTMLElement | null>(null);
-    const [inviteMenuAnchorEl, setInviteMenuAnchorEl] = useState<HTMLElement | null>(null);
-    const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-    const [addScoreDialogOpen, setAddScoreDialogOpen] = useState(false);
+    const [addScoreModalOpen, setAddScoreModalOpen] = useState(false);
     const [addScoreUserUrl, setAddScoreUserUrl] = useState("");
     const [addScoreBeatmapUrl, setAddScoreBeatmapUrl] = useState("");
     
     // Handlers
-    const handleUserMenuOpen = (event:React.MouseEvent<HTMLElement>) => setUserMenuAnchorEl(event.currentTarget);
-    const handleUserMenuClose = () => setUserMenuAnchorEl(null);
-    const handleInviteMenuOpen = (event:React.MouseEvent<HTMLElement>) => setInviteMenuAnchorEl(event.currentTarget);
-    const handleInviteMenuClose = () => setInviteMenuAnchorEl(null);
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value);
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
             props.history.push(`/users/${searchValue}`);
@@ -103,8 +108,7 @@ function Navbar(props: NavbarProps) {
         }
         event.preventDefault();
     }
-    const handleSidebarToggle = () => setMobileSidebarOpen(!mobileSidebarOpen);
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleAddScoreSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
         const userUrlRe = /osu.ppy.sh\/users\/(\d+)/;
@@ -123,152 +127,93 @@ function Navbar(props: NavbarProps) {
             const userId = parseInt(userUrlMatch[1]);
             const gamemodeId = gamemodeIdFromName(gamemode);
             meStore.addScores(userId, beatmapIds, gamemodeId);
-            setAddScoreDialogOpen(false);
+            handleAddScoreModalClose();
         }
     }
-    const handleCloseAddScoreDialog = () => setAddScoreDialogOpen(false);
+    const handleAddScoreModalClose = () => {
+        setAddScoreModalOpen(false);
+        setAddScoreUserUrl("");
+        setAddScoreBeatmapUrl("");
+    }
 
     // Variables
     const osuUser = meStore.osuUser;
-    
+    const invites = meStore.invites;
+
     return (
-        <>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={handleSidebarToggle} className={classes.menuButton}>
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        osu!chan <strong>Beta</strong>
-                    </Typography>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <form onSubmit={handleSearchSubmit}>
-                            <InputBase placeholder="osu! username" onChange={handleSearchChange} value={searchValue} classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }} />
-                        </form>
-                    </div>
-                    <div className={classes.auth}>
-                        {osuUser ? (
-                            <>
-                                <IconButton onClick={handleInviteMenuOpen} color="inherit">
-                                    <Badge badgeContent={meStore.invites.length} color="secondary">
-                                        <MailIcon />
-                                    </Badge>
-                                </IconButton>
-                                <Menu
-                                    id="invite-menu"
-                                    anchorEl={inviteMenuAnchorEl}
-                                    getContentAnchorEl={null}
-                                    anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "center"
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "center"
-                                    }}
-                                    open={inviteMenuAnchorEl !== null}
-                                    onClose={handleInviteMenuClose}
-                                >
-                                    {meStore.invites.length > 0 ? meStore.invites.map(invite => {
-                                        const leaderboard = invite.leaderboard as Leaderboard;
-                                        const ownerId = typeof leaderboard.owner === "number" ? leaderboard.owner : leaderboard.owner!.id;
-                                        
-                                        return (
-                                            <MenuItem component={Link} to={`/leaderboards/${leaderboard.id}`}>
-                                                <ListItemIcon>
-                                                    <Avatar src={`https://a.ppy.sh/${ownerId}`} />
-                                                </ListItemIcon>
-                                                <ListItemText primary={leaderboard.name} />
-                                            </MenuItem>
-                                        )
-                                    }) : (
-                                        <MenuItem disabled>No pending invites</MenuItem>
-                                    )}
-                                </Menu>
-                                <IconButton onClick={handleUserMenuOpen}>
-                                    <Avatar src={`https://a.ppy.sh/${osuUser.id}`} />
-                                </IconButton>
-                                <Menu
-                                    id="user-menu"
-                                    anchorEl={userMenuAnchorEl}
-                                    getContentAnchorEl={null}
-                                    anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "center"
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "center"
-                                    }}
-                                    open={userMenuAnchorEl !== null}
-                                    onClose={handleUserMenuClose}
-                                >
-                                    <MenuItem component={Link} to={`/users/${osuUser.username}`}>Profile</MenuItem>
-                                    <MenuItem component="a" href="/osuauth/logout">Logout</MenuItem>
-                                    <MenuItem disabled></MenuItem>
-                                    {meStore.isAddingScores ? (
-                                        <MenuItem disabled>
-                                            <CircularProgress size={22} color="inherit" />
-                                        </MenuItem>
-                                    ) : (
-                                        <MenuItem onClick={() => setAddScoreDialogOpen(true)}>Add scores</MenuItem>
-                                    )}
-                                    <Dialog open={addScoreDialogOpen} onClose={handleCloseAddScoreDialog}>
-                                        <form onSubmit={handleSubmit}>
-                                            <DialogTitle>Add scores</DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText>
-                                                    Enter a player's osu! profile URL and beatmap URL(s) to add scores from those beatmaps.
-                                                    <br />
-                                                    URLs must be from the new site so they match the format below.
-                                                </DialogContentText>
-                                                <TextField
-                                                    autoFocus
-                                                    margin="dense"
-                                                    label="osu! profile URL"
-                                                    placeholder="https://osu.ppy.sh/users/5701575"
-                                                    required
-                                                    fullWidth
-                                                    onChange={e => setAddScoreUserUrl(e.currentTarget.value)}
-                                                />
-                                                <TextField
-                                                    margin="dense"
-                                                    label="Beatmap URL(s)"
-                                                    placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
-                                                    required
-                                                    fullWidth
-                                                    multiline
-                                                    onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)}
-                                                />
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={handleCloseAddScoreDialog}>
-                                                    Cancel
-                                                </Button>
-                                                <Button type="submit">
-                                                    Add scores
-                                                </Button>
-                                            </DialogActions>
-                                        </form>
-                                    </Dialog>
-                                </Menu>
-                            </>
-                        ) : (
-                            <Button href="/osuauth/login">Login</Button>
-                        )}
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Sidebar mobileSidebarOpen={mobileSidebarOpen} handleSidebarToggle={handleSidebarToggle} />
-        </>
+        <NavbarWrapper>
+            <LinksContainer>
+                {/* Links */}
+                <NavbarLink to="/" active={props.location.pathname === "/"}>Home</NavbarLink>
+                <NavbarLink to="/leaderboards" active={matchPath(props.location.pathname, {path: "/leaderboards"}) !== null}>Leaderboards</NavbarLink>
+            </LinksContainer>
+
+            {/* osu!chan Beta title */}
+            <TitleHeader>
+                <Link to="/">osu!chan <strong>Beta</strong></Link>
+            </TitleHeader>
+
+            <UserMenuContainer>
+                {/* User search */}
+                <form onSubmit={handleSearchSubmit}>
+                    <SearchInput placeholder="osu! username" onChange={e => setSearchValue(e.currentTarget.value)} value={searchValue} />
+                </form>
+                
+                {/* Login button / user menu */}
+                {osuUser ? (
+                    <>
+                        <SimpleMenu triggerElement={
+                            <InviteIconWrapper>
+                                <FontAwesomeIcon icon={faEnvelope} size="lg" />
+                            </InviteIconWrapper>
+                        } emptyText="No pending invites">
+                            {invites.map((invite, i) => (
+                                <Link key={i} to={`/leaderboards/${(invite.leaderboard as Leaderboard).id}`}>
+                                    <SimpleMenuItem>{(invite.leaderboard as Leaderboard).name}</SimpleMenuItem>
+                                </Link>
+                            ))}
+                        </SimpleMenu>
+                        <SimpleMenu triggerElement={
+                            <UserAvatarWrapper>
+                                <UserAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
+                            </UserAvatarWrapper>
+                        }>
+                            <Link to={`/users/${osuUser.username}`}>
+                                <SimpleMenuItem>My Profile</SimpleMenuItem>
+                            </Link>
+                            <SimpleMenuItem onClick={() => setAddScoreModalOpen(true)}>Add Scores</SimpleMenuItem>
+                            <a href="/osuauth/logout">
+                                <SimpleMenuItem>Logout</SimpleMenuItem>
+                            </a>
+                        </SimpleMenu>
+
+                        {/* Add Scores modal */}
+                        <SimpleModal open={addScoreModalOpen} onClose={handleAddScoreModalClose}>
+                            <SimpleModalTitle>Add Scores</SimpleModalTitle>
+                            <p>
+                                Enter a player's osu! profile URL and beatmap URL(s) to add scores from those beatmaps.
+                                <br />
+                                URLs must be from the new site so they match the format below.
+                            </p>
+                            <form onSubmit={handleAddScoreSubmit}>
+                                <label>
+                                    osu! Profile URL
+                                    <TextInput fullWidth required placeholder="https://osu.ppy.sh/users/5701575" onChange={e => setAddScoreUserUrl(e.currentTarget.value)} value={addScoreUserUrl} />
+                                </label>
+                                <label>
+                                    Beatmap URL(s)
+                                    <TextInput fullWidth required placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514" onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)} value={addScoreBeatmapUrl} />
+                                </label>
+                                <Button type="submit">Submit</Button>
+                            </form>
+                        </SimpleModal>
+                    </>
+                ) : (
+                    <LoginLink href="/osuauth/login">Login</LoginLink>
+                )}
+            </UserMenuContainer>
+            
+        </NavbarWrapper>
     );
 }
 

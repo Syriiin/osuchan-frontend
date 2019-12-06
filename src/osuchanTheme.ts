@@ -1,11 +1,14 @@
 import { DefaultTheme } from "styled-components";
 
-export const osuchanBlueTheme: DefaultTheme = {
+export const osuchanTheme: DefaultTheme = {
     colours: {
-        primary: "#3256C2",
-        secondary: "#25408F",
-        dark: "#252C42",
-        detail: "#7289CC",
-        backdrop: "#111E42"
+        pillow: "#3A3ACC",
+        currant: "#574566",
+        mystic: "#A02EFF",
+        timber: "#D2B66F",
+        mango: "#FFAF2E",
+        foreground: "#363663",
+        midground: "#29293d",
+        background: "#17171c"
     }
 }

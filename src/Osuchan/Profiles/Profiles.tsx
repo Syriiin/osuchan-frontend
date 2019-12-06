@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 
 function Profiles() {
     return (

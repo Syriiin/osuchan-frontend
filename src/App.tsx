@@ -1,41 +1,43 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { Router } from "react-router-dom";
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 
 import history from "./history";
-import { osuchanBlueTheme } from "./osuchanTheme";
+import { osuchanTheme } from "./osuchanTheme";
 
 import Osuchan from "./Osuchan/Osuchan";
 
-const muiTheme = createMuiTheme({
-    palette: {
-        type: "dark",
-        primary: {
-            main: "#25408F"
-        },
-        secondary: {
-            main: "#3256C2"
-        },
-        background: {
-            default: "#111E42",
-            paper: "#252C42"
+const GlobalStyle = createGlobalStyle`
+    * {
+        box-sizing: border-box;
+        font-family: "Exo 2", sans-serif;
+    }
+
+    a {
+        color: ${props => props.theme.colours.mango};
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
         }
     }
-});
 
-const App: FunctionComponent = () => {
+    body {
+        margin: 0;
+        background-color: ${props => props.theme.colours.background};
+        color: #fff;
+        line-height: 1.3;
+    }
+`;
+
+function App() {
     return (
-        <ThemeProvider theme={muiTheme}>
-            <StyledThemeProvider theme={osuchanBlueTheme}>
-                <Router history={history}>
-                    <CssBaseline />
-                    <Osuchan />
-                </Router>
-            </StyledThemeProvider>
-        </ThemeProvider>
+        <StyledThemeProvider theme={osuchanTheme}>
+            <Router history={history}>
+                <GlobalStyle />
+                <Osuchan />
+            </Router>
+        </StyledThemeProvider>
     );
 }
 
