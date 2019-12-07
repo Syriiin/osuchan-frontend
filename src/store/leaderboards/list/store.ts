@@ -6,6 +6,8 @@ import history from "../../../history";
 
 import { Leaderboard } from "../../models/leaderboards/types";
 import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
+import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../models/leaderboards/enums";
+import { Gamemode, Mods } from "../../models/common/enums";
 
 export class ListStore {
     @observable leaderboards: Leaderboard[] = [];
@@ -31,12 +33,12 @@ export class ListStore {
 
     @action
     createLeaderboard = async (
-        gamemode: number,
-        accessType: number,
+        gamemode: Gamemode,
+        accessType: LeaderboardAccessType,
         name: string,
         description: string,
         allowPastScores: boolean | null,
-        allowedBeatmapStatus: number,
+        allowedBeatmapStatus: AllowedBeatmapStatus,
         oldestBeatmapDate: Date | null,
         newestBeatmapDate: Date | null,
         oldestScoreDate: Date | null,
@@ -47,8 +49,8 @@ export class ListStore {
         highestOd: number | null,
         lowestCs: number | null,
         highestCs: number | null,
-        requiredMods: number,
-        disqualifiedMods: number,
+        requiredMods: Mods,
+        disqualifiedMods: Mods,
         lowestAccuracy: number | null,
         highestAccuracy: number | null
     ) => {

@@ -1,4 +1,6 @@
 import { modsShortFromBitwise } from "./osu";
+import { ScoreResult } from "../store/models/profiles/enums";
+import { Gamemode, Mods } from "../store/models/common/enums";
 
 export function formatTime(seconds: number) {
     // convert seconds to MM:SS format
@@ -8,39 +10,39 @@ export function formatTime(seconds: number) {
     return `${minutesString}:${("00" + secondsString).substring(secondsString.length)}`;
 }
 
-export function formatMods(bitwiseMods: number) {
+export function formatMods(bitwiseMods: Mods) {
     // convert bitwise mods to mod string (eg. 72 -> "HD, DT")
     const mods = modsShortFromBitwise(bitwiseMods);
     
     return mods.length > 0 ? mods.join(", ") : "";
 }
 
-export function formatScoreResult(result: number) {
+export function formatScoreResult(result: ScoreResult) {
     // convert score result id to string representation
     switch (result) {
-        case 1:     // Perfect
-        case 2:     // No break
+        case ScoreResult.Perfect:
+        case ScoreResult.NoBreak:
             return "Full Combo";
-        case 4:     // Sliderbreak
-        case 8:     // One miss
-        case 16:    // End choke
+        case ScoreResult.SliderBreak:
+        case ScoreResult.OneMiss:
+        case ScoreResult.EndChoke:
             return "Choke";
-        case 32:    // Clear
+        case ScoreResult.Clear:
             return "Clear";
         default:
             return "Error";
     }
 }
 
-export function formatGamemodeName(gamemodeId: number) {
+export function formatGamemodeName(gamemodeId: Gamemode) {
     switch (gamemodeId) {
-        case 0:
+        case Gamemode.Standard:
             return "osu!";
-        case 1:
+        case Gamemode.Taiko:
             return "osu!taiko";
-        case 2:
+        case Gamemode.Catch:
             return "osu!catch";
-        case 3:
+        case Gamemode.Mania:
             return "osu!mania";
         default:
             return "Unknown";

@@ -5,6 +5,7 @@ import { UserStats, Score, OsuUser } from "../models/profiles/types";
 import { Leaderboard } from "../models/leaderboards/types";
 import { userStatsFromJson, scoreFromJson } from "../models/profiles/deserialisers";
 import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
+import { Gamemode, Mods } from "../models/common/enums";
 
 export class UsersStore {
     @observable currentUserStats: UserStats | null = null;
@@ -13,7 +14,7 @@ export class UsersStore {
     @observable isLoading: boolean = false;
 
     @action
-    loadUser = async (userString: string, gamemode: number) => {
+    loadUser = async (userString: string, gamemode: Gamemode) => {
         this.currentUserStats = null;
         this.scores = [];
         this.leaderboards = [];

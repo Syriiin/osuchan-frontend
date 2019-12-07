@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
+import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 
 function LeaderboardList() {
     const store = useContext(StoreContext);
@@ -26,8 +27,8 @@ function LeaderboardList() {
     }, [isLoading]);
 
     const leaderboards = listStore.leaderboards;
-    const globalLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType === 0);
-    const communityLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType !== 0);
+    const globalLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType === LeaderboardAccessType.Global);
+    const communityLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType !== LeaderboardAccessType.Global);
 
     return (
         <>

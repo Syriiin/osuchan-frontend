@@ -7,6 +7,7 @@ import { formatScoreResult, formatTime } from "../../utils/formatting";
 import { DataTable, DataCell } from "./DataTable";
 import TimeAgo from "timeago-react";
 import { ModIcons } from "./ModIcons";
+import { ScoreResult } from "../../store/models/profiles/enums";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -84,7 +85,7 @@ const Performance = styled.span`
     font-size: 2em;
 `;
 
-const ScoreResult = styled.span`
+const Result = styled.span`
 
 `;
 
@@ -159,8 +160,8 @@ export function ScoreModal(props: ScoreModalProps) {
                     <Accuracy>{score.accuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%</Accuracy>
                     <Combo>{score.bestCombo}x / {beatmap.maxCombo}x</Combo>
                     <Performance>{score.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
-                    <ScoreResult>{formatScoreResult(score.result)}</ScoreResult>
-                    {score.result !== 1 && score.result !== 2 && (
+                    <Result>{formatScoreResult(score.result)}</Result>
+                    {score.result & ScoreResult.Choke && (
                         <NochokePerformance>No-choke {score.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</NochokePerformance>
                     )}
                 </ScoreInfo>

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { modsShortFromBitwise } from "../../utils/osu";
+import { Mods } from "../../store/models/common/enums";
 
 const ModsContainer = styled.div`
     display: flex;
@@ -24,6 +25,6 @@ export function ModIcons(props: ModIconsProps) {
 }
 
 interface ModIconsProps {
-    bitwiseMods: number;
+    bitwiseMods: Mods;
     small?: boolean;
 }

@@ -11,6 +11,8 @@ import { Leaderboard } from "../../../store/models/leaderboards/types";
 import { Surface, SurfaceTitle, Button, SimpleModal, TextField, SimpleModalTitle, FormControl, FormLabel } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
+import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
+import { Gamemode, Mods } from "../../../store/models/common/enums";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -46,17 +48,17 @@ function LeaderboardFilters(props: LeaderboardFiltersProps) {
                 <li><FilterValue>Scores must be made after joining leaderboard</FilterValue></li>
             )}
             {/* Mods */}
-            {leaderboard.requiredMods !== 0 && (
+            {leaderboard.requiredMods !== Mods.None && (
                 <li>Required Mods: <FilterValue>{formatMods(leaderboard.requiredMods)}</FilterValue></li>
             )}
-            {leaderboard.disqualifiedMods !== 0 && (
+            {leaderboard.disqualifiedMods !== Mods.None && (
                 <li>Disqualified Mods: <FilterValue>{formatMods(leaderboard.disqualifiedMods)}</FilterValue></li>
             )}
             {/* Beatmap status */}
-            {leaderboard.allowedBeatmapStatus === 0 && (
+            {leaderboard.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
                 <li>Beatmap Status: <FilterValue>Ranked or Loved</FilterValue></li>
             )}
-            {leaderboard.allowedBeatmapStatus === 2 && (
+            {leaderboard.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
                 <li>Beatmap Status: <FilterValue>Loved</FilterValue></li>
             )}
             {/* Beatmap date */}
@@ -82,10 +84,10 @@ function LeaderboardFilters(props: LeaderboardFiltersProps) {
             )}
             {/* CS */}
             {leaderboard.lowestCs !== null && (
-                <li>Min {leaderboard.gamemode === 3 ? "Keys" : "CS"}: <FilterValue>{leaderboard.lowestCs}</FilterValue></li>
+                <li>Min {leaderboard.gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{leaderboard.lowestCs}</FilterValue></li>
             )}
             {leaderboard.highestCs !== null && (
-                <li>Max {leaderboard.gamemode === 3 ? "Keys" : "CS"}: <FilterValue>{leaderboard.highestCs}</FilterValue></li>
+                <li>Max {leaderboard.gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{leaderboard.highestCs}</FilterValue></li>
             )}
             {/* AR */}
             {leaderboard.lowestAr !== null && (
@@ -149,7 +151,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
     return (
         <>
             {/* If not global leaderboard */}
-            {leaderboard.accessType !== 0 && meOsuUser && (
+            {leaderboard.accessType !== LeaderboardAccessType.Global && meOsuUser && (
                 <>
                     {/* If owner */}
                     {(leaderboard.owner as OsuUser).id === meOsuUser.id && (
@@ -158,7 +160,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
                             <Button onClick={handleDelete}>Delete Leaderboard</Button>
 
                             {/* Invite button if either private or public invite-only */}
-                            {(leaderboard.accessType === 2 || leaderboard.accessType === 3) && (
+                            {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
                                 <>
                                     <Button onClick={() => setInviteDialogOpen(true)}>Invite Player</Button>
 
@@ -184,7 +186,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
                     )}
                     
                     {/* Join button if public or pending invite, and not member */}
-                    {(leaderboard.accessType === 1 || meStore.invites.find(i => (i.leaderboard as Leaderboard).id === leaderboard.id) !== undefined) && !meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
+                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => (i.leaderboard as Leaderboard).id === leaderboard.id) !== undefined) && !meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
                         <Button onClick={handleJoin}>Join Leaderboard</Button>
                     )}
 
@@ -242,14 +244,14 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                     {/*Leaderboard Details */}
                     <LeaderboardSurface>
                         <SurfaceTitle>{leaderboard.name}</SurfaceTitle>
-                        {leaderboard.accessType === 0 ? (
+                        {leaderboard.accessType === LeaderboardAccessType.Global ? (
                             <AccessType>GLOBAL</AccessType>
                         ) : (
                             <>
                                 <AccessType>
-                                    {leaderboard.accessType === 1 && "PUBLIC"}
-                                    {leaderboard.accessType === 2 && "INVITE-ONLY"}
-                                    {leaderboard.accessType === 3 && "PRIVATE"}
+                                    {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
+                                    {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
+                                    {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                                 </AccessType>
                                 <Owner to={`/users/${(leaderboard.owner as OsuUser).id}`}>
                                     {(leaderboard.owner as OsuUser).username}

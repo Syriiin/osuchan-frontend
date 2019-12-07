@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Surface, SurfaceTitle, ScoreRow } from "../../../components";
 import { Score } from "../../../store/models/profiles/types";
 import { observer } from "mobx-react-lite";
+import { Gamemode } from "../../../store/models/common/enums";
 
 const ScoresSurface = styled(Surface)`
     padding: 20px;
@@ -27,7 +28,7 @@ function ProfileScoreRow(props: ProfileScoreRowProps) {
 
 interface ProfileScoreRowProps {
     score: Score;
-    gamemode: number;
+    gamemode: Gamemode;
     sandboxMode: boolean;
 }
 
@@ -42,14 +43,14 @@ function Scores(props: ScoresProps) {
             </SurfaceTitle>
             {props.scores.map((score, i) => (
                 <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
-            ))}}
+            ))}
         </ScoresSurface>
     );
 }
 
 interface ScoresProps {
     scores: Score[];
-    gamemode: number;
+    gamemode: Gamemode;
     sandboxMode: boolean;
 }
 

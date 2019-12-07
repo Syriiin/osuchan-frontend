@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { Surface } from "../../../components";
+import { Gamemode } from "../../../store/models/common/enums";
 
 const ModeSwitcherSurface = styled(Surface)`
     padding: 20px;
@@ -40,16 +41,16 @@ function ModeSwitcher(props: ModeSwitcherProps) {
     return (
         <ModeSwitcherSurface>
             <ModeSwitcherContainer>
-                <ModeLink active={props.gamemodeId === 0} to={`/users/${props.userString}/osu`}>
+                <ModeLink active={props.gamemodeId === Gamemode.Standard} to={`/users/${props.userString}/osu`}>
                     <li>osu!</li>
                 </ModeLink>
-                <ModeLink active={props.gamemodeId === 1} to={`/users/${props.userString}/taiko`}>
+                <ModeLink active={props.gamemodeId === Gamemode.Taiko} to={`/users/${props.userString}/taiko`}>
                     <li>osu!taiko</li>
                 </ModeLink>
-                <ModeLink active={props.gamemodeId === 2} to={`/users/${props.userString}/catch`}>
+                <ModeLink active={props.gamemodeId === Gamemode.Catch} to={`/users/${props.userString}/catch`}>
                     <li>osu!catch</li>
                 </ModeLink>
-                <ModeLink active={props.gamemodeId === 3} to={`/users/${props.userString}/mania`}>
+                <ModeLink active={props.gamemodeId === Gamemode.Mania} to={`/users/${props.userString}/mania`}>
                     <li>osu!mania</li>
                 </ModeLink>
             </ModeSwitcherContainer>
@@ -58,7 +59,7 @@ function ModeSwitcher(props: ModeSwitcherProps) {
 }
 
 interface ModeSwitcherProps {
-    gamemodeId: number;
+    gamemodeId: Gamemode;
     userString: string;
 }
 

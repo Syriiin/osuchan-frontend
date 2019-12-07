@@ -1,3 +1,6 @@
+import { ScoreResult } from "./enums";
+import { BeatmapStatus, Gamemode, Mods } from "../common/enums";
+
 export interface OsuUser {
     id: number;
     username: string;
@@ -8,7 +11,7 @@ export interface OsuUser {
 export interface UserStats {
     id: number;
     osuUser: OsuUser | number;
-    gamemode: number;
+    gamemode: Gamemode;
     playcount: number;
     playtime: number;
     level: number;
@@ -31,8 +34,8 @@ export interface Beatmap {
     artist: string;
     title: string;
     difficultyName: string;
-    gamemode: number;
-    status: number;
+    gamemode: Gamemode;
+    status: BeatmapStatus;
     creatorName: string;
     creator: OsuUser | number;
     bpm: number;
@@ -59,7 +62,7 @@ export interface Score {
     countGeki: number;
     countKatu: number;
     bestCombo: number;
-    mods: number;
+    mods: Mods;
     rank: string;
     pp: number;
     date: Date;
@@ -71,5 +74,5 @@ export interface Score {
     overallDifficulty: number;
     nochokePp: number;
     starRating: number;
-    result: number;
+    result: ScoreResult;
 }

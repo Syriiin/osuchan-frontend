@@ -6,6 +6,7 @@ import { OsuUser } from "../models/profiles/types";
 import { Invite, Membership, Leaderboard } from "../models/leaderboards/types";
 import { osuUserFromJson } from "../models/profiles/deserialisers";
 import { inviteFromJson, membershipFromJson } from "../models/leaderboards/deserialisers";
+import { Gamemode } from "../models/common/enums";
 
 export class MeStore {
     @observable osuUser: OsuUser | null = null;
@@ -44,7 +45,7 @@ export class MeStore {
     }
 
     @action
-    addScores = async (userId: number, beatmapIds: number[], gamemodeId: number) => {
+    addScores = async (userId: number, beatmapIds: number[], gamemodeId: Gamemode) => {
         this.isAddingScores = true;
 
         try {

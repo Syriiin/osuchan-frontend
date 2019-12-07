@@ -4,17 +4,19 @@ import Switch from "react-switch";
 import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button } from "../../components";
 import { StoreContext } from "../../store";
 import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
+import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../store/models/leaderboards/enums";
+import { Gamemode, Mods } from "../../store/models/common/enums";
 
 function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
 
-    const [gamemode, setGamemode] = useState(0);
-    const [accessType, setAccessType] = useState(1);
+    const [gamemode, setGamemode] = useState(Gamemode.Standard);
+    const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
     const [name, setName] = useState();
     const [description, setDescription] = useState();
     const [allowPastScores, setAllowPastScores] = useState(true);
-    const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(1);
+    const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(AllowedBeatmapStatus.RankedOnly);
     const [oldestBeatmapDate, setOldestBeatmapDate] = useState();
     const [newestBeatmapDate, setNewestBeatmapDate] = useState();
     const [oldestScoreDate, setOldestScoreDate] = useState();
@@ -62,12 +64,12 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     }
     
     const clearInputs = () => {
-        setGamemode(0);
-        setAccessType(1);
+        setGamemode(Gamemode.Standard);
+        setAccessType(LeaderboardAccessType.Public);
         setName(null);
         setDescription(null);
         setAllowPastScores(true);
-        setAllowedBeatmapStatus(1);
+        setAllowedBeatmapStatus(AllowedBeatmapStatus.RankedOnly);
         setOldestBeatmapDate(null);
         setNewestBeatmapDate(null);
         setOldestScoreDate(null);
@@ -78,8 +80,8 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
         setHighestOd(null);
         setLowestCs(null);
         setHighestCs(null);
-        setRequiredMods(0);
-        setDisqualifiedMods(0);
+        setRequiredMods(Mods.None);
+        setDisqualifiedMods(Mods.None);
         setLowestAccuracy(null);
         setHighestAccuracy(null);
 
@@ -96,18 +98,18 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormLabel>Gamemode</FormLabel>
                 <FormControl>
                     <select value={gamemode} onChange={e => setGamemode(parseInt(e.target.value as string))}>
-                        <option value={0}>osu!</option>
-                        <option value={1}>osu!taiko</option>
-                        <option value={2}>osu!catch</option>
-                        <option value={3}>osu!mania</option>
+                        <option value={Gamemode.Standard}>osu!</option>
+                        <option value={Gamemode.Taiko}>osu!taiko</option>
+                        <option value={Gamemode.Catch}>osu!catch</option>
+                        <option value={Gamemode.Mania}>osu!mania</option>
                     </select>
                 </FormControl>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
                     <select value={accessType} onChange={e => setAccessType(parseInt(e.target.value as string))}>
-                        <option value={1}>Public</option>
-                        <option value={2}>Public (Invite-only)</option>
-                        <option value={3}>Private</option>
+                        <option value={LeaderboardAccessType.Public}>Public</option>
+                        <option value={LeaderboardAccessType.PublicInviteOnly}>Public (Invite-only)</option>
+                        <option value={LeaderboardAccessType.Private}>Private</option>
                     </select>
                 </FormControl>
                 <FormLabel>Description</FormLabel>
@@ -133,9 +135,9 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormLabel>Allowed Beatmap Status</FormLabel>
                 <FormControl>
                     <select value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value as string))}>
-                        <option value={0}>Ranked or Loved</option>
-                        <option value={1}>Ranked only</option>
-                        <option value={2}>Loved only</option>
+                        <option value={AllowedBeatmapStatus.Any}>Ranked or Loved</option>
+                        <option value={AllowedBeatmapStatus.RankedOnly}>Ranked only</option>
+                        <option value={AllowedBeatmapStatus.LovedOnly}>Loved only</option>
                     </select>
                 </FormControl>
                 
@@ -168,7 +170,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 </FormControl>
                 
                 {/* Ranges */}
-                {(gamemode === 0 || gamemode === 2) && (
+                {(gamemode === Gamemode.Standard || gamemode === Gamemode.Catch) && (
                     <>
                         <FormLabel>Min AR</FormLabel>
                         <FormControl>
@@ -188,11 +190,11 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormControl>
                     <TextInput value={highestOd} onChange={e => setHighestOd(e.currentTarget.value)} />
                 </FormControl>
-                <FormLabel>Min {gamemode === 3 ? "Keys" : "CS"}</FormLabel>
+                <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                 <FormControl>
                     <TextInput value={lowestCs} onChange={e => setLowestCs(e.currentTarget.value)} />
                 </FormControl>
-                <FormLabel>Max {gamemode === 3 ? "Keys" : "CS"}</FormLabel>
+                <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                 <FormControl>
                     <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
                 </FormControl>

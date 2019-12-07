@@ -1,9 +1,10 @@
 import React from "react";
 import Select, { ValueType, StylesConfig } from "react-select";
+import { Mods, Gamemode } from "../../store/models/common/enums";
 
 // TODO: replace this ugly mess... custom select needed
 
-type OptionType = { label: string; value: number; }
+type OptionType = { label: string; value: Mods; }
 
 const styles: StylesConfig = {
     menu: (provided, state) => ({
@@ -39,18 +40,18 @@ export function ModsSelect(props: ModsSelectProps) {
         { value: 16384, label: "PF" }
     ];
 
-    if (props.gamemode === 0) {
+    if (props.gamemode === Gamemode.Standard) {
         selectModOptions.push(
             { value: 4096, label: "SO" },
             { value: 4, label: "TD" }
         );
     }
 
-    if (props.gamemode !== 3) {
+    if (props.gamemode !== Gamemode.Mania) {
         selectModOptions.push({ value: 16, label: "HR" });
     }
 
-    if (props.gamemode === 3) {
+    if (props.gamemode === Gamemode.Mania) {
         selectModOptions.push({ value: 1048576, label: "FI" });
     }
 
@@ -78,7 +79,7 @@ export function ModsSelect(props: ModsSelectProps) {
 }
 
 interface ModsSelectProps {
-    gamemode: number;
-    value: number;
-    onChange: (mods: number) => void;
+    gamemode: Gamemode;
+    value: Mods;
+    onChange: (mods: Mods) => void;
 }
