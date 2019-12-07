@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { Surface, SurfaceTitle, ScoreRow } from "../../../components";
 import { Score } from "../../../store/models/profiles/types";
+import ScoreEditModal from "./ScoreEditModal";
 import { observer } from "mobx-react-lite";
 import { Gamemode } from "../../../store/models/common/enums";
 
@@ -19,10 +20,15 @@ const SandboxEditTip = styled.span`
 `;
 
 function ProfileScoreRow(props: ProfileScoreRowProps) {
+    const [editModalOpen, setEditModalOpen] = useState(false);
+
     const score = props.score;
 
     return (
-        <ScoreRow score={score} hidePlayerInfo />
+        <>
+            <ScoreRow onClickOverride={props.sandboxMode ? () => setEditModalOpen(true) : undefined} score={score} hidePlayerInfo />
+            <ScoreEditModal score={score} gamemode={props.gamemode} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
+        </>
     );
 }
 

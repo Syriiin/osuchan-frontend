@@ -43,6 +43,7 @@ function Profile(props: ProfileProps) {
     const userStats = usersStore.currentUserStats;
     const osuUser = userStats && userStats.osuUser as OsuUser;
     const scores = usersStore.scores;
+    const sandboxScores = usersStore.sandboxScores;
 
     // use effect to update title
     const { isLoading } = usersStore;
@@ -84,7 +85,7 @@ function Profile(props: ProfileProps) {
                     <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
 
                     {/* Scores */}
-                    <Scores scores={scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
+                    <Scores scores={sandboxMode ? sandboxScores : scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
                     
                     {sandboxMode || (
                         <>

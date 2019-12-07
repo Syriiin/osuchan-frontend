@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { Surface, DataCell, DataTable } from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
+import { StoreContext } from "../../../store";
+import { observer } from "mobx-react-lite";
 
 const RankInfoSurface = styled(Surface)`
     padding: 20px;
@@ -10,20 +12,23 @@ const RankInfoSurface = styled(Surface)`
 `;
 
 function RankInfo(props: RankInfoProps) {
+    const store = useContext(StoreContext);
+    const usersStore = store.usersStore;
+
     return (
         <RankInfoSurface>
             <DataTable>
                 <tr>
                     <td>Performance</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxPerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                     )}
                     <DataCell>{props.userStats.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                 </tr>
                 <tr>
                     <td>No-choke Performance</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxNochokePerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                     )}
                     <DataCell>{props.userStats.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                 </tr>
@@ -52,4 +57,4 @@ interface RankInfoProps {
     sandboxMode: boolean;
 }
 
-export default RankInfo;
+export default observer(RankInfo);

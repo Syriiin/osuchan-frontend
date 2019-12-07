@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { Surface, DataTable, DataCell } from "../../../components";
 import { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
+import { observer } from "mobx-react-lite";
+import { StoreContext } from "../../../store";
 
 const ScoreStyleSurface = styled(Surface)`
     padding: 20px;
@@ -11,48 +13,51 @@ const ScoreStyleSurface = styled(Surface)`
 `;
 
 function ScoreStyle(props: ScoreStyleProps) {
+    const store = useContext(StoreContext);
+    const usersStore = store.usersStore;
+
     return (
         <ScoreStyleSurface>
             <DataTable>
                 <tr>
                     <td>Accuracy</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.scoreStyleAccuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxScoreStyleAccuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%</DataCell>
                     )}
                     <DataCell>{props.userStats.scoreStyleAccuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%</DataCell>
                 </tr>
                 <tr>
                     <td>BPM</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.scoreStyleBpm.toLocaleString("en", { maximumFractionDigits: 0 })}</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxScoreStyleBpm.toLocaleString("en", { maximumFractionDigits: 0 })}</DataCell>
                     )}
                     <DataCell>{props.userStats.scoreStyleBpm.toLocaleString("en", { maximumFractionDigits: 0 })}</DataCell>
                 </tr>
                 <tr>
                     <td>Length</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{formatTime(props.userStats.scoreStyleLength)}</DataCell>
+                        <DataCell highlighted>{formatTime(usersStore.sandboxScoreStyleLength)}</DataCell>
                     )}
                     <DataCell>{formatTime(props.userStats.scoreStyleLength)}</DataCell>
                 </tr>
                 <tr>
                     <td>Circle Size</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.scoreStyleCs.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxScoreStyleCircleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                     )}
                     <DataCell>{props.userStats.scoreStyleCs.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                 </tr>
                 <tr>
                     <td>Approach Rate</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.scoreStyleAr.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxScoreStyleApproachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                     )}
                     <DataCell>{props.userStats.scoreStyleAr.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                 </tr>
                 <tr>
                     <td>Overall Difficulty</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>{props.userStats.scoreStyleOd.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                        <DataCell highlighted>{usersStore.sandboxScoreStyleOverallDifficulty.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                     )}
                     <DataCell>{props.userStats.scoreStyleOd.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                 </tr>
@@ -66,4 +71,4 @@ interface ScoreStyleProps {
     sandboxMode: boolean;
 }
 
-export default ScoreStyle;
+export default observer(ScoreStyle);
