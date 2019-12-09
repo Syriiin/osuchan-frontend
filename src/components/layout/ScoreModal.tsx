@@ -8,6 +8,7 @@ import { DataTable, DataCell } from "./DataTable";
 import TimeAgo from "timeago-react";
 import { ModIcons } from "./ModIcons";
 import { ScoreResult } from "../../store/models/profiles/enums";
+import { BeatmapStatus } from "../../store/models/common/enums";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -109,7 +110,7 @@ export function ScoreModal(props: ScoreModalProps) {
                     <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     <Mapper>Mapset by {beatmap.creatorName}</Mapper>
                     {/* TODO: change to date ranked */}
-                    <BeatmapDate>Ranked <TimeAgo datetime={beatmap.lastUpdated} /></BeatmapDate>
+                    <BeatmapDate>{beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"} <TimeAgo datetime={beatmap.lastUpdated} /></BeatmapDate>
                     <ModIcons small bitwiseMods={score.mods} />
                     <BeatmapDataTable>
                         <tr>
