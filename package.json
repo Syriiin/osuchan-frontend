@@ -21,7 +21,7 @@
         "js-cookie": "^2.2.1",
         "mobx": "^5.15.0",
         "mobx-react-lite": "^1.5.1",
-        "ojsama": "^1.2.2",
+        "ojsama": "^1.2.3",
         "react": "^16.10.1",
         "react-dom": "^16.10.1",
         "react-router-dom": "^5.1.1",
