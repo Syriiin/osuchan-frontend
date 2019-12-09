@@ -8,6 +8,7 @@ import { OsuUser } from "../../../../store/models/profiles/types";
 import Scores from "./Scores";
 import UserInfo from "./UserInfo";
 import MemberInfo from "./MemberInfo";
+import { LoadingPage } from "../../../../components";
 
 const LeaderboardMemberGrid = styled.div`
     margin: 20px auto;
@@ -50,10 +51,7 @@ function LeaderboardUser(props: LeaderboardUserProps) {
     return (
         <>
             {userStore.isLoading && (
-                <>
-                    {/* Loading spinner */}
-                    Loading...
-                </>
+                <LoadingPage />
             )}
             {membership && osuUser && (
                 <LeaderboardMemberGrid>

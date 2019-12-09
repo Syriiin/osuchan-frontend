@@ -5,6 +5,7 @@ import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
+import { LoadingPage } from "../../components";
 
 function LeaderboardList() {
     const store = useContext(StoreContext);
@@ -33,10 +34,7 @@ function LeaderboardList() {
     return (
         <>
             {listStore.isLoading ? (
-                <>
-                    {/* Loading spinner */}
-                    <div>Loading...</div>
-                </>
+                <LoadingPage />
             ) : (
                 <>
                     {/* Global leaderboards */}

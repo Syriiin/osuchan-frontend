@@ -13,6 +13,7 @@ import RankInfo from "./RankInfo";
 import ScoreStyle from "./ScoreStyle";
 import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
+import { LoadingPage } from "../../../components";
 
 const ProfileGrid = styled.div`
     margin: 20px auto;
@@ -62,10 +63,7 @@ function Profile(props: ProfileProps) {
     return (
         <>
             {usersStore.isLoading && (
-                <>
-                    {/* Loading spinner */}
-                    <div>Loading...</div>
-                </>
+                <LoadingPage />
             )}
             {userStats && osuUser && (
                 <ProfileGrid>

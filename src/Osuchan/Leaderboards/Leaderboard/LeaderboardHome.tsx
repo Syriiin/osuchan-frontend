@@ -8,7 +8,7 @@ import { formatMods } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
-import { Surface, SurfaceTitle, Button, SimpleModal, TextField, SimpleModalTitle, FormControl, FormLabel } from "../../../components";
+import { Surface, SurfaceTitle, Button, SimpleModal, TextField, SimpleModalTitle, FormControl, FormLabel, LoadingPage } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
 import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
@@ -234,10 +234,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
     return (
         <>
             {detailStore.isLoading && (
-                <>
-                    {/* Loading spinner */}
-                    Loading...
-                </>
+                <LoadingPage />
             )}
             {leaderboard && (
                 <>

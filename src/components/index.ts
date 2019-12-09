@@ -7,6 +7,7 @@ export * from "./layout/ScoreModal";
 export * from "./layout/ModIcons";
 export * from "./layout/Row";
 export * from "./layout/ScoreRow";
+export * from "./layout/Loading";
 export * from "./helpers/UnstyledLink";
 export * from "./formcontrols/Button";
 export * from "./formcontrols/TextInput";
