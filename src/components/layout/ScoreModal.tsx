@@ -109,8 +109,7 @@ export function ScoreModal(props: ScoreModalProps) {
                     <Artist>by {beatmap.artist}</Artist>
                     <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     <Mapper>Mapset by {beatmap.creatorName}</Mapper>
-                    {/* TODO: change to date ranked */}
-                    <BeatmapDate>{beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"} <TimeAgo datetime={beatmap.lastUpdated} /></BeatmapDate>
+                    <BeatmapDate>{beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"} <TimeAgo datetime={beatmap.approvalDate} /></BeatmapDate>
                     <ModIcons small bitwiseMods={score.mods} />
                     <BeatmapDataTable>
                         <tr>

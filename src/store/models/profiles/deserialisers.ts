@@ -51,6 +51,8 @@ export function beatmapFromJson(beatmapData: any): Beatmap {
         approachRate: beatmapData["approach_rate"],
         healthDrain: beatmapData["health_drain"],
         starRating: beatmapData["star_rating"],
+        submissionDate: new Date(beatmapData["submission_date"]),
+        approvalDate: new Date(beatmapData["approval_date"]),
         lastUpdated: new Date(beatmapData["last_updated"])
     }
 }

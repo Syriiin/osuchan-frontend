@@ -47,6 +47,8 @@ export interface Beatmap {
     approachRate: number;
     healthDrain: number;
     starRating: number;
+    submissionDate: Date;
+    approvalDate: Date;
     lastUpdated: Date;
 }
 
