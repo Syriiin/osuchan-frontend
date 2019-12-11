@@ -45,6 +45,7 @@ function Profile(props: ProfileProps) {
     const osuUser = userStats && userStats.osuUser as OsuUser;
     const scores = usersStore.scores;
     const sandboxScores = usersStore.sandboxScores;
+    const leaderboards = usersStore.leaderboards;
 
     // use effect to update title
     const { isLoading } = usersStore;
@@ -88,7 +89,7 @@ function Profile(props: ProfileProps) {
                     {sandboxMode || (
                         <>
                             {/* Community Leaderboards */}
-                            <Leaderboards />
+                            <Leaderboards leaderboards={leaderboards} />
                         </>
                     )}
                 </ProfileGrid>
