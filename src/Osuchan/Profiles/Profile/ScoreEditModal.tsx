@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Score } from "../../../store/models/profiles/types";
+import { Score, Beatmap } from "../../../store/models/profiles/types";
 import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Button, ModsSelect } from "../../../components";
 import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
@@ -10,6 +10,7 @@ function ScoreEditModal(props: ScoreEditModalProps) {
     const usersStore = store.usersStore;
     
     const score = props.score;
+    const beatmap = score.beatmap as Beatmap;
 
     const [mods, setMods] = useState(score.mods);
     const [combo, setCombo] = useState(score.bestCombo.toString());
@@ -52,21 +53,21 @@ function ScoreEditModal(props: ScoreEditModalProps) {
                 <FormControl>
                     <ModsSelect gamemode={props.gamemode} value={mods} onChange={enabledMods => setMods(enabledMods)} />
                 </FormControl>
-                <FormLabel>Best Combo</FormLabel>
+                <FormLabel>Best Combo <small>(max {beatmap.maxCombo}x)</small></FormLabel>
                 <FormControl>
-                    <TextInput fullWidth required placeholder={score.bestCombo.toString()} value={combo} onChange={e => setCombo(e.currentTarget.value)} />
+                    <TextInput fullWidth type="number" required placeholder={score.bestCombo.toString()} value={combo} onChange={e => setCombo(e.currentTarget.value)} min={0} max={beatmap.maxCombo} />
                 </FormControl>
                 <FormLabel>100s</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth required placeholder={score.count100.toString()} value={count100} onChange={e => setCount100(e.currentTarget.value)} />
+                    <TextInput fullWidth type="number" required placeholder={score.count100.toString()} value={count100} onChange={e => setCount100(e.currentTarget.value)} min={0} />
                 </FormControl>
                 <FormLabel>50s</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth required placeholder={score.count50.toString()} value={count50} onChange={e => setCount50(e.currentTarget.value)} />
+                    <TextInput fullWidth type="number" required placeholder={score.count50.toString()} value={count50} onChange={e => setCount50(e.currentTarget.value)} min={0} />
                 </FormControl>
                 <FormLabel>Misses</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth required placeholder={score.countMiss.toString()} value={countMiss} onChange={e => setCountMiss(e.currentTarget.value)} />
+                    <TextInput fullWidth type="number" required placeholder={score.countMiss.toString()} value={countMiss} onChange={e => setCountMiss(e.currentTarget.value)} min={0} />
                 </FormControl>
                 <Button type="submit">Apply</Button>
             </form>
