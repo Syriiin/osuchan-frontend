@@ -21,7 +21,7 @@ const LeaderboardCreator = styled.span`
 `;
 
 const LeaderboardIcon = styled.img`
-
+    width: 86px;
 `;
 
 export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
@@ -30,7 +30,7 @@ export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
 
     return (
         <Row hoverable>
-            <LeaderboardIcon src={leaderboard.iconUrl || "https://osu.ppy.sh/images/badges/mods/mod_coop@2x.png"} />
+            <LeaderboardIcon src={leaderboard.iconUrl || `https://a.ppy.sh/${owner.id}`} />
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{leaderboard.name}</LeaderboardTitle>
                 <LeaderboardCreator>{owner.username}</LeaderboardCreator>
