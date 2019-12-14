@@ -28,6 +28,7 @@ const Owner = styled(Link)`
 
 const AccessType = styled.div`
     margin-bottom: 5px;
+    font-size: 0.8em;
 `;
 
 const Description = styled.div`
@@ -245,14 +246,14 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             <AccessType>GLOBAL</AccessType>
                         ) : (
                             <>
+                                <Owner to={`/users/${(leaderboard.owner as OsuUser).id}`}>
+                                    {(leaderboard.owner as OsuUser).username}
+                                </Owner>
                                 <AccessType>
                                     {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
                                     {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
                                     {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                                 </AccessType>
-                                <Owner to={`/users/${(leaderboard.owner as OsuUser).id}`}>
-                                    {(leaderboard.owner as OsuUser).username}
-                                </Owner>
                             </>
                         )}
                         <Description>{leaderboard.description}</Description>

@@ -198,7 +198,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormControl>
                     <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
                 </FormControl>
-                <FormLabel>Min Accuracy(%)</FormLabel>
+                <FormLabel>Min Accuracy (%)</FormLabel>
                 <FormControl>
                     <TextInput value={lowestAccuracy} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
                 </FormControl>

@@ -4,6 +4,17 @@ import styled from "styled-components";
 import { Row } from "./Row";
 import { OsuUser } from "../../store/models/profiles/types";
 import { Leaderboard } from "../../store/models/leaderboards/types";
+import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
+
+const LeaderboardIconContainer = styled.div`
+    height: 86px;
+    display: flex;
+    align-items: center;
+`;
+
+const LeaderboardIcon = styled.img`
+    width: 86px;
+`;
 
 const LeaderboardTitleContainer = styled.div`
     display: flex;
@@ -20,8 +31,8 @@ const LeaderboardCreator = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
-const LeaderboardIcon = styled.img`
-    width: 86px;
+const LeaderboardType = styled.span`
+    font-size: 0.8em;
 `;
 
 export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
@@ -30,10 +41,17 @@ export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
 
     return (
         <Row hoverable>
-            <LeaderboardIcon src={leaderboard.iconUrl || `https://a.ppy.sh/${owner.id}`} />
+            <LeaderboardIconContainer>
+                <LeaderboardIcon src={leaderboard.iconUrl || `https://a.ppy.sh/${owner.id}`} />
+            </LeaderboardIconContainer>
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{leaderboard.name}</LeaderboardTitle>
                 <LeaderboardCreator>{owner.username}</LeaderboardCreator>
+                <LeaderboardType>
+                    {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
+                    {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
+                    {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
+                </LeaderboardType>
             </LeaderboardTitleContainer>
         </Row>
     );
