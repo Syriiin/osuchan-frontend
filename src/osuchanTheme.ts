@@ -8,7 +8,7 @@ export const osuchanTheme: DefaultTheme = {
         timber: "#D2B66F",
         mango: "#FFAF2E",
         foreground: "#363663",
-        midground: "#29293d",
-        background: "#17171c"
+        midground: "#29293D",
+        background: "#17171C"
     }
 }
