@@ -36,28 +36,28 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
         e.preventDefault();
 
         // dispatch create action
-        listStore.createLeaderboard(
+        listStore.createLeaderboard({
             gamemode,
             accessType,
             name,
-            description || "",
+            description: description || "",
             allowPastScores,
             allowedBeatmapStatus,
-            oldestBeatmapDate ? new Date(oldestBeatmapDate) : null,
-            newestBeatmapDate ? new Date(newestBeatmapDate) : null,
-            oldestScoreDate ? new Date(oldestScoreDate) : null,
-            newestScoreDate ? new Date(newestScoreDate) : null,
-            lowestAr ? parseFloat(lowestAr) : null,
-            highestAr ? parseFloat(highestAr) : null,
-            lowestOd ? parseFloat(lowestOd) : null,
-            highestOd ? parseFloat(highestOd) : null,
-            lowestCs ? parseFloat(lowestCs) : null,
-            highestCs ? parseFloat(highestCs) : null,
+            oldestBeatmapDate: oldestBeatmapDate ? new Date(oldestBeatmapDate) : null,
+            newestBeatmapDate: newestBeatmapDate ? new Date(newestBeatmapDate) : null,
+            oldestScoreDate: oldestScoreDate ? new Date(oldestScoreDate) : null,
+            newestScoreDate: newestScoreDate ? new Date(newestScoreDate) : null,
+            lowestAr: lowestAr ? parseFloat(lowestAr) : null,
+            highestAr: highestAr ? parseFloat(highestAr) : null,
+            lowestOd: lowestOd ? parseFloat(lowestOd) : null,
+            highestOd: highestOd ? parseFloat(highestOd) : null,
+            lowestCs: lowestCs ? parseFloat(lowestCs) : null,
+            highestCs: highestCs ? parseFloat(highestCs) : null,
             requiredMods,
             disqualifiedMods,
-            lowestAccuracy ? parseFloat(lowestAccuracy) : null,
-            highestAccuracy ? parseFloat(highestAccuracy) : null
-        )
+            lowestAccuracy: lowestAccuracy ? parseFloat(lowestAccuracy) : null,
+            highestAccuracy: highestAccuracy ? parseFloat(highestAccuracy) : null
+        })
 
         props.onClose();
         clearInputs();
