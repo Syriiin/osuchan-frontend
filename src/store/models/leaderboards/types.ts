@@ -25,15 +25,18 @@ export interface Leaderboard {
     disqualifiedMods: Mods;
     lowestAccuracy: number | null;
     highestAccuracy: number | null;
-    owner: OsuUser | number | null;
+    owner: OsuUser | null;
+    ownerId: number | null;
     creationTime: Date;
 }
 
 export interface Membership {
     id: number;
     pp: number;
-    leaderboard: Leaderboard | number;
-    osuUser: OsuUser | number;
+    leaderboard: Leaderboard | null;
+    leaderboardId: number;
+    osuUser: OsuUser | null;
+    osuUserId: number;
     joinDate: Date;
     scoreCount: number;
 }
@@ -41,7 +44,9 @@ export interface Membership {
 export interface Invite {
     id: number;
     message: string;
-    leaderboard: Leaderboard | number;
-    osuUser: OsuUser | number;
+    leaderboard: Leaderboard | null;
+    leaderboardId: number;
+    osuUser: OsuUser | null;
+    osuUserId: number;
     inviteDate: Date;
 }

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { observable, action } from "mobx";
 
 import { OsuUser } from "../models/profiles/types";
-import { Invite, Membership, Leaderboard } from "../models/leaderboards/types";
+import { Invite, Membership } from "../models/leaderboards/types";
 import { osuUserFromJson } from "../models/profiles/deserialisers";
 import { inviteFromJson, membershipFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
@@ -94,7 +94,7 @@ export class MeStore {
                 }
             });
 
-            this.memberships = this.memberships.filter(m => (m.leaderboard as Leaderboard).id !== leaderboardId);
+            this.memberships = this.memberships.filter(m => m.leaderboardId !== leaderboardId);
         } catch (error) {
             console.log(error);
         }

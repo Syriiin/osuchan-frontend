@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { Surface, Row, SurfaceTitle, UnstyledLink } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
-import { OsuUser } from "../../../store/models/profiles/types";
 
 const RankingsSurface = styled(Surface)`
     margin: 20px auto;
@@ -57,9 +56,9 @@ function RankingRow(props: RankingRowProps) {
         <Row hoverable>
             <Rank>#{props.rank}</Rank>
             <PlayerInfo>
-                <Avatar src={`https://a.ppy.sh/${(membership.osuUser as OsuUser).id}`} />
+                <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
                 <Username>
-                    {(membership.osuUser as OsuUser).username}
+                    {membership.osuUser!.username}
                 </Username>
             </PlayerInfo>
             <PerformanceContainer>
@@ -84,7 +83,7 @@ function Rankings(props: TopScoresProps) {
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
-                <UnstyledLink key={i} to={`/leaderboards/${membership.leaderboard}/users/${(membership.osuUser as OsuUser).id}`}>
+                <UnstyledLink key={i} to={`/leaderboards/${membership.leaderboardId}/users/${membership.osuUserId}`}>
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>
             ))}

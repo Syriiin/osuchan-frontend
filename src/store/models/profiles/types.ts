@@ -10,7 +10,8 @@ export interface OsuUser {
 
 export interface UserStats {
     id: number;
-    osuUser: OsuUser | number;
+    osuUser: OsuUser | null;
+    osuUserId: number;
     gamemode: Gamemode;
     playcount: number;
     playtime: number;
@@ -37,7 +38,8 @@ export interface Beatmap {
     gamemode: Gamemode;
     status: BeatmapStatus;
     creatorName: string;
-    creator: OsuUser | number;
+    creator: OsuUser | null;
+    creatorId: number;
     bpm: number;
     drainTime: number;
     totalTime: number;
@@ -54,8 +56,10 @@ export interface Beatmap {
 
 export interface Score {
     id: number;
-    beatmap: Beatmap | number;
-    userStats: UserStats | number;
+    beatmap: Beatmap | null;
+    beatmapId: number;
+    userStats: UserStats | null;
+    userStatsId: number;
     score: number;
     count300: number;
     count100: number;

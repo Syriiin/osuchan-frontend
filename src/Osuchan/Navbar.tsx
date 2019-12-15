@@ -7,7 +7,6 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
-import { Leaderboard } from "../store/models/leaderboards/types";
 import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button } from "../components";
 
 const NavbarWrapper = styled.nav`
@@ -168,8 +167,8 @@ function Navbar(props: NavbarProps) {
                             </InviteIconWrapper>
                         } emptyText="No pending invites">
                             {invites.map((invite, i) => (
-                                <Link key={i} to={`/leaderboards/${(invite.leaderboard as Leaderboard).id}`}>
-                                    <SimpleMenuItem>{(invite.leaderboard as Leaderboard).name}</SimpleMenuItem>
+                                <Link key={i} to={`/leaderboards/${invite.leaderboardId}`}>
+                                    <SimpleMenuItem>{invite.leaderboard!.name}</SimpleMenuItem>
                                 </Link>
                             ))}
                         </SimpleMenu>

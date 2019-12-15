@@ -159,7 +159,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
             {leaderboard.accessType !== LeaderboardAccessType.Global && meOsuUser && (
                 <>
                     {/* If owner */}
-                    {(leaderboard.owner as OsuUser).id === meOsuUser.id && (
+                    {leaderboard.ownerId === meOsuUser.id && (
                         <>
                             {/* Delete button */}
                             <DeleteButton onClick={handleDelete}>Delete Leaderboard</DeleteButton>
@@ -191,12 +191,12 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
                     )}
                     
                     {/* Join button if public or pending invite, and not member */}
-                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => (i.leaderboard as Leaderboard).id === leaderboard.id) !== undefined) && !meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
+                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && !meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
                         <Button onClick={handleJoin}>Join Leaderboard</Button>
                     )}
 
                     {/* Leave button if member and not owner */}
-                    {(leaderboard.owner as OsuUser).id !== meOsuUser.id && meStore.memberships.find(m => (m.leaderboard as Leaderboard).id === leaderboard.id) && (
+                    {leaderboard.ownerId !== meOsuUser.id && meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
                         <Button onClick={handleLeave}>Leave Leaderboard</Button>
                     )}
                 </>
@@ -250,8 +250,8 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             <AccessType>GLOBAL</AccessType>
                         ) : (
                             <>
-                                <Owner to={`/users/${(leaderboard.owner as OsuUser).id}`}>
-                                    {(leaderboard.owner as OsuUser).username}
+                                <Owner to={`/users/${leaderboard.ownerId}`}>
+                                    {leaderboard.owner!.username}
                                 </Owner>
                                 <AccessType>
                                     {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
@@ -262,7 +262,7 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                         )}
                         <Description>{leaderboard.description}</Description>
                         <LeaderboardFilters leaderboard={leaderboard} />
-                        <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.osuUser as OsuUser} />
+                        <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.osuUser!} />
                     </LeaderboardSurface>
                     
                     {/* Top Scores */}

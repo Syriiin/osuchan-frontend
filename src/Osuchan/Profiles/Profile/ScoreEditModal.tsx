@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Score, Beatmap } from "../../../store/models/profiles/types";
+import { Score } from "../../../store/models/profiles/types";
 import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Button, ModsSelect } from "../../../components";
 import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
@@ -10,7 +10,7 @@ function ScoreEditModal(props: ScoreEditModalProps) {
     const usersStore = store.usersStore;
     
     const score = props.score;
-    const beatmap = score.beatmap as Beatmap;
+    const beatmap = score.beatmap!;
 
     const [mods, setMods] = useState(score.mods);
     const [combo, setCombo] = useState(score.bestCombo.toString());

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Score, Beatmap } from "../../store/models/profiles/types";
+import { Score } from "../../store/models/profiles/types";
 import { BasicModal } from "./BasicModal";
 import { formatScoreResult, formatTime } from "../../utils/formatting";
 import { DataTable, DataCell } from "./DataTable";
@@ -96,7 +96,7 @@ const NochokePerformance = styled.span`
 
 export function ScoreModal(props: ScoreModalProps) {
     const score = props.score;
-    const beatmap = score.beatmap as Beatmap;
+    const beatmap = score.beatmap!;
 
     return (
         <BasicModal open={props.open} onClose={props.onClose}>

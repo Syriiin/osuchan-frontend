@@ -16,7 +16,7 @@ const ScoreStyleSurface = styled(Surface)`
 function ScoreStyle(props: ScoreStyleProps) {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
-    const userStats = usersStore.currentUserStats as UserStats;
+    const userStats = usersStore.currentUserStats!;
 
     return (
         <ScoreStyleSurface>

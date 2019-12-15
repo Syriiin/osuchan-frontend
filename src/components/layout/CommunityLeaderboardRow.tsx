@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 import { Row } from "./Row";
-import { OsuUser } from "../../store/models/profiles/types";
 import { Leaderboard } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 
@@ -38,16 +37,15 @@ const LeaderboardType = styled.span`
 
 export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
     const leaderboard = props.leaderboard;
-    const owner = leaderboard.owner as OsuUser;
 
     return (
         <Row hoverable>
             <LeaderboardIconContainer>
-                <LeaderboardIcon src={leaderboard.iconUrl || `https://a.ppy.sh/${owner.id}`} />
+                <LeaderboardIcon src={leaderboard.iconUrl || `https://a.ppy.sh/${leaderboard.owner!.id}`} />
             </LeaderboardIconContainer>
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{leaderboard.name}</LeaderboardTitle>
-                <LeaderboardCreator>{owner.username}</LeaderboardCreator>
+                <LeaderboardCreator>{leaderboard.owner!.username}</LeaderboardCreator>
                 <LeaderboardType>
                     {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
                     {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}

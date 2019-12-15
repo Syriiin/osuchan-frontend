@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
 import { StoreContext } from "../../../../store";
-import { OsuUser } from "../../../../store/models/profiles/types";
 import Scores from "./Scores";
 import UserInfo from "./UserInfo";
 import MemberInfo from "./MemberInfo";
@@ -34,7 +33,7 @@ function LeaderboardUser(props: LeaderboardUserProps) {
     }, [loadUser, leaderboardId, userId]);
 
     const membership = userStore.membership;
-    const osuUser = membership ? membership.osuUser as OsuUser : null;
+    const osuUser = membership?.osuUser;
 
     // use effect to update title
     const { isLoading } = userStore;
@@ -56,7 +55,7 @@ function LeaderboardUser(props: LeaderboardUserProps) {
             {membership && osuUser && (
                 <LeaderboardMemberGrid>
                     {/* User Info */}
-                    <UserInfo osuUser={membership.osuUser as OsuUser} />
+                    <UserInfo osuUser={osuUser} />
 
                     {/* Member Info */}
                     <MemberInfo membership={membership} />

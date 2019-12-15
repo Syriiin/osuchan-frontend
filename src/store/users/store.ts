@@ -2,7 +2,7 @@ import axios from "axios";
 import { observable, action, computed } from "mobx";
 import ojsama from "ojsama";
 
-import { UserStats, Score, OsuUser, Beatmap } from "../models/profiles/types";
+import { UserStats, Score } from "../models/profiles/types";
 import { Leaderboard } from "../models/leaderboards/types";
 import { userStatsFromJson, scoreFromJson } from "../models/profiles/deserialisers";
 import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
@@ -81,7 +81,7 @@ export class UsersStore {
             });
             const userStats: UserStats = userStatsFromJson(userStatsResponse.data);
 
-            const userId = (userStats.osuUser as OsuUser).id;
+            const userId = userStats.osuUserId;
 
             const scoresResponse = await axios.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
@@ -107,7 +107,7 @@ export class UsersStore {
 
     @action
     updateSandboxScore = async (score: Score, mods: Mods, bestCombo: number, count100: number, count50: number, countMiss: number) => {
-        const beatmap = score.beatmap as Beatmap;
+        const beatmap = score.beatmap!;
         const totalObjects = score.count300 + score.count100 + score.count50 + score.countMiss;
 
         score.mods = mods;
@@ -117,7 +117,7 @@ export class UsersStore {
         score.count50 = count50;
         score.countMiss = countMiss;
         
-        score.accuracy = calculateAccuracy((this.currentUserStats as UserStats).gamemode, score.count300, score.count100, score.count50, score.countMiss);
+        score.accuracy = calculateAccuracy(this.currentUserStats!.gamemode, score.count300, score.count100, score.count50, score.countMiss);
         score.bpm = calculateBpm(beatmap.bpm, score.mods);
         score.length = calculateLength(beatmap.drainTime, score.mods);
         score.circleSize = calculateCircleSize(beatmap.circleSize, score.mods);

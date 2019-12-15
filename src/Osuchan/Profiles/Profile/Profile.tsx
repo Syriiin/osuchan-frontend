@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import { StoreContext } from "../../../store";
 import { gamemodeIdFromName } from "../../../utils/osu";
-import { OsuUser } from "../../../store/models/profiles/types";
 import UserInfo from "./UserInfo";
 import ModeSwitcher from "./ModeSwitcher";
 import SandboxControls from "./SandboxControls";
@@ -42,7 +41,7 @@ function Profile(props: ProfileProps) {
     }, [loadUser, userString, gamemodeId]);
 
     const userStats = usersStore.currentUserStats;
-    const osuUser = userStats && userStats.osuUser as OsuUser;
+    const osuUser = userStats?.osuUser;
     const scores = usersStore.scores;
     const sandboxScores = usersStore.sandboxScores;
     const leaderboards = usersStore.leaderboards;

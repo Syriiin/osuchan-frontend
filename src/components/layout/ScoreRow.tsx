@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TimeAgo from "timeago-react";
-import { Beatmap, Score, UserStats, OsuUser } from "../../store/models/profiles/types";
+import { Score } from "../../store/models/profiles/types";
 import { Row } from "./Row";
 import { ModIcons } from "./ModIcons";
 import { formatScoreResult } from "../../utils/formatting";
@@ -83,17 +83,17 @@ export function ScoreRow(props: ScoreRowProps) {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
     const score = props.score;
-    const userStats = score.userStats as UserStats;
-    const beatmap = score.beatmap as Beatmap;
+    const userStats = score.userStats!;
+    const beatmap = score.beatmap!;
 
     return (
         <>
             <Row hoverable onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}>
                 {!props.hidePlayerInfo && (
                     <PlayerInfo>
-                        <Avatar src={`https://a.ppy.sh/${(userStats.osuUser as OsuUser).id}`} />
+                        <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
                         <Username>
-                            {(userStats.osuUser as OsuUser).username}
+                            {userStats.osuUser!.username}
                         </Username>
                     </PlayerInfo>
                 )}
