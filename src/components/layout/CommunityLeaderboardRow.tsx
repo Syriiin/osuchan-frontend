@@ -13,6 +13,7 @@ const LeaderboardIconContainer = styled.div`
 `;
 
 const LeaderboardIcon = styled.img`
+    border-radius: 5px;
     width: 86px;
 `;
 
