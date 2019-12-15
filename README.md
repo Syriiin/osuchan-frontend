@@ -2,8 +2,7 @@
 
 ## Requirements
 
-- Node.js
-- NPM
+- Node
 
 ## Setup
 
