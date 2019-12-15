@@ -39,6 +39,10 @@ const FilterValue = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
+const DeleteButton = styled(Button)`
+    margin-right: 5px;
+`;
+
 function LeaderboardFilters(props: LeaderboardFiltersProps) {
     const leaderboard = props.leaderboard;
 
@@ -158,7 +162,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
                     {(leaderboard.owner as OsuUser).id === meOsuUser.id && (
                         <>
                             {/* Delete button */}
-                            <Button onClick={handleDelete}>Delete Leaderboard</Button>
+                            <DeleteButton onClick={handleDelete}>Delete Leaderboard</DeleteButton>
 
                             {/* Invite button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
