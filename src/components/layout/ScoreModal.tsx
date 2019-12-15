@@ -161,7 +161,7 @@ export function ScoreModal(props: ScoreModalProps) {
                     <Combo>{score.bestCombo}x / {beatmap.maxCombo}x</Combo>
                     <Performance>{score.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
                     <Result>{formatScoreResult(score.result)}</Result>
-                    {score.result & ScoreResult.Choke && (
+                    {Boolean(score.result & ScoreResult.Choke) && (
                         <NochokePerformance>No-choke {score.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</NochokePerformance>
                     )}
                 </ScoreInfo>
