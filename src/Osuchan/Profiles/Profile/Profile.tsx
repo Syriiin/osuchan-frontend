@@ -75,7 +75,7 @@ function Profile(props: ProfileProps) {
                     <ModeSwitcher gamemodeId={gamemodeId} userString={props.match.params.userString} />
 
                     {/* Sandbox controls */}
-                    <SandboxControls sandboxMode={sandboxMode} setSandboxMode={setSandboxMode} />
+                    <SandboxControls gamemode={userStats.gamemode} sandboxMode={sandboxMode} setSandboxMode={setSandboxMode} />
 
                     {/* PP/rank info */}
                     <RankInfo osuUser={osuUser} userStats={userStats} sandboxMode={sandboxMode} />

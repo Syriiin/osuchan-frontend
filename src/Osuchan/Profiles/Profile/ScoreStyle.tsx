@@ -6,6 +6,7 @@ import { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
 import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../../store";
+import { Gamemode } from "../../../store/models/common/enums";
 
 const ScoreStyleSurface = styled(Surface)`
     padding: 20px;
@@ -15,6 +16,7 @@ const ScoreStyleSurface = styled(Surface)`
 function ScoreStyle(props: ScoreStyleProps) {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
+    const userStats = usersStore.currentUserStats as UserStats;
 
     return (
         <ScoreStyleSurface>
@@ -40,20 +42,24 @@ function ScoreStyle(props: ScoreStyleProps) {
                     )}
                     <DataCell>{formatTime(props.userStats.scoreStyleLength)}</DataCell>
                 </tr>
-                <tr>
-                    <td>Circle Size</td>
-                    {props.sandboxMode && (
-                        <DataCell highlighted>{usersStore.sandboxScoreStyleCircleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                    )}
-                    <DataCell>{props.userStats.scoreStyleCs.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                </tr>
-                <tr>
-                    <td>Approach Rate</td>
-                    {props.sandboxMode && (
-                        <DataCell highlighted>{usersStore.sandboxScoreStyleApproachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                    )}
-                    <DataCell>{props.userStats.scoreStyleAr.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                </tr>
+                {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(userStats.gamemode) && (
+                    <tr>
+                        <td>{userStats.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
+                        {props.sandboxMode && (
+                            <DataCell highlighted>{usersStore.sandboxScoreStyleCircleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                        )}
+                        <DataCell>{props.userStats.scoreStyleCs.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                    </tr>
+                )}
+                {[Gamemode.Standard, Gamemode.Catch].includes(userStats.gamemode) && (
+                    <tr>
+                        <td>Approach Rate</td>
+                        {props.sandboxMode && (
+                            <DataCell highlighted>{usersStore.sandboxScoreStyleApproachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                        )}
+                        <DataCell>{props.userStats.scoreStyleAr.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                    </tr>
+                )}
                 <tr>
                     <td>Overall Difficulty</td>
                     {props.sandboxMode && (

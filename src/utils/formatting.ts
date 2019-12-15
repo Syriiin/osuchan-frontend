@@ -29,8 +29,6 @@ export function formatScoreResult(result: ScoreResult) {
             return "Choke";
         case ScoreResult.Clear:
             return "Clear";
-        default:
-            return "Error";
     }
 }
 

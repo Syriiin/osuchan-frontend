@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import Switch from "react-switch";
+import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button } from "../../components";
 import { StoreContext } from "../../store";
-import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../store/models/common/enums";
 
@@ -144,19 +144,19 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 {/* Dates */}
                 <FormLabel>Oldest Beatmap Date</FormLabel>
                 <FormControl>
-                    <TextInput pattern="\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?" value={oldestBeatmapDate} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestBeatmapDate} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
                 </FormControl>
                 <FormLabel>Newest Beatmap Date</FormLabel>
                 <FormControl>
-                    <TextInput pattern="\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?" value={newestBeatmapDate} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestBeatmapDate} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
                 </FormControl>
                 <FormLabel>Oldest Score Date</FormLabel>
                 <FormControl>
-                    <TextInput pattern="\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?" value={oldestScoreDate} onChange={e => setOldestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestScoreDate} onChange={e => setOldestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
                 </FormControl>
                 <FormLabel>Newest Score Date</FormLabel>
                 <FormControl>
-                    <TextInput pattern="\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}( GMT\\+\\d{4})?)?" value={newestScoreDate} onChange={e => setNewestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestScoreDate} onChange={e => setNewestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
                 </FormControl>
                 
                 {/* Mods */}
@@ -170,7 +170,19 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 </FormControl>
                 
                 {/* Ranges */}
-                {(gamemode === Gamemode.Standard || gamemode === Gamemode.Catch) && (
+                {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(gamemode) && (
+                    <>
+                        <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
+                        <FormControl>
+                            <TextInput value={lowestCs} onChange={e => setLowestCs(e.currentTarget.value)} />
+                        </FormControl>
+                        <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
+                        <FormControl>
+                            <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
+                        </FormControl>
+                    </>
+                )}
+                {[Gamemode.Standard, Gamemode.Catch].includes(gamemode) && (
                     <>
                         <FormLabel>Min AR</FormLabel>
                         <FormControl>
@@ -189,14 +201,6 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormLabel>Max OD</FormLabel>
                 <FormControl>
                     <TextInput value={highestOd} onChange={e => setHighestOd(e.currentTarget.value)} />
-                </FormControl>
-                <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
-                <FormControl>
-                    <TextInput value={lowestCs} onChange={e => setLowestCs(e.currentTarget.value)} />
-                </FormControl>
-                <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
-                <FormControl>
-                    <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
                 </FormControl>
                 <FormLabel>Min Accuracy (%)</FormLabel>
                 <FormControl>

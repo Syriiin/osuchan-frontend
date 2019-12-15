@@ -74,6 +74,7 @@ export function scoreFromJson(scoreData: any): Score {
         rank: scoreData["rank"],
         pp: scoreData["pp"],
         date: new Date(scoreData["date"]),
+        gamemode: scoreData["gamemode"],
         accuracy: scoreData["accuracy"],
         bpm: scoreData["bpm"],
         length: scoreData["length"],

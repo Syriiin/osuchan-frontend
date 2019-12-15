@@ -8,7 +8,7 @@ import { DataTable, DataCell } from "./DataTable";
 import TimeAgo from "timeago-react";
 import { ModIcons } from "./ModIcons";
 import { ScoreResult } from "../../store/models/profiles/enums";
-import { BeatmapStatus } from "../../store/models/common/enums";
+import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -120,20 +120,26 @@ export function ScoreModal(props: ScoreModalProps) {
                             <td>Length</td>
                             <DataCell>{formatTime(score.length)}</DataCell>
                         </tr>
-                        <tr>
-                            <td>Circle Size</td>
-                            <DataCell>{score.circleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                        </tr>
-                        <tr>
-                            <td>Approach Rate</td>
-                            <DataCell>{score.approachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
-                        </tr>
+                        {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(score.gamemode) && (
+                            <tr>
+                                <td>{score.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
+                                <DataCell>{score.circleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                            </tr>
+                        )}
+                        {[Gamemode.Standard, Gamemode.Catch].includes(score.gamemode) && (
+                            <tr>
+                                <td>Approach Rate</td>
+                                <DataCell>{score.approachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                            </tr>
+                        )}
                         <tr>
                             <td>Overall Difficulty</td>
                             <DataCell>{score.overallDifficulty.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
                         </tr>
                     </BeatmapDataTable>
-                    <StarRating>{score.starRating.toLocaleString("en", { maximumFractionDigits: 2 })} stars</StarRating>
+                    {score.gamemode === Gamemode.Standard && (
+                        <StarRating>{score.starRating.toLocaleString("en", { maximumFractionDigits: 2 })} stars</StarRating>
+                    )}
                 </BeatmapInfo>
 
                 {/* Score info: date, 300s, 100s, 50s, misses, combo, acc, pp, result */}

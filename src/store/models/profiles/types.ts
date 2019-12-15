@@ -68,6 +68,7 @@ export interface Score {
     rank: string;
     pp: number;
     date: Date;
+    gamemode: Gamemode;
     accuracy: number;
     bpm: number;
     length: number;

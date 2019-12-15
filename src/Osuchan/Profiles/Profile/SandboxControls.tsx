@@ -3,6 +3,7 @@ import styled, { withTheme, ThemeProps, DefaultTheme } from "styled-components";
 import Switch from "react-switch";
 
 import { Surface } from "../../../components";
+import { Gamemode } from "../../../store/models/common/enums";
 
 const SandboxControlsSurface = styled(Surface)`
     padding: 20px;
@@ -50,18 +51,22 @@ function SandboxControls(props: SandboxControlsProps) {
                     checked={props.sandboxMode}
                     uncheckedIcon={false}
                     checkedIcon={false}
+                    disabled={props.gamemode !== Gamemode.Standard}
                     offColor={props.theme.colours.currant}
                     onColor={props.theme.colours.mystic}
                 />
             </SandboxModeSwitchContainer>
             <ControlsContainer>
-                <ControlsStatus enabled={props.sandboxMode}>{props.sandboxMode ? "ENABLED" : "DISABLED"}</ControlsStatus>
+                <ControlsStatus enabled={props.sandboxMode}>
+                    {props.gamemode === Gamemode.Standard ? props.sandboxMode ? "ENABLED" : "DISABLED" : "UNAVAILABLE"}
+                </ControlsStatus>
             </ControlsContainer>
         </SandboxControlsSurface>
     );
 }
 
 interface SandboxControlsProps extends ThemeProps<DefaultTheme> {
+    gamemode: Gamemode;
     sandboxMode: boolean;
     setSandboxMode: (value: React.SetStateAction<boolean>) => void;
 }

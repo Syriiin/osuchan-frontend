@@ -5,6 +5,7 @@ import { Surface, DataCell, DataTable } from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { StoreContext } from "../../../store";
 import { observer } from "mobx-react-lite";
+import { Gamemode } from "../../../store/models/common/enums";
 
 const RankInfoSurface = styled(Surface)`
     padding: 20px;
@@ -27,10 +28,16 @@ function RankInfo(props: RankInfoProps) {
                 </tr>
                 <tr>
                     <td>No-choke Performance</td>
-                    {props.sandboxMode && (
-                        <DataCell highlighted>{usersStore.sandboxNochokePerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                    {props.userStats.gamemode === Gamemode.Standard ? (
+                        <>
+                            {props.sandboxMode && (
+                                <DataCell highlighted>{usersStore.sandboxNochokePerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                            )}
+                            <DataCell>{props.userStats.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                        </>
+                    ) : (
+                        <DataCell>-</DataCell>
                     )}
-                    <DataCell>{props.userStats.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                 </tr>
                 <tr>
                     <td>Rank</td>
