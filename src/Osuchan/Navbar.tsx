@@ -41,6 +41,7 @@ interface NavbarLinkProps extends LinkProps {
 const TitleHeader = styled.h1`
     margin: 10px;
     flex: 1;
+    font-size: 2em;
     font-weight: 400;
     text-align: center;
 
@@ -147,9 +148,9 @@ function Navbar(props: NavbarProps) {
                 <NavbarLink to="/leaderboards" active={matchPath(props.location.pathname, {path: "/leaderboards"}) !== null}>Leaderboards</NavbarLink>
             </LinksContainer>
 
-            {/* osu!chan Beta title */}
+            {/* osu!chan title */}
             <TitleHeader>
-                <Link to="/">osu!chan <strong>Beta</strong></Link>
+                <Link to="/">osu!chan</Link>
             </TitleHeader>
 
             <UserMenuContainer>

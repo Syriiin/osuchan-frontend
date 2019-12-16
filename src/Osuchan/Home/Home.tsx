@@ -3,7 +3,7 @@ import React from "react";
 function Home() {
     return (
         <>
-            <h1>Welcome to the osu!chan Beta!</h1>
+            <h1>Welcome to the osu!chan!</h1>
 
             <p>
                 You can view a player's profile by searching their username in the top right.
@@ -12,9 +12,7 @@ function Home() {
             </p>
 
             <p>
-                Please remember this is a beta, so expect to encounter bugs and inconsistencies.
-                <br />
-                If you run into any bugs, please let me know in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+                If you run into any bugs, please report them preferrably as a github issue on <a href="https//github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
             </p>
 
             <br />
@@ -25,8 +23,6 @@ function Home() {
                 <em>Where are all the features that classic osu!chan has?</em>
             </h3>
             <p>
-                The focus of this beta is primarily to test the custom leaderboard system, so many of the features I plan to implement have yet to come.
-                <br />
                 Some of classic osu!chan's features will be coming to this version in new and improved forms, and some will not.
                 <br />
                 For example, at the moment, I don't have any plans on implementing the Mod PP statistics from classic osu!chan as they are somewhat replaced by the global leaderboards.
