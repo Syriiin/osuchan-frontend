@@ -18,7 +18,7 @@ export function ModIcons(props: ModIconsProps) {
     return (
         <ModsContainer>
             {mods.map((mod, i) => (
-                <ModImage key={i} src={`/images/mods/mod_${mod}${props.small ? "" : "@2x"}.png`} />
+                <ModImage key={i} src={`/static/images/mods/mod_${mod}${props.small ? "" : "@2x"}.png`} />
             ))}
         </ModsContainer>
     )
