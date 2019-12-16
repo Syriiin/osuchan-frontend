@@ -171,7 +171,7 @@ function LeaderboardButtons(props: LeaderboardButtonsProps) {
 
                                     {/* Invite player modal */}
                                     <SimpleModal open={inviteDialogOpen} onClose={() => setInviteDialogOpen(false)}>
-                                        <SimpleModalTitle>Add Scores</SimpleModalTitle>
+                                        <SimpleModalTitle>Invite Players</SimpleModalTitle>
                                         <p>
                                             Enter osu! profile URLs to invite players.
                                             <br />
