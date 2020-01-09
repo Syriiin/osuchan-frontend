@@ -17,6 +17,18 @@ function Home() {
 
             <br />
 
+            <h2>Changelog</h2>
+
+            <h3>9th January 2020</h3>
+            <ul>
+                <li>Make "Add Scores" osu! Profile URL default to the currently logged in user</li>
+                <li>Fix loved maps appearing in profiles and affecting score-style</li>
+                <li>Fix incorrect key values for osu!mania when certain mods are used</li>
+                <li>Fix the site appearing completely broken on some browsers</li>
+            </ul>
+
+            <br />
+
             <h2>FAQ</h2>
             
             <h3>
