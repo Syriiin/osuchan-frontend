@@ -119,7 +119,33 @@ export function calculateLength(length: number, mods: Mods) {
     return length;
 }
 
-export function calculateCircleSize(circleSize: number, mods: Mods) {
+export function calculateCircleSize(circleSize: number, mods: Mods, gamemode: Gamemode) {
+    if (gamemode & Gamemode.Mania) {
+        if (mods & Mods.KeyMod) {
+            switch (mods) {
+                case Mods.Key1:
+                    return 1;
+                case Mods.Key2:
+                    return 2;
+                case Mods.Key3:
+                    return 3;
+                case Mods.Key4:
+                    return 4;
+                case Mods.Key5:
+                    return 5;
+                case Mods.Key6:
+                    return 6;
+                case Mods.Key7:
+                    return 7;
+                case Mods.Key8:
+                    return 8;
+                case Mods.Key9:
+                    return 9;
+            }
+        }
+        return circleSize;
+    }
+
     if (mods & Mods.HardRock) {
         return circleSize * 1.3;
     } else if (mods & Mods.Easy) {

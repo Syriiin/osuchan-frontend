@@ -120,7 +120,7 @@ export class UsersStore {
         score.accuracy = calculateAccuracy(this.currentUserStats!.gamemode, score.count300, score.count100, score.count50, score.countMiss);
         score.bpm = calculateBpm(beatmap.bpm, score.mods);
         score.length = calculateLength(beatmap.drainTime, score.mods);
-        score.circleSize = calculateCircleSize(beatmap.circleSize, score.mods);
+        score.circleSize = calculateCircleSize(beatmap.circleSize, score.mods, score.gamemode);
         score.approachRate = calculateApproachRate(beatmap.approachRate, score.mods);
         score.overallDifficulty = calculateOverallDifficulty(beatmap.overallDifficulty, score.mods);
         score.result = getScoreResult(countMiss, bestCombo, beatmap.maxCombo);
