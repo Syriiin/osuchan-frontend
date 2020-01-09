@@ -12,7 +12,7 @@ function Home() {
             </p>
 
             <p>
-                If you run into any bugs, please report them preferrably as a github issue on <a href="https//github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+                If you run into any bugs, please report them preferrably as a github issue on <a href="https://github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
             </p>
 
             <br />
