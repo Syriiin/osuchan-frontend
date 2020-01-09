@@ -12,7 +12,7 @@ const ModalBase = styled.div<ModalBaseProps>`
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: ${props => props.open ? "1" : "-1"};
-    opacity: ${props => props.open ? "100%" : "0%"};
+    opacity: ${props => props.open ? "1" : "0"};
     transition: all 200ms;
 `;
 
