@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, withRouter, LinkProps, RouteComponentProps, matchPath } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
@@ -99,7 +99,12 @@ function Navbar(props: NavbarProps) {
     const [addScoreModalOpen, setAddScoreModalOpen] = useState(false);
     const [addScoreUserUrl, setAddScoreUserUrl] = useState("");
     const [addScoreBeatmapUrl, setAddScoreBeatmapUrl] = useState("");
-    
+
+    // Use effect to initialse form values
+    useEffect(() => {
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.osuUser?.id.toString()}` || "");
+    }, [meStore.osuUser])
+
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
@@ -132,7 +137,7 @@ function Navbar(props: NavbarProps) {
     }
     const handleAddScoreModalClose = () => {
         setAddScoreModalOpen(false);
-        setAddScoreUserUrl("");
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.osuUser?.id.toString()}` || "");
         setAddScoreBeatmapUrl("");
     }
 
