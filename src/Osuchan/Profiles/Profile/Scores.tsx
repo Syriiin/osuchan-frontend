@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Surface, SurfaceTitle, ScoreRow } from "../../../components";
+import { Surface, SurfaceTitle, ScoreRow, Button } from "../../../components";
 import { Score } from "../../../store/models/profiles/types";
 import ScoreEditModal from "./ScoreEditModal";
 import { observer } from "mobx-react-lite";
@@ -39,6 +39,8 @@ interface ProfileScoreRowProps {
 }
 
 function Scores(props: ScoresProps) {
+    const [showAllScores, setShowAllScores] = useState(false);
+
     return (
         <ScoresSurface>
             <SurfaceTitle>
@@ -47,9 +49,12 @@ function Scores(props: ScoresProps) {
                     <SandboxEditTip>TIP: Click on a score to edit it</SandboxEditTip>
                 )}
             </SurfaceTitle>
-            {props.scores.map((score, i) => (
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
                 <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
             ))}
+            {showAllScores || (
+                <Button fullWidth onClick={() => setShowAllScores(true)}>Show all scores</Button>
+            )}
         </ScoresSurface>
     );
 }
