@@ -2,6 +2,8 @@ import React from 'react';
 import { Router } from "react-router-dom";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 
+import "react-vis/dist/style.css";
+
 import history from "./history";
 import { osuchanTheme } from "./osuchanTheme";
 

@@ -10,6 +10,7 @@ import ModeSwitcher from "./ModeSwitcher";
 import SandboxControls from "./SandboxControls";
 import RankInfo from "./RankInfo";
 import ScoreStyle from "./ScoreStyle";
+import ScoresChart from "./ScoresChart";
 import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
@@ -23,6 +24,7 @@ const ProfileGrid = styled.div`
     grid-template-areas:
         "userinfo userinfo userinfo modeswitcher sandboxcontrols sandboxcontrols"
         "rankinfo rankinfo rankinfo scorestyle scorestyle scorestyle"
+        "scoreschart scoreschart scoreschart scoreschart scoreschart scoreschart"
         "scores scores scores scores scores scores"
         "leaderboards leaderboards leaderboards leaderboards leaderboards leaderboards"
         "trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses";
@@ -81,6 +83,9 @@ function Profile(props: ProfileProps) {
 
                     {/* Score style */}
                     <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
+
+                    {/* Scores */}
+                    <ScoresChart scores={scores} sandboxScores={sandboxScores} sandboxMode={sandboxMode} />
 
                     {/* Scores */}
                     <Scores scores={sandboxMode ? sandboxScores : scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
