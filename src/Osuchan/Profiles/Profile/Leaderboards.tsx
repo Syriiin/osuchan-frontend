@@ -19,6 +19,9 @@ function Leaderboards(props: LeaderboardsProps) {
                     <CommunityLeaderboardRow leaderboard={leaderboard} />
                 </UnstyledLink>
             ))}
+            {props.leaderboards.length === 0 && (
+                <p>This user has not joined any community leaderboards yet...</p>
+            )}
         </LeaderboardsSurface>
     );
 }
