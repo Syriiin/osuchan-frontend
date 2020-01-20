@@ -37,13 +37,13 @@ function ScoresChart(props: ScoresChartProps) {
                     })}
                     itemsFormat={props.sandboxMode ? (d: MarkSeriesPoint[]) => ([{
                         title: "Real",
-                        value: d[0].y
+                        value: `${(d[0].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
                     }, {
                         title: "Sandbox",
-                        value: d[1].y
+                        value: `${(d[1].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
                     }]) : (d: MarkSeriesPoint[]) => ([{
                         title: "PP",
-                        value: d[0].y
+                        value: `${(d[0].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
                     }])}
                 />
             </FlexibleWidthXYPlot>
