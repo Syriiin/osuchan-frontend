@@ -9,3 +9,9 @@ export enum ScoreResult {
     FullCombo = Perfect | NoBreak,
     Choke = SliderBreak | OneMiss | EndChoke
 }
+
+export enum ScoreSet {
+    Normal = 0,
+    NeverChoke = 1,
+    AlwaysFullCombo = 2
+}

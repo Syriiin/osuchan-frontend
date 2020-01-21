@@ -9,6 +9,7 @@ import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
 import { getScoreResult, calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty } from "../../utils/osu";
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
+import { ScoreSet, ScoreResult } from "../models/profiles/enums";
 
 // This is just the sum(0.95 ** i for i in range(100)) but js is too imprecise for this many tiny additions
 const WEIGHTING_VALUE = 19.881589415593293;
@@ -17,9 +18,23 @@ function calculateScoreStyleValue(values: number[]) {
     return values.reduce((total, value, i) => total + value * 0.95 ** i, 0) / WEIGHTING_VALUE;
 }
 
+function unchokeScore(score: Score) {
+    // some slight assumptions here about combo but its close enough
+    score.count300 += score.countMiss;
+    score.countMiss = 0;
+    score.bestCombo = score.beatmap!.maxCombo;
+    score.accuracy = calculateAccuracy(score.gamemode, score.count300, score.count100, score.count50, score.countMiss);
+    score.pp = score.nochokePp;
+    score.result = ScoreResult.Perfect;
+
+    return score;
+}
+
 export class UsersStore {
-    @observable currentUserStats: UserStats | null = null;
     @observable isLoading: boolean = false;
+    @observable isLoadingSandboxScores: boolean = false;
+
+    @observable currentUserStats: UserStats | null = null;
 
     readonly scores = observable<Score>([]);
     readonly leaderboards = observable<Leaderboard>([]);
@@ -29,16 +44,8 @@ export class UsersStore {
         return this.currentUserStats ? this.currentUserStats.pp - this.scores.reduce((total, score, i) => total + score.pp * 0.95 ** i, 0) : 0;
     }
 
-    @computed get extraNochokePerformance() {
-        return this.currentUserStats ? this.currentUserStats.nochokePp - this.scores.reduce((total, score, i) => total + (score.result & ScoreResult.Choke ? score.nochokePp : score.pp) * 0.95 ** i, 0) : 0;
-    }
-
     @computed get sandboxPerformance() {
         return this.sandboxScores.reduce((total, score, i) => total + score.pp * 0.95 ** i, 0) + this.extraPerformance;
-    }
-
-    @computed get sandboxNochokePerformance() {
-        return this.sandboxScores.reduce((total, score, i) => total + (score.result & ScoreResult.Choke ? score.nochokePp : score.pp) * 0.95 ** i, 0) + this.extraNochokePerformance;
     }
 
     @computed get sandboxScoreStyleAccuracy() {
@@ -67,8 +74,10 @@ export class UsersStore {
 
     @action
     loadUser = async (userString: string, gamemode: Gamemode) => {
-        this.currentUserStats = null;
         this.isLoading = true;
+
+        // reset values for loading new user
+        this.currentUserStats = null;
         this.scores.clear();
         this.leaderboards.clear();
         this.sandboxScores.clear();
@@ -103,6 +112,36 @@ export class UsersStore {
         }
         
         this.isLoading = false;
+    }
+
+    @action
+    loadSandboxScores = async (scoreSet: ScoreSet, allowLoved: boolean) => {
+        this.isLoadingSandboxScores = true;
+
+        try {
+            const scoresResponse = await axios.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
+                params: {
+                    "score_set": scoreSet,
+                    "allow_loved": allowLoved ? "true" : "false"
+                }
+            });
+            let scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
+
+            switch (scoreSet) {
+                case ScoreSet.AlwaysFullCombo:
+                    scores = scores.map(score => unchokeScore(score));
+                    break;
+                case ScoreSet.NeverChoke:
+                    scores = scores.map(score => score.result & ScoreResult.Choke ? unchokeScore(score) : score);
+                    break;
+            }
+
+            this.sandboxScores.replace(scores);
+        } catch (error) {
+            console.log(error)
+        }
+        
+        this.isLoadingSandboxScores = false;
     }
 
     @action

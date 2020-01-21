@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { observer } from "mobx-react-lite";
 
 import { Surface, DataCell, DataTable } from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { StoreContext } from "../../../store";
-import { observer } from "mobx-react-lite";
-import { Gamemode } from "../../../store/models/common/enums";
 
 const RankInfoSurface = styled(Surface)`
     padding: 20px;
@@ -25,19 +24,6 @@ function RankInfo(props: RankInfoProps) {
                         <DataCell highlighted>{usersStore.sandboxPerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
                     )}
                     <DataCell>{props.userStats.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
-                </tr>
-                <tr>
-                    <td>No-choke Performance</td>
-                    {props.userStats.gamemode === Gamemode.Standard ? (
-                        <>
-                            {props.sandboxMode && (
-                                <DataCell highlighted>{usersStore.sandboxNochokePerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
-                            )}
-                            <DataCell>{props.userStats.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
-                        </>
-                    ) : (
-                        <DataCell>-</DataCell>
-                    )}
                 </tr>
                 <tr>
                     <td>Rank</td>

@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import Switch from "react-switch";
 import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
-import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button } from "../../components";
+import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button, Switch } from "../../components";
 import { StoreContext } from "../../store";
 import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../store/models/common/enums";
@@ -35,7 +34,6 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // dispatch create action
         listStore.createLeaderboard({
             gamemode,
             accessType,
@@ -122,10 +120,9 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <FormLabel>Allow scores prior to member joining</FormLabel>
                 <FormControl>
                     <Switch
+                        mini
                         checked={allowPastScores}
                         onChange={(checked, event, id) => setAllowPastScores(checked)}
-                        uncheckedIcon={false}
-                        checkedIcon={false}
                         offColor={props.theme.colours.currant}
                         onColor={props.theme.colours.mystic}
                     />

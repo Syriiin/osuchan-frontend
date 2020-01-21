@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { withTheme, ThemeProps, DefaultTheme } from "styled-components";
-import Switch from "react-switch";
 
-import { Surface } from "../../../components";
+import { Surface, Switch, Button } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
+
+import SandboxSettingsModal from "./SandboxSettingsModal";
 
 const SandboxControlsSurface = styled(Surface)`
     padding: 20px;
@@ -42,15 +43,15 @@ interface ControlsStatusProps {
 }
 
 function SandboxControls(props: SandboxControlsProps) {
+    const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] = useState(false);
+
     return (
         <SandboxControlsSurface>
             <SandboxModeSwitchContainer>
                 <SandboxModeHeader>Sandbox Mode</SandboxModeHeader>
                 <Switch
-                    onChange={(checked, event, id) => props.setSandboxMode(checked)}
+                    onChange={checked => props.setSandboxMode(checked)}
                     checked={props.sandboxMode}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
                     disabled={props.gamemode !== Gamemode.Standard}
                     offColor={props.theme.colours.currant}
                     onColor={props.theme.colours.mystic}
@@ -61,6 +62,10 @@ function SandboxControls(props: SandboxControlsProps) {
                     {props.gamemode === Gamemode.Standard ? props.sandboxMode ? "ENABLED" : "DISABLED" : "UNAVAILABLE"}
                 </ControlsStatus>
             </ControlsContainer>
+            {props.sandboxMode && (
+                <Button onClick={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
+            )}
+            <SandboxSettingsModal open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
         </SandboxControlsSurface>
     );
 }

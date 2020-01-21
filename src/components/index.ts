@@ -15,3 +15,4 @@ export * from "./formcontrols/ModsSelect";
 export * from "./formcontrols/TextField";
 export * from "./formcontrols/FormLabel";
 export * from "./formcontrols/FormControl";
+export * from "./formcontrols/Switch";
