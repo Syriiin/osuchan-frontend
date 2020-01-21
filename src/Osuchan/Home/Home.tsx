@@ -19,6 +19,14 @@ function Home() {
 
             <h2>Changelog</h2>
 
+            <h3>21st January 2020</h3>
+            <ul>
+                <li>Add sandbox settings to customise the score set (ie. normal/no-choke) and allow loved scores</li>
+                <li>Add pp distribution charts to profiles</li>
+                <li>Only show 5 scores on profiles by default</li>
+                <li>Misc cleanup in profiles</li>
+            </ul>
+
             <h3>9th January 2020</h3>
             <ul>
                 <li>Make "Add Scores" osu! Profile URL default to the currently logged in user</li>
