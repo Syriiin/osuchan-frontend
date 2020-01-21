@@ -30,7 +30,7 @@ export class UsersStore {
     }
 
     @computed get extraNochokePerformance() {
-        return this.currentUserStats ? this.currentUserStats.nochokePp - this.scores.reduce((total, score, i) => total + score.nochokePp * 0.95 ** i, 0) : 0;
+        return this.currentUserStats ? this.currentUserStats.nochokePp - this.scores.reduce((total, score, i) => total + (score.result & ScoreResult.Choke ? score.nochokePp : score.pp) * 0.95 ** i, 0) : 0;
     }
 
     @computed get sandboxPerformance() {
@@ -38,7 +38,7 @@ export class UsersStore {
     }
 
     @computed get sandboxNochokePerformance() {
-        return this.sandboxScores.reduce((total, score, i) => total + score.nochokePp * 0.95 ** i, 0) + this.extraNochokePerformance;
+        return this.sandboxScores.reduce((total, score, i) => total + (score.result & ScoreResult.Choke ? score.nochokePp : score.pp) * 0.95 ** i, 0) + this.extraNochokePerformance;
     }
 
     @computed get sandboxScoreStyleAccuracy() {
