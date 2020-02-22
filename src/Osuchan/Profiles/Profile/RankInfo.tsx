@@ -33,7 +33,7 @@ function RankInfo(props: RankInfoProps) {
         <RankInfoSurface>
             {props.userStats.pp === 0 ? (
                 <InactiveStatusContainer>
-                    <InactiveStatus>INACTIVE PLAYER</InactiveStatus>
+                    <InactiveStatus>{usersStore.scores.length === 0 ? "UNPLAYED GAMEMODE" : "INACTIVE PLAYER"}</InactiveStatus>
                 </InactiveStatusContainer>
             ) : (
                 <DataTable>

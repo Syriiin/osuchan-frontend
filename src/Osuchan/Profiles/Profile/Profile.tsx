@@ -84,18 +84,24 @@ function Profile(props: ProfileProps) {
                     {/* Score style */}
                     <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
 
-                    {/* Scores */}
-                    <ScoresChart scores={scores} sandboxScores={sandboxScores} sandboxMode={sandboxMode} />
 
-                    {/* Scores */}
-                    <Scores scores={sandboxMode ? sandboxScores : scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
-                    
-                    {sandboxMode || (
+                    {scores.length > 0 && (
                         <>
-                            {/* Community Leaderboards */}
-                            <Leaderboards leaderboards={leaderboards} />
+                            {/* Scores */}
+                            <ScoresChart scores={scores} sandboxScores={sandboxScores} sandboxMode={sandboxMode} />
+
+                            {/* Scores */}
+                            <Scores scores={sandboxMode ? sandboxScores : scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
+                            
+                            {sandboxMode || (
+                                <>
+                                    {/* Community Leaderboards */}
+                                    <Leaderboards leaderboards={leaderboards} />
+                                </>
+                            )}
                         </>
                     )}
+                    
                 </ProfileGrid>
             )}
             {!usersStore.isLoading && !osuUser && (
