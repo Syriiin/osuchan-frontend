@@ -23,7 +23,7 @@ const SandboxModeHeader = styled.h3`
     margin: 0;
 `;
 
-const ControlsContainer = styled.div`
+const ControlsStatusContainer = styled.div`
     display: flex;
     flex-grow: 1;
     align-items: center;
@@ -57,11 +57,11 @@ function SandboxControls(props: SandboxControlsProps) {
                     onColor={props.theme.colours.mystic}
                 />
             </SandboxModeSwitchContainer>
-            <ControlsContainer>
+            <ControlsStatusContainer>
                 <ControlsStatus enabled={props.sandboxMode}>
                     {props.gamemode === Gamemode.Standard ? props.sandboxMode ? "ENABLED" : "DISABLED" : "UNAVAILABLE"}
                 </ControlsStatus>
-            </ControlsContainer>
+            </ControlsStatusContainer>
             {props.sandboxMode && (
                 <Button onClick={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
             )}
