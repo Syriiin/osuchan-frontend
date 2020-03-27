@@ -95,7 +95,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <TextInput fullWidth required value={name} onChange={e => setName(e.currentTarget.value)} />
                 <FormLabel>Gamemode</FormLabel>
                 <FormControl>
-                    <select value={gamemode} onChange={e => setGamemode(parseInt(e.target.value as string))}>
+                    <select value={gamemode} onChange={e => setGamemode(parseInt(e.target.value))}>
                         <option value={Gamemode.Standard}>osu!</option>
                         <option value={Gamemode.Taiko}>osu!taiko</option>
                         <option value={Gamemode.Catch}>osu!catch</option>
@@ -104,7 +104,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 </FormControl>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                    <select value={accessType} onChange={e => setAccessType(parseInt(e.target.value as string))}>
+                    <select value={accessType} onChange={e => setAccessType(parseInt(e.target.value))}>
                         <option value={LeaderboardAccessType.Public}>Public</option>
                         <option value={LeaderboardAccessType.PublicInviteOnly}>Public (Invite-only)</option>
                         <option value={LeaderboardAccessType.Private}>Private</option>
@@ -131,7 +131,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 {/* Beatmap status */}
                 <FormLabel>Allowed Beatmap Status</FormLabel>
                 <FormControl>
-                    <select value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value as string))}>
+                    <select value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value))}>
                         <option value={AllowedBeatmapStatus.Any}>Ranked or Loved</option>
                         <option value={AllowedBeatmapStatus.RankedOnly}>Ranked only</option>
                         <option value={AllowedBeatmapStatus.LovedOnly}>Loved only</option>
