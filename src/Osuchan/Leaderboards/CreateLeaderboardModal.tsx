@@ -12,24 +12,24 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);
     const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
-    const [name, setName] = useState();
-    const [description, setDescription] = useState();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [allowPastScores, setAllowPastScores] = useState(true);
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(AllowedBeatmapStatus.RankedOnly);
-    const [oldestBeatmapDate, setOldestBeatmapDate] = useState();
-    const [newestBeatmapDate, setNewestBeatmapDate] = useState();
-    const [oldestScoreDate, setOldestScoreDate] = useState();
-    const [newestScoreDate, setNewestScoreDate] = useState();
-    const [lowestAr, setLowestAr] = useState();
-    const [highestAr, setHighestAr] = useState();
-    const [lowestOd, setLowestOd] = useState();
-    const [highestOd, setHighestOd] = useState();
-    const [lowestCs, setLowestCs] = useState();
-    const [highestCs, setHighestCs] = useState();
+    const [oldestBeatmapDate, setOldestBeatmapDate] = useState("");
+    const [newestBeatmapDate, setNewestBeatmapDate] = useState("");
+    const [oldestScoreDate, setOldestScoreDate] = useState("");
+    const [newestScoreDate, setNewestScoreDate] = useState("");
+    const [lowestAr, setLowestAr] = useState("");
+    const [highestAr, setHighestAr] = useState("");
+    const [lowestOd, setLowestOd] = useState("");
+    const [highestOd, setHighestOd] = useState("");
+    const [lowestCs, setLowestCs] = useState("");
+    const [highestCs, setHighestCs] = useState("");
     const [requiredMods, setRequiredMods] = useState(0);
     const [disqualifiedMods, setDisqualifiedMods] = useState(0);
-    const [lowestAccuracy, setLowestAccuracy] = useState();
-    const [highestAccuracy, setHighestAccuracy] = useState();
+    const [lowestAccuracy, setLowestAccuracy] = useState("");
+    const [highestAccuracy, setHighestAccuracy] = useState("");
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,23 +38,23 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
             gamemode,
             accessType,
             name,
-            description: description || "",
+            description: description,
             allowPastScores,
             allowedBeatmapStatus,
-            oldestBeatmapDate: oldestBeatmapDate ? new Date(oldestBeatmapDate) : null,
-            newestBeatmapDate: newestBeatmapDate ? new Date(newestBeatmapDate) : null,
-            oldestScoreDate: oldestScoreDate ? new Date(oldestScoreDate) : null,
-            newestScoreDate: newestScoreDate ? new Date(newestScoreDate) : null,
-            lowestAr: lowestAr ? parseFloat(lowestAr) : null,
-            highestAr: highestAr ? parseFloat(highestAr) : null,
-            lowestOd: lowestOd ? parseFloat(lowestOd) : null,
-            highestOd: highestOd ? parseFloat(highestOd) : null,
-            lowestCs: lowestCs ? parseFloat(lowestCs) : null,
-            highestCs: highestCs ? parseFloat(highestCs) : null,
+            oldestBeatmapDate: new Date(oldestBeatmapDate),
+            newestBeatmapDate: new Date(newestBeatmapDate),
+            oldestScoreDate: new Date(oldestScoreDate),
+            newestScoreDate: new Date(newestScoreDate),
+            lowestAr: parseFloat(lowestAr),
+            highestAr: parseFloat(highestAr),
+            lowestOd: parseFloat(lowestOd),
+            highestOd: parseFloat(highestOd),
+            lowestCs: parseFloat(lowestCs),
+            highestCs: parseFloat(highestCs),
             requiredMods,
             disqualifiedMods,
-            lowestAccuracy: lowestAccuracy ? parseFloat(lowestAccuracy) : null,
-            highestAccuracy: highestAccuracy ? parseFloat(highestAccuracy) : null
+            lowestAccuracy: parseFloat(lowestAccuracy),
+            highestAccuracy: parseFloat(highestAccuracy)
         })
 
         props.onClose();
@@ -64,24 +64,24 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const clearInputs = () => {
         setGamemode(Gamemode.Standard);
         setAccessType(LeaderboardAccessType.Public);
-        setName(null);
-        setDescription(null);
+        setName("");
+        setDescription("");
         setAllowPastScores(true);
         setAllowedBeatmapStatus(AllowedBeatmapStatus.RankedOnly);
-        setOldestBeatmapDate(null);
-        setNewestBeatmapDate(null);
-        setOldestScoreDate(null);
-        setNewestScoreDate(null);
-        setLowestAr(null);
-        setHighestAr(null);
-        setLowestOd(null);
-        setHighestOd(null);
-        setLowestCs(null);
-        setHighestCs(null);
+        setOldestBeatmapDate("");
+        setNewestBeatmapDate("");
+        setOldestScoreDate("");
+        setNewestScoreDate("");
+        setLowestAr("");
+        setHighestAr("");
+        setLowestOd("");
+        setHighestOd("");
+        setLowestCs("");
+        setHighestCs("");
         setRequiredMods(Mods.None);
         setDisqualifiedMods(Mods.None);
-        setLowestAccuracy(null);
-        setHighestAccuracy(null);
+        setLowestAccuracy("");
+        setHighestAccuracy("");
 
         props.onClose();
     }
