@@ -65,7 +65,7 @@ function SandboxControls(props: SandboxControlsProps) {
             {props.sandboxMode && (
                 <Button onClick={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
             )}
-            <SandboxSettingsModal open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
+            <SandboxSettingsModal gamemode={props.gamemode} open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
         </SandboxControlsSurface>
     );
 }

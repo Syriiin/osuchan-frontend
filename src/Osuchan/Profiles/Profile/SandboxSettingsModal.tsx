@@ -1,24 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { ScoreSet } from "../../../store/models/profiles/enums";
 import { StoreContext } from "../../../store";
-import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Switch, Button } from "../../../components";
+import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Button, ScoreFilterForm } from "../../../components";
+import { Gamemode } from "../../../store/models/common/enums";
+import { ScoreFilter } from "../../../store/models/profiles/types";
 
 function SandboxSettingsModal(props: SandboxSettingsModalProps) {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 
     const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
-    const [allowLoved, setAllowLoved] = useState(false);
+    const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
 
     const handleSandboxSettingsSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        usersStore.loadSandboxScores(scoreSet, allowLoved);
+        usersStore.loadSandboxScores(scoreSet, scoreFilter as ScoreFilter);
 
         props.onClose();
     }
+
+    const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
 
     return (
         <SimpleModal open={props.open} onClose={() => props.onClose()}>
@@ -32,16 +36,7 @@ function SandboxSettingsModal(props: SandboxSettingsModalProps) {
                         {/* <option value={ScoreSet.AlwaysFullCombo}>Always FC</option> */}
                     </select>
                 </FormControl>
-                <FormLabel>Allow loved scores</FormLabel>
-                <FormControl>
-                    <Switch
-                        mini
-                        checked={allowLoved}
-                        onChange={checked => setAllowLoved(checked)}
-                        offColor={props.theme.colours.currant}
-                        onColor={props.theme.colours.mystic}
-                    />
-                </FormControl>
+                <ScoreFilterForm gamemode={props.gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
                 <Button type="submit">Load scores</Button>
             </form>
         </SimpleModal>
@@ -49,6 +44,7 @@ function SandboxSettingsModal(props: SandboxSettingsModalProps) {
 }
 
 interface SandboxSettingsModalProps extends ThemeProps<DefaultTheme> {
+    gamemode: Gamemode;
     open: boolean;
     onClose: () => void;
 }

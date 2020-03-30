@@ -40,7 +40,7 @@ function ScoresChart(props: ScoresChartProps) {
                         value: `${(d[0].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
                     }, {
                         title: "Sandbox",
-                        value: `${(d[1].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
+                        value: d[1] ? `${(d[1].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp` : "-"
                     }]) : (d: MarkSeriesPoint[]) => ([{
                         title: "PP",
                         value: `${(d[0].y as number).toLocaleString("en", { maximumFractionDigits: 0 })}pp`
