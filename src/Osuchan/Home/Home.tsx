@@ -19,6 +19,12 @@ function Home() {
 
             <h2>Changelog</h2>
 
+            <h3>31st March 2020</h3>
+            <ul>
+                <li>Add fully featured score filtering to profile sandbox</li>
+                <li>Misc bug fixes</li>
+            </ul>
+
             <h3>22nd February 2020</h3>
             <ul>
                 <li>Add notice in profiles for inactive players and unplayed gamemodes</li>
