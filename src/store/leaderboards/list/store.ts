@@ -7,6 +7,8 @@ import history from "../../../history";
 import { Leaderboard } from "../../models/leaderboards/types";
 import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
 import { ScoreFilter } from "../../models/profiles/types";
+import { Gamemode } from "../../models/common/enums";
+import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 
 export class ListStore {
     @observable leaderboards: Leaderboard[] = [];
@@ -31,31 +33,31 @@ export class ListStore {
     }
 
     @action
-    createLeaderboard = async (leaderboardData: Partial<Leaderboard>, scoreFilterData: Partial<ScoreFilter>) => {
+    createLeaderboard = async (gamemode: Gamemode, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter | null) => {
         this.isCreating = true;
 
         try {
             const leaderboardResponse = await axios.post(`/api/leaderboards/leaderboards`, {
-                "gamemode": leaderboardData.gamemode,
-                "access_type": leaderboardData.accessType,
-                "name": leaderboardData.name,
-                "description": leaderboardData.description,
-                "allow_past_scores": leaderboardData.allowPastScores,
-                "allowed_beatmap_status": scoreFilterData.allowedBeatmapStatus,
-                "oldest_beatmap_date": scoreFilterData.oldestBeatmapDate,
-                "newest_beatmap_date": scoreFilterData.newestBeatmapDate,
-                "oldest_score_date": scoreFilterData.oldestScoreDate,
-                "newest_score_date": scoreFilterData.newestScoreDate,
-                "lowest_ar": scoreFilterData.lowestAr,
-                "highest_ar": scoreFilterData.highestAr,
-                "lowest_od": scoreFilterData.lowestOd,
-                "highest_od": scoreFilterData.highestOd,
-                "lowest_cs": scoreFilterData.lowestCs,
-                "highest_cs": scoreFilterData.highestCs,
-                "required_mods": scoreFilterData.requiredMods,
-                "disqualified_mods": scoreFilterData.disqualifiedMods,
-                "lowest_accuracy": scoreFilterData.lowestAccuracy,
-                "highest_accuracy": scoreFilterData.highestAccuracy
+                "gamemode": gamemode,
+                "access_type": accessType,
+                "name": name,
+                "description": description,
+                "allow_past_scores": allowPastScores,
+                "allowed_beatmap_status": scoreFilter?.allowedBeatmapStatus,
+                "oldest_beatmap_date": scoreFilter?.oldestBeatmapDate,
+                "newest_beatmap_date": scoreFilter?.newestBeatmapDate,
+                "oldest_score_date": scoreFilter?.oldestScoreDate,
+                "newest_score_date": scoreFilter?.newestScoreDate,
+                "lowest_ar": scoreFilter?.lowestAr,
+                "highest_ar": scoreFilter?.highestAr,
+                "lowest_od": scoreFilter?.lowestOd,
+                "highest_od": scoreFilter?.highestOd,
+                "lowest_cs": scoreFilter?.lowestCs,
+                "highest_cs": scoreFilter?.highestCs,
+                "required_mods": scoreFilter?.requiredMods,
+                "disqualified_mods": scoreFilter?.disqualifiedMods,
+                "lowest_accuracy": scoreFilter?.lowestAccuracy,
+                "highest_accuracy": scoreFilter?.highestAccuracy
             }, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")

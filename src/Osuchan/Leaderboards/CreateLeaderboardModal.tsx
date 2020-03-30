@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
-import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button, Switch } from "../../components";
+import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm } from "../../components";
 import { StoreContext } from "../../store";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
-import { Gamemode, Mods } from "../../store/models/common/enums";
-import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
+import { Gamemode } from "../../store/models/common/enums";
+import { ScoreFilter } from "../../store/models/profiles/types";
 
 function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const store = useContext(StoreContext);
@@ -16,48 +16,12 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [allowPastScores, setAllowPastScores] = useState(true);
-    const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(AllowedBeatmapStatus.RankedOnly);
-    const [oldestBeatmapDate, setOldestBeatmapDate] = useState("");
-    const [newestBeatmapDate, setNewestBeatmapDate] = useState("");
-    const [oldestScoreDate, setOldestScoreDate] = useState("");
-    const [newestScoreDate, setNewestScoreDate] = useState("");
-    const [lowestAr, setLowestAr] = useState("");
-    const [highestAr, setHighestAr] = useState("");
-    const [lowestOd, setLowestOd] = useState("");
-    const [highestOd, setHighestOd] = useState("");
-    const [lowestCs, setLowestCs] = useState("");
-    const [highestCs, setHighestCs] = useState("");
-    const [requiredMods, setRequiredMods] = useState(0);
-    const [disqualifiedMods, setDisqualifiedMods] = useState(0);
-    const [lowestAccuracy, setLowestAccuracy] = useState("");
-    const [highestAccuracy, setHighestAccuracy] = useState("");
+    const [scoreFilter, setScoreFilter] = useState<ScoreFilter | null>(null);
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        listStore.createLeaderboard({
-            gamemode,
-            accessType,
-            name,
-            description,
-            allowPastScores,
-        }, {
-            allowedBeatmapStatus,
-            oldestBeatmapDate: new Date(oldestBeatmapDate),
-            newestBeatmapDate: new Date(newestBeatmapDate),
-            oldestScoreDate: new Date(oldestScoreDate),
-            newestScoreDate: new Date(newestScoreDate),
-            lowestAr: parseFloat(lowestAr),
-            highestAr: parseFloat(highestAr),
-            lowestOd: parseFloat(lowestOd),
-            highestOd: parseFloat(highestOd),
-            lowestCs: parseFloat(lowestCs),
-            highestCs: parseFloat(highestCs),
-            requiredMods,
-            disqualifiedMods,
-            lowestAccuracy: parseFloat(lowestAccuracy),
-            highestAccuracy: parseFloat(highestAccuracy)
-        });
+        listStore.createLeaderboard(gamemode, accessType, name, description, allowPastScores, scoreFilter);
 
         props.onClose();
         clearInputs();
@@ -69,24 +33,13 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
         setName("");
         setDescription("");
         setAllowPastScores(true);
-        setAllowedBeatmapStatus(AllowedBeatmapStatus.RankedOnly);
-        setOldestBeatmapDate("");
-        setNewestBeatmapDate("");
-        setOldestScoreDate("");
-        setNewestScoreDate("");
-        setLowestAr("");
-        setHighestAr("");
-        setLowestOd("");
-        setHighestOd("");
-        setLowestCs("");
-        setHighestCs("");
-        setRequiredMods(Mods.None);
-        setDisqualifiedMods(Mods.None);
-        setLowestAccuracy("");
-        setHighestAccuracy("");
+        setScoreFilter(null);
 
         props.onClose();
     }
+
+    // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
+    const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter | null) => setScoreFilter(scoreFilter), []);
 
     return (
         <SimpleModal open={props.open} onClose={() => props.onClose()}>
@@ -114,11 +67,6 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
-
-                {/* Score filters */}
-                <h3>Score filters</h3>
-                
-                {/* Past scores */}
                 <FormLabel>Allow scores prior to member joining</FormLabel>
                 <FormControl>
                     <Switch
@@ -129,86 +77,10 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                         onColor={props.theme.colours.mystic}
                     />
                 </FormControl>
-                
-                {/* Beatmap status */}
-                <FormLabel>Allowed Beatmap Status</FormLabel>
-                <FormControl>
-                    <select value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value))}>
-                        <option value={AllowedBeatmapStatus.Any}>Ranked or Loved</option>
-                        <option value={AllowedBeatmapStatus.RankedOnly}>Ranked only</option>
-                        <option value={AllowedBeatmapStatus.LovedOnly}>Loved only</option>
-                    </select>
-                </FormControl>
-                
-                {/* Dates */}
-                <FormLabel>Oldest Beatmap Date</FormLabel>
-                <FormControl>
-                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestBeatmapDate} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
-                </FormControl>
-                <FormLabel>Newest Beatmap Date</FormLabel>
-                <FormControl>
-                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestBeatmapDate} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
-                </FormControl>
-                <FormLabel>Oldest Score Date</FormLabel>
-                <FormControl>
-                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestScoreDate} onChange={e => setOldestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
-                </FormControl>
-                <FormLabel>Newest Score Date</FormLabel>
-                <FormControl>
-                    <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestScoreDate} onChange={e => setNewestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
-                </FormControl>
-                
-                {/* Mods */}
-                <FormLabel>Required Mods</FormLabel>
-                <FormControl>
-                    <ModsSelect gamemode={gamemode} value={requiredMods} onChange={mods => setRequiredMods(mods)} />
-                </FormControl>
-                <FormLabel>Disqualified mods</FormLabel>
-                <FormControl>
-                    <ModsSelect gamemode={gamemode} value={disqualifiedMods} onChange={mods => setDisqualifiedMods(mods)} />
-                </FormControl>
-                
-                {/* Ranges */}
-                {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(gamemode) && (
-                    <>
-                        <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
-                        <FormControl>
-                            <TextInput value={lowestCs} onChange={e => setLowestCs(e.currentTarget.value)} />
-                        </FormControl>
-                        <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
-                        <FormControl>
-                            <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
-                        </FormControl>
-                    </>
-                )}
-                {[Gamemode.Standard, Gamemode.Catch].includes(gamemode) && (
-                    <>
-                        <FormLabel>Min AR</FormLabel>
-                        <FormControl>
-                            <TextInput value={lowestAr} onChange={e => setLowestAr(e.currentTarget.value)} />
-                        </FormControl>
-                        <FormLabel>Max AR</FormLabel>
-                        <FormControl>
-                            <TextInput value={highestAr} onChange={e => setHighestAr(e.currentTarget.value)} />
-                        </FormControl>
-                    </>
-                )}
-                <FormLabel>Min OD</FormLabel>
-                <FormControl>
-                    <TextInput value={lowestOd} onChange={e => setLowestOd(e.currentTarget.value)} />
-                </FormControl>
-                <FormLabel>Max OD</FormLabel>
-                <FormControl>
-                    <TextInput value={highestOd} onChange={e => setHighestOd(e.currentTarget.value)} />
-                </FormControl>
-                <FormLabel>Min Accuracy (%)</FormLabel>
-                <FormControl>
-                    <TextInput value={lowestAccuracy} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
-                </FormControl>
-                <FormLabel>Max Accuracy (%)</FormLabel>
-                <FormControl>
-                    <TextInput value={highestAccuracy} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
-                </FormControl>
+
+                {/* Score filters */}
+                <ScoreFilterForm gamemode={gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
+
                 <Button type="submit">Create</Button>
             </form>
         </SimpleModal>
