@@ -1,4 +1,4 @@
-import { OsuUser, UserStats, Beatmap, Score } from "./types";
+import { OsuUser, UserStats, Beatmap, Score, ScoreFilter } from "./types";
 
 export function osuUserFromJson(osuUserData: any): OsuUser {
     return {
@@ -88,6 +88,26 @@ export function scoreFromJson(scoreData: any): Score {
         nochokePp: scoreData["nochoke_pp"],
         starRating: scoreData["star_rating"],
         result: scoreData["result"]
+    }
+}
+
+export function scoreFilterFromJson(scoreFilterData: any): ScoreFilter {
+    return {
+        allowedBeatmapStatus: scoreFilterData["allowed_beatmap_status"],
+        oldestBeatmapDate: scoreFilterData["oldest_beatmap_date"] ? new Date(scoreFilterData["oldest_beatmap_date"]) : null,
+        newestBeatmapDate: scoreFilterData["newest_beatmap_date"] ? new Date(scoreFilterData["newest_beatmap_date"]) : null,
+        oldestScoreDate: scoreFilterData["oldest_score_date"] ? new Date(scoreFilterData["oldest_score_date"]) : null,
+        newestScoreDate: scoreFilterData["newest_score_date"] ? new Date(scoreFilterData["newest_score_date"]) : null,
+        lowestAr: scoreFilterData["lowest_ar"],
+        highestAr: scoreFilterData["highest_ar"],
+        lowestOd: scoreFilterData["lowest_od"],
+        highestOd: scoreFilterData["highest_od"],
+        lowestCs: scoreFilterData["lowest_cs"],
+        highestCs: scoreFilterData["highest_cs"],
+        requiredMods: scoreFilterData["required_mods"],
+        disqualifiedMods: scoreFilterData["disqualified_mods"],
+        lowestAccuracy: scoreFilterData["lowest_accuracy"],
+        highestAccuracy: scoreFilterData["highest_accuracy"]
     }
 }
 

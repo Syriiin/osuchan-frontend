@@ -15,3 +15,9 @@ export enum ScoreSet {
     NeverChoke = 1,
     AlwaysFullCombo = 2
 }
+
+export enum AllowedBeatmapStatus {
+    Any = 0,
+    RankedOnly = 1, // ranked + approved
+    LovedOnly = 2
+}

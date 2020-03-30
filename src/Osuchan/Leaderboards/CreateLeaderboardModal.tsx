@@ -3,8 +3,9 @@ import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { SimpleModal, SimpleModalTitle, TextInput, ModsSelect, TextField, FormLabel, FormControl, Button, Switch } from "../../components";
 import { StoreContext } from "../../store";
-import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../store/models/leaderboards/enums";
+import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../store/models/common/enums";
+import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
 
 function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const store = useContext(StoreContext);
@@ -38,8 +39,9 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
             gamemode,
             accessType,
             name,
-            description: description,
+            description,
             allowPastScores,
+        }, {
             allowedBeatmapStatus,
             oldestBeatmapDate: new Date(oldestBeatmapDate),
             newestBeatmapDate: new Date(newestBeatmapDate),
@@ -55,7 +57,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
             disqualifiedMods,
             lowestAccuracy: parseFloat(lowestAccuracy),
             highestAccuracy: parseFloat(highestAccuracy)
-        })
+        });
 
         props.onClose();
         clearInputs();

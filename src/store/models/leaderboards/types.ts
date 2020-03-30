@@ -1,6 +1,6 @@
-import { OsuUser } from "../profiles/types";
-import { AllowedBeatmapStatus, LeaderboardAccessType } from "./enums";
-import { Gamemode, Mods } from "../common/enums";
+import { OsuUser, ScoreFilter } from "../profiles/types";
+import { LeaderboardAccessType } from "./enums";
+import { Gamemode } from "../common/enums";
 
 export interface Leaderboard {
     id: number;
@@ -10,21 +10,8 @@ export interface Leaderboard {
     description: string;
     iconUrl: string;
     allowPastScores: boolean | null;
-    allowedBeatmapStatus: AllowedBeatmapStatus;
-    oldestBeatmapDate: Date | null;
-    newestBeatmapDate: Date | null;
-    oldestScoreDate: Date | null;
-    newestScoreDate: Date | null;
-    lowestAr: number | null;
-    highestAr: number | null;
-    lowestOd: number | null;
-    highestOd: number | null;
-    lowestCs: number | null;
-    highestCs: number | null;
-    requiredMods: Mods;
-    disqualifiedMods: Mods;
-    lowestAccuracy: number | null;
-    highestAccuracy: number | null;
+    scoreFilter: ScoreFilter | null;
+    scoreFilterId: number | null;
     owner: OsuUser | null;
     ownerId: number | null;
     creationTime: Date;

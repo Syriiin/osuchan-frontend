@@ -6,13 +6,14 @@ import styled from "styled-components";
 
 import { formatMods } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
-import { OsuUser } from "../../../store/models/profiles/types";
+import { OsuUser, ScoreFilter } from "../../../store/models/profiles/types";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
 import { Surface, SurfaceTitle, Button, SimpleModal, TextField, SimpleModalTitle, FormControl, FormLabel, LoadingPage } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
-import { AllowedBeatmapStatus, LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
+import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../../store/models/common/enums";
+import { AllowedBeatmapStatus } from "../../../store/models/profiles/enums";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -35,6 +36,10 @@ const Description = styled.div`
 
 `;
 
+const FiltersHeading = styled.h3`
+    font-weight: 400;
+`;
+
 const FilterValue = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
@@ -43,77 +48,82 @@ const DeleteButton = styled(Button)`
     margin-right: 5px;
 `;
 
+const AllowPastScores = styled.div`
+    color: ${props => props.theme.colours.timber};
+`;
+
 function LeaderboardFilters(props: LeaderboardFiltersProps) {
-    const leaderboard = props.leaderboard;
+    const scoreFilter = props.scoreFilter;
+    const gamemode = props.gamemode;
 
     return (
-        <ul>
-            {/* Allow past scores */}
-            {!leaderboard.allowPastScores && (
-                <li><FilterValue>Scores must be made after joining leaderboard</FilterValue></li>
-            )}
-            {/* Mods */}
-            {leaderboard.requiredMods !== Mods.None && (
-                <li>Required Mods: <FilterValue>{formatMods(leaderboard.requiredMods)}</FilterValue></li>
-            )}
-            {leaderboard.disqualifiedMods !== Mods.None && (
-                <li>Disqualified Mods: <FilterValue>{formatMods(leaderboard.disqualifiedMods)}</FilterValue></li>
-            )}
-            {/* Beatmap status */}
-            {leaderboard.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
-                <li>Beatmap Status: <FilterValue>Ranked or Loved</FilterValue></li>
-            )}
-            {leaderboard.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
-                <li>Beatmap Status: <FilterValue>Loved</FilterValue></li>
-            )}
-            {/* Beatmap date */}
-            {leaderboard.oldestBeatmapDate !== null && (
-                <li>Oldest Beatmap Date: <FilterValue>{leaderboard.oldestBeatmapDate.toLocaleDateString()}</FilterValue></li>
-            )}
-            {leaderboard.newestBeatmapDate !== null && (
-                <li>Newest Beatmap Date: <FilterValue>{leaderboard.newestBeatmapDate.toLocaleDateString()}</FilterValue></li>
-            )}
-            {/* Score date */}
-            {leaderboard.oldestScoreDate !== null && (
-                <li>Oldest Score Date: <FilterValue>{leaderboard.oldestScoreDate.toLocaleDateString()}</FilterValue></li>
-            )}
-            {leaderboard.newestScoreDate !== null && (
-                <li>Newest Score Date: <FilterValue>{leaderboard.newestScoreDate.toLocaleDateString()}</FilterValue></li>
-            )}
-            {/* Accuracy */}
-            {leaderboard.lowestAccuracy !== null && (
-                <li>Min Accuracy: <FilterValue>{leaderboard.lowestAccuracy}</FilterValue></li>
-            )}
-            {leaderboard.highestAccuracy !== null && (
-                <li>Max Accuracy: <FilterValue>{leaderboard.highestAccuracy}</FilterValue></li>
-            )}
-            {/* CS */}
-            {leaderboard.lowestCs !== null && (
-                <li>Min {leaderboard.gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{leaderboard.lowestCs}</FilterValue></li>
-            )}
-            {leaderboard.highestCs !== null && (
-                <li>Max {leaderboard.gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{leaderboard.highestCs}</FilterValue></li>
-            )}
-            {/* AR */}
-            {leaderboard.lowestAr !== null && (
-                <li>Min AR: <FilterValue>{leaderboard.lowestAr}</FilterValue></li>
-            )}
-            {leaderboard.highestAr !== null && (
-                <li>Max AR: <FilterValue>{leaderboard.highestAr}</FilterValue></li>
-            )}
-            {/* OD */}
-            {leaderboard.lowestOd !== null && (
-                <li>Min OD: <FilterValue>{leaderboard.lowestOd}</FilterValue></li>
-            )}
-            {leaderboard.highestOd !== null && (
-                <li>Max OD: <FilterValue>{leaderboard.highestOd}</FilterValue></li>
-            )}
-        </ul>
+        <>
+            <FiltersHeading>Score Filters</FiltersHeading>
+            <ul>
+                {/* Mods */}
+                {scoreFilter.requiredMods !== Mods.None && (
+                    <li>Required Mods: <FilterValue>{formatMods(scoreFilter.requiredMods)}</FilterValue></li>
+                )}
+                {scoreFilter.disqualifiedMods !== Mods.None && (
+                    <li>Disqualified Mods: <FilterValue>{formatMods(scoreFilter.disqualifiedMods)}</FilterValue></li>
+                )}
+                {/* Beatmap status */}
+                {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
+                    <li>Beatmap Status: <FilterValue>Ranked or Loved</FilterValue></li>
+                )}
+                {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
+                    <li>Beatmap Status: <FilterValue>Loved</FilterValue></li>
+                )}
+                {/* Beatmap date */}
+                {scoreFilter.oldestBeatmapDate !== null && (
+                    <li>Oldest Beatmap Date: <FilterValue>{scoreFilter.oldestBeatmapDate.toLocaleDateString()}</FilterValue></li>
+                )}
+                {scoreFilter.newestBeatmapDate !== null && (
+                    <li>Newest Beatmap Date: <FilterValue>{scoreFilter.newestBeatmapDate.toLocaleDateString()}</FilterValue></li>
+                )}
+                {/* Score date */}
+                {scoreFilter.oldestScoreDate !== null && (
+                    <li>Oldest Score Date: <FilterValue>{scoreFilter.oldestScoreDate.toLocaleDateString()}</FilterValue></li>
+                )}
+                {scoreFilter.newestScoreDate !== null && (
+                    <li>Newest Score Date: <FilterValue>{scoreFilter.newestScoreDate.toLocaleDateString()}</FilterValue></li>
+                )}
+                {/* Accuracy */}
+                {scoreFilter.lowestAccuracy !== null && (
+                    <li>Min Accuracy: <FilterValue>{scoreFilter.lowestAccuracy}</FilterValue></li>
+                )}
+                {scoreFilter.highestAccuracy !== null && (
+                    <li>Max Accuracy: <FilterValue>{scoreFilter.highestAccuracy}</FilterValue></li>
+                )}
+                {/* CS */}
+                {scoreFilter.lowestCs !== null && (
+                    <li>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{scoreFilter.lowestCs}</FilterValue></li>
+                )}
+                {scoreFilter.highestCs !== null && (
+                    <li>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{scoreFilter.highestCs}</FilterValue></li>
+                )}
+                {/* AR */}
+                {scoreFilter.lowestAr !== null && (
+                    <li>Min AR: <FilterValue>{scoreFilter.lowestAr}</FilterValue></li>
+                )}
+                {scoreFilter.highestAr !== null && (
+                    <li>Max AR: <FilterValue>{scoreFilter.highestAr}</FilterValue></li>
+                )}
+                {/* OD */}
+                {scoreFilter.lowestOd !== null && (
+                    <li>Min OD: <FilterValue>{scoreFilter.lowestOd}</FilterValue></li>
+                )}
+                {scoreFilter.highestOd !== null && (
+                    <li>Max OD: <FilterValue>{scoreFilter.highestOd}</FilterValue></li>
+                )}
+            </ul>
+        </>
     );
 }
 
 interface LeaderboardFiltersProps {
-    leaderboard: Leaderboard;
+    scoreFilter: ScoreFilter;
+    gamemode: Gamemode;
 }
 
 function LeaderboardButtons(props: LeaderboardButtonsProps) {
@@ -261,7 +271,13 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                             </>
                         )}
                         <Description>{leaderboard.description}</Description>
-                        <LeaderboardFilters leaderboard={leaderboard} />
+                        {/* Allow past scores */}
+                        {!leaderboard.allowPastScores && (
+                            <AllowPastScores>Scores must be set after joining</AllowPastScores>
+                        )}
+                        {leaderboard.scoreFilter && (
+                            <LeaderboardFilters gamemode={leaderboard.gamemode} scoreFilter={leaderboard.scoreFilter} />
+                        )}
                         <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.osuUser!} />
                     </LeaderboardSurface>
                     

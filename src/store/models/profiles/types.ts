@@ -1,4 +1,4 @@
-import { ScoreResult } from "./enums";
+import { ScoreResult, AllowedBeatmapStatus } from "./enums";
 import { BeatmapStatus, Gamemode, Mods } from "../common/enums";
 
 export interface OsuUser {
@@ -82,4 +82,22 @@ export interface Score {
     nochokePp: number;
     starRating: number;
     result: ScoreResult;
+}
+
+export interface ScoreFilter {
+    allowedBeatmapStatus: AllowedBeatmapStatus;
+    oldestBeatmapDate: Date | null;
+    newestBeatmapDate: Date | null;
+    oldestScoreDate: Date | null;
+    newestScoreDate: Date | null;
+    lowestAr: number | null;
+    highestAr: number | null;
+    lowestOd: number | null;
+    highestOd: number | null;
+    lowestCs: number | null;
+    highestCs: number | null;
+    requiredMods: Mods;
+    disqualifiedMods: Mods;
+    lowestAccuracy: number | null;
+    highestAccuracy: number | null;
 }

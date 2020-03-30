@@ -1,5 +1,5 @@
 import { Leaderboard, Membership, Invite } from "./types";
-import { osuUserFromJson } from "../profiles/deserialisers";
+import { osuUserFromJson, scoreFilterFromJson } from "../profiles/deserialisers";
 
 export function leaderboardFromJson(leaderboardData: any): Leaderboard {
     return {
@@ -10,21 +10,8 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
         description: leaderboardData["description"],
         iconUrl: leaderboardData["icon_url"],
         allowPastScores: leaderboardData["allow_past_scores"],
-        allowedBeatmapStatus: leaderboardData["allowed_beatmap_status"],
-        oldestBeatmapDate: leaderboardData["oldest_beatmap_date"] ? new Date(leaderboardData["oldest_beatmap_date"]) : null,
-        newestBeatmapDate: leaderboardData["newest_beatmap_date"] ? new Date(leaderboardData["newest_beatmap_date"]) : null,
-        oldestScoreDate: leaderboardData["oldest_score_date"] ? new Date(leaderboardData["oldest_score_date"]) : null,
-        newestScoreDate: leaderboardData["newest_score_date"] ? new Date(leaderboardData["newest_score_date"]) : null,
-        lowestAr: leaderboardData["lowest_ar"],
-        highestAr: leaderboardData["highest_ar"],
-        lowestOd: leaderboardData["lowest_od"],
-        highestOd: leaderboardData["highest_od"],
-        lowestCs: leaderboardData["lowest_cs"],
-        highestCs: leaderboardData["highest_cs"],
-        requiredMods: leaderboardData["required_mods"],
-        disqualifiedMods: leaderboardData["disqualified_mods"],
-        lowestAccuracy: leaderboardData["lowest_accuracy"],
-        highestAccuracy: leaderboardData["highest_accuracy"],
+        scoreFilter: leaderboardData["score_filter"] === null ? null : typeof leaderboardData["score_filter"] === "object" ? scoreFilterFromJson(leaderboardData["score_filter"]) : null,
+        scoreFilterId: leaderboardData["score_filter"] === null ? null : typeof leaderboardData["score_filter"] === "object" ? leaderboardData["score_filter"]["id"] : leaderboardData["score_filter"],
         owner: leaderboardData["owner"] === null ? null : typeof leaderboardData["owner"] === "object" ? osuUserFromJson(leaderboardData["owner"]) : null,
         ownerId: leaderboardData["owner"] === null ? null : typeof leaderboardData["owner"] === "object" ? leaderboardData["owner"]["id"] : leaderboardData["owner"],
         creationTime: new Date(leaderboardData["creation_time"])

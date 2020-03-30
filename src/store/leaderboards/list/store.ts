@@ -6,6 +6,7 @@ import history from "../../../history";
 
 import { Leaderboard } from "../../models/leaderboards/types";
 import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
+import { ScoreFilter } from "../../models/profiles/types";
 
 export class ListStore {
     @observable leaderboards: Leaderboard[] = [];
@@ -30,7 +31,7 @@ export class ListStore {
     }
 
     @action
-    createLeaderboard = async (leaderboardData: Partial<Leaderboard>) => {
+    createLeaderboard = async (leaderboardData: Partial<Leaderboard>, scoreFilterData: Partial<ScoreFilter>) => {
         this.isCreating = true;
 
         try {
@@ -40,21 +41,21 @@ export class ListStore {
                 "name": leaderboardData.name,
                 "description": leaderboardData.description,
                 "allow_past_scores": leaderboardData.allowPastScores,
-                "allowed_beatmap_status": leaderboardData.allowedBeatmapStatus,
-                "oldest_beatmap_date": leaderboardData.oldestBeatmapDate,
-                "newest_beatmap_date": leaderboardData.newestBeatmapDate,
-                "oldest_score_date": leaderboardData.oldestScoreDate,
-                "newest_score_date": leaderboardData.newestScoreDate,
-                "lowest_ar": leaderboardData.lowestAr,
-                "highest_ar": leaderboardData.highestAr,
-                "lowest_od": leaderboardData.lowestOd,
-                "highest_od": leaderboardData.highestOd,
-                "lowest_cs": leaderboardData.lowestCs,
-                "highest_cs": leaderboardData.highestCs,
-                "required_mods": leaderboardData.requiredMods,
-                "disqualified_mods": leaderboardData.disqualifiedMods,
-                "lowest_accuracy": leaderboardData.lowestAccuracy,
-                "highest_accuracy": leaderboardData.highestAccuracy
+                "allowed_beatmap_status": scoreFilterData.allowedBeatmapStatus,
+                "oldest_beatmap_date": scoreFilterData.oldestBeatmapDate,
+                "newest_beatmap_date": scoreFilterData.newestBeatmapDate,
+                "oldest_score_date": scoreFilterData.oldestScoreDate,
+                "newest_score_date": scoreFilterData.newestScoreDate,
+                "lowest_ar": scoreFilterData.lowestAr,
+                "highest_ar": scoreFilterData.highestAr,
+                "lowest_od": scoreFilterData.lowestOd,
+                "highest_od": scoreFilterData.highestOd,
+                "lowest_cs": scoreFilterData.lowestCs,
+                "highest_cs": scoreFilterData.highestCs,
+                "required_mods": scoreFilterData.requiredMods,
+                "disqualified_mods": scoreFilterData.disqualifiedMods,
+                "lowest_accuracy": scoreFilterData.lowestAccuracy,
+                "highest_accuracy": scoreFilterData.highestAccuracy
             }, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")
