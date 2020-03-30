@@ -11,11 +11,12 @@ import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
 import { ScoreSet, ScoreResult } from "../models/profiles/enums";
 
-// This is just the sum(0.95 ** i for i in range(100)) but js is too imprecise for this many tiny additions
-const WEIGHTING_VALUE = 19.881589415593293;
-
 function calculateScoreStyleValue(values: number[]) {
-    return values.reduce((total, value, i) => total + value * 0.95 ** i, 0) / WEIGHTING_VALUE;
+    let weighting_value = 0;
+    for (let i = 0; i < values.length; i++) {
+        weighting_value += 0.95 ** i;
+    }
+    return values.reduce((total, value, i) => total + value * 0.95 ** i, 0) / weighting_value;
 }
 
 function unchokeScore(score: Score) {
