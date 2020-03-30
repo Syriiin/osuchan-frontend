@@ -16,12 +16,12 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [allowPastScores, setAllowPastScores] = useState(true);
-    const [scoreFilter, setScoreFilter] = useState<ScoreFilter | null>(null);
+    const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        listStore.createLeaderboard(gamemode, accessType, name, description, allowPastScores, scoreFilter);
+        listStore.createLeaderboard(gamemode, accessType, name, description, allowPastScores, scoreFilter as ScoreFilter);
 
         props.onClose();
         clearInputs();
@@ -33,13 +33,13 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
         setName("");
         setDescription("");
         setAllowPastScores(true);
-        setScoreFilter(null);
+        setScoreFilter({});
 
         props.onClose();
     }
 
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
-    const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter | null) => setScoreFilter(scoreFilter), []);
+    const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
 
     return (
         <SimpleModal open={props.open} onClose={() => props.onClose()}>

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
-import { Gamemode } from "../../store/models/common/enums";
+import { Gamemode, Mods } from "../../store/models/common/enums";
 import { FormLabel } from "./FormLabel";
 import { FormControl } from "./FormControl";
 import { TextInput } from "./TextInput";
 import { ModsSelect } from "./ModsSelect";
 import { ScoreFilter } from "../../store/models/profiles/types";
 
+function formatDate(date: Date) {
+    return date.toISOString().split("T")[0];
+}
+
 export function ScoreFilterForm(props: ScoreFilterFormProps) {
     const gamemode = props.gamemode;
     const onChange = props.onChange;
+    const value = props.value;
 
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(AllowedBeatmapStatus.RankedOnly);
     const [oldestBeatmapDate, setOldestBeatmapDate] = useState("");
@@ -22,27 +27,27 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
     const [highestOd, setHighestOd] = useState("");
     const [lowestCs, setLowestCs] = useState("");
     const [highestCs, setHighestCs] = useState("");
-    const [requiredMods, setRequiredMods] = useState(0);
-    const [disqualifiedMods, setDisqualifiedMods] = useState(0);
+    const [requiredMods, setRequiredMods] = useState(Mods.None);
+    const [disqualifiedMods, setDisqualifiedMods] = useState(Mods.None);
     const [lowestAccuracy, setLowestAccuracy] = useState("");
     const [highestAccuracy, setHighestAccuracy] = useState("");
 
     useEffect(() => onChange({
-        allowedBeatmapStatus,
-        oldestBeatmapDate: new Date(oldestBeatmapDate),
-        newestBeatmapDate: new Date(newestBeatmapDate),
-        oldestScoreDate: new Date(oldestScoreDate),
-        newestScoreDate: new Date(newestScoreDate),
-        lowestAr: parseFloat(lowestAr),
-        highestAr: parseFloat(highestAr),
-        lowestOd: parseFloat(lowestOd),
-        highestOd: parseFloat(highestOd),
-        lowestCs: parseFloat(lowestCs),
-        highestCs: parseFloat(highestCs),
-        requiredMods,
-        disqualifiedMods,
-        lowestAccuracy: parseFloat(lowestAccuracy),
-        highestAccuracy: parseFloat(highestAccuracy)
+            allowedBeatmapStatus,
+            oldestBeatmapDate: oldestBeatmapDate !== "" ? new Date(oldestBeatmapDate) : null,
+            newestBeatmapDate: newestBeatmapDate !== "" ? new Date(newestBeatmapDate) : null,
+            oldestScoreDate: oldestScoreDate !== "" ? new Date(oldestScoreDate) : null,
+            newestScoreDate: newestScoreDate !== "" ? new Date(newestScoreDate) : null,
+            lowestAr: parseFloat(lowestAr) || null,
+            highestAr: parseFloat(highestAr) || null,
+            lowestOd: parseFloat(lowestOd) || null,
+            highestOd: parseFloat(highestOd) || null,
+            lowestCs: parseFloat(lowestCs) || null,
+            highestCs: parseFloat(highestCs) || null,
+            requiredMods,
+            disqualifiedMods,
+            lowestAccuracy: parseFloat(lowestAccuracy) || null,
+            highestAccuracy: parseFloat(highestAccuracy) || null
     }), [
         onChange,
         allowedBeatmapStatus,
@@ -66,11 +71,11 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
         <>
             {/* Score filters */}
             <h3>Score filters</h3>
-            
+
             {/* Beatmap status */}
             <FormLabel>Allowed Beatmap Status</FormLabel>
             <FormControl>
-                <select value={allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value))}>
+                <select value={value.allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value))}>
                     <option value={AllowedBeatmapStatus.Any}>Ranked or Loved</option>
                     <option value={AllowedBeatmapStatus.RankedOnly}>Ranked only</option>
                     <option value={AllowedBeatmapStatus.LovedOnly}>Loved only</option>
@@ -80,29 +85,29 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
             {/* Dates */}
             <FormLabel>Oldest Beatmap Date</FormLabel>
             <FormControl>
-                <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestBeatmapDate} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                <input type="date" value={value.oldestBeatmapDate ? formatDate(value.oldestBeatmapDate) : ""} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Newest Beatmap Date</FormLabel>
             <FormControl>
-                <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestBeatmapDate} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                <input type="date" value={value.newestBeatmapDate ? formatDate(value.newestBeatmapDate) : ""} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Oldest Score Date</FormLabel>
             <FormControl>
-                <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={oldestScoreDate} onChange={e => setOldestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                <input type="date" value={value.oldestScoreDate ? formatDate(value.oldestScoreDate) : ""} onChange={e => setOldestScoreDate(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Newest Score Date</FormLabel>
             <FormControl>
-                <TextInput pattern="\d{4}-\d{2}-\d{2}( \d{2}:\d{2}( GMT\\+\d{4})?)?" value={newestScoreDate} onChange={e => setNewestScoreDate(e.currentTarget.value)} placeholder="YYYY-MM-DD" />
+                <input type="date" value={value.newestScoreDate ? formatDate(value.newestScoreDate) : ""} onChange={e => setNewestScoreDate(e.currentTarget.value)} />
             </FormControl>
             
             {/* Mods */}
             <FormLabel>Required Mods</FormLabel>
             <FormControl>
-                <ModsSelect gamemode={gamemode} value={requiredMods} onChange={mods => setRequiredMods(mods)} />
+                <ModsSelect gamemode={gamemode} value={value.requiredMods || Mods.None} onChange={mods => setRequiredMods(mods)} />
             </FormControl>
             <FormLabel>Disqualified mods</FormLabel>
             <FormControl>
-                <ModsSelect gamemode={gamemode} value={disqualifiedMods} onChange={mods => setDisqualifiedMods(mods)} />
+                <ModsSelect gamemode={gamemode} value={value.disqualifiedMods || Mods.None} onChange={mods => setDisqualifiedMods(mods)} />
             </FormControl>
             
             {/* Ranges */}
@@ -110,11 +115,11 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
                 <>
                     <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
-                        <TextInput value={lowestCs} onChange={e => setLowestCs(e.currentTarget.value)} />
+                        <TextInput value={value.lowestCs || ""} onChange={e => setLowestCs(e.currentTarget.value)} />
                     </FormControl>
                     <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
-                        <TextInput value={highestCs} onChange={e => setHighestCs(e.currentTarget.value)} />
+                        <TextInput value={value.highestCs || ""} onChange={e => setHighestCs(e.currentTarget.value)} />
                     </FormControl>
                 </>
             )}
@@ -122,29 +127,29 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
                 <>
                     <FormLabel>Min AR</FormLabel>
                     <FormControl>
-                        <TextInput value={lowestAr} onChange={e => setLowestAr(e.currentTarget.value)} />
+                        <TextInput value={value.lowestAr || ""} onChange={e => setLowestAr(e.currentTarget.value)} />
                     </FormControl>
                     <FormLabel>Max AR</FormLabel>
                     <FormControl>
-                        <TextInput value={highestAr} onChange={e => setHighestAr(e.currentTarget.value)} />
+                        <TextInput value={value.highestAr || ""} onChange={e => setHighestAr(e.currentTarget.value)} />
                     </FormControl>
                 </>
             )}
             <FormLabel>Min OD</FormLabel>
             <FormControl>
-                <TextInput value={lowestOd} onChange={e => setLowestOd(e.currentTarget.value)} />
+                <TextInput value={value.lowestOd || ""} onChange={e => setLowestOd(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Max OD</FormLabel>
             <FormControl>
-                <TextInput value={highestOd} onChange={e => setHighestOd(e.currentTarget.value)} />
+                <TextInput value={value.highestOd || ""} onChange={e => setHighestOd(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Min Accuracy (%)</FormLabel>
             <FormControl>
-                <TextInput value={lowestAccuracy} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
+                <TextInput value={value.lowestAccuracy || ""} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Max Accuracy (%)</FormLabel>
             <FormControl>
-                <TextInput value={highestAccuracy} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
+                <TextInput value={value.highestAccuracy || ""} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
             </FormControl>
         </>
     );
@@ -152,6 +157,6 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
 
 interface ScoreFilterFormProps {
     gamemode: Gamemode;
-    value: ScoreFilter | null;
-    onChange: (scoreFilter: ScoreFilter | null) => void;
+    value: Partial<ScoreFilter>;
+    onChange: (scoreFilter: ScoreFilter) => void;
 }

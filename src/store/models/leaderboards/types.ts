@@ -11,7 +11,7 @@ export interface Leaderboard {
     iconUrl: string;
     allowPastScores: boolean | null;
     scoreFilter: ScoreFilter | null;
-    scoreFilterId: number | null;
+    scoreFilterId: number;
     owner: OsuUser | null;
     ownerId: number | null;
     creationTime: Date;

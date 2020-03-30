@@ -33,7 +33,7 @@ export class ListStore {
     }
 
     @action
-    createLeaderboard = async (gamemode: Gamemode, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter | null) => {
+    createLeaderboard = async (gamemode: Gamemode, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
         this.isCreating = true;
 
         try {
@@ -43,21 +43,21 @@ export class ListStore {
                 "name": name,
                 "description": description,
                 "allow_past_scores": allowPastScores,
-                "allowed_beatmap_status": scoreFilter?.allowedBeatmapStatus,
-                "oldest_beatmap_date": scoreFilter?.oldestBeatmapDate,
-                "newest_beatmap_date": scoreFilter?.newestBeatmapDate,
-                "oldest_score_date": scoreFilter?.oldestScoreDate,
-                "newest_score_date": scoreFilter?.newestScoreDate,
-                "lowest_ar": scoreFilter?.lowestAr,
-                "highest_ar": scoreFilter?.highestAr,
-                "lowest_od": scoreFilter?.lowestOd,
-                "highest_od": scoreFilter?.highestOd,
-                "lowest_cs": scoreFilter?.lowestCs,
-                "highest_cs": scoreFilter?.highestCs,
-                "required_mods": scoreFilter?.requiredMods,
-                "disqualified_mods": scoreFilter?.disqualifiedMods,
-                "lowest_accuracy": scoreFilter?.lowestAccuracy,
-                "highest_accuracy": scoreFilter?.highestAccuracy
+                "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
+                "oldest_beatmap_date": scoreFilter.oldestBeatmapDate,
+                "newest_beatmap_date": scoreFilter.newestBeatmapDate,
+                "oldest_score_date": scoreFilter.oldestScoreDate,
+                "newest_score_date": scoreFilter.newestScoreDate,
+                "lowest_ar": scoreFilter.lowestAr,
+                "highest_ar": scoreFilter.highestAr,
+                "lowest_od": scoreFilter.lowestOd,
+                "highest_od": scoreFilter.highestOd,
+                "lowest_cs": scoreFilter.lowestCs,
+                "highest_cs": scoreFilter.highestCs,
+                "required_mods": scoreFilter.requiredMods,
+                "disqualified_mods": scoreFilter.disqualifiedMods,
+                "lowest_accuracy": scoreFilter.lowestAccuracy,
+                "highest_accuracy": scoreFilter.highestAccuracy
             }, {
                 headers: {
                     "X-CSRFToken": Cookies.get("csrftoken")
