@@ -67,7 +67,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
-                <FormLabel>Allow scores prior to member joining</FormLabel>
+                <FormLabel>Allow scores set prior to member joining</FormLabel>
                 <FormControl>
                     <Switch
                         mini
