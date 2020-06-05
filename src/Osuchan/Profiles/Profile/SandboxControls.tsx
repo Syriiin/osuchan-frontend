@@ -52,14 +52,13 @@ function SandboxControls(props: SandboxControlsProps) {
                 <Switch
                     onChange={checked => props.setSandboxMode(checked)}
                     checked={props.sandboxMode}
-                    disabled={props.gamemode !== Gamemode.Standard}
                     offColor={props.theme.colours.currant}
                     onColor={props.theme.colours.mystic}
                 />
             </SandboxModeSwitchContainer>
             <ControlsStatusContainer>
                 <ControlsStatus enabled={props.sandboxMode}>
-                    {props.gamemode === Gamemode.Standard ? props.sandboxMode ? "ENABLED" : "DISABLED" : "UNAVAILABLE"}
+                    {props.sandboxMode ? "ENABLED" : "DISABLED"}
                 </ControlsStatus>
             </ControlsStatusContainer>
             {props.sandboxMode && (

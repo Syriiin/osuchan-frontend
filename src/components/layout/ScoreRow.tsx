@@ -6,11 +6,17 @@ import { Row } from "./Row";
 import { ModIcons } from "./ModIcons";
 import { formatScoreResult } from "../../utils/formatting";
 import { ScoreModal } from "./ScoreModal";
+import { Button } from "../forms/Button";
+
+const ScoreRowWrapper = styled(Row)`
+    padding: 0;
+    align-items: unset;
+`;
 
 const PlayerInfo = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 5px;
+    margin: 5px;
     width: 200px;
 `;
 
@@ -28,6 +34,7 @@ const BeatmapInfo = styled.div`
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    margin: 5px;
 `;
 
 const Title = styled.span`
@@ -43,9 +50,15 @@ const DifficultyName = styled.span`
     color: ${props => props.theme.colours.mango};
 `;
 
+const ModsContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
 const ScoreInfo = styled.div`
     width: 200px;
     display: flex;
+    margin: 5px;
 `;
 
 const AccuracyContainer = styled.div`
@@ -79,6 +92,10 @@ const Result = styled.span`
     font-size: 0.8em;
 `;
 
+const ActionButton = styled(Button)`
+    border-radius: 0 5px 5px 0;
+`;
+
 export function ScoreRow(props: ScoreRowProps) {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
@@ -88,7 +105,7 @@ export function ScoreRow(props: ScoreRowProps) {
 
     return (
         <>
-            <Row hoverable onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}>
+            <ScoreRowWrapper hoverable onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}>
                 {!props.hidePlayerInfo && (
                     <PlayerInfo>
                         <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
@@ -110,7 +127,9 @@ export function ScoreRow(props: ScoreRowProps) {
                         </DifficultyName>
                     </BeatmapInfo>
                 )}
-                <ModIcons small bitwiseMods={score.mods} />
+                <ModsContainer>
+                    <ModIcons small bitwiseMods={score.mods} />
+                </ModsContainer>
                 <ScoreInfo>
                     <AccuracyContainer>
                         <Accuracy>
@@ -127,7 +146,10 @@ export function ScoreRow(props: ScoreRowProps) {
                         </Result>
                     </PerformanceContainer>
                 </ScoreInfo>
-            </Row>
+                {props.actionButton && (
+                    <ActionButton onClick={e => { e.stopPropagation(); props.actionButtonOnClick && props.actionButtonOnClick(); }}>{props.actionButtonText}</ActionButton>
+                )}
+            </ScoreRowWrapper>
             <ScoreModal score={score} open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} />
         </>
     );
@@ -138,4 +160,7 @@ interface ScoreRowProps {
     hidePlayerInfo?: boolean;
     hideBeatmapInfo?: boolean;
     onClickOverride?: () => void;
+    actionButton?: boolean;
+    actionButtonOnClick?: () => void;
+    actionButtonText?: string;
 }

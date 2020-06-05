@@ -12,22 +12,17 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-const SandboxEditTip = styled.span`
-    font-size: 0.5em;
-    font-style: italic;
-    font-weight: 400;
-    color: ${props => props.theme.colours.timber};
-`;
-
 function ProfileScoreRow(props: ProfileScoreRowProps) {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const score = props.score;
+    const sandboxMode = props.sandboxMode;
+    const gamemode = props.gamemode;
 
     return (
         <>
-            <ScoreRow onClickOverride={props.sandboxMode ? () => setEditModalOpen(true) : undefined} score={score} hidePlayerInfo />
-            <ScoreEditModal score={score} gamemode={props.gamemode} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
+            <ScoreRow actionButton={sandboxMode && gamemode === Gamemode.Standard} actionButtonText="Edit" actionButtonOnClick={() => setEditModalOpen(true)} score={score} hidePlayerInfo />
+            <ScoreEditModal score={score} gamemode={gamemode} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
         </>
     );
 }
@@ -45,9 +40,6 @@ function Scores(props: ScoresProps) {
         <ScoresSurface>
             <SurfaceTitle>
                 Scores
-                {props.sandboxMode && (
-                    <SandboxEditTip>TIP: Click on a score to edit it</SandboxEditTip>
-                )}
             </SurfaceTitle>
             {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
                 <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
