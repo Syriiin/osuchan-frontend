@@ -44,8 +44,11 @@ function Scores(props: ScoresProps) {
             {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
                 <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
             ))}
-            {showAllScores || (
+            {props.scores.length <= 5 || showAllScores || (
                 <Button fullWidth onClick={() => setShowAllScores(true)}>Show all scores</Button>
+            )}
+            {props.scores.length === 0 && (
+                <p>No scores found...</p>
             )}
         </ScoresSurface>
     );
