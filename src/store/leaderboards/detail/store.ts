@@ -8,6 +8,7 @@ import { Leaderboard, Membership } from "../../models/leaderboards/types";
 import { Score } from "../../models/profiles/types";
 import { leaderboardFromJson, membershipFromJson } from "../../models/leaderboards/deserialisers";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
+import { unchokeForScoreSet } from "../../../utils/osu";
 
 export class DetailStore {
     @observable leaderboard: Leaderboard | null = null;
@@ -34,7 +35,8 @@ export class DetailStore {
 
             this.leaderboard = leaderboard;
             this.rankings = members;
-            this.topScores = scores;
+            // transform scores into their intended form for abnormal score sets
+            this.topScores = unchokeForScoreSet(scores, leaderboard.scoreSet);
         } catch (error) {
             console.log(error)
         }

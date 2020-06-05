@@ -6,10 +6,10 @@ import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
 import { Leaderboard } from "../models/leaderboards/types";
 import { userStatsFromJson, scoreFromJson } from "../models/profiles/deserialisers";
 import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
-import { getScoreResult, calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty } from "../../utils/osu";
+import { getScoreResult, calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty, unchokeForScoreSet } from "../../utils/osu";
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
-import { ScoreSet, ScoreResult } from "../models/profiles/enums";
+import { ScoreSet } from "../models/profiles/enums";
 
 function calculateScoreStyleValue(values: number[]) {
     let weighting_value = 0;
@@ -17,18 +17,6 @@ function calculateScoreStyleValue(values: number[]) {
         weighting_value += 0.95 ** i;
     }
     return values.reduce((total, value, i) => total + value * 0.95 ** i, 0) / weighting_value;
-}
-
-function unchokeScore(score: Score) {
-    // some slight assumptions here about combo but its close enough
-    score.count300 += score.countMiss;
-    score.countMiss = 0;
-    score.bestCombo = score.beatmap!.maxCombo;
-    score.accuracy = calculateAccuracy(score.gamemode, score.count300, score.count100, score.count50, score.countMiss);
-    score.pp = score.nochokePp;
-    score.result = ScoreResult.Perfect;
-
-    return score;
 }
 
 export class UsersStore {
@@ -142,14 +130,8 @@ export class UsersStore {
             });
             let scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            switch (scoreSet) {
-                case ScoreSet.AlwaysFullCombo:
-                    scores = scores.map(score => unchokeScore(score));
-                    break;
-                case ScoreSet.NeverChoke:
-                    scores = scores.map(score => score.result & ScoreResult.Choke ? unchokeScore(score) : score);
-                    break;
-            }
+            // transform scores into their intended form for abnormal score sets
+            scores = unchokeForScoreSet(scores, scoreSet);
 
             this.sandboxScores.replace(scores);
         } catch (error) {

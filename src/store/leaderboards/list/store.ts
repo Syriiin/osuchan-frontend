@@ -9,6 +9,7 @@ import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
 import { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
+import { ScoreSet } from "../../models/profiles/enums";
 
 export class ListStore {
     @observable leaderboards: Leaderboard[] = [];
@@ -33,12 +34,13 @@ export class ListStore {
     }
 
     @action
-    createLeaderboard = async (gamemode: Gamemode, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
+    createLeaderboard = async (gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
         this.isCreating = true;
 
         try {
             const leaderboardResponse = await axios.post(`/api/leaderboards/leaderboards`, {
                 "gamemode": gamemode,
+                "score_set": scoreSet,
                 "access_type": accessType,
                 "name": name,
                 "description": description,

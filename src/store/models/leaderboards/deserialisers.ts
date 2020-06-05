@@ -5,6 +5,7 @@ export function leaderboardFromJson(leaderboardData: any): Leaderboard {
     return {
         id: leaderboardData["id"],
         gamemode: leaderboardData["gamemode"],
+        scoreSet: leaderboardData["score_set"],
         accessType: leaderboardData["access_type"],
         name: leaderboardData["name"],
         description: leaderboardData["description"],

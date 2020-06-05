@@ -13,7 +13,7 @@ import TopScores from "./TopScores";
 import Rankings from "./Rankings";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../../store/models/common/enums";
-import { AllowedBeatmapStatus } from "../../../store/models/profiles/enums";
+import { AllowedBeatmapStatus, ScoreSet } from "../../../store/models/profiles/enums";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -30,6 +30,10 @@ const Owner = styled(Link)`
 const AccessType = styled.div`
     margin-bottom: 5px;
     font-size: 0.8em;
+`;
+
+const ScoreSetLabel = styled.div`
+
 `;
 
 const Description = styled.div`
@@ -269,6 +273,12 @@ function LeaderboardHome(props: LeaderboardHomeProps) {
                                     {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                                 </AccessType>
                             </>
+                        )}
+                        {leaderboard.scoreSet !== ScoreSet.Normal && (
+                            <ScoreSetLabel>
+                                {leaderboard.scoreSet === ScoreSet.NeverChoke && "Never Choke"}
+                                {leaderboard.scoreSet === ScoreSet.AlwaysFullCombo && "Always Full Combo"}
+                            </ScoreSetLabel>
                         )}
                         <Description>{leaderboard.description}</Description>
                         {/* Allow past scores */}

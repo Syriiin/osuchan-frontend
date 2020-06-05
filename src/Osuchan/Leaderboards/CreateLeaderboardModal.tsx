@@ -6,12 +6,14 @@ import { StoreContext } from "../../store";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
+import { ScoreSet } from "../../store/models/profiles/enums";
 
 function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);
+    const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
     const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -21,7 +23,7 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        listStore.createLeaderboard(gamemode, accessType, name, description, allowPastScores, scoreFilter as ScoreFilter);
+        listStore.createLeaderboard(gamemode, scoreSet, accessType, name, description, allowPastScores, scoreFilter as ScoreFilter);
 
         props.onClose();
         clearInputs();
@@ -41,6 +43,15 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
     const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
 
+    const handleGamemodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const mode = parseInt(e.target.value)
+        setGamemode(mode);
+        if (mode !== Gamemode.Standard) {
+            // Only normal score set is supported for non-standard gamemodes since other depend on choke support
+            setScoreSet(ScoreSet.Normal);
+        }
+    }
+
     return (
         <SimpleModal open={props.open} onClose={() => props.onClose()}>
             <SimpleModalTitle>Create Leaderboard</SimpleModalTitle>
@@ -50,11 +61,19 @@ function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
                 <TextInput fullWidth required value={name} onChange={e => setName(e.currentTarget.value)} />
                 <FormLabel>Gamemode</FormLabel>
                 <FormControl>
-                    <select value={gamemode} onChange={e => setGamemode(parseInt(e.target.value))}>
+                    <select value={gamemode} onChange={handleGamemodeChange}>
                         <option value={Gamemode.Standard}>osu!</option>
                         <option value={Gamemode.Taiko}>osu!taiko</option>
                         <option value={Gamemode.Catch}>osu!catch</option>
                         <option value={Gamemode.Mania}>osu!mania</option>
+                    </select>
+                </FormControl>
+                <FormLabel>Score Set</FormLabel>
+                <FormControl>
+                    <select value={scoreSet} onChange={e => setScoreSet(parseInt(e.target.value))} disabled={gamemode !== Gamemode.Standard}>
+                        <option value={ScoreSet.Normal}>Normal</option>
+                        <option value={ScoreSet.NeverChoke}>Never Choke</option>
+                        {/* <option value={ScoreSet.AlwaysFullCombo}>Always FC</option> */}
                     </select>
                 </FormControl>
                 <FormLabel>Type</FormLabel>
