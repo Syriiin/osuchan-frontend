@@ -40,7 +40,7 @@ export function BasicModal(props: BasicModalProps) {
     }
 
     return (
-        <ModalBase ref={modalBaseEl} open={props.open} onClick={handleCloseClick}>
+        <ModalBase ref={modalBaseEl} open={props.open} onMouseDown={handleCloseClick}>
             <ModalBody>
                 {props.children}
             </ModalBody>
