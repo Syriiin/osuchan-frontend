@@ -115,11 +115,11 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
                 <>
                     <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
-                        <TextInput value={value.lowestCs || ""} onChange={e => setLowestCs(e.currentTarget.value)} />
+                        <TextInput type="number" step={gamemode === Gamemode.Mania ? "1" : "0.1"} min={gamemode === Gamemode.Mania ? "1" : "0"} max={gamemode === Gamemode.Mania ? "10" : "11"} value={value.lowestCs || ""} onChange={e => setLowestCs(e.currentTarget.value)} />
                     </FormControl>
                     <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
-                        <TextInput value={value.highestCs || ""} onChange={e => setHighestCs(e.currentTarget.value)} />
+                        <TextInput type="number" step={gamemode === Gamemode.Mania ? "1" : "0.1"} min={gamemode === Gamemode.Mania ? "1" : "0"} max={gamemode === Gamemode.Mania ? "10" : "11"} value={value.highestCs || ""} onChange={e => setHighestCs(e.currentTarget.value)} />
                     </FormControl>
                 </>
             )}
@@ -127,29 +127,29 @@ export function ScoreFilterForm(props: ScoreFilterFormProps) {
                 <>
                     <FormLabel>Min AR</FormLabel>
                     <FormControl>
-                        <TextInput value={value.lowestAr || ""} onChange={e => setLowestAr(e.currentTarget.value)} />
+                        <TextInput type="number" step="0.1" min="-5" max="13" value={value.lowestAr || ""} onChange={e => setLowestAr(e.currentTarget.value)} />
                     </FormControl>
                     <FormLabel>Max AR</FormLabel>
                     <FormControl>
-                        <TextInput value={value.highestAr || ""} onChange={e => setHighestAr(e.currentTarget.value)} />
+                        <TextInput type="number" step="0.1" min="-5" max="13" value={value.highestAr || ""} onChange={e => setHighestAr(e.currentTarget.value)} />
                     </FormControl>
                 </>
             )}
             <FormLabel>Min OD</FormLabel>
             <FormControl>
-                <TextInput value={value.lowestOd || ""} onChange={e => setLowestOd(e.currentTarget.value)} />
+                <TextInput type="number" step="0.1" min="-4.5" max="13.5" value={value.lowestOd || ""} onChange={e => setLowestOd(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Max OD</FormLabel>
             <FormControl>
-                <TextInput value={value.highestOd || ""} onChange={e => setHighestOd(e.currentTarget.value)} />
+                <TextInput type="number" step="0.1" min="-4.5" max="13.5" value={value.highestOd || ""} onChange={e => setHighestOd(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Min Accuracy (%)</FormLabel>
             <FormControl>
-                <TextInput value={value.lowestAccuracy || ""} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
+                <TextInput type="number" step="0.1" min="0" max="100" value={value.lowestAccuracy || ""} onChange={e => setLowestAccuracy(e.currentTarget.value)} />
             </FormControl>
             <FormLabel>Max Accuracy (%)</FormLabel>
             <FormControl>
-                <TextInput value={value.highestAccuracy || ""} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
+                <TextInput type="number" step="0.1" min="0" max="100" value={value.highestAccuracy || ""} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
             </FormControl>
         </>
     );
