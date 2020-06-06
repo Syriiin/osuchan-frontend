@@ -12,7 +12,7 @@ function Home() {
             </p>
 
             <p>
-                If you run into any bugs, please report them preferrably as a github issue on <a href="https://github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+                If you run into any bugs, please report them preferably as a github issue on <a href="https://github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
             </p>
 
             <br />
@@ -66,7 +66,7 @@ function Home() {
                 <em>Why didn't my score submit?</em>
             </h3>
             <p>
-                Score submissions work by checking your top 100 pp scores, as well as you last 50 plays (including fails/retries) for osu!standard.
+                Score submissions work by checking your top 100 pp scores, as well as your last 50 plays (including fails/retries) for osu!standard.
                 <br />
                 Because of this, if you wait too long after making a score before checking osu!chan, the play will not be retrieved.
                 <br />
@@ -88,7 +88,7 @@ function Home() {
                 <em>Why is the pp for some of my scores different to the osu! website?</em>
             </h3>
             <p>
-                As mentioned in the previous answer, some scores need to have their pp calculted by osu!chan rather than getting the data from osu!.
+                As mentioned in the previous answer, some scores need to have their pp calculated by osu!chan rather than getting the data from osu!.
                 <br />
                 osu!chan uses <a href="https://github.com/Francesco149/oppai-ng">oppai</a> to calculate pp for these scores, which can sometimes have slight differences to official pp values.
             </p>
