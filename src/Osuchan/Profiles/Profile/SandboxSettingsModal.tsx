@@ -30,7 +30,7 @@ function SandboxSettingsModal(props: SandboxSettingsModalProps) {
             <form onSubmit={handleSandboxSettingsSubmit}>
                 <FormLabel>Score Set</FormLabel>
                 <FormControl>
-                    <select value={scoreSet} onChange={e => setScoreSet(parseInt(e.target.value))}>
+                    <select value={scoreSet} onChange={e => setScoreSet(parseInt(e.target.value))} disabled={props.gamemode !== Gamemode.Standard}>
                         <option value={ScoreSet.Normal}>Normal</option>
                         <option value={ScoreSet.NeverChoke}>Never Choke</option>
                         {/* <option value={ScoreSet.AlwaysFullCombo}>Always FC</option> */}
