@@ -16,6 +16,8 @@ export class UserStore {
 
     @action    
     loadUser = async (leaderboardId: number, userId: number) => {
+        this.leaderboard = null;
+        this.membership = null;
         this.isLoading = true;
         
         try {
@@ -28,6 +30,7 @@ export class UserStore {
             const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
+            this.leaderboard = leaderboard;
             this.membership = membership;
             // transform scores into their intended form for abnormal score sets
             this.scores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));

@@ -16,6 +16,8 @@ export class BeatmapStore {
 
     @action
     loadBeatmap = async (leaderboardId: number, beatmapId: number) => {
+        this.leaderboard = null;
+        this.beatmap = null;
         this.isLoading = true;
 
         try {
@@ -28,6 +30,7 @@ export class BeatmapStore {
             const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/beatmaps/${beatmapId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
+            this.leaderboard = leaderboard;
             this.beatmap = beatmap;
             // transform scores into their intended form for abnormal score sets
             this.scores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));

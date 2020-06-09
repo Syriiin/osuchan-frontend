@@ -63,13 +63,11 @@ export class UsersStore {
 
     @action
     loadUser = async (userString: string, gamemode: Gamemode) => {
-        this.isLoading = true;
-
-        // reset values for loading new user
         this.currentUserStats = null;
         this.scores.clear();
         this.leaderboards.clear();
         this.sandboxScores.clear();
+        this.isLoading = true;
 
         try {
             const userStatsResponse = await axios.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {

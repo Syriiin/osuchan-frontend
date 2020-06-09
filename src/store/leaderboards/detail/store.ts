@@ -22,6 +22,8 @@ export class DetailStore {
     @action
     loadLeaderboard = async (leaderboardId: number) => {
         this.leaderboard = null;
+        this.rankings.clear();
+        this.topScores.clear();
         this.isLoading = true;
 
         try {
