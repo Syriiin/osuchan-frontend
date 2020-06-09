@@ -1,6 +1,7 @@
-import axios from "axios";
 import { observable, action, computed } from "mobx";
 import ojsama from "ojsama";
+
+import http from "../../http";
 
 import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
 import { Leaderboard } from "../models/leaderboards/types";
@@ -70,7 +71,7 @@ export class UsersStore {
         this.isLoading = true;
 
         try {
-            const userStatsResponse = await axios.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {
+            const userStatsResponse = await http.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {
                 params: {
                     "user_id_type": "username"
                 }
@@ -79,10 +80,10 @@ export class UsersStore {
 
             const userId = userStats.osuUserId;
 
-            const scoresResponse = await axios.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
+            const scoresResponse = await http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            const leaderboardsResponse = await axios.get(`/api/leaderboards/leaderboards`, {
+            const leaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
                 params: {
                     "user_id": userId,
                     "gamemode": gamemode
@@ -106,7 +107,7 @@ export class UsersStore {
         this.isLoadingSandboxScores = true;
 
         try {
-            const scoresResponse = await axios.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
+            const scoresResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
                 params: {
                     "score_set": scoreSet,
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -197,7 +198,7 @@ export class UsersStore {
         }
 
         // Fetch beatmap from server
-        const response = await axios.get(`/beatmapfiles/${beatmapId}`);
+        const response = await http.get(`/beatmapfiles/${beatmapId}`);
         const beatmapData = response.data;
 
         // Save to idb cache

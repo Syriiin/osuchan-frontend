@@ -1,6 +1,6 @@
-import axios from "axios";
-import Cookies from "js-cookie";
 import { observable, action } from "mobx";
+
+import http from "../../http";
 
 import { OsuUser, ScoreFilter } from "../models/profiles/types";
 import { Invite, Membership } from "../models/leaderboards/types";
@@ -33,16 +33,16 @@ export class MeStore {
         this.isLoading = true;
 
         try {
-            const meResponse = await axios.get("/osuauth/me");
+            const meResponse = await http.get("/osuauth/me");
             const osuUser: OsuUser = osuUserFromJson(meResponse.data);
 
-            const membershipsResponse = await axios.get(`/api/profiles/users/${osuUser.id}/memberships`);
+            const membershipsResponse = await http.get(`/api/profiles/users/${osuUser.id}/memberships`);
             const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
             
-            const invitesResponse = await axios.get(`/api/profiles/users/${osuUser.id}/invites`);
+            const invitesResponse = await http.get(`/api/profiles/users/${osuUser.id}/invites`);
             const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
-            const scoreFilterPresetsResponse = await axios.get(`/osuauth/me/scorefilterpresets`);
+            const scoreFilterPresetsResponse = await http.get(`/osuauth/me/scorefilterpresets`);
             const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
             this.osuUser = osuUser;
@@ -61,12 +61,8 @@ export class MeStore {
         this.isAddingScores = true;
 
         try {
-            await axios.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
+            await http.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
                 "beatmap_ids": beatmapIds
-            }, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
             });
         } catch (error) {
             console.log(error);
@@ -80,11 +76,7 @@ export class MeStore {
         this.isJoiningLeaderboard = true;
 
         try {
-            const membershipResponse = await axios.post(`/api/leaderboards/leaderboards/${leaderboardId}/members`, {}, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            });
+            const membershipResponse = await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
             const membership = membershipFromJson(membershipResponse.data);
             
             this.memberships.push(membership);
@@ -100,11 +92,7 @@ export class MeStore {
         this.isLeavingLeaderboard = true;
 
         try {
-            await axios.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.osuUser!.id}`, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            });
+            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.osuUser!.id}`);
 
             this.memberships.replace(this.memberships.filter(m => m.leaderboardId !== leaderboardId));
         } catch (error) {
@@ -119,7 +107,7 @@ export class MeStore {
         this.isCreatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await axios.post(`/osuauth/me/scorefilterpresets`, {
+            const scoreFilterPresetResponse = await http.post(`/osuauth/me/scorefilterpresets`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -137,10 +125,6 @@ export class MeStore {
                     "disqualified_mods": scoreFilter.disqualifiedMods,
                     "lowest_accuracy": scoreFilter.lowestAccuracy,
                     "highest_accuracy": scoreFilter.highestAccuracy
-                }
-            }, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
                 }
             });
 
@@ -159,7 +143,7 @@ export class MeStore {
         this.isUpdatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await axios.put(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
+            const scoreFilterPresetResponse = await http.put(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -178,10 +162,6 @@ export class MeStore {
                     "lowest_accuracy": scoreFilter.lowestAccuracy,
                     "highest_accuracy": scoreFilter.highestAccuracy
                 }
-            }, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
             });
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
@@ -199,11 +179,7 @@ export class MeStore {
         this.isDeletingScoreFilterPreset = true;
 
         try {
-            await axios.delete(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            });
+            await http.delete(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`);
 
             this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
         } catch (error) {

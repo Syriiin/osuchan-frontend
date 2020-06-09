@@ -1,8 +1,7 @@
-import axios from "axios";
-import Cookies from "js-cookie";
 import { observable, action } from "mobx";
 
 import history from "../../../history";
+import http from "../../../http";
 
 import { Leaderboard } from "../../models/leaderboards/types";
 import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
@@ -23,7 +22,7 @@ export class ListStore {
         this.isLoading = true;
 
         try {
-            const leaderboardsResponse = await axios.get(`/api/leaderboards/leaderboards`);
+            const leaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`);
             const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
 
             this.leaderboards.replace(leaderboards);
@@ -39,7 +38,7 @@ export class ListStore {
         this.isCreating = true;
 
         try {
-            const leaderboardResponse = await axios.post(`/api/leaderboards/leaderboards`, {
+            const leaderboardResponse = await http.post(`/api/leaderboards/leaderboards`, {
                 "gamemode": gamemode,
                 "score_set": scoreSet,
                 "access_type": accessType,
@@ -61,10 +60,6 @@ export class ListStore {
                 "disqualified_mods": scoreFilter.disqualifiedMods,
                 "lowest_accuracy": scoreFilter.lowestAccuracy,
                 "highest_accuracy": scoreFilter.highestAccuracy
-            }, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
             });
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 

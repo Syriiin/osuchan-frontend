@@ -1,5 +1,6 @@
-import axios from "axios";
 import { observable, action } from "mobx";
+
+import http from "../../../http";
 
 import { Score } from "../../models/profiles/types";
 import { Membership, Leaderboard } from "../../models/leaderboards/types";
@@ -21,13 +22,13 @@ export class UserStore {
         this.isLoading = true;
         
         try {
-            const leaderboardResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
+            const leaderboardResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
         
-            const membershipResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}`);
+            const membershipResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}`);
             const membership: Membership = membershipFromJson(membershipResponse.data);
             
-            const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}/scores`);
+            const scoresResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}/members/${userId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             this.leaderboard = leaderboard;

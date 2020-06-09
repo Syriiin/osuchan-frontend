@@ -1,5 +1,6 @@
-import axios from "axios";
 import { observable, action } from "mobx";
+
+import http from "../../../http";
 
 import { Score, Beatmap } from "../../models/profiles/types";
 import { beatmapFromJson, scoreFromJson } from "../../models/profiles/deserialisers";
@@ -21,13 +22,13 @@ export class BeatmapStore {
         this.isLoading = true;
 
         try {
-            const leaderboardResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
+            const leaderboardResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
             
-            const beatmapResponse = await axios.get(`/api/profiles/beatmaps/${beatmapId}`);
+            const beatmapResponse = await http.get(`/api/profiles/beatmaps/${beatmapId}`);
             const beatmap: Beatmap = beatmapFromJson(beatmapResponse.data);
             
-            const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/beatmaps/${beatmapId}/scores`);
+            const scoresResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}/beatmaps/${beatmapId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             this.leaderboard = leaderboard;

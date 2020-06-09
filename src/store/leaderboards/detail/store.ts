@@ -1,8 +1,7 @@
-import axios from "axios";
-import Cookies from "js-cookie";
 import { observable, action } from "mobx";
 
 import history from "../../../history";
+import http from "../../../http";
 
 import { Leaderboard, Membership } from "../../models/leaderboards/types";
 import { Score } from "../../models/profiles/types";
@@ -27,13 +26,13 @@ export class DetailStore {
         this.isLoading = true;
 
         try {
-            const leaderboardResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
+            const leaderboardResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}`);
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
             
-            const membersResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
+            const membersResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
             const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
             
-            const scoresResponse = await axios.get(`/api/leaderboards/leaderboards/${leaderboardId}/scores`);
+            const scoresResponse = await http.get(`/api/leaderboards/leaderboards/${leaderboardId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             this.leaderboard = leaderboard;
@@ -52,11 +51,7 @@ export class DetailStore {
         this.isDeleting = true;
 
         try {
-            await axios.delete(`/api/leaderboards/leaderboards/${leaderboardId}`, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            });
+            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}`);
 
             // Navigate to leaderboard ist page after deletion
             history.push("/leaderboards");
@@ -76,12 +71,8 @@ export class DetailStore {
         this.isInviting = true;
 
         try {
-            await axios.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
+            await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
                 "user_ids": userIds
-            }, {
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
             });
         } catch (error) {
             console.log(error);
