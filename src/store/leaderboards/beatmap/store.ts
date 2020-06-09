@@ -10,8 +10,9 @@ import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
 export class BeatmapStore {
     @observable leaderboard: Leaderboard | null = null;
     @observable beatmap: Beatmap | null = null;
-    @observable scores: Score[] = [];
     @observable isLoading: boolean = false;
+
+    readonly scores = observable<Score>([]);
 
     @action
     loadBeatmap = async (leaderboardId: number, beatmapId: number) => {
@@ -29,7 +30,7 @@ export class BeatmapStore {
 
             this.beatmap = beatmap;
             // transform scores into their intended form for abnormal score sets
-            this.scores = unchokeForScoreSet(scores, leaderboard.scoreSet);
+            this.scores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
         } catch (error) {
             console.log(error);
         }

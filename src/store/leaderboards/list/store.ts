@@ -12,20 +12,21 @@ import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 import { ScoreSet } from "../../models/profiles/enums";
 
 export class ListStore {
-    @observable leaderboards: Leaderboard[] = [];
     @observable isLoading: boolean = false;
     @observable isCreating: boolean = false;
 
+    readonly leaderboards = observable<Leaderboard>([]);
+
     @action
     loadLeaderboards = async () => {
-        this.leaderboards = [];
+        this.leaderboards.clear();
         this.isLoading = true;
 
         try {
             const leaderboardsResponse = await axios.get(`/api/leaderboards/leaderboards`);
             const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
 
-            this.leaderboards = leaderboards;
+            this.leaderboards.replace(leaderboards);
         } catch (error) {
             console.log(error)
         }

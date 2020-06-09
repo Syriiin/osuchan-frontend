@@ -10,8 +10,9 @@ import { unchokeForScoreSet } from "../../../utils/osu";
 export class UserStore {
     @observable leaderboard: Leaderboard | null = null;
     @observable membership: Membership | null = null;
-    @observable scores: Score[] = [];
     @observable isLoading: boolean = false;
+
+    readonly scores = observable<Score>([]);
 
     @action    
     loadUser = async (leaderboardId: number, userId: number) => {
@@ -29,7 +30,7 @@ export class UserStore {
 
             this.membership = membership;
             // transform scores into their intended form for abnormal score sets
-            this.scores = unchokeForScoreSet(scores, leaderboard.scoreSet);
+            this.scores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
         } catch (error) {
             console.log(error);
         }

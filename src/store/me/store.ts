@@ -12,8 +12,6 @@ import { scoreFilterPresetFromJson } from "../models/users/deserialisers";
 
 export class MeStore {
     @observable osuUser: OsuUser | null = null;
-    @observable memberships: Membership[] = [];
-    @observable invites: Invite[] = [];
     @observable isLoading: boolean = false;
     @observable isJoiningLeaderboard: boolean = false;
     @observable isAddingScores: boolean = false;
@@ -22,13 +20,15 @@ export class MeStore {
     @observable isUpdatingScoreFilterPreset: boolean = false;
     @observable isDeletingScoreFilterPreset: boolean = false;
 
+    readonly memberships = observable<Membership>([]);
+    readonly invites = observable<Invite>([]);
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
 
     @action
     loadMe = async () => {
         this.osuUser = null;
-        this.memberships = [];
-        this.invites = [];
+        this.memberships.clear();
+        this.invites.clear();
         this.scoreFilterPresets.clear();
         this.isLoading = true;
 
@@ -46,8 +46,8 @@ export class MeStore {
             const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
             this.osuUser = osuUser;
-            this.memberships = memberships;
-            this.invites = invites;
+            this.memberships.replace(memberships);
+            this.invites.replace(invites);
             this.scoreFilterPresets.replace(scoreFilterPresets);
         } catch (error) {
             console.log(error)
@@ -106,7 +106,7 @@ export class MeStore {
                 }
             });
 
-            this.memberships = this.memberships.filter(m => m.leaderboardId !== leaderboardId);
+            this.memberships.replace(this.memberships.filter(m => m.leaderboardId !== leaderboardId));
         } catch (error) {
             console.log(error);
         }

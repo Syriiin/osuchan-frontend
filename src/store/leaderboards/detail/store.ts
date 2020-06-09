@@ -12,11 +12,12 @@ import { unchokeForScoreSet } from "../../../utils/osu";
 
 export class DetailStore {
     @observable leaderboard: Leaderboard | null = null;
-    @observable rankings: Membership[] = [];
-    @observable topScores: Score[] = [];
     @observable isLoading: boolean = false;
     @observable isDeleting: boolean = false;
     @observable isInviting: boolean = false;
+
+    readonly rankings = observable<Membership>([]);
+    readonly topScores = observable<Score>([]);
 
     @action
     loadLeaderboard = async (leaderboardId: number) => {
@@ -34,9 +35,9 @@ export class DetailStore {
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             this.leaderboard = leaderboard;
-            this.rankings = members;
+            this.rankings.replace(members);
             // transform scores into their intended form for abnormal score sets
-            this.topScores = unchokeForScoreSet(scores, leaderboard.scoreSet);
+            this.topScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
         } catch (error) {
             console.log(error)
         }
@@ -59,8 +60,8 @@ export class DetailStore {
             history.push("/leaderboards");
 
             this.leaderboard = null;
-            this.rankings = [];
-            this.topScores = [];
+            this.rankings.clear();
+            this.topScores.clear();
         } catch (error) {
             console.log(error);
         }
