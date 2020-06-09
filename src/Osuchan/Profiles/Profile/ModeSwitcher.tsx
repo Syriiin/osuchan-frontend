@@ -37,7 +37,7 @@ interface ModeLinkProps {
     active?: boolean;
 }
 
-function ModeSwitcher(props: ModeSwitcherProps) {
+const ModeSwitcher = (props: ModeSwitcherProps) => {
     return (
         <ModeSwitcherSurface>
             <ModeSwitcherContainer>

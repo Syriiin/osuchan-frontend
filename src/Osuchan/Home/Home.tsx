@@ -1,6 +1,6 @@
 import React from "react";
 
-function Home() {
+const Home = () => {
     return (
         <>
             <h1>Welcome to the osu!chan!</h1>

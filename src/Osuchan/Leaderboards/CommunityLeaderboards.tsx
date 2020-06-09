@@ -14,7 +14,7 @@ const CommunityLeaderboardsSurface = styled(Surface)`
     padding: 20px;
 `;
 
-function CommunityLeaderboards(props: CommunityLeaderboardsProps) {
+const CommunityLeaderboards = (props: CommunityLeaderboardsProps) => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 

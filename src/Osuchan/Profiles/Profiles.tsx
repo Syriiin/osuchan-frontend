@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import Profile from "./Profile/Profile";
 
-function Profiles() {
+const Profiles = () => {
     return (
         <Switch>
             <Route exact path="/users/:userString" component={Profile} />

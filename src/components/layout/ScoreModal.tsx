@@ -94,7 +94,7 @@ const NochokePerformance = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
-export function ScoreModal(props: ScoreModalProps) {
+export const ScoreModal = (props: ScoreModalProps) => {
     const score = props.score;
     const beatmap = score.beatmap!;
 

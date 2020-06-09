@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from "react-router";
 import LeaderboardHome from "./LeaderboardHome";
 import LeaderboardMember from "./LeaderboardMember/LeaderboardMember";
 
-function Leaderboard() {
+const Leaderboard = () => {
     return (
         <Switch>
             <Route exact path="/leaderboards/:leaderboardId" component={LeaderboardHome} />

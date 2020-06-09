@@ -9,7 +9,7 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-function Scores(props: ScoresProps) {
+const Scores = (props: ScoresProps) => {
     return (
         <ScoresSurface>
             <SurfaceTitle>Scores</SurfaceTitle>

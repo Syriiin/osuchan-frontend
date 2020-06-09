@@ -21,7 +21,7 @@ const ContentWrapper = styled.main`
     margin: 20px 50px;
 `;
 
-function Osuchan() {
+const Osuchan = () => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     

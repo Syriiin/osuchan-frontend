@@ -8,7 +8,7 @@ import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
 
-function CreateLeaderboardModal(props: CreateLeaderboardModalProps) {
+const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
 

@@ -5,7 +5,7 @@ import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Butto
 import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
 
-function ScoreEditModal(props: ScoreEditModalProps) {
+const ScoreEditModal = (props: ScoreEditModalProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
     

@@ -7,7 +7,7 @@ const FooterWrapper = styled.footer`
     color: ${props => props.theme.colours.currant};
 `;
 
-function Footer() {
+const Footer = () => {
     return (
         <FooterWrapper>
             <span>&copy; osu!chan 2019 | Team osu!chan</span>

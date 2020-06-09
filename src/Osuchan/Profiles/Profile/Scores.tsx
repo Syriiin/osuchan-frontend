@@ -12,7 +12,7 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-function ProfileScoreRow(props: ProfileScoreRowProps) {
+const ProfileScoreRow = (props: ProfileScoreRowProps) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const score = props.score;
@@ -33,7 +33,7 @@ interface ProfileScoreRowProps {
     sandboxMode: boolean;
 }
 
-function Scores(props: ScoresProps) {
+const Scores = (props: ScoresProps) => {
     const [showAllScores, setShowAllScores] = useState(false);
 
     return (

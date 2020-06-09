@@ -42,7 +42,7 @@ interface ControlsStatusProps {
     enabled: boolean;
 }
 
-function SandboxControls(props: SandboxControlsProps) {
+const SandboxControls = (props: SandboxControlsProps) => {
     const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] = useState(false);
 
     return (

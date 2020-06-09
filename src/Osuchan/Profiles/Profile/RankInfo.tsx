@@ -25,7 +25,7 @@ const InactiveStatus = styled.span`
     font-weight: bolder;
 `;
 
-function RankInfo(props: RankInfoProps) {
+const RankInfo = (props: RankInfoProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 

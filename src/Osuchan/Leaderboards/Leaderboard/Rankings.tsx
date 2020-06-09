@@ -49,7 +49,7 @@ const ScoreCount = styled.span`
     font-size: 0.8em;
 `;
 
-function RankingRow(props: RankingRowProps) {
+const RankingRow = (props: RankingRowProps) => {
     const membership = props.membership;
 
     return (
@@ -78,7 +78,7 @@ interface RankingRowProps {
     rank: number;
 }
 
-function Rankings(props: TopScoresProps) {
+const Rankings = (props: TopScoresProps) => {
     return (
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>

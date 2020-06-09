@@ -30,7 +30,7 @@ const ModalBody = styled.div`
     background-color: ${props => props.theme.colours.midground};
 `;
 
-export function BasicModal(props: BasicModalProps) {
+export const BasicModal = (props: BasicModalProps) => {
     const modalBaseEl = useRef(null);
 
     const handleCloseClick = (e: React.MouseEvent) => {

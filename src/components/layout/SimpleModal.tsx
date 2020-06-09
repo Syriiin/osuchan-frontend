@@ -11,7 +11,7 @@ export const SimpleModalTitle = styled.h1`
     margin: 0 0 20px 0;
 `;
 
-export function SimpleModal(props: SimpleModalProps) {
+export const SimpleModal = (props: SimpleModalProps) => {
     return (
         <BasicModal open={props.open} onClose={props.onClose}>
             <SimpleModalWrapper>

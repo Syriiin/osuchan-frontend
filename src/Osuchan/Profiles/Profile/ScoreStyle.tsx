@@ -13,7 +13,7 @@ const ScoreStyleSurface = styled(Surface)`
     grid-area: scorestyle;
 `;
 
-function ScoreStyle(props: ScoreStyleProps) {
+const ScoreStyle = (props: ScoreStyleProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
     const userStats = usersStore.currentUserStats!;

@@ -27,7 +27,7 @@ const styles: StylesConfig = {
     },
 }
 
-export function ModsSelect(props: ModsSelectProps) {
+export const ModsSelect = (props: ModsSelectProps) => {
     const selectModOptions = [
         { value: 8, label: "HD" },
         { value: 64, label: "DT" },

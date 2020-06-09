@@ -10,7 +10,7 @@ const TopScoresSurface = styled(Surface)`
     padding: 20px;
 `;
 
-function TopScores(props: TopScoresProps) {
+const TopScores = (props: TopScoresProps) => {
     return (
         <TopScoresSurface>
             <SurfaceTitle>Top Scores</SurfaceTitle>

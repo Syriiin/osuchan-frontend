@@ -7,7 +7,7 @@ import CommunityLeaderboards from "./CommunityLeaderboards";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { LoadingPage } from "../../components";
 
-function LeaderboardList() {
+const LeaderboardList = () => {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
 

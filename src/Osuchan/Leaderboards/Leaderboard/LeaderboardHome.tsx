@@ -56,7 +56,7 @@ const AllowPastScores = styled.div`
     color: ${props => props.theme.colours.timber};
 `;
 
-function LeaderboardFilters(props: LeaderboardFiltersProps) {
+const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
     const scoreFilter = props.scoreFilter;
     const gamemode = props.gamemode;
 
@@ -130,7 +130,7 @@ interface LeaderboardFiltersProps {
     gamemode: Gamemode;
 }
 
-function LeaderboardButtons(props: LeaderboardButtonsProps) {
+const LeaderboardButtons = (props: LeaderboardButtonsProps) => {
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
@@ -224,7 +224,7 @@ interface LeaderboardButtonsProps {
     meOsuUser: OsuUser;
 }
 
-function LeaderboardHome(props: LeaderboardHomeProps) {
+const LeaderboardHome = (props: LeaderboardHomeProps) => {
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;

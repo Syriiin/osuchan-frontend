@@ -30,7 +30,7 @@ const ProfileGrid = styled.div`
         "trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses";
 `;
 
-function Profile(props: ProfileProps) {
+const Profile = (props: ProfileProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 

@@ -10,7 +10,7 @@ const LeaderboardsSurface = styled(Surface)`
     grid-area: leaderboards;
 `;
 
-function Leaderboards(props: LeaderboardsProps) {
+const Leaderboards = (props: LeaderboardsProps) => {
     return (
         <LeaderboardsSurface>
             <SurfaceTitle>Leaderboards</SurfaceTitle>

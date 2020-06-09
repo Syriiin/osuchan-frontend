@@ -36,7 +36,7 @@ const ScoreCount = styled.span`
 
 `;
 
-function MemberInfo(props: MemberInfoProps) {
+const MemberInfo = (props: MemberInfoProps) => {
     const membership = props.membership;
 
     return (

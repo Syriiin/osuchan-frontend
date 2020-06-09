@@ -49,7 +49,7 @@ const JoinIcon = styled(FontAwesomeIcon)`
     margin-right: 0.5em;
 `;
 
-function UserInfo(props: UserInfoProps) {
+const UserInfo = (props: UserInfoProps) => {
     const osuUser = props.osuUser;
 
     return (

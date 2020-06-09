@@ -12,7 +12,7 @@ const ModImage = styled.img`
     
 `;
 
-export function ModIcons(props: ModIconsProps) {
+export const ModIcons = (props: ModIconsProps) => {
     const mods = modsShortFromBitwise(props.bitwiseMods);
 
     return (

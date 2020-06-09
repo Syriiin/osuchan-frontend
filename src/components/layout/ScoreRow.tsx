@@ -96,7 +96,7 @@ const ActionButton = styled(Button)`
     border-radius: 0 5px 5px 0;
 `;
 
-export function ScoreRow(props: ScoreRowProps) {
+export const ScoreRow = (props: ScoreRowProps) => {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
     const score = props.score;

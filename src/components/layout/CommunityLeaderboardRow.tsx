@@ -35,7 +35,7 @@ const LeaderboardType = styled.span`
     font-size: 0.8em;
 `;
 
-export function CommunityLeaderboardRow(props: CommunityLeaderboardRowProps) {
+export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => {
     const leaderboard = props.leaderboard;
 
     return (

@@ -121,7 +121,7 @@ interface LoadingWrapperProps {
     scale?: number;
 }
 
-export function LoadingSpinner(props: LoadingProps) {
+export const LoadingSpinner = (props: LoadingProps) => {
     return (
         <LoadingWrapper scale={props.scale}>
             <div></div>
@@ -140,7 +140,7 @@ interface LoadingProps {
     scale?: number;
 }
 
-export function LoadingPage() {
+export const LoadingPage = () => {
     return (
         <LoadingPageWrapper>
             <LoadingSpinner scale={2} />

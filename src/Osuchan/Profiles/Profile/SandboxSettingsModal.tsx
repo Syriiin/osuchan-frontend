@@ -7,7 +7,7 @@ import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Button, ScoreFil
 import { Gamemode } from "../../../store/models/common/enums";
 import { ScoreFilter } from "../../../store/models/profiles/types";
 
-function SandboxSettingsModal(props: SandboxSettingsModalProps) {
+const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 

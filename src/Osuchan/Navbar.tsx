@@ -90,7 +90,7 @@ const UserAvatar = styled.img`
     }
 `;
 
-function Navbar(props: NavbarProps) {
+const Navbar = (props: NavbarProps) => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     

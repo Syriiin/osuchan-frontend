@@ -20,7 +20,7 @@ const LeaderboardMemberGrid = styled.div`
         "scores scores";
 `;
 
-function LeaderboardUser(props: LeaderboardUserProps) {
+const LeaderboardUser = (props: LeaderboardUserProps) => {
     const store = useContext(StoreContext);
     const userStore = store.leaderboardsStore.userStore;
 

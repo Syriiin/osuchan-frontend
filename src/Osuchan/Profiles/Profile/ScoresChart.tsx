@@ -11,7 +11,7 @@ const ScoresChartSurface = styled(Surface)`
     grid-area: scoreschart;
 `;
 
-function ScoresChart(props: ScoresChartProps) {
+const ScoresChart = (props: ScoresChartProps) => {
     const [crosshairValues, setCrosshairValues] = useState<any[]>([]);
     const scoresData = props.scores.map((score, i) => ({ x: i, y: score.pp }));
     const sandboxScoresData = props.sandboxScores.map((score, i) => ({ x: i, y: score.pp }));

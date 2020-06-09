@@ -1,7 +1,7 @@
 import React from "react";
 import ReactSwitch, { ReactSwitchProps } from "react-switch";
 
-export function Switch(props: SwitchProps) {
+export const Switch = (props: SwitchProps) => {
     return (
         <ReactSwitch
             {...props}

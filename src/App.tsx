@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-function App() {
+const App = () => {
     return (
         <StyledThemeProvider theme={osuchanTheme}>
             <Router history={history}>

@@ -48,7 +48,7 @@ const LeaderboardIcon = styled.img`
 
 `;
 
-function LeaderboardTile(props: LeaderboardTileProps) {
+const LeaderboardTile = (props: LeaderboardTileProps) => {
     const leaderboard = props.leaderboard;
 
     return (
@@ -66,7 +66,7 @@ interface LeaderboardTileProps {
     leaderboard: Leaderboard;
 }
 
-function GlobalLeaderboards(props: GlobalLeaderboardsProps) {
+const GlobalLeaderboards = (props: GlobalLeaderboardsProps) => {
     return (
         <GlobalLeaderboardsSurface>
             <SurfaceTitle>Global Leaderboards</SurfaceTitle>
