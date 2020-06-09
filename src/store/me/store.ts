@@ -159,7 +159,7 @@ export class MeStore {
         this.isUpdatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await axios.patch(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
+            const scoreFilterPresetResponse = await axios.put(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -186,7 +186,7 @@ export class MeStore {
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
-            this.scoreFilterPresets.push(scoreFilterPreset);
+            this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
         } catch (error) {
             console.log(error);
         }
@@ -205,7 +205,7 @@ export class MeStore {
                 }
             });
 
-            this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(filter => filter.id !== scoreFilterPresetId));
+            this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
         } catch (error) {
             console.log(error);
         }
