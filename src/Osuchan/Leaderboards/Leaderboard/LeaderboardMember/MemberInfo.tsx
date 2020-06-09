@@ -1,13 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import countries from "i18n-iso-countries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { Surface } from "../../../../components";
 import { Membership } from "../../../../store/models/leaderboards/types";
-
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 const MemberInfoSurface = styled(Surface)`
     padding: 20px;
