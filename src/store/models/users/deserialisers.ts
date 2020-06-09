@@ -1,23 +1,23 @@
 import { User, ScoreFilterPreset } from "./types";
 import { osuUserFromJson, scoreFilterFromJson } from "../profiles/deserialisers";
 
-export function userFromJson(userData: any): User {
+export function userFromJson(data: any): User {
     return {
-        id: userData["id"],
-        dateJoined: new Date(userData["date_joined"]),
-        isBetaTester: userData["is_beta_tester"],
-        osuUser: typeof userData["osu_user"] === "object" ? osuUserFromJson(userData["osu_user"]) : null,
-        osuUserId: typeof userData["osu_user"] === "object" ? userData["osu_user"]["id"] : userData["osu_user"]
+        id: data["id"],
+        dateJoined: new Date(data["date_joined"]),
+        isBetaTester: data["is_beta_tester"],
+        osuUser: typeof data["osu_user"] === "object" ? osuUserFromJson(data["osu_user"]) : null,
+        osuUserId: typeof data["osu_user"] === "object" ? data["osu_user"]["id"] : data["osu_user"]
     }
 }
 
-export function scoreFilterPresetFromJson(scoreFilterPresetData: any): ScoreFilterPreset {
+export function scoreFilterPresetFromJson(data: any): ScoreFilterPreset {
     return {
-        id: scoreFilterPresetData["id"],
-        name: scoreFilterPresetData["name"],
-        scoreFilter: typeof scoreFilterPresetData["score_filter"] === "object" ? scoreFilterFromJson(scoreFilterPresetData["score_filter"]) : null,
-        scoreFilterId: typeof scoreFilterPresetData["score_filter"] === "object" ? scoreFilterPresetData["score_filter"]["id"] : scoreFilterPresetData["osu_user"],
-        user: typeof scoreFilterPresetData["user"] === "object" ? userFromJson(scoreFilterPresetData["user"]) : null,
-        userId: typeof scoreFilterPresetData["user"] === "object" ? scoreFilterPresetData["user"]["id"] : scoreFilterPresetData["user"]
+        id: data["id"],
+        name: data["name"],
+        scoreFilter: typeof data["score_filter"] === "object" ? scoreFilterFromJson(data["score_filter"]) : null,
+        scoreFilterId: typeof data["score_filter"] === "object" ? data["score_filter"]["id"] : data["osu_user"],
+        user: typeof data["user"] === "object" ? userFromJson(data["user"]) : null,
+        userId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"]
     }
 }

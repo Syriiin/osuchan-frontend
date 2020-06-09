@@ -1,113 +1,113 @@
 import { OsuUser, UserStats, Beatmap, Score, ScoreFilter } from "./types";
 
-export function osuUserFromJson(osuUserData: any): OsuUser {
+export function osuUserFromJson(data: any): OsuUser {
     return {
-        id: osuUserData["id"],
-        username: osuUserData["username"],
-        country: osuUserData["country"],
-        joinDate: new Date(osuUserData["join_date"])
+        id: data["id"],
+        username: data["username"],
+        country: data["country"],
+        joinDate: new Date(data["join_date"])
     }
 }
 
-export function userStatsFromJson(userStatsData: any): UserStats {
+export function userStatsFromJson(data: any): UserStats {
     return {
-        id: userStatsData["id"],
-        osuUser: typeof userStatsData["user"] === "object" ? osuUserFromJson(userStatsData["user"]) : null,
-        osuUserId: typeof userStatsData["user"] === "object" ? userStatsData["user"]["id"] : userStatsData["user"],
-        gamemode: userStatsData["gamemode"],
-        playcount: userStatsData["playcount"],
-        playtime: userStatsData["playtime"],
-        level: userStatsData["level"],
-        rank: userStatsData["rank"],
-        countryRank: userStatsData["country_rank"],
-        pp: userStatsData["pp"],
-        accuracy: userStatsData["accuracy"],
-        nochokePp: userStatsData["nochoke_pp"],
-        scoreStyleAccuracy: userStatsData["score_style_accuracy"],
-        scoreStyleBpm: userStatsData["score_style_bpm"],
-        scoreStyleCs: userStatsData["score_style_cs"],
-        scoreStyleAr: userStatsData["score_style_ar"],
-        scoreStyleOd: userStatsData["score_style_od"],
-        scoreStyleLength: userStatsData["score_style_length"]
+        id: data["id"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
+        gamemode: data["gamemode"],
+        playcount: data["playcount"],
+        playtime: data["playtime"],
+        level: data["level"],
+        rank: data["rank"],
+        countryRank: data["country_rank"],
+        pp: data["pp"],
+        accuracy: data["accuracy"],
+        nochokePp: data["nochoke_pp"],
+        scoreStyleAccuracy: data["score_style_accuracy"],
+        scoreStyleBpm: data["score_style_bpm"],
+        scoreStyleCs: data["score_style_cs"],
+        scoreStyleAr: data["score_style_ar"],
+        scoreStyleOd: data["score_style_od"],
+        scoreStyleLength: data["score_style_length"]
     }
 }
 
-export function beatmapFromJson(beatmapData: any): Beatmap {
+export function beatmapFromJson(data: any): Beatmap {
     return {
-        id: beatmapData["id"],
-        setId: beatmapData["set_id"],
-        artist: beatmapData["artist"],
-        title: beatmapData["title"],
-        difficultyName: beatmapData["difficulty_name"],
-        gamemode: beatmapData["gamemode"],
-        status: beatmapData["status"],
-        creatorName: beatmapData["creator_name"],
-        creator: typeof beatmapData["creator"] === "object" ? osuUserFromJson(beatmapData["creator"]) : null,
-        creatorId: typeof beatmapData["creator"] === "object" ? beatmapData["creator"]["id"] : beatmapData["creator"],
-        bpm: beatmapData["bpm"],
-        drainTime: beatmapData["drain_time"],
-        totalTime: beatmapData["total_time"],
-        maxCombo: beatmapData["max_combo"],
-        circleSize: beatmapData["circle_size"],
-        overallDifficulty: beatmapData["overall_difficulty"],
-        approachRate: beatmapData["approach_rate"],
-        healthDrain: beatmapData["health_drain"],
-        starRating: beatmapData["star_rating"],
-        submissionDate: new Date(beatmapData["submission_date"]),
-        approvalDate: new Date(beatmapData["approval_date"]),
-        lastUpdated: new Date(beatmapData["last_updated"])
+        id: data["id"],
+        setId: data["set_id"],
+        artist: data["artist"],
+        title: data["title"],
+        difficultyName: data["difficulty_name"],
+        gamemode: data["gamemode"],
+        status: data["status"],
+        creatorName: data["creator_name"],
+        creator: typeof data["creator"] === "object" ? osuUserFromJson(data["creator"]) : null,
+        creatorId: typeof data["creator"] === "object" ? data["creator"]["id"] : data["creator"],
+        bpm: data["bpm"],
+        drainTime: data["drain_time"],
+        totalTime: data["total_time"],
+        maxCombo: data["max_combo"],
+        circleSize: data["circle_size"],
+        overallDifficulty: data["overall_difficulty"],
+        approachRate: data["approach_rate"],
+        healthDrain: data["health_drain"],
+        starRating: data["star_rating"],
+        submissionDate: new Date(data["submission_date"]),
+        approvalDate: new Date(data["approval_date"]),
+        lastUpdated: new Date(data["last_updated"])
     }
 }
 
-export function scoreFromJson(scoreData: any): Score {
+export function scoreFromJson(data: any): Score {
     return {
-        id: scoreData["id"],
-        beatmap: typeof scoreData["beatmap"] === "object" ? beatmapFromJson(scoreData["beatmap"]) : null,
-        beatmapId: typeof scoreData["beatmap"] === "object" ? scoreData["beatmap"]["id"] : scoreData["beatmap"],
-        userStats: typeof scoreData["user_stats"] === "object" ? userStatsFromJson(scoreData["user_stats"]) : null,
-        userStatsId: typeof scoreData["user_stats"] === "object" ? scoreData["user_stats"]["id"] : scoreData["user_stats"],
-        score: scoreData["score"],
-        count300: scoreData["count_300"],
-        count100: scoreData["count_100"],
-        count50: scoreData["count_50"],
-        countMiss: scoreData["count_miss"],
-        countGeki: scoreData["count_geki"],
-        countKatu: scoreData["count_katu"],
-        bestCombo: scoreData["best_combo"],
-        mods: scoreData["mods"],
-        rank: scoreData["rank"],
-        pp: scoreData["pp"],
-        date: new Date(scoreData["date"]),
-        gamemode: scoreData["gamemode"],
-        accuracy: scoreData["accuracy"],
-        bpm: scoreData["bpm"],
-        length: scoreData["length"],
-        circleSize: scoreData["circle_size"],
-        approachRate: scoreData["approach_rate"],
-        overallDifficulty: scoreData["overall_difficulty"],
-        nochokePp: scoreData["nochoke_pp"],
-        starRating: scoreData["star_rating"],
-        result: scoreData["result"]
+        id: data["id"],
+        beatmap: typeof data["beatmap"] === "object" ? beatmapFromJson(data["beatmap"]) : null,
+        beatmapId: typeof data["beatmap"] === "object" ? data["beatmap"]["id"] : data["beatmap"],
+        userStats: typeof data["user_stats"] === "object" ? userStatsFromJson(data["user_stats"]) : null,
+        userStatsId: typeof data["user_stats"] === "object" ? data["user_stats"]["id"] : data["user_stats"],
+        score: data["score"],
+        count300: data["count_300"],
+        count100: data["count_100"],
+        count50: data["count_50"],
+        countMiss: data["count_miss"],
+        countGeki: data["count_geki"],
+        countKatu: data["count_katu"],
+        bestCombo: data["best_combo"],
+        mods: data["mods"],
+        rank: data["rank"],
+        pp: data["pp"],
+        date: new Date(data["date"]),
+        gamemode: data["gamemode"],
+        accuracy: data["accuracy"],
+        bpm: data["bpm"],
+        length: data["length"],
+        circleSize: data["circle_size"],
+        approachRate: data["approach_rate"],
+        overallDifficulty: data["overall_difficulty"],
+        nochokePp: data["nochoke_pp"],
+        starRating: data["star_rating"],
+        result: data["result"]
     }
 }
 
-export function scoreFilterFromJson(scoreFilterData: any): ScoreFilter {
+export function scoreFilterFromJson(data: any): ScoreFilter {
     return {
-        allowedBeatmapStatus: scoreFilterData["allowed_beatmap_status"],
-        oldestBeatmapDate: scoreFilterData["oldest_beatmap_date"] ? new Date(scoreFilterData["oldest_beatmap_date"]) : null,
-        newestBeatmapDate: scoreFilterData["newest_beatmap_date"] ? new Date(scoreFilterData["newest_beatmap_date"]) : null,
-        oldestScoreDate: scoreFilterData["oldest_score_date"] ? new Date(scoreFilterData["oldest_score_date"]) : null,
-        newestScoreDate: scoreFilterData["newest_score_date"] ? new Date(scoreFilterData["newest_score_date"]) : null,
-        lowestAr: scoreFilterData["lowest_ar"],
-        highestAr: scoreFilterData["highest_ar"],
-        lowestOd: scoreFilterData["lowest_od"],
-        highestOd: scoreFilterData["highest_od"],
-        lowestCs: scoreFilterData["lowest_cs"],
-        highestCs: scoreFilterData["highest_cs"],
-        requiredMods: scoreFilterData["required_mods"],
-        disqualifiedMods: scoreFilterData["disqualified_mods"],
-        lowestAccuracy: scoreFilterData["lowest_accuracy"],
-        highestAccuracy: scoreFilterData["highest_accuracy"]
+        allowedBeatmapStatus: data["allowed_beatmap_status"],
+        oldestBeatmapDate: data["oldest_beatmap_date"] ? new Date(data["oldest_beatmap_date"]) : null,
+        newestBeatmapDate: data["newest_beatmap_date"] ? new Date(data["newest_beatmap_date"]) : null,
+        oldestScoreDate: data["oldest_score_date"] ? new Date(data["oldest_score_date"]) : null,
+        newestScoreDate: data["newest_score_date"] ? new Date(data["newest_score_date"]) : null,
+        lowestAr: data["lowest_ar"],
+        highestAr: data["highest_ar"],
+        lowestOd: data["lowest_od"],
+        highestOd: data["highest_od"],
+        lowestCs: data["lowest_cs"],
+        highestCs: data["highest_cs"],
+        requiredMods: data["required_mods"],
+        disqualifiedMods: data["disqualified_mods"],
+        lowestAccuracy: data["lowest_accuracy"],
+        highestAccuracy: data["highest_accuracy"]
     }
 }
 

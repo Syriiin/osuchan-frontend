@@ -1,45 +1,45 @@
 import { Leaderboard, Membership, Invite } from "./types";
 import { osuUserFromJson, scoreFilterFromJson } from "../profiles/deserialisers";
 
-export function leaderboardFromJson(leaderboardData: any): Leaderboard {
+export function leaderboardFromJson(data: any): Leaderboard {
     return {
-        id: leaderboardData["id"],
-        gamemode: leaderboardData["gamemode"],
-        scoreSet: leaderboardData["score_set"],
-        accessType: leaderboardData["access_type"],
-        name: leaderboardData["name"],
-        description: leaderboardData["description"],
-        iconUrl: leaderboardData["icon_url"],
-        allowPastScores: leaderboardData["allow_past_scores"],
-        scoreFilter: leaderboardData["score_filter"] === null ? null : typeof leaderboardData["score_filter"] === "object" ? scoreFilterFromJson(leaderboardData["score_filter"]) : null,
-        scoreFilterId: leaderboardData["score_filter"] === null ? null : typeof leaderboardData["score_filter"] === "object" ? leaderboardData["score_filter"]["id"] : leaderboardData["score_filter"],
-        owner: leaderboardData["owner"] === null ? null : typeof leaderboardData["owner"] === "object" ? osuUserFromJson(leaderboardData["owner"]) : null,
-        ownerId: leaderboardData["owner"] === null ? null : typeof leaderboardData["owner"] === "object" ? leaderboardData["owner"]["id"] : leaderboardData["owner"],
-        creationTime: new Date(leaderboardData["creation_time"])
+        id: data["id"],
+        gamemode: data["gamemode"],
+        scoreSet: data["score_set"],
+        accessType: data["access_type"],
+        name: data["name"],
+        description: data["description"],
+        iconUrl: data["icon_url"],
+        allowPastScores: data["allow_past_scores"],
+        scoreFilter: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? scoreFilterFromJson(data["score_filter"]) : null,
+        scoreFilterId: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? data["score_filter"]["id"] : data["score_filter"],
+        owner: data["owner"] === null ? null : typeof data["owner"] === "object" ? osuUserFromJson(data["owner"]) : null,
+        ownerId: data["owner"] === null ? null : typeof data["owner"] === "object" ? data["owner"]["id"] : data["owner"],
+        creationTime: new Date(data["creation_time"])
     }
 }
 
-export function membershipFromJson(membershipData: any): Membership {
+export function membershipFromJson(data: any): Membership {
     return {
-        id: membershipData["id"],
-        pp: membershipData["pp"],
-        leaderboard: typeof membershipData["leaderboard"] === "object" ? leaderboardFromJson(membershipData["leaderboard"]) : null,
-        leaderboardId: typeof membershipData["leaderboard"] === "object" ? membershipData["leaderboard"]["id"] : membershipData["leaderboard"],
-        osuUser: typeof membershipData["user"] === "object" ? osuUserFromJson(membershipData["user"]) : null,
-        osuUserId: typeof membershipData["user"] === "object" ? membershipData["user"]["id"] : membershipData["user"],
-        joinDate: new Date(membershipData["join_date"]),
-        scoreCount: membershipData["score_count"]
+        id: data["id"],
+        pp: data["pp"],
+        leaderboard: typeof data["leaderboard"] === "object" ? leaderboardFromJson(data["leaderboard"]) : null,
+        leaderboardId: typeof data["leaderboard"] === "object" ? data["leaderboard"]["id"] : data["leaderboard"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
+        joinDate: new Date(data["join_date"]),
+        scoreCount: data["score_count"]
     }
 }
 
-export function inviteFromJson(inviteData: any): Invite {
+export function inviteFromJson(data: any): Invite {
     return {
-        id: inviteData["id"],
-        message: inviteData["message"],
-        leaderboard: typeof inviteData["leaderboard"] === "object" ? leaderboardFromJson(inviteData["leaderboard"]) : null,
-        leaderboardId: typeof inviteData["leaderboard"] === "object" ? inviteData["leaderboard"]["id"] : inviteData["leaderboard"],
-        osuUser: typeof inviteData["user"] === "object" ? osuUserFromJson(inviteData["user"]) : null,
-        osuUserId: typeof inviteData["user"] === "object" ? inviteData["user"]["id"] : inviteData["user"],
-        inviteDate: new Date(inviteData["invite_date"])
+        id: data["id"],
+        message: data["message"],
+        leaderboard: typeof data["leaderboard"] === "object" ? leaderboardFromJson(data["leaderboard"]) : null,
+        leaderboardId: typeof data["leaderboard"] === "object" ? data["leaderboard"]["id"] : data["leaderboard"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
+        inviteDate: new Date(data["invite_date"])
     }
 }
