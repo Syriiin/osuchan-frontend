@@ -8,6 +8,7 @@ export * from "./layout/ModIcons";
 export * from "./layout/Row";
 export * from "./layout/ScoreRow";
 export * from "./layout/Loading";
+export * from "./layout/CommunityLeaderboardRow";
 export * from "./helpers/UnstyledLink";
 export * from "./forms/Button";
 export * from "./forms/TextInput";

@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Surface, SurfaceTitle, UnstyledLink } from "../../../components";
+import { Surface, SurfaceTitle, UnstyledLink, CommunityLeaderboardRow } from "../../../components";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
-import { CommunityLeaderboardRow } from "../../../components/layout/CommunityLeaderboardRow";
 
 const LeaderboardsSurface = styled(Surface)`
     padding: 20px;

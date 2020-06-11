@@ -17,14 +17,13 @@ const styles: StylesConfig = {
     }),
     input: (provided, state) => ({
         ...provided,
-        backgroundColor: "#17171c"
+        backgroundColor: "#17171c",
+        color: "white"
     }),
-    option: (provided, state) => {
-        return ({
-            ...provided,
-            color: state.isFocused ? "#17171c" : "white"
-        });
-    },
+    option: (provided, state) => ({
+        ...provided,
+        color: state.isFocused ? "#17171c" : "white"
+    })
 }
 
 export const ModsSelect = (props: ModsSelectProps) => {

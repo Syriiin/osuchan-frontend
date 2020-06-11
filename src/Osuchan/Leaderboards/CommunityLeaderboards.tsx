@@ -3,10 +3,9 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
 import { Leaderboard } from "../../store/models/leaderboards/types";
-import { Surface, SurfaceTitle, UnstyledLink, Button } from "../../components";
+import { Surface, SurfaceTitle, UnstyledLink, Button, CommunityLeaderboardRow } from "../../components";
 import { StoreContext } from "../../store";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
-import { CommunityLeaderboardRow } from "../../components/layout/CommunityLeaderboardRow";
 
 const CommunityLeaderboardsSurface = styled(Surface)`
     margin: 20px auto;
