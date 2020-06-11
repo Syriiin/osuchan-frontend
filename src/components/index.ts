@@ -17,3 +17,4 @@ export * from "./forms/FormLabel";
 export * from "./forms/FormControl";
 export * from "./forms/Switch";
 export * from "./forms/ScoreFilterForm";
+export * from "./forms/Select";

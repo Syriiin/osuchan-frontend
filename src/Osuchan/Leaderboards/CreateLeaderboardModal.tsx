@@ -1,7 +1,7 @@
 import React, { useContext, useState, useCallback } from "react";
 import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
-import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm } from "../../components";
+import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
 import { StoreContext } from "../../store";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
@@ -43,8 +43,7 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
     const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
 
-    const handleGamemodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const mode = parseInt(e.target.value)
+    const handleGamemodeChange = (mode: Gamemode) => {
         setGamemode(mode);
         if (mode !== Gamemode.Standard) {
             // Only normal score set is supported for non-standard gamemodes since other depend on choke support
@@ -61,28 +60,28 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
                 <TextInput fullWidth required value={name} onChange={e => setName(e.currentTarget.value)} />
                 <FormLabel>Gamemode</FormLabel>
                 <FormControl>
-                    <select value={gamemode} onChange={handleGamemodeChange}>
-                        <option value={Gamemode.Standard}>osu!</option>
-                        <option value={Gamemode.Taiko}>osu!taiko</option>
-                        <option value={Gamemode.Catch}>osu!catch</option>
-                        <option value={Gamemode.Mania}>osu!mania</option>
-                    </select>
+                    <Select value={gamemode} onChange={handleGamemodeChange} options={[
+                        { value: Gamemode.Standard, label: "osu!" },
+                        { value: Gamemode.Taiko, label: "osu!taiko" },
+                        { value: Gamemode.Catch, label: "osu!catch" },
+                        { value: Gamemode.Mania, label: "osu!mania" },
+                    ]} />
                 </FormControl>
                 <FormLabel>Score Set</FormLabel>
                 <FormControl>
-                    <select value={scoreSet} onChange={e => setScoreSet(parseInt(e.target.value))} disabled={gamemode !== Gamemode.Standard}>
-                        <option value={ScoreSet.Normal}>Normal</option>
-                        <option value={ScoreSet.NeverChoke}>Never Choke</option>
-                        {/* <option value={ScoreSet.AlwaysFullCombo}>Always FC</option> */}
-                    </select>
+                    <Select value={scoreSet} onChange={value => setScoreSet(value)} disabled={gamemode !== Gamemode.Standard} options={[
+                        { value: ScoreSet.Normal, label: "Normal" },
+                        { value: ScoreSet.NeverChoke, label: "Never Choke" },
+                        // { value: ScoreSet.AlwaysFullCombo, label: "Always FC" }
+                    ]} />
                 </FormControl>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                    <select value={accessType} onChange={e => setAccessType(parseInt(e.target.value))}>
-                        <option value={LeaderboardAccessType.Public}>Public</option>
-                        <option value={LeaderboardAccessType.PublicInviteOnly}>Public (Invite-only)</option>
-                        <option value={LeaderboardAccessType.Private}>Private</option>
-                    </select>
+                    <Select value={accessType} onChange={value => setAccessType(value)} options={[
+                        { value: LeaderboardAccessType.Public, label: "Public" },
+                        { value: LeaderboardAccessType.PublicInviteOnly, label: "Public (Invite-only)" },
+                        { value: LeaderboardAccessType.Private, label: "Private" }
+                    ]} />
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />

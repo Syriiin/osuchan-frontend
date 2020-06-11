@@ -12,6 +12,7 @@ import { StoreContext } from "../../store";
 import { ScoreFilterPreset } from "../../store/models/users/types";
 import { Button } from "./Button";
 import { LoadingSpinner } from "../layout/Loading";
+import { Select } from "./Select";
 
 function formatDate(date: Date) {
     return date.toISOString().split("T")[0];
@@ -141,12 +142,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             {/* Presets */}
             <FormLabel>Preset</FormLabel>
             <FormControl>
-                <select value={preset?.id ?? 0} onChange={e => loadPreset(presets.find(preset => preset.id === parseInt(e.target.value)) ?? null)}>
-                    <option value={0}>None</option>
-                    {presets.map(preset => (
-                        <option value={preset.id}>{preset.name}</option>
-                    ))}
-                </select>
+                <Select value={preset?.id ?? 0} onChange={value => loadPreset(presets.find(preset => preset.id === value) ?? null)} options={[
+                    { value: 0, label: "None" },
+                    ...presets.map(preset => ({ value: preset.id, label: preset.name }))
+                ]} />
             </FormControl>
 
             <FormControl>
@@ -169,11 +168,11 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             {/* Beatmap status */}
             <FormLabel>Allowed Beatmap Status</FormLabel>
             <FormControl>
-                <select value={value.allowedBeatmapStatus} onChange={e => setAllowedBeatmapStatus(parseInt(e.target.value))}>
-                    <option value={AllowedBeatmapStatus.Any}>Ranked or Loved</option>
-                    <option value={AllowedBeatmapStatus.RankedOnly}>Ranked only</option>
-                    <option value={AllowedBeatmapStatus.LovedOnly}>Loved only</option>
-                </select>
+                <Select value={value.allowedBeatmapStatus} onChange={value => setAllowedBeatmapStatus(value)} options={[
+                    { value: AllowedBeatmapStatus.Any, label: "Ranked or Loved" },
+                    { value: AllowedBeatmapStatus.RankedOnly, label: "Ranked only" },
+                    { value: AllowedBeatmapStatus.LovedOnly, label: "Loved only" }
+                ]} />
             </FormControl>
             
             {/* Dates */}

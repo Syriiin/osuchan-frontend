@@ -3,7 +3,7 @@ import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { ScoreSet } from "../../../store/models/profiles/enums";
 import { StoreContext } from "../../../store";
-import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Button, ScoreFilterForm } from "../../../components";
+import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Button, ScoreFilterForm, Select } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
 import { ScoreFilter } from "../../../store/models/profiles/types";
 
@@ -30,11 +30,11 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
             <form onSubmit={handleSandboxSettingsSubmit}>
                 <FormLabel>Score Set</FormLabel>
                 <FormControl>
-                    <select value={scoreSet} onChange={e => setScoreSet(parseInt(e.target.value))} disabled={props.gamemode !== Gamemode.Standard}>
-                        <option value={ScoreSet.Normal}>Normal</option>
-                        <option value={ScoreSet.NeverChoke}>Never Choke</option>
-                        {/* <option value={ScoreSet.AlwaysFullCombo}>Always FC</option> */}
-                    </select>
+                    <Select value={scoreSet} onChange={value => setScoreSet(value)} disabled={props.gamemode !== Gamemode.Standard} options={[
+                        { value: ScoreSet.Normal, label: "Normal" },
+                        { value: ScoreSet.NeverChoke, label: "Never Choke" },
+                        // { value: ScoreSet.AlwaysFullCombo, label: "Always FC" }
+                    ]} />
                 </FormControl>
                 <ScoreFilterForm gamemode={props.gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
                 <Button type="submit">Load scores</Button>
