@@ -102,8 +102,8 @@ const Navbar = (props: NavbarProps) => {
 
     // Use effect to initialse form values
     useEffect(() => {
-        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.osuUser?.id.toString()}` || "");
-    }, [meStore.osuUser])
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
+    }, [meStore.user])
 
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -137,12 +137,12 @@ const Navbar = (props: NavbarProps) => {
     }
     const handleAddScoreModalClose = () => {
         setAddScoreModalOpen(false);
-        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.osuUser?.id.toString()}` || "");
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
         setAddScoreBeatmapUrl("");
     }
 
     // Variables
-    const osuUser = meStore.osuUser;
+    const osuUser = meStore.user?.osuUser;
     const invites = meStore.invites;
 
     return (

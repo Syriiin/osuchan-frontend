@@ -2,16 +2,15 @@ import { observable, action } from "mobx";
 
 import http from "../../http";
 
-import { OsuUser, ScoreFilter } from "../models/profiles/types";
+import { ScoreFilter } from "../models/profiles/types";
 import { Invite, Membership } from "../models/leaderboards/types";
-import { osuUserFromJson } from "../models/profiles/deserialisers";
 import { inviteFromJson, membershipFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
-import { ScoreFilterPreset } from "../models/users/types";
-import { scoreFilterPresetFromJson } from "../models/users/deserialisers";
+import { User, ScoreFilterPreset } from "../models/users/types";
+import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deserialisers";
 
 export class MeStore {
-    @observable osuUser: OsuUser | null = null;
+    @observable user: User | null = null;
     @observable isLoading: boolean = false;
     @observable isJoiningLeaderboard: boolean = false;
     @observable isAddingScores: boolean = false;
@@ -26,7 +25,7 @@ export class MeStore {
 
     @action
     loadMe = async () => {
-        this.osuUser = null;
+        this.user = null;
         this.memberships.clear();
         this.invites.clear();
         this.scoreFilterPresets.clear();
@@ -34,25 +33,30 @@ export class MeStore {
 
         try {
             const meResponse = await http.get("/osuauth/me");
-            const osuUser: OsuUser = osuUserFromJson(meResponse.data);
+            const user: User = userFromJson(meResponse.data);
 
-            const membershipsResponse = await http.get(`/api/profiles/users/${osuUser.id}/memberships`);
-            const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
-            
-            const invitesResponse = await http.get(`/api/profiles/users/${osuUser.id}/invites`);
-            const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
+            this.user = user;
 
-            const scoreFilterPresetsResponse = await http.get(`/osuauth/me/scorefilterpresets`);
-            const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
+            if (user.osuUser !== null) {
+                const membershipsResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/memberships`);
+                const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
 
-            this.osuUser = osuUser;
-            this.memberships.replace(memberships);
-            this.invites.replace(invites);
-            this.scoreFilterPresets.replace(scoreFilterPresets);
+                const invitesResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/invites`);
+                const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
+
+                const scoreFilterPresetsResponse = await http.get(`/osuauth/me/scorefilterpresets`);
+                const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
+
+                this.memberships.replace(memberships);
+                this.invites.replace(invites);
+                this.scoreFilterPresets.replace(scoreFilterPresets);
+            }
+
+
         } catch (error) {
             console.log(error)
         }
-        
+
         this.isLoading = false;
     }
 
@@ -67,7 +71,7 @@ export class MeStore {
         } catch (error) {
             console.log(error);
         }
-        
+
         this.isAddingScores = false;
     }
 
@@ -78,12 +82,12 @@ export class MeStore {
         try {
             const membershipResponse = await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
             const membership = membershipFromJson(membershipResponse.data);
-            
+
             this.memberships.push(membership);
         } catch (error) {
             console.log(error);
         }
-        
+
         this.isJoiningLeaderboard = false;
     }
 
@@ -92,13 +96,13 @@ export class MeStore {
         this.isLeavingLeaderboard = true;
 
         try {
-            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.osuUser!.id}`);
+            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.user!.osuUserId}`);
 
             this.memberships.replace(this.memberships.filter(m => m.leaderboardId !== leaderboardId));
         } catch (error) {
             console.log(error);
         }
-        
+
         this.isLeavingLeaderboard = false;
     }
 

@@ -221,7 +221,7 @@ const LeaderboardButtons = (props: LeaderboardButtonsProps) => {
 
 interface LeaderboardButtonsProps {
     leaderboard: Leaderboard;
-    meOsuUser: OsuUser;
+    meOsuUser: OsuUser | null;
 }
 
 const LeaderboardHome = (props: LeaderboardHomeProps) => {
@@ -288,7 +288,7 @@ const LeaderboardHome = (props: LeaderboardHomeProps) => {
                         {leaderboard.scoreFilter && (
                             <LeaderboardFilters gamemode={leaderboard.gamemode} scoreFilter={leaderboard.scoreFilter} />
                         )}
-                        <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.osuUser!} />
+                        <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.user?.osuUser ?? null} />
                     </LeaderboardSurface>
                     
                     {/* Top Scores */}

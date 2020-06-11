@@ -25,7 +25,7 @@ const CommunityLeaderboards = (props: CommunityLeaderboardsProps) => {
             <CommunityLeaderboardsSurface>
                 <SurfaceTitle>
                     Community Leaderboards
-                    {meStore.osuUser && (
+                    {meStore.user?.osuUser && (
                         <Button onClick={() => setCreateLeaderboardModalOpen(true)}>Create</Button>
                     )}
                 </SurfaceTitle>
