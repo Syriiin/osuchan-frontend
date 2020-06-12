@@ -1,5 +1,4 @@
 import React, { useContext, useState, useCallback } from "react";
-import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
 import { StoreContext } from "../../store";
@@ -91,8 +90,6 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
                         mini
                         checked={allowPastScores}
                         onChange={(checked, event, id) => setAllowPastScores(checked)}
-                        offColor={props.theme.colours.currant}
-                        onColor={props.theme.colours.mystic}
                     />
                 </FormControl>
 
@@ -105,9 +102,9 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
     );
 }
 
-interface CreateLeaderboardModalProps extends ThemeProps<DefaultTheme> {
+interface CreateLeaderboardModalProps {
     open: boolean;
     onClose: () => void;
 }
 
-export default withTheme(CreateLeaderboardModal);
+export default CreateLeaderboardModal;

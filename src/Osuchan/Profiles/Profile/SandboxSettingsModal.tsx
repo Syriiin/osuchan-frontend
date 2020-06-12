@@ -1,5 +1,4 @@
 import React, { useContext, useState, useCallback } from "react";
-import { ThemeProps, DefaultTheme, withTheme } from "styled-components";
 
 import { ScoreSet } from "../../../store/models/profiles/enums";
 import { StoreContext } from "../../../store";
@@ -43,10 +42,10 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
     );
 }
 
-interface SandboxSettingsModalProps extends ThemeProps<DefaultTheme> {
+interface SandboxSettingsModalProps {
     gamemode: Gamemode;
     open: boolean;
     onClose: () => void;
 }
 
-export default withTheme(SandboxSettingsModal);
+export default SandboxSettingsModal;

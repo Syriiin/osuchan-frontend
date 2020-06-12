@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styled, { ThemeProps, DefaultTheme, withTheme } from "styled-components";
+import React, { useState, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { FlexibleWidthXYPlot, HorizontalGridLines, MarkSeries, YAxis, Crosshair, MarkSeriesPoint } from "react-vis";
 
 import { Surface } from "../../../components";
@@ -12,6 +12,8 @@ const ScoresChartSurface = styled(Surface)`
 `;
 
 const ScoresChart = (props: ScoresChartProps) => {
+    const theme = useContext(ThemeContext);
+
     const [crosshairValues, setCrosshairValues] = useState<any[]>([]);
     const scoresData = props.scores.map((score, i) => ({ x: i, y: score.pp }));
     const sandboxScoresData = props.sandboxScores.map((score, i) => ({ x: i, y: score.pp }));
@@ -22,11 +24,11 @@ const ScoresChart = (props: ScoresChartProps) => {
                 <HorizontalGridLines />
                 <MarkSeries
                     data={scoresData}
-                    color={props.theme.colours.pillow}
+                    color={theme.colours.pillow}
                     onNearestX={(value, { index }) => setCrosshairValues(props.sandboxMode ? [value, sandboxScoresData[index]] : [value])}
                 />
                 {props.sandboxMode && (
-                    <MarkSeries data={sandboxScoresData} color={props.theme.colours.timber} />
+                    <MarkSeries data={sandboxScoresData} color={theme.colours.timber} />
                 )}
                 <YAxis />
                 <Crosshair
@@ -51,10 +53,10 @@ const ScoresChart = (props: ScoresChartProps) => {
     );
 }
 
-interface ScoresChartProps extends ThemeProps<DefaultTheme> {
+interface ScoresChartProps {
     scores: Score[];
     sandboxScores: Score[];
     sandboxMode: boolean;
 }
 
-export default withTheme(observer(ScoresChart));
+export default observer(ScoresChart);

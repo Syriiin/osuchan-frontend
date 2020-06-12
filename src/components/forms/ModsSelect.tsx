@@ -1,32 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { Mods, Gamemode } from "../../store/models/common/enums";
+import { ThemeContext } from "styled-components";
 
 // TODO: replace this ugly mess... custom select needed
 
 type OptionType = { label: string; value: Mods; }
 
-const styles: StylesConfig = {
-    menu: (provided, state) => ({
-        ...provided,
-        backgroundColor: "#17171c"
-    }),
-    control: (provided, state) => ({
-        ...provided,
-        backgroundColor: "#17171c"
-    }),
-    input: (provided, state) => ({
-        ...provided,
-        backgroundColor: "#17171c",
-        color: "white"
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        color: state.isFocused ? "#17171c" : "white"
-    })
-}
-
 export const ModsSelect = (props: ModsSelectProps) => {
+    const theme = useContext(ThemeContext);
+    
+    const styles: StylesConfig = {
+        menu: (provided, state) => ({
+            ...provided,
+            backgroundColor: theme.colours.background
+        }),
+        control: (provided, state) => ({
+            ...provided,
+            backgroundColor: theme.colours.background,
+            border: "none"
+        }),
+        input: (provided, state) => ({
+            ...provided,
+            backgroundColor: theme.colours.background,
+            color: "#fff"
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            color: state.isFocused ? theme.colours.background : "#fff"
+        })
+    }
+
     const selectModOptions = [
         { value: 8, label: "HD" },
         { value: 64, label: "DT" },

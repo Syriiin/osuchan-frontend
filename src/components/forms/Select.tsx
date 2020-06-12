@@ -1,32 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
-
-const styles: StylesConfig = {
-    control: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isDisabled ? "#29293D" : "#17171C"
-    }),
-    input: (provided, state) => ({
-        ...provided,
-        backgroundColor: "#17171C",
-        color: "white"
-    }),
-    singleValue: (provided, state) => ({
-        ...provided,
-        color: "white"
-    }),
-    menu: (provided, state) => ({
-        ...provided,
-        backgroundColor: "#17171C"
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        color: state.isSelected || state.isFocused ? "#17171C" : "white",
-        backgroundColor: state.isSelected || state.isFocused ? "white" : provided.backgroundColor
-    })
-}
+import { ThemeContext } from "styled-components";
 
 export const Select = <T extends OptionValue = number>(props: SelectProps<T>) => {
+    const theme = useContext(ThemeContext);
+
+    const styles: StylesConfig = {
+        control: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isDisabled ? theme.colours.midground : theme.colours.background,
+            border: "none"
+        }),
+        input: (provided, state) => ({
+            ...provided,
+            backgroundColor: theme.colours.background,
+            color: "#fff"
+        }),
+        singleValue: (provided, state) => ({
+            ...provided,
+            color: "#fff"
+        }),
+        menu: (provided, state) => ({
+            ...provided,
+            backgroundColor: theme.colours.background
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            color: state.isSelected || state.isFocused ? theme.colours.background : "#fff",
+            backgroundColor: state.isSelected || state.isFocused ? "#fff" : provided.backgroundColor
+        })
+    }
+    
     const selectedOption = props.options.find(option => option.value === props.value);
     return (
         <ReactSelect

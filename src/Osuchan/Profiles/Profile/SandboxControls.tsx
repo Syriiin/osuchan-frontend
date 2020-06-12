@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { withTheme, ThemeProps, DefaultTheme } from "styled-components";
+import styled from "styled-components";
 
 import { Surface, Switch, Button } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
@@ -52,8 +52,6 @@ const SandboxControls = (props: SandboxControlsProps) => {
                 <Switch
                     onChange={checked => props.setSandboxMode(checked)}
                     checked={props.sandboxMode}
-                    offColor={props.theme.colours.currant}
-                    onColor={props.theme.colours.mystic}
                 />
             </SandboxModeSwitchContainer>
             <ControlsStatusContainer>
@@ -69,10 +67,10 @@ const SandboxControls = (props: SandboxControlsProps) => {
     );
 }
 
-interface SandboxControlsProps extends ThemeProps<DefaultTheme> {
+interface SandboxControlsProps {
     gamemode: Gamemode;
     sandboxMode: boolean;
     setSandboxMode: (value: React.SetStateAction<boolean>) => void;
 }
 
-export default withTheme(SandboxControls);
+export default SandboxControls;
