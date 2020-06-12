@@ -7,7 +7,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
-import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button } from "../components";
+import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink } from "../components";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -38,7 +38,18 @@ interface NavbarLinkProps extends LinkProps {
     active?: boolean;
 }
 
-const TitleHeader = styled.h1`
+const TitleContainer = styled.div`
+
+`;
+
+const Logo = styled.img`
+    width: 36px;
+    margin-right: 5px;
+`;
+
+const Title = styled.h1`
+    display: flex;
+    align-items: flex-end;
     margin: 10px;
     flex: 1;
     font-size: 2em;
@@ -154,9 +165,14 @@ const Navbar = (props: NavbarProps) => {
             </LinksContainer>
 
             {/* osu!chan title */}
-            <TitleHeader>
-                <Link to="/">osu!chan</Link>
-            </TitleHeader>
+            <TitleContainer>
+                <UnstyledLink to="/">
+                    <Title>
+                        <Logo src="/static/icon-64.png" />
+                        <span>osu!chan</span>
+                    </Title>
+                </UnstyledLink>
+            </TitleContainer>
 
             <UserMenuContainer>
                 {/* User search */}
