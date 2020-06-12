@@ -9,6 +9,18 @@ const DatePickerWrapper = styled.div`
         padding: 10px;
         color: #fff;
         border-width: 0;
+
+    }
+
+    .react-datepicker__close-icon {
+        &::after {
+            background-color: unset;
+            font-size: 1em;
+        }
+
+        &:hover::after {
+            background-color: ${props => props.theme.colours.currant};
+        }
     }
 
     .react-datepicker__header {
@@ -64,6 +76,7 @@ export const DatePicker = (props: DatePickerProps) => (
         <ReactDatePicker
             {...props}
             placeholderText="Click to select a date"
+            isClearable
             className="react-datepicker__input"
         />
     </DatePickerWrapper>
