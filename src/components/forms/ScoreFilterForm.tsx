@@ -13,10 +13,7 @@ import { ScoreFilterPreset } from "../../store/models/users/types";
 import { Button } from "./Button";
 import { LoadingSpinner } from "../layout/Loading";
 import { Select } from "./Select";
-
-function formatDate(date: Date) {
-    return date.toISOString().split("T")[0];
-}
+import { DatePicker } from "./DatePicker";
 
 const SaveNewButton = styled(Button)`
 
@@ -43,10 +40,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const [presetName, setPresetName] = useState("");
 
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(AllowedBeatmapStatus.RankedOnly);
-    const [oldestBeatmapDate, setOldestBeatmapDate] = useState("");
-    const [newestBeatmapDate, setNewestBeatmapDate] = useState("");
-    const [oldestScoreDate, setOldestScoreDate] = useState("");
-    const [newestScoreDate, setNewestScoreDate] = useState("");
+    const [oldestBeatmapDate, setOldestBeatmapDate] = useState<Date | null>(null);
+    const [newestBeatmapDate, setNewestBeatmapDate] = useState<Date | null>(null);
+    const [oldestScoreDate, setOldestScoreDate] = useState<Date | null>(null);
+    const [newestScoreDate, setNewestScoreDate] = useState<Date | null>(null);
     const [lowestAr, setLowestAr] = useState("");
     const [highestAr, setHighestAr] = useState("");
     const [lowestOd, setLowestOd] = useState("");
@@ -60,10 +57,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
 
     const getScoreFilter = useCallback(() => ({
         allowedBeatmapStatus,
-        oldestBeatmapDate: oldestBeatmapDate !== "" ? new Date(oldestBeatmapDate) : null,
-        newestBeatmapDate: newestBeatmapDate !== "" ? new Date(newestBeatmapDate) : null,
-        oldestScoreDate: oldestScoreDate !== "" ? new Date(oldestScoreDate) : null,
-        newestScoreDate: newestScoreDate !== "" ? new Date(newestScoreDate) : null,
+        oldestBeatmapDate: oldestBeatmapDate,
+        newestBeatmapDate: newestBeatmapDate,
+        oldestScoreDate: oldestScoreDate,
+        newestScoreDate: newestScoreDate,
         lowestAr: parseFloat(lowestAr) || null,
         highestAr: parseFloat(highestAr) || null,
         lowestOd: parseFloat(lowestOd) || null,
@@ -114,10 +111,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setPresetName(preset?.name ?? "");
 
         setAllowedBeatmapStatus(preset?.scoreFilter?.allowedBeatmapStatus ?? AllowedBeatmapStatus.RankedOnly);
-        setOldestBeatmapDate(preset?.scoreFilter?.oldestBeatmapDate?.toString() ?? "");
-        setNewestBeatmapDate(preset?.scoreFilter?.newestBeatmapDate?.toString() ?? "");
-        setOldestScoreDate(preset?.scoreFilter?.oldestScoreDate?.toString() ?? "");
-        setNewestScoreDate(preset?.scoreFilter?.newestScoreDate?.toString() ?? "");
+        setOldestBeatmapDate(preset?.scoreFilter?.oldestBeatmapDate ?? null);
+        setNewestBeatmapDate(preset?.scoreFilter?.newestBeatmapDate ?? null);
+        setOldestScoreDate(preset?.scoreFilter?.oldestScoreDate ?? null);
+        setNewestScoreDate(preset?.scoreFilter?.newestScoreDate ?? null);
         setLowestAr(preset?.scoreFilter?.lowestAr?.toString() ?? "");
         setHighestAr(preset?.scoreFilter?.highestAr?.toString() ?? "");
         setLowestOd(preset?.scoreFilter?.lowestOd?.toString() ?? "");
@@ -178,19 +175,19 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             {/* Dates */}
             <FormLabel>Oldest Beatmap Date</FormLabel>
             <FormControl>
-                <input type="date" value={value.oldestBeatmapDate ? formatDate(value.oldestBeatmapDate) : ""} onChange={e => setOldestBeatmapDate(e.currentTarget.value)} />
+                <DatePicker selected={value.oldestBeatmapDate} onChange={date => setOldestBeatmapDate(date)} />
             </FormControl>
             <FormLabel>Newest Beatmap Date</FormLabel>
             <FormControl>
-                <input type="date" value={value.newestBeatmapDate ? formatDate(value.newestBeatmapDate) : ""} onChange={e => setNewestBeatmapDate(e.currentTarget.value)} />
+                <DatePicker selected={value.newestBeatmapDate} onChange={date => setNewestBeatmapDate(date)} />
             </FormControl>
             <FormLabel>Oldest Score Date</FormLabel>
             <FormControl>
-                <input type="date" value={value.oldestScoreDate ? formatDate(value.oldestScoreDate) : ""} onChange={e => setOldestScoreDate(e.currentTarget.value)} />
+                <DatePicker selected={value.oldestScoreDate} onChange={date => setOldestScoreDate(date)} />
             </FormControl>
             <FormLabel>Newest Score Date</FormLabel>
             <FormControl>
-                <input type="date" value={value.newestScoreDate ? formatDate(value.newestScoreDate) : ""} onChange={e => setNewestScoreDate(e.currentTarget.value)} />
+                <DatePicker selected={value.newestScoreDate} onChange={date => setNewestScoreDate(date)} />
             </FormControl>
             
             {/* Mods */}

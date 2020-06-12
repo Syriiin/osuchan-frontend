@@ -19,3 +19,4 @@ export * from "./forms/FormControl";
 export * from "./forms/Switch";
 export * from "./forms/ScoreFilterForm";
 export * from "./forms/Select";
+export * from "./forms/DatePicker";
