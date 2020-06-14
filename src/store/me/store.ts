@@ -32,7 +32,7 @@ export class MeStore {
         this.isLoading = true;
 
         try {
-            const meResponse = await http.get("/osuauth/me");
+            const meResponse = await http.get("/api/users/me");
             const user: User = userFromJson(meResponse.data);
 
             this.user = user;
@@ -44,7 +44,7 @@ export class MeStore {
                 const invitesResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/invites`);
                 const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
-                const scoreFilterPresetsResponse = await http.get(`/osuauth/me/scorefilterpresets`);
+                const scoreFilterPresetsResponse = await http.get(`/api/users/me/scorefilterpresets`);
                 const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
                 this.memberships.replace(memberships);
@@ -111,7 +111,7 @@ export class MeStore {
         this.isCreatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await http.post(`/osuauth/me/scorefilterpresets`, {
+            const scoreFilterPresetResponse = await http.post(`/api/users/me/scorefilterpresets`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -147,7 +147,7 @@ export class MeStore {
         this.isUpdatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await http.put(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`, {
+            const scoreFilterPresetResponse = await http.put(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -183,7 +183,7 @@ export class MeStore {
         this.isDeletingScoreFilterPreset = true;
 
         try {
-            await http.delete(`/osuauth/me/scorefilterpresets/${scoreFilterPresetId}`);
+            await http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
 
             this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
         } catch (error) {
