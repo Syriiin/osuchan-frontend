@@ -19,6 +19,17 @@ const Home = () => {
 
             <h2>Changelog</h2>
 
+            <h3>14th June 2020</h3>
+            <ul>
+                <li>Add score set support for leaderboards</li>
+                <li>Add the ability to save score filter presets</li>
+                <li>Enable profile sandbox for taiko, catch, and mania (score sets and score editing not supported yet)</li>
+                <li>Add new logo</li>
+                <li>Make various things look a bit nicer</li>
+                <li>Misc bug fixes</li>
+                <li>A BUNCH of refactoring and code quality cleanup</li>
+            </ul>
+
             <h3>31st March 2020</h3>
             <ul>
                 <li>Add fully featured score filtering to profile sandbox</li>
