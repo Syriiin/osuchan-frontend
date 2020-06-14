@@ -8,11 +8,11 @@ const Home = () => {
             <p>
                 You can view a player's profile by searching their username in the top right.
                 <br />
-                You can explore the custom leaderboard system via the link in the sidebar.
+                You can explore the custom leaderboard system via the link in the above.
             </p>
 
             <p>
-                If you run into any bugs, please report them preferably as a github issue on <a href="https://github.com/Syriiin/osuchan-backend">the repository</a> or alternativly in the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+                If you run into any bugs, please report them in the #bugs channel of the <a href="https://discord.gg/z7c9tD6">discord server</a>.
             </p>
 
             <br />
