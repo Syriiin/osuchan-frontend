@@ -39,27 +39,27 @@ export class UsersStore {
     }
 
     @computed get sandboxScoreStyleAccuracy() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.accuracy));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.accuracy)) || 0;
     }
 
     @computed get sandboxScoreStyleBpm() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.bpm));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.bpm)) || 0;
     }
 
     @computed get sandboxScoreStyleLength() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.length));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.length)) || 0;
     }
 
     @computed get sandboxScoreStyleCircleSize() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.circleSize));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.circleSize)) || 0;
     }
 
     @computed get sandboxScoreStyleApproachRate() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.approachRate));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.approachRate)) || 0;
     }
 
     @computed get sandboxScoreStyleOverallDifficulty() {
-        return calculateScoreStyleValue(this.sandboxScores.map(score => score.overallDifficulty));
+        return calculateScoreStyleValue(this.sandboxScores.map(score => score.overallDifficulty)) || 0;
     }
 
     @action
