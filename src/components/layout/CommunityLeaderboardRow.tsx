@@ -27,12 +27,13 @@ const LeaderboardTitle = styled.span`
     font-size: 1.5em;
 `;
 
-const LeaderboardCreator = styled.span`
-    color: ${props => props.theme.colours.timber};
-`;
-
 const LeaderboardType = styled.span`
     font-size: 0.8em;
+    color: ${props => props.theme.colours.mango};
+`;
+
+const LeaderboardCreator = styled.span`
+    color: ${props => props.theme.colours.timber};
 `;
 
 export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => {
@@ -45,12 +46,12 @@ export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => 
             </LeaderboardIconContainer>
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{leaderboard.name}</LeaderboardTitle>
-                <LeaderboardCreator>{leaderboard.owner!.username}</LeaderboardCreator>
                 <LeaderboardType>
                     {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
                     {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
                     {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                 </LeaderboardType>
+                <LeaderboardCreator>{leaderboard.owner!.username}</LeaderboardCreator>
             </LeaderboardTitleContainer>
         </Row>
     );

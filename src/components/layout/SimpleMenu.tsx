@@ -1,11 +1,12 @@
 import React, { useState, ReactNode, ReactNodeArray } from "react";
 import styled from "styled-components";
 
-const Menu = styled.div`
+const Menu = styled.div<MenuProps>`
     position: absolute;
-    left: calc(50% - 50px);
+    left: calc(50% - ${props => props.width / 2}px);
     top: calc(100% + 10px);
     z-index: 100;
+    width: ${props => props.width}px;
 
     background-color: ${props => props.theme.colours.midground};
     border: 1px solid ${props => props.theme.colours.currant};
@@ -16,28 +17,24 @@ const Menu = styled.div`
     }
 `;
 
+interface MenuProps {
+    width: number;
+}
+
 export const SimpleMenuItem = styled.div<SimpleMenuItemProps>`
     padding: 10px;
-    width: 100px;
-    color: #fff;
+    width: 100%;
+    color: ${props => props.disabled ? "#777" : "#fff"};
+    cursor: ${props => props.disabled ? "default" : "unset"};
 
     &:hover {
-        background-color: ${props => props.theme.colours.currant};
+        background-color: ${props => !props.disabled && props.theme.colours.currant};
     }
 `;
 
 interface SimpleMenuItemProps {
     disabled?: boolean;
 }
-
-export const DisabledSimpleMenuItem = styled(SimpleMenuItem)`
-    color: #777;
-    cursor: default;
-
-    &:hover {
-        background-color: unset;
-    }
-`;
 
 const MenuTriggerWrapper = styled.div`
     position: relative;
@@ -53,9 +50,9 @@ export const SimpleMenu = (props: SimpleMenuProps) => {
         <MenuTriggerWrapper onClick={handleMenuOpen}>
             {props.triggerElement}
             {menuOpen && (
-                <Menu>
+                <Menu width={props.width ?? 100}>
                     {props.children.length > 0 ? props.children : (
-                        <DisabledSimpleMenuItem>{props.emptyText || "Nothing here!"}</DisabledSimpleMenuItem>
+                        <SimpleMenuItem disabled>{props.emptyText || "Nothing here!"}</SimpleMenuItem>
                     )}
                 </Menu>
             )}
@@ -67,4 +64,5 @@ export interface SimpleMenuProps {
     triggerElement: ReactNode;
     children: ReactNodeArray;
     emptyText?: string;
+    width?: number;
 }

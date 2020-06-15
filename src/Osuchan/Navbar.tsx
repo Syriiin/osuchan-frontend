@@ -96,6 +96,16 @@ const NotificationNumber = styled.div`
     background-color: ${props => props.theme.colours.mystic};
 `;
 
+const InviteWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const InviteLeaderboardImage = styled.img`
+    height: 20px;
+    margin-right: 5px;
+`;
+
 const UserAvatarWrapper = styled.div`
     margin: 10px;
     width: 50px;
@@ -193,7 +203,7 @@ const Navbar = (props: NavbarProps) => {
                 {/* Login button / user menu */}
                 {osuUser ? (
                     <>
-                        <SimpleMenu triggerElement={
+                        <SimpleMenu width={150} triggerElement={
                             <InviteIconWrapper>
                                 {invites.length > 0 && (
                                     <NotificationNumber>{invites.length}</NotificationNumber>
@@ -201,13 +211,24 @@ const Navbar = (props: NavbarProps) => {
                                 <FontAwesomeIcon icon={faEnvelope} size="lg" />
                             </InviteIconWrapper>
                         } emptyText="No pending invites">
-                            {invites.map((invite, i) => (
+                            {invites.slice(0, 5).map((invite, i) => (
                                 <Link key={i} to={`/leaderboards/${invite.leaderboardId}`}>
-                                    <SimpleMenuItem>{invite.leaderboard!.name}</SimpleMenuItem>
+                                    <SimpleMenuItem>
+                                        <InviteWrapper>
+                                            <InviteLeaderboardImage src={invite.leaderboard!.iconUrl} alt="Leaderboard icon" />
+                                            <div>{invite.leaderboard!.name}</div>
+                                        </InviteWrapper>
+                                    </SimpleMenuItem>
                                 </Link>
                             ))}
+                            {invites.length > 5 && (
+                                <SimpleMenuItem disabled>and {invites.length - 5} more</SimpleMenuItem>
+                            )}
+                            <Link to="/me/invites">
+                                <SimpleMenuItem>See all invites</SimpleMenuItem>
+                            </Link>
                         </SimpleMenu>
-                        <SimpleMenu triggerElement={
+                        <SimpleMenu width={150} triggerElement={
                             <UserAvatarWrapper>
                                 <UserAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
                             </UserAvatarWrapper>

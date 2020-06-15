@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Home from "./Home/Home";
+import Me from "./Me/Me";
 import Profiles from "./Profiles/Profiles";
 import Leaderboards from "./Leaderboards/Leaderboards";
 import { StoreContext } from "../store";
@@ -37,6 +38,7 @@ const Osuchan = () => {
             <ContentWrapper>
                 <Switch>
                     <Route path="/" exact component={Home} />
+                    <Route path="/me" component={Me} />
                     <Route path="/users" component={Profiles} />
                     <Route path="/leaderboards" component={Leaderboards} />
                     <Redirect to="/" />
