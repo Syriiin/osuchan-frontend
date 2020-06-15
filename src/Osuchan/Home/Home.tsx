@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Home = () => {
+    // use effect to update title
+    useEffect(() => {
+        document.title = "Home - osu!chan";
+    }, []);
+
     return (
         <>
             <h1>Welcome to the osu!chan!</h1>
