@@ -210,7 +210,7 @@ const Navbar = (props: NavbarProps) => {
                                 )}
                                 <FontAwesomeIcon icon={faEnvelope} size="lg" />
                             </InviteIconWrapper>
-                        } emptyText="No pending invites">
+                        }>
                             {invites.slice(0, 5).map((invite, i) => (
                                 <Link key={i} to={`/leaderboards/${invite.leaderboardId}`}>
                                     <SimpleMenuItem>
@@ -221,6 +221,9 @@ const Navbar = (props: NavbarProps) => {
                                     </SimpleMenuItem>
                                 </Link>
                             ))}
+                            {invites.length === 0 && (
+                                <SimpleMenuItem disabled>No pending invites</SimpleMenuItem>
+                            )}
                             {invites.length > 5 && (
                                 <SimpleMenuItem disabled>and {invites.length - 5} more</SimpleMenuItem>
                             )}
