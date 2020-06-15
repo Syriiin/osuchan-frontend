@@ -124,7 +124,9 @@ export class UsersStore {
                     "required_mods": scoreFilter.requiredMods,
                     "disqualified_mods": scoreFilter.disqualifiedMods,
                     "lowest_accuracy": scoreFilter.lowestAccuracy,
-                    "highest_accuracy": scoreFilter.highestAccuracy
+                    "highest_accuracy": scoreFilter.highestAccuracy,
+                    "lowest_length": scoreFilter.lowestLength,
+                    "highest_length": scoreFilter.highestLength
                 }
             });
             let scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));

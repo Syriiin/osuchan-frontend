@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { formatMods } from "../../../utils/formatting";
+import { formatMods, formatTime } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
 import { OsuUser, ScoreFilter } from "../../../store/models/profiles/types";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
@@ -98,6 +98,13 @@ const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
                 )}
                 {scoreFilter.highestAccuracy !== null && (
                     <li>Max Accuracy: <FilterValue>{scoreFilter.highestAccuracy}</FilterValue></li>
+                )}
+                {/* Length */}
+                {scoreFilter.lowestLength !== null && (
+                    <li>Min Length: <FilterValue>{formatTime(scoreFilter.lowestLength)}</FilterValue></li>
+                )}
+                {scoreFilter.highestLength !== null && (
+                    <li>Max Length: <FilterValue>{formatTime(scoreFilter.highestLength)}</FilterValue></li>
                 )}
                 {/* CS */}
                 {scoreFilter.lowestCs !== null && (

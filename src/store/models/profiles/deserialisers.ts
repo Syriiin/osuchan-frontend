@@ -107,7 +107,9 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
         requiredMods: data["required_mods"],
         disqualifiedMods: data["disqualified_mods"],
         lowestAccuracy: data["lowest_accuracy"],
-        highestAccuracy: data["highest_accuracy"]
+        highestAccuracy: data["highest_accuracy"],
+        lowestLength: data["lowest_length"],
+        highestLength: data["highest_length"]
     }
 }
 

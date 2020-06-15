@@ -54,6 +54,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const [disqualifiedMods, setDisqualifiedMods] = useState(Mods.None);
     const [lowestAccuracy, setLowestAccuracy] = useState("");
     const [highestAccuracy, setHighestAccuracy] = useState("");
+    const [lowestLength, setLowestLength] = useState("");
+    const [highestLength, setHighestLength] = useState("");
 
     const getScoreFilter = useCallback(() => ({
         allowedBeatmapStatus,
@@ -70,7 +72,9 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         requiredMods,
         disqualifiedMods,
         lowestAccuracy: parseFloat(lowestAccuracy) || null,
-        highestAccuracy: parseFloat(highestAccuracy) || null
+        highestAccuracy: parseFloat(highestAccuracy) || null,
+        lowestLength: parseInt(lowestLength) || null,
+        highestLength: parseInt(highestLength) || null
     }), [
         allowedBeatmapStatus,
         oldestBeatmapDate,
@@ -86,7 +90,9 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         requiredMods,
         disqualifiedMods,
         lowestAccuracy,
-        highestAccuracy
+        highestAccuracy,
+        lowestLength,
+        highestLength
     ]);
 
     // Call onChange if the score filters update
@@ -125,6 +131,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setDisqualifiedMods(preset?.scoreFilter?.disqualifiedMods ?? Mods.None);
         setLowestAccuracy(preset?.scoreFilter?.lowestAccuracy?.toString() ?? "");
         setHighestAccuracy(preset?.scoreFilter?.highestAccuracy?.toString() ?? "");
+        setLowestLength(preset?.scoreFilter?.lowestLength?.toString() ?? "");
+        setHighestLength(preset?.scoreFilter?.highestLength?.toString() ?? "");
     }
 
     const handleSavePreset = () => meStore.createScoreFilterPreset(presetName || "New Preset", getScoreFilter());
@@ -240,6 +248,14 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormLabel>Max Accuracy (%)</FormLabel>
             <FormControl>
                 <TextInput type="number" step="0.1" min="0" max="100" value={value.highestAccuracy || ""} onChange={e => setHighestAccuracy(e.currentTarget.value)} />
+            </FormControl>
+            <FormLabel>Min Length (seconds)</FormLabel>
+            <FormControl>
+                <TextInput type="number" min="0" value={value.lowestLength || ""} onChange={e => setLowestLength(e.currentTarget.value)} />
+            </FormControl>
+            <FormLabel>Max Length (seconds)</FormLabel>
+            <FormControl>
+                <TextInput type="number" min="0" value={value.highestLength || ""} onChange={e => setHighestLength(e.currentTarget.value)} />
             </FormControl>
         </>
     );

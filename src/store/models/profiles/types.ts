@@ -100,4 +100,6 @@ export interface ScoreFilter {
     disqualifiedMods: Mods;
     lowestAccuracy: number | null;
     highestAccuracy: number | null;
+    lowestLength: number | null;
+    highestLength: number | null;
 }
