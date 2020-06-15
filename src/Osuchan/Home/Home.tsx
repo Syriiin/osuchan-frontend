@@ -20,9 +20,22 @@ const Home = () => {
                 If you run into any bugs, please report them in the #bugs channel of the <a href="https://discord.gg/z7c9tD6">discord server</a>.
             </p>
 
+            <p>
+                If want to help out with the project at all (please help me with design!) check out the #suggestions channel of the <a href="https://discord.gg/z7c9tD6">discord server</a>.
+                <br />
+                You can also check out the code over at the github repos for the <a href="https://github.com/Syriiin/osuchan-frontend">frontend web app</a> and/or the <a href="https://github.com/Syriiin/osuchan-backend">backend server</a>.
+            </p>
+
             <br />
 
             <h2>Changelog</h2>
+
+            <h3>15th June 2020</h3>
+            <ul>
+                <li>Add "My Invites" page made navbar invite list look nicer</li>
+                <li>Add length support for score filters</li>
+                <li>Misc bug fixes</li>
+            </ul>
 
             <h3>14th June 2020</h3>
             <ul>
