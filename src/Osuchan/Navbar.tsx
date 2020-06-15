@@ -86,6 +86,16 @@ const InviteIconWrapper = styled.div`
     width: 50px;
 `;
 
+const NotificationNumber = styled.div`
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: ${props => props.theme.colours.mystic};
+`;
+
 const UserAvatarWrapper = styled.div`
     margin: 10px;
     width: 50px;
@@ -185,6 +195,9 @@ const Navbar = (props: NavbarProps) => {
                     <>
                         <SimpleMenu triggerElement={
                             <InviteIconWrapper>
+                                {invites.length > 0 && (
+                                    <NotificationNumber>{invites.length}</NotificationNumber>
+                                )}
                                 <FontAwesomeIcon icon={faEnvelope} size="lg" />
                             </InviteIconWrapper>
                         } emptyText="No pending invites">
