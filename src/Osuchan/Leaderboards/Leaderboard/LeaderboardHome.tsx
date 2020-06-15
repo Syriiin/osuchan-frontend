@@ -130,7 +130,7 @@ interface LeaderboardFiltersProps {
     gamemode: Gamemode;
 }
 
-const LeaderboardButtons = (props: LeaderboardButtonsProps) => {
+const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
@@ -217,7 +217,7 @@ const LeaderboardButtons = (props: LeaderboardButtonsProps) => {
             )}
         </>
     );
-}
+});
 
 interface LeaderboardButtonsProps {
     leaderboard: Leaderboard;
