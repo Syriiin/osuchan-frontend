@@ -30,6 +30,14 @@ const Home = () => {
 
             <h2>Changelog</h2>
 
+            <h3>16th June 2020</h3>
+            <ul>
+                <li>Add notifications for various things (creating leaderboard, loading scores, inviting players, etc...)</li>
+                <li>Make navbar menus look a bit nicer</li>
+                <li>Add ability to send a message along with your leaderboard invites</li>
+                <li>Misc bug fixes</li>
+            </ul>
+
             <h3>15th June 2020</h3>
             <ul>
                 <li>Add "My Invites" page made navbar invite list look nicer</li>
