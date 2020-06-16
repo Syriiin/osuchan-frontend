@@ -268,7 +268,7 @@ const Navbar = (props: NavbarProps) => {
                             </form>
                         </SimpleModal>
                     </>
-                ) : (
+                ) : meStore.isLoading || (
                     <LoginLink href="/osuauth/login">Login</LoginLink>
                 )}
             </UserMenuContainer>
