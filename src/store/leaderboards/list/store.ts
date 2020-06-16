@@ -28,7 +28,7 @@ export class ListStore {
 
             this.leaderboards.replace(leaderboards);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
         this.isLoading = false;
@@ -75,7 +75,7 @@ export class ListStore {
 
             notify.positive("Leaderboard created");
         } catch (error) {
-            console.log(error)
+            console.log(error);
 
             const errorMessage = error.response.data.detail;
 

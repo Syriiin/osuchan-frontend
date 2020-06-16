@@ -55,7 +55,7 @@ export class MeStore {
 
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
         this.isLoading = false;

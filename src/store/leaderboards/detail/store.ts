@@ -41,7 +41,7 @@ export class DetailStore {
             // transform scores into their intended form for abnormal score sets
             this.topScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
         this.isLoading = false;

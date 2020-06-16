@@ -97,7 +97,7 @@ export class UsersStore {
             this.leaderboards.replace(leaderboards);
             this.sandboxScores.replace(scores);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
         
         this.isLoading = false;
@@ -139,7 +139,7 @@ export class UsersStore {
 
             notify.neutral("Sandbox scores loaded");
         } catch (error) {
-            console.log(error)
+            console.log(error);
 
             const errorMessage = error.response.data.detail;
 
