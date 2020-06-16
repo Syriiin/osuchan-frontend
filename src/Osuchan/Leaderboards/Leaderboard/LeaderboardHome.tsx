@@ -154,6 +154,7 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
     
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
     const [inviteUserUrl, setInviteUserUrl] = useState("");
+    const [inviteMessage, setInviteMessage] = useState("");
 
     const handleInviteSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -166,7 +167,7 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
         }
 
         if (userIds.length > 0) {
-            detailStore.invitePlayers(leaderboard!.id, userIds);
+            detailStore.invitePlayers(leaderboard!.id, userIds, inviteMessage);
             setInviteDialogOpen(false);
         }
     }
@@ -202,6 +203,10 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                                             <FormLabel>osu! Profile URL(s)</FormLabel>
                                             <FormControl>
                                                 <TextField fullWidth required placeholder="https://osu.ppy.sh/users/5701575" onChange={e => setInviteUserUrl(e.currentTarget.value)} value={inviteUserUrl} />
+                                            </FormControl>
+                                            <FormLabel>Message</FormLabel>
+                                            <FormControl>
+                                                <TextField fullWidth onChange={e => setInviteMessage(e.currentTarget.value)} value={inviteMessage} />
                                             </FormControl>
                                             <Button type="submit">Invite</Button>
                                         </form>

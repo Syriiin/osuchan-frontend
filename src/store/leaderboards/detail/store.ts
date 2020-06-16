@@ -78,12 +78,13 @@ export class DetailStore {
     }
 
     @action
-    invitePlayers = async (leaderboardId: number, userIds: number[]) => {
+    invitePlayers = async (leaderboardId: number, userIds: number[], message: string) => {
         this.isInviting = true;
 
         try {
             await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
-                "user_ids": userIds
+                "user_ids": userIds,
+                "message": message
             });
 
             notify.positive("Invitations sent");
