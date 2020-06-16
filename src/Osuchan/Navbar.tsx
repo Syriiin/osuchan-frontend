@@ -7,7 +7,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
-import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
+import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -227,6 +227,7 @@ const Navbar = (props: NavbarProps) => {
                             {invites.length > 5 && (
                                 <SimpleMenuItem disabled>and {invites.length - 5} more</SimpleMenuItem>
                             )}
+                            <SimpleMenuDivider />
                             <Link to="/me/invites">
                                 <SimpleMenuItem>See all invites</SimpleMenuItem>
                             </Link>
@@ -240,6 +241,7 @@ const Navbar = (props: NavbarProps) => {
                                 <SimpleMenuItem>My Profile</SimpleMenuItem>
                             </Link>
                             <SimpleMenuItem onClick={() => setAddScoreModalOpen(true)}>Add Scores</SimpleMenuItem>
+                            <SimpleMenuDivider />
                             <a href="/osuauth/logout">
                                 <SimpleMenuItem>Logout</SimpleMenuItem>
                             </a>
