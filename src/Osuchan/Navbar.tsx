@@ -7,7 +7,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
-import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink } from "../components";
+import { SimpleMenu, SimpleMenuItem, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -260,7 +260,7 @@ const Navbar = (props: NavbarProps) => {
                                 </label>
                                 <label>
                                     Beatmap URL(s)
-                                    <TextInput fullWidth required placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514" onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)} value={addScoreBeatmapUrl} />
+                                    <TextField fullWidth required placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514" onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)} value={addScoreBeatmapUrl} />
                                 </label>
                                 <Button type="submit">Submit</Button>
                             </form>
