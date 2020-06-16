@@ -8,6 +8,7 @@ import { Score } from "../../models/profiles/types";
 import { leaderboardFromJson, membershipFromJson } from "../../models/leaderboards/deserialisers";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
 import { unchokeForScoreSet } from "../../../utils/osu";
+import { notify } from "../../../notifications";
 
 export class DetailStore {
     @observable leaderboard: Leaderboard | null = null;
@@ -59,8 +60,18 @@ export class DetailStore {
             this.leaderboard = null;
             this.rankings.clear();
             this.topScores.clear();
+
+            notify.positive("Leaderboard deleted");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to delete leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to delete leaderboard");
+            }
         }
 
         this.isDeleting = false;
@@ -74,8 +85,18 @@ export class DetailStore {
             await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
                 "user_ids": userIds
             });
+
+            notify.positive("Invitations sent");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to send invitations: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to send invitations");
+            }
         }
 
         this.isInviting = false;

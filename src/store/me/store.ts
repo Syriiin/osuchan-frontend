@@ -8,6 +8,7 @@ import { inviteFromJson, membershipFromJson } from "../models/leaderboards/deser
 import { Gamemode } from "../models/common/enums";
 import { User, ScoreFilterPreset } from "../models/users/types";
 import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deserialisers";
+import { notify } from "../../notifications";
 
 export class MeStore {
     @observable user: User | null = null;
@@ -68,8 +69,18 @@ export class MeStore {
             await http.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
                 "beatmap_ids": beatmapIds
             });
+
+            notify.positive("New scores added");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to add new scores: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to add new scores");
+            }
         }
 
         this.isAddingScores = false;
@@ -84,8 +95,18 @@ export class MeStore {
             const membership = membershipFromJson(membershipResponse.data);
 
             this.memberships.push(membership);
+
+            notify.positive("Leaderboard joined");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to join leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to join leaderboard");
+            }
         }
 
         this.isJoiningLeaderboard = false;
@@ -99,8 +120,18 @@ export class MeStore {
             await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.user!.osuUserId}`);
 
             this.memberships.replace(this.memberships.filter(m => m.leaderboardId !== leaderboardId));
+
+            notify.positive("Leaderboard left");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to leave leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to leave leaderboard");
+            }
         }
 
         this.isLeavingLeaderboard = false;
@@ -137,8 +168,18 @@ export class MeStore {
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
             this.scoreFilterPresets.push(scoreFilterPreset);
+
+            notify.positive("Score filter preset created");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to create score filter preset: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to create score filter preset");
+            }
         }
 
         this.isCreatingScoreFilterPreset = false;
@@ -175,8 +216,18 @@ export class MeStore {
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
             this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
+
+            notify.positive("Score filter preset updated");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to update score filter preset: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to update score filter preset");
+            }
         }
 
         this.isUpdatingScoreFilterPreset = false;
@@ -190,8 +241,18 @@ export class MeStore {
             await http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
 
             this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
+
+            notify.positive("Score filter preset deleted");
         } catch (error) {
             console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to delete score filter preset: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to delete score filter preset");
+            }
         }
 
         this.isDeletingScoreFilterPreset = false;

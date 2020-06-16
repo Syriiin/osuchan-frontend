@@ -30,6 +30,7 @@
         "react-scripts": "^3.4.1",
         "react-select": "^3.1.0",
         "react-switch": "^5.0.1",
+        "react-toastify": "^6.0.5",
         "react-vis": "^1.11.7",
         "styled-components": "^5.1.1",
         "timeago-react": "^3.0.0",

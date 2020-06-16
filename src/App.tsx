@@ -4,9 +4,11 @@ import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-
 
 import "react-vis/dist/style.css";
 import "react-datepicker/dist/react-datepicker.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import history from "./history";
 import { osuchanTheme } from "./osuchanTheme";
+import { NotificationContainer } from "./notifications";
 
 import Osuchan from "./Osuchan/Osuchan";
 
@@ -38,6 +40,7 @@ const App = () => {
         <StyledThemeProvider theme={osuchanTheme}>
             <Router history={history}>
                 <GlobalStyle />
+                <NotificationContainer hideProgressBar />
                 <Osuchan />
             </Router>
         </StyledThemeProvider>

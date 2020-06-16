@@ -11,6 +11,7 @@ import { getScoreResult, calculateAccuracy, calculateBpm, calculateLength, calcu
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
 import { ScoreSet } from "../models/profiles/enums";
+import { notify } from "../../notifications";
 
 function calculateScoreStyleValue(values: number[]) {
     let weighting_value = 0;
@@ -135,8 +136,18 @@ export class UsersStore {
             scores = unchokeForScoreSet(scores, scoreSet);
 
             this.sandboxScores.replace(scores);
+
+            notify.neutral("Sandbox scores loaded");
         } catch (error) {
             console.log(error)
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to load sandbox scores: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to load sandbox scores");
+            }
         }
         
         this.isLoadingSandboxScores = false;
@@ -189,6 +200,8 @@ export class UsersStore {
 
         // Sort observable array
         this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
+
+        notify.neutral("Sandbox scores recalculated");
     }
 
     @action

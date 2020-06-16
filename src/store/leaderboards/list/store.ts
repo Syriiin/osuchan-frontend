@@ -9,6 +9,7 @@ import { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 import { ScoreSet } from "../../models/profiles/enums";
+import { notify } from "../../../notifications";
 
 export class ListStore {
     @observable isLoading: boolean = false;
@@ -71,8 +72,18 @@ export class ListStore {
 
             // Navigate to leaderboard page after creation
             history.push(`/leaderboards/${leaderboard.id}`);
+
+            notify.positive("Leaderboard created");
         } catch (error) {
             console.log(error)
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to create leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to create leaderboard");
+            }
         }
 
         this.isCreating = false;
