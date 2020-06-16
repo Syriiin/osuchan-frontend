@@ -7,6 +7,9 @@ export const osuchanTheme: DefaultTheme = {
         mystic: "#A02EFF",
         timber: "#D2B66F",
         mango: "#FFAF2E",
+        positive: "#2FCC6A",
+        warning: "#CCAE25",
+        negative: "#CC544E",
         foreground: "#363663",
         midground: "#29293D",
         background: "#17171C"

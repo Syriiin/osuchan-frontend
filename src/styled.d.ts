@@ -8,6 +8,9 @@ declare module "styled-components" {
             mystic: string;
             timber: string;
             mango: string;
+            positive: string;
+            warning: string;
+            negative: string;
             foreground: string;
             midground: string;
             background: string;
