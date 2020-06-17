@@ -45,7 +45,7 @@ const InviteRow = (props: InviteRowProps) => {
             <InviteeAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
             <InviteeUsername>{osuUser.username}</InviteeUsername>
             <InviteMessage>{props.invite.message}</InviteMessage>
-            <Button onClick={() => invitesStore.cancelInvite(props.invite.leaderboardId, osuUser.id)}>Cancel Invite</Button>
+            <Button negative onClick={() => invitesStore.cancelInvite(props.invite.leaderboardId, osuUser.id)}>Cancel Invite</Button>
         </Row>
     );
 };
@@ -94,7 +94,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                 <FormControl>
                     <TextField fullWidth onChange={e => setInviteMessage(e.currentTarget.value)} value={inviteMessage} />
                 </FormControl>
-                <Button type="submit">Invite</Button>
+                <Button positive type="submit">Invite</Button>
             </form>
         </SimpleModal>
     );

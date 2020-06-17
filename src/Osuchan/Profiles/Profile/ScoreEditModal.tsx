@@ -69,7 +69,7 @@ const ScoreEditModal = (props: ScoreEditModalProps) => {
                 <FormControl>
                     <TextInput fullWidth type="number" required placeholder={score.countMiss.toString()} value={countMiss} onChange={e => setCountMiss(e.currentTarget.value)} min={0} />
                 </FormControl>
-                <Button type="submit">Apply</Button>
+                <Button positive type="submit">Apply</Button>
             </form>
         </SimpleModal>
     );

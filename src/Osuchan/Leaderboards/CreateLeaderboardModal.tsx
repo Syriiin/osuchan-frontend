@@ -96,7 +96,7 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
                 {/* Score filters */}
                 <ScoreFilterForm gamemode={gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
 
-                <Button type="submit">Create</Button>
+                <Button positive type="submit">Create</Button>
             </form>
         </SimpleModal>
     );

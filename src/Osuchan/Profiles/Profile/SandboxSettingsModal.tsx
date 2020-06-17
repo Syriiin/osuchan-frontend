@@ -36,7 +36,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
                     ]} />
                 </FormControl>
                 <ScoreFilterForm gamemode={props.gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
-                <Button type="submit">Load scores</Button>
+                <Button positive type="submit">Load scores</Button>
             </form>
         </SimpleModal>
     );

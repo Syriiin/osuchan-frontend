@@ -76,7 +76,7 @@ const InviteRow = (props: InviteRowProps) => {
             <UnstyledLink to={`/leaderboards/${invite.leaderboardId}`}>
                 <Button>View Leaderboard</Button>
             </UnstyledLink>
-            <DeclineButton onClick={() => meStore.declineInvite(invite.leaderboardId)}>Decline Invite</DeclineButton>
+            <DeclineButton negative onClick={() => meStore.declineInvite(invite.leaderboardId)}>Decline Invite</DeclineButton>
         </Row>
     );
 }

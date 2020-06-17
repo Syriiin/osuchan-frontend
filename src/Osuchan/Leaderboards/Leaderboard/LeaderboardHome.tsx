@@ -164,7 +164,7 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     {leaderboard.ownerId === meOsuUser.id && (
                         <>
                             {/* Delete button */}
-                            <DeleteButton onClick={handleDelete}>Delete Leaderboard</DeleteButton>
+                            <DeleteButton negative onClick={handleDelete}>Delete Leaderboard</DeleteButton>
 
                             {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
@@ -177,12 +177,12 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     
                     {/* Join button if public or pending invite, and not member */}
                     {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && !meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button onClick={handleJoin}>Join Leaderboard</Button>
+                        <Button positive onClick={handleJoin}>Join Leaderboard</Button>
                     )}
 
                     {/* Leave button if member and not owner */}
                     {leaderboard.ownerId !== meOsuUser.id && meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button onClick={handleLeave}>Leave Leaderboard</Button>
+                        <Button negative onClick={handleLeave}>Leave Leaderboard</Button>
                     )}
                 </>
             )}

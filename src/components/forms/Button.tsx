@@ -4,13 +4,17 @@ export const Button = styled.button<ButtonProps>`
     padding: 10px;
     border-radius: 10px;
     color: #fff;
-    background-color: ${props => props.theme.colours.currant};
+    background-color: ${props => 
+        props.negative ? props.theme.colours.negative :
+        props.positive ? props.theme.colours.positive :
+        props.theme.colours.currant
+    };
     border: none;
     cursor: pointer;
     width: ${props => props.fullWidth ? "100%" : "unset"};
 
     &:hover {
-        background-color: ${props => props.theme.colours.mystic};
+        filter: brightness(1.2);
     }
 
     &:focus {
@@ -21,4 +25,6 @@ export const Button = styled.button<ButtonProps>`
 
 interface ButtonProps {
     fullWidth?: boolean;
+    negative?: boolean;
+    positive?: boolean;
 }

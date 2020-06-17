@@ -156,15 +156,15 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <TextInput placeholder="Preset Name" value={presetName} onChange={e => setPresetName(e.currentTarget.value)} />
             </FormControl>
-            <SaveNewButton type="button" onClick={handleSavePreset}>
+            <SaveNewButton positive type="button" onClick={handleSavePreset}>
                 {meStore.isCreatingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Save New Preset"}
             </SaveNewButton>
             {preset !== null && (
                 <>
-                    <SaveButton type="button" onClick={handleUpdatePreset}>
+                    <SaveButton positive type="button" onClick={handleUpdatePreset}>
                         {meStore.isUpdatingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Save Preset"}
                     </SaveButton>
-                    <DeleteButton type="button" onClick={handleDeletePreset}>
+                    <DeleteButton negative type="button" onClick={handleDeletePreset}>
                         {meStore.isDeletingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Delete Preset"}
                     </DeleteButton>
                 </>

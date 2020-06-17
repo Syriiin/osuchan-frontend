@@ -264,7 +264,7 @@ const Navbar = (props: NavbarProps) => {
                                     Beatmap URL(s)
                                     <TextField fullWidth required placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514" onChange={e => setAddScoreBeatmapUrl(e.currentTarget.value)} value={addScoreBeatmapUrl} />
                                 </label>
-                                <Button type="submit">Submit</Button>
+                                <Button positive type="submit">Submit</Button>
                             </form>
                         </SimpleModal>
                     </>
