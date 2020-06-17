@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
 import { StoreContext } from "../../store";
-import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink } from "../../components";
+import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
 import { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 
@@ -22,12 +22,14 @@ const LeaderboardIconContainer = styled.div`
 const LeaderboardIcon = styled.img`
     border-radius: 5px;
     width: 86px;
+    margin-right: 10px;
 `;
 
 const LeaderboardTitleContainer = styled.div`
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    min-width: 200px;
+    margin-right: 10px;
 `;
 
 const LeaderboardTitle = styled.span`
@@ -44,15 +46,21 @@ const LeaderboardCreator = styled.span`
 `;
 
 const InviteMessage = styled.div`
-    margin-left: 10px;
     flex-grow: 1;
 `;
 
+const DeclineButton = styled(Button)`
+    margin-left: 5px;
+`;
+
 const InviteRow = (props: InviteRowProps) => {
+    const store = useContext(StoreContext);
+    const meStore = store.meStore;
+
     const invite = props.invite;
 
     return (
-        <Row hoverable>
+        <Row>
             <LeaderboardIconContainer>
                 <LeaderboardIcon src={invite.leaderboard!.iconUrl || `https://a.ppy.sh/${invite.leaderboard!.owner!.id}`} />
             </LeaderboardIconContainer>
@@ -64,9 +72,11 @@ const InviteRow = (props: InviteRowProps) => {
                 </LeaderboardType>
                 <LeaderboardCreator>{invite.leaderboard!.owner!.username}</LeaderboardCreator>
             </LeaderboardTitleContainer>
-            <InviteMessage>
-                {invite.message}
-            </InviteMessage>
+            <InviteMessage>{invite.message}</InviteMessage>
+            <UnstyledLink to={`/leaderboards/${invite.leaderboardId}`}>
+                <Button>View Leaderboard</Button>
+            </UnstyledLink>
+            <DeclineButton onClick={() => meStore.declineInvite(invite.leaderboardId)}>Decline Invite</DeclineButton>
         </Row>
     );
 }
@@ -75,7 +85,7 @@ interface InviteRowProps {
     invite: Invite;
 }
 
-const Invites = (props: InvitesProps) => {
+const Invites = () => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 
@@ -107,9 +117,7 @@ const Invites = (props: InvitesProps) => {
                 <InvitesSurface>
                     <SurfaceTitle>My Invites</SurfaceTitle>
                     {invites.map(invite => (
-                        <UnstyledLink to={`/leaderboards/${invite.leaderboardId}`}>
-                            <InviteRow invite={invite} />
-                        </UnstyledLink>
+                        <InviteRow invite={invite} />
                     ))}
                     {invites.length === 0 && (
                         <p>You currently have no pending invites...</p>
@@ -119,7 +127,5 @@ const Invites = (props: InvitesProps) => {
         </>
     );
 }
-
-interface InvitesProps {}
 
 export default observer(Invites);

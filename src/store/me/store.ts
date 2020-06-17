@@ -13,9 +13,10 @@ import { notify } from "../../notifications";
 export class MeStore {
     @observable user: User | null = null;
     @observable isLoading: boolean = false;
-    @observable isJoiningLeaderboard: boolean = false;
     @observable isAddingScores: boolean = false;
+    @observable isJoiningLeaderboard: boolean = false;
     @observable isLeavingLeaderboard: boolean = false;
+    @observable isDecliningInvite: boolean = false;
     @observable isCreatingScoreFilterPreset: boolean = false;
     @observable isUpdatingScoreFilterPreset: boolean = false;
     @observable isDeletingScoreFilterPreset: boolean = false;
@@ -135,6 +136,31 @@ export class MeStore {
         }
 
         this.isLeavingLeaderboard = false;
+    }
+
+    @action
+    declineInvite = async (leaderboardId: number) => {
+        this.isDecliningInvite = true;
+
+        try {
+            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/invites/${this.user!.osuUserId}`);
+
+            this.invites.replace(this.invites.filter(i => i.leaderboardId !== leaderboardId));
+
+            notify.positive("Invite declined");
+        } catch (error) {
+            console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to decline invite: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to decline invite");
+            }
+        }
+
+        this.isDecliningInvite = false;
     }
 
     @action
