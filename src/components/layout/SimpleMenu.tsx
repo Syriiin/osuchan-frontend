@@ -13,6 +13,7 @@ const Menu = styled.div<MenuProps>`
     background-color: ${props => props.theme.colours.midground};
     border: 1px solid ${props => props.theme.colours.currant};
     border-radius: 5px;
+    cursor: default;
 
     a, a:hover {
         text-decoration: none;
@@ -28,7 +29,7 @@ export const SimpleMenuItem = styled.div<SimpleMenuItemProps>`
     margin: 5px;
     border-radius: 5px;
     color: ${props => props.disabled ? "#777" : "#fff"};
-    cursor: ${props => props.disabled ? "default" : "unset"};
+    cursor: ${props => props.disabled ? "default" : "pointer"};
 
     &:hover {
         background-color: ${props => !props.disabled && props.theme.colours.currant};
