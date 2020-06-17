@@ -14,7 +14,6 @@ export class DetailStore {
     @observable leaderboard: Leaderboard | null = null;
     @observable isLoading: boolean = false;
     @observable isDeleting: boolean = false;
-    @observable isInviting: boolean = false;
 
     readonly rankings = observable<Membership>([]);
     readonly topScores = observable<Score>([]);
@@ -75,31 +74,5 @@ export class DetailStore {
         }
 
         this.isDeleting = false;
-    }
-
-    @action
-    invitePlayers = async (leaderboardId: number, userIds: number[], message: string) => {
-        this.isInviting = true;
-
-        try {
-            await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/invites`, {
-                "user_ids": userIds,
-                "message": message
-            });
-
-            notify.positive("Invitations sent");
-        } catch (error) {
-            console.log(error);
-
-            const errorMessage = error.response.data.detail;
-
-            if (errorMessage) {
-                notify.negative(`Failed to send invitations: ${errorMessage}`);
-            } else {
-                notify.negative("Failed to send invitations");
-            }
-        }
-
-        this.isInviting = false;
     }
 }

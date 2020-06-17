@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -8,7 +8,7 @@ import { formatMods, formatTime } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
 import { OsuUser, ScoreFilter } from "../../../store/models/profiles/types";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
-import { Surface, SurfaceTitle, Button, SimpleModal, TextField, SimpleModalTitle, FormControl, FormLabel, LoadingPage } from "../../../components";
+import { Surface, SurfaceTitle, Button, LoadingPage, UnstyledLink } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
@@ -151,26 +151,6 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
         await meStore.leaveLeaderboard(leaderboard!.id);
         await detailStore.loadLeaderboard(leaderboard!.id);
     }
-    
-    const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-    const [inviteUserUrl, setInviteUserUrl] = useState("");
-    const [inviteMessage, setInviteMessage] = useState("");
-
-    const handleInviteSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        const userUrlRe = new RegExp(/osu.ppy.sh\/users\/(\d+)/, "g");
-        let match;
-        const userIds = [];
-        while ((match = userUrlRe.exec(inviteUserUrl)) !== null) {
-            userIds.push(parseInt(match[1]));
-        }
-
-        if (userIds.length > 0) {
-            detailStore.invitePlayers(leaderboard!.id, userIds, inviteMessage);
-            setInviteDialogOpen(false);
-        }
-    }
 
     const leaderboard = props.leaderboard;
     const meOsuUser = props.meOsuUser;
@@ -186,32 +166,11 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                             {/* Delete button */}
                             <DeleteButton onClick={handleDelete}>Delete Leaderboard</DeleteButton>
 
-                            {/* Invite button if either private or public invite-only */}
+                            {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
-                                <>
-                                    <Button onClick={() => setInviteDialogOpen(true)}>Invite Player</Button>
-
-                                    {/* Invite player modal */}
-                                    <SimpleModal open={inviteDialogOpen} onClose={() => setInviteDialogOpen(false)}>
-                                        <SimpleModalTitle>Invite Players</SimpleModalTitle>
-                                        <p>
-                                            Enter osu! profile URLs to invite players.
-                                            <br />
-                                            URLs must be from the new site so they matches the format below.
-                                        </p>
-                                        <form onSubmit={handleInviteSubmit}>
-                                            <FormLabel>osu! Profile URL(s)</FormLabel>
-                                            <FormControl>
-                                                <TextField fullWidth required placeholder="https://osu.ppy.sh/users/5701575" onChange={e => setInviteUserUrl(e.currentTarget.value)} value={inviteUserUrl} />
-                                            </FormControl>
-                                            <FormLabel>Message</FormLabel>
-                                            <FormControl>
-                                                <TextField fullWidth onChange={e => setInviteMessage(e.currentTarget.value)} value={inviteMessage} />
-                                            </FormControl>
-                                            <Button type="submit">Invite</Button>
-                                        </form>
-                                    </SimpleModal>
-                                </>
+                                <UnstyledLink to={`/leaderboards/${leaderboard.id}/invites`}>
+                                    <Button>Manage Invites</Button>
+                                </UnstyledLink>
                             )}
                         </>
                     )}
