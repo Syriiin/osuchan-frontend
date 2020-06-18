@@ -53,7 +53,7 @@ const DeclineButton = styled(Button)`
     margin-left: 5px;
 `;
 
-const InviteRow = (props: InviteRowProps) => {
+const InviteRow = observer((props: InviteRowProps) => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 
@@ -74,12 +74,12 @@ const InviteRow = (props: InviteRowProps) => {
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
             <UnstyledLink to={`/leaderboards/${invite.leaderboardId}`}>
-                <Button>View Leaderboard</Button>
+                <Button type="button">View Leaderboard</Button>
             </UnstyledLink>
-            <DeclineButton negative onClick={() => meStore.declineInvite(invite.leaderboardId)}>Decline Invite</DeclineButton>
+            <DeclineButton negative isLoading={meStore.isDecliningInvite} action={() => meStore.declineInvite(invite.leaderboardId)} confirmationMessage="Are you sure you want to decline this invite?">Decline Invite</DeclineButton>
         </Row>
     );
-}
+});
 
 interface InviteRowProps {
     invite: Invite;

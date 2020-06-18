@@ -6,8 +6,9 @@ import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
+import { observer } from "mobx-react-lite";
 
-const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
+const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
 
@@ -23,20 +24,6 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
         e.preventDefault();
 
         listStore.createLeaderboard(gamemode, scoreSet, accessType, name, description, allowPastScores, scoreFilter as ScoreFilter);
-
-        props.onClose();
-        clearInputs();
-    }
-    
-    const clearInputs = () => {
-        setGamemode(Gamemode.Standard);
-        setAccessType(LeaderboardAccessType.Public);
-        setName("");
-        setDescription("");
-        setAllowPastScores(true);
-        setScoreFilter({});
-
-        props.onClose();
     }
 
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
@@ -96,11 +83,11 @@ const CreateLeaderboardModal = (props: CreateLeaderboardModalProps) => {
                 {/* Score filters */}
                 <ScoreFilterForm gamemode={gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
 
-                <Button positive type="submit">Create</Button>
+                <Button isLoading={listStore.isCreating} positive type="submit">Create</Button>
             </form>
         </SimpleModal>
     );
-}
+});
 
 interface CreateLeaderboardModalProps {
     open: boolean;

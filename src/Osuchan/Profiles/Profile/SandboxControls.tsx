@@ -60,7 +60,7 @@ const SandboxControls = (props: SandboxControlsProps) => {
                 </ControlsStatus>
             </ControlsStatusContainer>
             {props.sandboxMode && (
-                <Button onClick={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
+                <Button type="button" action={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
             )}
             <SandboxSettingsModal gamemode={props.gamemode} open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
         </SandboxControlsSurface>

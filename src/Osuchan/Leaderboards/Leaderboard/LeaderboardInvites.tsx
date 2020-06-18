@@ -34,7 +34,7 @@ const InviteMessage = styled.span`
     flex-grow: 1;
 `;
 
-const InviteRow = (props: InviteRowProps) => {
+const InviteRow = observer((props: InviteRowProps) => {
     const store = useContext(StoreContext);
     const invitesStore = store.leaderboardsStore.invitesStore;
 
@@ -45,10 +45,10 @@ const InviteRow = (props: InviteRowProps) => {
             <InviteeAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
             <InviteeUsername>{osuUser.username}</InviteeUsername>
             <InviteMessage>{props.invite.message}</InviteMessage>
-            <Button negative onClick={() => invitesStore.cancelInvite(props.invite.leaderboardId, osuUser.id)}>Cancel Invite</Button>
+            <Button type="button" negative isLoading={invitesStore.isCancellingInvite} action={() => invitesStore.cancelInvite(props.invite.leaderboardId, osuUser.id)} confirmationMessage="Are you sure you want to cancel this invite?">Cancel Invite</Button>
         </Row>
     );
-};
+});
 
 interface InviteRowProps {
     invite: Invite;
@@ -143,12 +143,12 @@ const LeaderboardInvites = (props: LeaderboardInvitesProps) => {
                 <InvitesSurface>
                     <SurfaceTitle onClick={() => console.log(invitesStore.invites.length)}>Manage Invites - {leaderboard.name}</SurfaceTitle>
                     
-                    <Button onClick={() => setInviteModalOpen(true)}>Invite Player</Button>
+                    <Button type="button" isLoading={invitesStore.isInviting} action={() => setInviteModalOpen(true)}>Invite Player</Button>
 
                     <InvitesList>
                         {invitesStore.invites.map(invite => (
                             <InviteRow invite={invite} />
-                            ))}
+                        ))}
                     </InvitesList>
                     
                     <InvitePlayerModal open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} leaderboard={leaderboard} />

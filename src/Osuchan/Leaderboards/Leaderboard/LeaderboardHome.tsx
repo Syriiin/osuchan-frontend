@@ -165,12 +165,12 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     {leaderboard.ownerId === meOsuUser.id && (
                         <>
                             {/* Delete button */}
-                            <DeleteButton negative onClick={handleDelete}>Delete Leaderboard</DeleteButton>
+                            <DeleteButton negative isLoading={detailStore.isDeleting} action={handleDelete} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
 
                             {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
                                 <UnstyledLink to={`/leaderboards/${leaderboard.id}/invites`}>
-                                    <Button>Manage Invites</Button>
+                                    <Button type="button">Manage Invites</Button>
                                 </UnstyledLink>
                             )}
                         </>
@@ -178,12 +178,12 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     
                     {/* Join button if public or pending invite, and not member */}
                     {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && !meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button positive onClick={handleJoin}>Join Leaderboard</Button>
+                        <Button type="button" positive isLoading={meStore.isJoiningLeaderboard} action={handleJoin}>Join Leaderboard</Button>
                     )}
 
                     {/* Leave button if member and not owner */}
                     {leaderboard.ownerId !== meOsuUser.id && meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button negative onClick={handleLeave}>Leave Leaderboard</Button>
+                        <Button type="button" negative isLoading={meStore.isLeavingLeaderboard} action={handleLeave} confirmationMessage="Are you sure you want to leave this leaderboard?">Leave Leaderboard</Button>
                     )}
                 </>
             )}

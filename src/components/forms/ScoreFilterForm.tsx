@@ -11,7 +11,6 @@ import { ScoreFilter } from "../../store/models/profiles/types";
 import { StoreContext } from "../../store";
 import { ScoreFilterPreset } from "../../store/models/users/types";
 import { Button } from "./Button";
-import { LoadingSpinner } from "../layout/Loading";
 import { Select } from "./Select";
 import { DatePicker } from "./DatePicker";
 
@@ -156,16 +155,16 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <TextInput placeholder="Preset Name" value={presetName} onChange={e => setPresetName(e.currentTarget.value)} />
             </FormControl>
-            <SaveNewButton positive type="button" onClick={handleSavePreset}>
-                {meStore.isCreatingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Save New Preset"}
+            <SaveNewButton isLoading={meStore.isCreatingScoreFilterPreset} positive type="button" action={handleSavePreset}>
+                Save New Preset
             </SaveNewButton>
             {preset !== null && (
                 <>
-                    <SaveButton positive type="button" onClick={handleUpdatePreset}>
-                        {meStore.isUpdatingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Save Preset"}
+                    <SaveButton isLoading={meStore.isUpdatingScoreFilterPreset} positive type="button" action={handleUpdatePreset}>
+                        Save Preset
                     </SaveButton>
-                    <DeleteButton negative type="button" onClick={handleDeletePreset}>
-                        {meStore.isDeletingScoreFilterPreset ? <LoadingSpinner scale={0.15} /> : "Delete Preset"}
+                    <DeleteButton isLoading={meStore.isDeletingScoreFilterPreset} negative type="button" action={handleDeletePreset} confirmationMessage="Are you sure you want to delete this preset?">
+                        Delete Preset
                     </DeleteButton>
                 </>
             )}

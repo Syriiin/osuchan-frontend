@@ -147,7 +147,7 @@ export const ScoreRow = (props: ScoreRowProps) => {
                     </PerformanceContainer>
                 </ScoreInfo>
                 {props.actionButton && (
-                    <ActionButton onClick={e => { e.stopPropagation(); props.actionButtonOnClick && props.actionButtonOnClick(); }}>{props.actionButtonText}</ActionButton>
+                    <ActionButton minWidth={0} action={props.actionButtonOnClick}>{props.actionButtonText}</ActionButton>
                 )}
             </ScoreRowWrapper>
             <ScoreModal score={score} open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} />
