@@ -14,6 +14,7 @@ import Rankings from "./Rankings";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../../store/models/common/enums";
 import { AllowedBeatmapStatus, ScoreSet } from "../../../store/models/profiles/enums";
+import { scoreFilterIsDefault } from "../../../utils/osuchan";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -256,7 +257,7 @@ const LeaderboardHome = (props: LeaderboardHomeProps) => {
                         {!leaderboard.allowPastScores && (
                             <AllowPastScores>Scores must be set after joining</AllowPastScores>
                         )}
-                        {leaderboard.scoreFilter && (
+                        {leaderboard.scoreFilter && !scoreFilterIsDefault(leaderboard.scoreFilter) && (
                             <LeaderboardFilters gamemode={leaderboard.gamemode} scoreFilter={leaderboard.scoreFilter} />
                         )}
                         <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.user?.osuUser ?? null} />

@@ -7,7 +7,7 @@ import { Leaderboard, Membership } from "../../models/leaderboards/types";
 import { Score } from "../../models/profiles/types";
 import { leaderboardFromJson, membershipFromJson } from "../../models/leaderboards/deserialisers";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
-import { unchokeForScoreSet } from "../../../utils/osu";
+import { unchokeForScoreSet } from "../../../utils/osuchan";
 import { notify } from "../../../notifications";
 
 export class DetailStore {

@@ -6,7 +6,7 @@ import { Score } from "../../models/profiles/types";
 import { Membership, Leaderboard } from "../../models/leaderboards/types";
 import { membershipFromJson, leaderboardFromJson } from "../../models/leaderboards/deserialisers";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
-import { unchokeForScoreSet } from "../../../utils/osu";
+import { unchokeForScoreSet } from "../../../utils/osuchan";
 
 export class UserStore {
     @observable leaderboard: Leaderboard | null = null;

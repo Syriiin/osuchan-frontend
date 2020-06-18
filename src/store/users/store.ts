@@ -7,11 +7,12 @@ import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
 import { Leaderboard } from "../models/leaderboards/types";
 import { userStatsFromJson, scoreFromJson } from "../models/profiles/deserialisers";
 import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
-import { getScoreResult, calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty, unchokeForScoreSet } from "../../utils/osu";
+import { calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty } from "../../utils/osu";
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
 import { ScoreSet } from "../models/profiles/enums";
 import { notify } from "../../notifications";
+import { unchokeForScoreSet, getScoreResult } from "../../utils/osuchan";
 
 function calculateScoreStyleValue(values: number[]) {
     let weighting_value = 0;

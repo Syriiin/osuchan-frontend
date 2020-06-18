@@ -4,7 +4,7 @@ import http from "../../../http";
 
 import { Score, Beatmap } from "../../models/profiles/types";
 import { beatmapFromJson, scoreFromJson } from "../../models/profiles/deserialisers";
-import { unchokeForScoreSet } from "../../../utils/osu";
+import { unchokeForScoreSet } from "../../../utils/osuchan";
 import { Leaderboard } from "../../models/leaderboards/types";
 import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
 
