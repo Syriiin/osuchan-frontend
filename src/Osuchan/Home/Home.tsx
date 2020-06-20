@@ -30,6 +30,13 @@ const Home = () => {
 
             <h2>Changelog</h2>
 
+            <h3>20th June 2020</h3>
+            <ul>
+                <li>Add loading indicators to buttons</li>
+                <li>Add confirmation messages to destructive actions</li>
+                <li>Misc bug fixes</li>
+            </ul>
+
             <h3>17th June 2020</h3>
             <ul>
                 <li>Add invite management page for leaderboard owners</li>
