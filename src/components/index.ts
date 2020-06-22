@@ -9,6 +9,7 @@ export * from "./layout/Row";
 export * from "./layout/ScoreRow";
 export * from "./layout/Loading";
 export * from "./helpers/UnstyledLink";
+export * from "./helpers/BottomScrollDetector";
 export * from "./forms/Button";
 export * from "./forms/TextInput";
 export * from "./forms/ModsSelect";
