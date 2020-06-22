@@ -14,6 +14,9 @@ import { notify } from "../../../notifications";
 export class ListStore {
     @observable isLoading: boolean = false;
     @observable isCreating: boolean = false;
+    @observable isLoadingCommunityLeaderboardPage: boolean = false;
+    @observable currentCommunityLeaderboardPage: number = 0;
+    @observable communityLeaderboardPagesEnded: boolean = false;
 
     readonly globalLeaderboards = observable<Leaderboard>([]);
     readonly communityLeaderboards = observable<Leaderboard>([]);
@@ -23,6 +26,8 @@ export class ListStore {
         this.globalLeaderboards.clear();
         this.communityLeaderboards.clear();
         this.isLoading = true;
+        this.currentCommunityLeaderboardPage = 0;
+        this.communityLeaderboardPagesEnded = false;
 
         try {
             const globalLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
@@ -36,18 +41,45 @@ export class ListStore {
             const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
                 params: {
                     type: "community",
-                    gamemode: gamemode
+                    gamemode: gamemode,
+                    page: 1
                 }
             });
             const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
             
             this.globalLeaderboards.replace(globalLeaderboards);
             this.communityLeaderboards.replace(communityLeaderboards);
+            this.currentCommunityLeaderboardPage = 1
         } catch (error) {
             console.log(error);
         }
 
         this.isLoading = false;
+    }
+
+    @action
+    loadNextCommunityLeaderboardPage = async (gamemode: Gamemode) => {
+        this.isLoadingCommunityLeaderboardPage = true;
+
+        try {
+            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
+                params: {
+                    type: "community",
+                    gamemode: gamemode,
+                    page: this.currentCommunityLeaderboardPage + 1
+                }
+            });
+            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
+            
+            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
+            this.currentCommunityLeaderboardPage += 1
+        } catch (error) {
+            console.log(error);
+
+            this.communityLeaderboardPagesEnded = true;
+        }
+
+        this.isLoadingCommunityLeaderboardPage = false;
     }
 
     @action

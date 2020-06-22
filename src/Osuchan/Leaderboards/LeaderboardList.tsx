@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
-import { LoadingPage } from "../../components";
+import { LoadingPage, BottomScrollDetector } from "../../components";
 import { Gamemode } from "../../store/models/common/enums";
 
 const LeaderboardList = () => {
@@ -30,6 +30,12 @@ const LeaderboardList = () => {
     const globalLeaderboards = listStore.globalLeaderboards;
     const communityLeaderboards = listStore.communityLeaderboards;
 
+    const loadNextCommunityLeaderboardPage = () => {
+        if (!listStore.communityLeaderboardPagesEnded && !listStore.isLoadingCommunityLeaderboardPage) {
+            listStore.loadNextCommunityLeaderboardPage(Gamemode.Standard);
+        }
+    }
+
     return (
         <>
             {listStore.isLoading ? (
@@ -40,7 +46,9 @@ const LeaderboardList = () => {
                     <GlobalLeaderboards leaderboards={globalLeaderboards} />
 
                     {/* Community leaderboards */}
-                    <CommunityLeaderboards leaderboards={communityLeaderboards} />
+                    <BottomScrollDetector onBottomScrolled={loadNextCommunityLeaderboardPage}>
+                        <CommunityLeaderboards leaderboards={communityLeaderboards} />
+                    </BottomScrollDetector>
                 </>
             )}
         </>
