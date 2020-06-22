@@ -12,6 +12,7 @@ import { ScoreSet } from "../../models/profiles/enums";
 import { notify } from "../../../notifications";
 
 export class ListStore {
+    @observable gamemode: Gamemode | null = null;
     @observable isLoading: boolean = false;
     @observable isCreating: boolean = false;
     @observable isLoadingCommunityLeaderboardPage: boolean = false;
@@ -23,6 +24,7 @@ export class ListStore {
 
     @action
     loadLeaderboards = async (gamemode: Gamemode) => {
+        this.gamemode = gamemode;
         this.globalLeaderboards.clear();
         this.communityLeaderboards.clear();
         this.isLoading = true;
@@ -58,14 +60,14 @@ export class ListStore {
     }
 
     @action
-    loadNextCommunityLeaderboardPage = async (gamemode: Gamemode) => {
+    loadNextCommunityLeaderboardPage = async () => {
         this.isLoadingCommunityLeaderboardPage = true;
 
         try {
             const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
                 params: {
                     type: "community",
-                    gamemode: gamemode,
+                    gamemode: this.gamemode,
                     page: this.currentCommunityLeaderboardPage + 1
                 }
             });

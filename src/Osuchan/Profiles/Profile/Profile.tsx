@@ -12,7 +12,7 @@ import RankInfo from "./RankInfo";
 import ScoreStyle from "./ScoreStyle";
 import ScoresChart from "./ScoresChart";
 import Scores from "./Scores";
-import CommunityLeaderboards from "./CommunityLeaderboards";
+import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
 
 const ProfileGrid = styled.div`
@@ -26,8 +26,7 @@ const ProfileGrid = styled.div`
         "rankinfo rankinfo rankinfo scorestyle scorestyle scorestyle"
         "scoreschart scoreschart scoreschart scoreschart scoreschart scoreschart"
         "scores scores scores scores scores scores"
-        "leaderboards leaderboards leaderboards leaderboards leaderboards leaderboards"
-        "trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses trainingcourses";
+        "leaderboards leaderboards leaderboards leaderboards leaderboards leaderboards";
 `;
 
 const Profile = (props: ProfileProps) => {
@@ -46,7 +45,6 @@ const Profile = (props: ProfileProps) => {
     const osuUser = userStats?.osuUser;
     const scores = usersStore.scores;
     const sandboxScores = usersStore.sandboxScores;
-    const memberships = usersStore.memberships;
 
     // use effect to update title
     const { isLoading } = usersStore;
@@ -94,8 +92,8 @@ const Profile = (props: ProfileProps) => {
                             
                             {sandboxMode || (
                                 <>
-                                    {/* Community Leaderboards */}
-                                    <CommunityLeaderboards memberships={memberships} />
+                                    {/* Leaderboards */}
+                                    <Leaderboards />
                                 </>
                             )}
                         </>

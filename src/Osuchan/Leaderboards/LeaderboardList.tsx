@@ -32,7 +32,7 @@ const LeaderboardList = () => {
 
     const loadNextCommunityLeaderboardPage = () => {
         if (!listStore.communityLeaderboardPagesEnded && !listStore.isLoadingCommunityLeaderboardPage) {
-            listStore.loadNextCommunityLeaderboardPage(Gamemode.Standard);
+            listStore.loadNextCommunityLeaderboardPage();
         }
     }
 

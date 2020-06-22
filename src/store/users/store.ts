@@ -23,13 +23,16 @@ function calculateScoreStyleValue(values: number[]) {
 }
 
 export class UsersStore {
+    @observable gamemode: Gamemode | null = null;
     @observable isLoading: boolean = false;
+    @observable isLoadingCommunityMemberships: boolean = false;
     @observable isLoadingSandboxScores: boolean = false;
-
+    @observable communityMembershipsLoaded: boolean = false;
     @observable currentUserStats: UserStats | null = null;
 
     readonly scores = observable<Score>([]);
-    readonly memberships = observable<Membership>([]);
+    readonly globalMemberships = observable<Membership>([]);
+    readonly communityMemberships = observable<Membership>([]);
     readonly sandboxScores = observable<Score>([]);
 
     @computed get extraPerformance() {
@@ -66,10 +69,12 @@ export class UsersStore {
 
     @action
     loadUser = async (userString: string, gamemode: Gamemode) => {
+        this.gamemode = gamemode;
         this.currentUserStats = null;
         this.scores.clear();
-        this.memberships.clear();
+        this.globalMemberships.clear();
         this.sandboxScores.clear();
+        this.communityMembershipsLoaded = false;
         this.isLoading = true;
 
         try {
@@ -85,23 +90,46 @@ export class UsersStore {
             const scoresResponse = await http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
             
-            const membershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships`, {
+            const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships`, {
                 params: {
-                    "type": "community",
+                    "type": "global",
                     "gamemode": gamemode
                 }
             });
-            const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
+            const globalMemberships: Membership[] = globalMembershipsResponse.data.map((data: any) => membershipFromJson(data));
 
             this.currentUserStats = userStats;
             this.scores.replace(scores);
-            this.memberships.replace(memberships);
+            this.globalMemberships.replace(globalMemberships);
             this.sandboxScores.replace(scores);
         } catch (error) {
             console.log(error);
         }
         
         this.isLoading = false;
+    }
+
+    @action
+    loadCommunityMemberships = async () => {
+        this.communityMemberships.clear();
+        this.isLoadingCommunityMemberships = true;
+
+        try {
+            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships`, {
+                params: {
+                    "type": "community",
+                    "gamemode": this.gamemode
+                }
+            });
+            const communityMemberships: Membership[] = communityMembershipsResponse.data.map((data: any) => membershipFromJson(data));
+
+            this.communityMemberships.replace(communityMemberships);
+            this.communityMembershipsLoaded = true;
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.isLoadingCommunityMemberships = false;
     }
 
     @action
