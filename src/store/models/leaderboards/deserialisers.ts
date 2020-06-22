@@ -11,6 +11,7 @@ export function leaderboardFromJson(data: any): Leaderboard {
         description: data["description"],
         iconUrl: data["icon_url"],
         allowPastScores: data["allow_past_scores"],
+        memberCount: data["member_count"],
         scoreFilter: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? scoreFilterFromJson(data["score_filter"]) : null,
         scoreFilterId: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? data["score_filter"]["id"] : data["score_filter"],
         owner: data["owner"] === null ? null : typeof data["owner"] === "object" ? osuUserFromJson(data["owner"]) : null,
@@ -23,12 +24,13 @@ export function membershipFromJson(data: any): Membership {
     return {
         id: data["id"],
         pp: data["pp"],
+        scoreCount: data["score_count"],
+        rank: data["rank"],
         leaderboard: typeof data["leaderboard"] === "object" ? leaderboardFromJson(data["leaderboard"]) : null,
         leaderboardId: typeof data["leaderboard"] === "object" ? data["leaderboard"]["id"] : data["leaderboard"],
         osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
         osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
-        joinDate: new Date(data["join_date"]),
-        scoreCount: data["score_count"]
+        joinDate: new Date(data["join_date"])
     }
 }
 

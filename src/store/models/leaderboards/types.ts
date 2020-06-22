@@ -12,6 +12,7 @@ export interface Leaderboard {
     description: string;
     iconUrl: string;
     allowPastScores: boolean | null;
+    memberCount: number | null;
     scoreFilter: ScoreFilter | null;
     scoreFilterId: number;
     owner: OsuUser | null;
@@ -22,12 +23,13 @@ export interface Leaderboard {
 export interface Membership {
     id: number;
     pp: number;
+    scoreCount: number;
+    rank: number;
     leaderboard: Leaderboard | null;
     leaderboardId: number;
     osuUser: OsuUser | null;
     osuUserId: number;
     joinDate: Date;
-    scoreCount: number;
 }
 
 export interface Invite {

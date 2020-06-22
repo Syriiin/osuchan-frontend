@@ -4,8 +4,8 @@ import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
-import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { LoadingPage } from "../../components";
+import { Gamemode } from "../../store/models/common/enums";
 
 const LeaderboardList = () => {
     const store = useContext(StoreContext);
@@ -14,7 +14,7 @@ const LeaderboardList = () => {
     // use effect to fetch leaderboards data
     const { loadLeaderboards } = listStore;
     useEffect(() => {
-        loadLeaderboards();
+        loadLeaderboards(Gamemode.Standard);
     }, [loadLeaderboards]);
 
     // use effect to update title
@@ -27,9 +27,8 @@ const LeaderboardList = () => {
         }
     }, [isLoading]);
 
-    const leaderboards = listStore.leaderboards;
-    const globalLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType === LeaderboardAccessType.Global);
-    const communityLeaderboards = leaderboards.filter(leaderboard => leaderboard.accessType !== LeaderboardAccessType.Global);
+    const globalLeaderboards = listStore.globalLeaderboards;
+    const communityLeaderboards = listStore.communityLeaderboards;
 
     return (
         <>

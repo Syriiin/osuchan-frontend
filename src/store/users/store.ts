@@ -4,9 +4,9 @@ import ojsama from "ojsama";
 import http from "../../http";
 
 import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
-import { Leaderboard } from "../models/leaderboards/types";
+import { Membership } from "../models/leaderboards/types";
 import { userStatsFromJson, scoreFromJson } from "../models/profiles/deserialisers";
-import { leaderboardFromJson } from "../models/leaderboards/deserialisers";
+import { membershipFromJson } from "../models/leaderboards/deserialisers";
 import { calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, calculateApproachRate, calculateOverallDifficulty } from "../../utils/osu";
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
@@ -29,7 +29,7 @@ export class UsersStore {
     @observable currentUserStats: UserStats | null = null;
 
     readonly scores = observable<Score>([]);
-    readonly leaderboards = observable<Leaderboard>([]);
+    readonly memberships = observable<Membership>([]);
     readonly sandboxScores = observable<Score>([]);
 
     @computed get extraPerformance() {
@@ -68,7 +68,7 @@ export class UsersStore {
     loadUser = async (userString: string, gamemode: Gamemode) => {
         this.currentUserStats = null;
         this.scores.clear();
-        this.leaderboards.clear();
+        this.memberships.clear();
         this.sandboxScores.clear();
         this.isLoading = true;
 
@@ -84,18 +84,18 @@ export class UsersStore {
 
             const scoresResponse = await http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
-
-            const leaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
+            
+            const membershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships`, {
                 params: {
-                    "user_id": userId,
+                    "type": "community",
                     "gamemode": gamemode
                 }
             });
-            const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
+            const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
 
             this.currentUserStats = userStats;
             this.scores.replace(scores);
-            this.leaderboards.replace(leaderboards);
+            this.memberships.replace(memberships);
             this.sandboxScores.replace(scores);
         } catch (error) {
             console.log(error);

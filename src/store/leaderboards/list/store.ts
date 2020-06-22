@@ -15,18 +15,34 @@ export class ListStore {
     @observable isLoading: boolean = false;
     @observable isCreating: boolean = false;
 
-    readonly leaderboards = observable<Leaderboard>([]);
+    readonly globalLeaderboards = observable<Leaderboard>([]);
+    readonly communityLeaderboards = observable<Leaderboard>([]);
 
     @action
-    loadLeaderboards = async () => {
-        this.leaderboards.clear();
+    loadLeaderboards = async (gamemode: Gamemode) => {
+        this.globalLeaderboards.clear();
+        this.communityLeaderboards.clear();
         this.isLoading = true;
 
         try {
-            const leaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`);
-            const leaderboards: Leaderboard[] = leaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
+            const globalLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
+                params: {
+                    type: "global",
+                    gamemode: gamemode
+                }
+            });
+            const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
 
-            this.leaderboards.replace(leaderboards);
+            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
+                params: {
+                    type: "community",
+                    gamemode: gamemode
+                }
+            });
+            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
+            
+            this.globalLeaderboards.replace(globalLeaderboards);
+            this.communityLeaderboards.replace(communityLeaderboards);
         } catch (error) {
             console.log(error);
         }
@@ -68,7 +84,7 @@ export class ListStore {
             });
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
-            this.leaderboards.push(leaderboard);
+            this.communityLeaderboards.push(leaderboard);
 
             // Navigate to leaderboard page after creation
             history.push(`/leaderboards/${leaderboard.id}`);
