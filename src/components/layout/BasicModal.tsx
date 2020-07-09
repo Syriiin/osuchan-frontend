@@ -11,6 +11,7 @@ const ModalBase = styled.div`
     height: 100%;
     top: 0;
     left: 0;
+    z-index: 1;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 200ms;
 
