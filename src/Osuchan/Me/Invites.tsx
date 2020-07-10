@@ -85,7 +85,7 @@ interface InviteRowProps {
     invite: Invite;
 }
 
-const Invites = () => {
+const Invites = observer(() => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 
@@ -126,6 +126,6 @@ const Invites = () => {
             )}
         </>
     );
-}
+});
 
-export default observer(Invites);
+export default Invites;

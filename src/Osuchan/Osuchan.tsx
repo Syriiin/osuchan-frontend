@@ -22,7 +22,7 @@ const ContentWrapper = styled.main`
     margin: 20px 50px;
 `;
 
-const Osuchan = () => {
+const Osuchan = observer(() => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     
@@ -47,6 +47,6 @@ const Osuchan = () => {
             <Footer />
         </OsuchanWrapper>
     );
-}
+});
 
-export default observer(Osuchan);
+export default Osuchan;

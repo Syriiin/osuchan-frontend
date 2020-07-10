@@ -33,7 +33,7 @@ interface ProfileScoreRowProps {
     sandboxMode: boolean;
 }
 
-const Scores = (props: ScoresProps) => {
+const Scores = observer((props: ScoresProps) => {
     const [showAllScores, setShowAllScores] = useState(false);
 
     return (
@@ -52,7 +52,7 @@ const Scores = (props: ScoresProps) => {
             )}
         </ScoresSurface>
     );
-}
+});
 
 interface ScoresProps {
     scores: Score[];
@@ -60,4 +60,4 @@ interface ScoresProps {
     sandboxMode: boolean;
 }
 
-export default observer(Scores);
+export default Scores;

@@ -121,7 +121,7 @@ const UserAvatar = styled.img`
     }
 `;
 
-const Navbar = (props: NavbarProps) => {
+const Navbar = observer((props: NavbarProps) => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     
@@ -275,8 +275,8 @@ const Navbar = (props: NavbarProps) => {
             
         </NavbarWrapper>
     );
-}
+});
 
 interface NavbarProps extends RouteComponentProps {}
 
-export default withRouter(observer(Navbar));
+export default withRouter(Navbar);

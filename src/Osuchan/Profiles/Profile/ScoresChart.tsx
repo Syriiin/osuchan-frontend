@@ -11,7 +11,7 @@ const ScoresChartSurface = styled(Surface)`
     grid-area: scoreschart;
 `;
 
-const ScoresChart = (props: ScoresChartProps) => {
+const ScoresChart = observer((props: ScoresChartProps) => {
     const theme = useContext(ThemeContext);
 
     const [crosshairValues, setCrosshairValues] = useState<any[]>([]);
@@ -51,7 +51,7 @@ const ScoresChart = (props: ScoresChartProps) => {
             </FlexibleWidthXYPlot>
         </ScoresChartSurface>
     );
-}
+});
 
 interface ScoresChartProps {
     scores: Score[];
@@ -59,4 +59,4 @@ interface ScoresChartProps {
     sandboxMode: boolean;
 }
 
-export default observer(ScoresChart);
+export default ScoresChart;

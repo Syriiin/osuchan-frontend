@@ -25,7 +25,7 @@ const InactiveStatus = styled.span`
     font-weight: bolder;
 `;
 
-const RankInfo = (props: RankInfoProps) => {
+const RankInfo = observer((props: RankInfoProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 
@@ -62,7 +62,7 @@ const RankInfo = (props: RankInfoProps) => {
             )}
         </RankInfoSurface>
     );
-}
+});
 
 interface RankInfoProps {
     osuUser: OsuUser;
@@ -70,4 +70,4 @@ interface RankInfoProps {
     sandboxMode: boolean;
 }
 
-export default observer(RankInfo);
+export default RankInfo;

@@ -13,7 +13,7 @@ const ScoreStyleSurface = styled(Surface)`
     grid-area: scorestyle;
 `;
 
-const ScoreStyle = (props: ScoreStyleProps) => {
+const ScoreStyle = observer((props: ScoreStyleProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
     const userStats = usersStore.currentUserStats!;
@@ -70,11 +70,11 @@ const ScoreStyle = (props: ScoreStyleProps) => {
             </DataTable>
         </ScoreStyleSurface>
     );
-}
+});
 
 interface ScoreStyleProps {
     userStats: UserStats;
     sandboxMode: boolean;
 }
 
-export default observer(ScoreStyle);
+export default ScoreStyle;

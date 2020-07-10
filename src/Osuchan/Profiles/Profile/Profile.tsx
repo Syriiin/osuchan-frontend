@@ -29,7 +29,7 @@ const ProfileGrid = styled.div`
         "leaderboards leaderboards leaderboards leaderboards leaderboards leaderboards";
 `;
 
-const Profile = (props: ProfileProps) => {
+const Profile = observer((props: ProfileProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 
@@ -106,7 +106,7 @@ const Profile = (props: ProfileProps) => {
             )}
         </>
     );
-}
+});
 
 interface RouteParams {
     userString: string;
@@ -115,4 +115,4 @@ interface RouteParams {
 
 interface ProfileProps extends RouteComponentProps<RouteParams> {}
 
-export default observer(Profile);
+export default Profile;
