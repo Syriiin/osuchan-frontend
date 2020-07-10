@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 

@@ -8,7 +8,7 @@ import Footer from "./Footer";
 import Home from "./Home/Home";
 import Me from "./Me/Me";
 import Profiles from "./Profiles/Profiles";
-import Leaderboards from "./Leaderboards/Leaderboards";
+import LeaderboardsRoot from "./Leaderboards";
 import { StoreContext } from "../store";
 
 const OsuchanWrapper = styled.div`
@@ -40,7 +40,7 @@ const Osuchan = () => {
                     <Route path="/" exact component={Home} />
                     <Route path="/me" component={Me} />
                     <Route path="/users" component={Profiles} />
-                    <Route path="/leaderboards" component={Leaderboards} />
+                    <Route path="/leaderboards" component={LeaderboardsRoot} />
                     <Redirect to="/" />
                 </Switch>
             </ContentWrapper>

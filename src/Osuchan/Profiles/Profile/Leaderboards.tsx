@@ -2,23 +2,15 @@ import React, { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { Surface, SurfaceTitle, UnstyledLink, Row, Button, SurfaceHeaderContainer, LoadingSpinner } from "../../../components";
+import { Surface, SurfaceTitle, UnstyledLink, Row, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { StoreContext } from "../../../store";
+import { formatGamemodeNameShort } from "../../../utils/formatting";
 
 const LeaderboardsSurface = styled(Surface)`
     padding: 20px;
     grid-area: leaderboards;
-`;
-
-const TypeSwitcherButton = styled(Button)`
-    margin-left: 5px;
-`;
-
-const LoadingContainer = styled.div`
-    text-align: center;
-    margin: 50px 0;
 `;
 
 const LeaderboardIconContainer = styled.div`
@@ -57,12 +49,12 @@ const MembershipInfoContainer = styled.div`
     text-align: right;
 `;
 
-const MembershipPerformance = styled.div`
-
-`;
-
 const MembershipRank = styled.div`
     font-size: 2em;
+`;
+
+const MembershipPerformance = styled.div`
+
 `;
 
 const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
@@ -72,11 +64,6 @@ const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
         </LeaderboardIconContainer>
         <LeaderboardTitleContainer>
             <LeaderboardTitle>{props.membership.leaderboard!.name}</LeaderboardTitle>
-            <LeaderboardType>
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.Public && "PUBLIC"}
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.Private && "PRIVATE"}
-            </LeaderboardType>
             <LeaderboardSubtitle>{props.membership.leaderboard!.description}</LeaderboardSubtitle>
         </LeaderboardTitleContainer>
         <MembershipInfoContainer>
@@ -144,30 +131,35 @@ const Leaderboards = observer(() => {
         <LeaderboardsSurface>
             <SurfaceHeaderContainer>
                 <SurfaceTitle>Leaderboards</SurfaceTitle>
-                <div>
-                    <TypeSwitcherButton active={leaderboardType === "global"} action={handleGlobalClick}>Global</TypeSwitcherButton>
-                    <TypeSwitcherButton active={leaderboardType === "community"} action={handleCommunityClick}>Community</TypeSwitcherButton>
-                </div>
+                <ButtonGroup>
+                    <Button active={leaderboardType === "global"} action={handleGlobalClick}>Global</Button>
+                    <Button active={leaderboardType === "community"} action={handleCommunityClick}>Community</Button>
+                </ButtonGroup>
             </SurfaceHeaderContainer>
             {leaderboardType === "global" && globalMemberships.map((membership, i) => (
-                <UnstyledLink key={i} to={`/leaderboards/${membership.leaderboardId}`}>
+                <UnstyledLink key={i} to={`/leaderboards/global/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
                     <GlobalLeaderboardRow membership={membership} />
                 </UnstyledLink>
             ))}
             {leaderboardType === "community" && (
                 <>
-                    {communityMemberships.map((membership, i) => (
-                        <UnstyledLink key={i} to={`/leaderboards/${membership.leaderboardId}`}>
-                            <CommunityLeaderboardRow membership={membership} />
-                        </UnstyledLink>
-                    ))}
-                    {usersStore.isLoadingCommunityMemberships && (
-                        <LoadingContainer>
-                            <LoadingSpinner />
-                        </LoadingContainer>
+                    {usersStore.communityMembershipsLoaded && (
+                        <>
+                            {communityMemberships.map((membership, i) => (
+                                <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
+                                    <CommunityLeaderboardRow membership={membership} />
+                                </UnstyledLink>
+                            ))}
+                            {!usersStore.communityMembershipsPagesEnded && (
+                                <Button fullWidth isLoading={usersStore.isLoadingCommunityMembershipsPage} action={() => usersStore.loadNextCommunityMembershipsPage()}>Load More</Button>
+                            )}
+                            {communityMemberships.length === 0 && (
+                                <p>This user has not joined any community leaderboards yet...</p>
+                            )}
+                        </>
                     )}
-                    {usersStore.communityMembershipsLoaded && communityMemberships.length === 0 && (
-                        <p>This user has not joined any community leaderboards yet...</p>
+                    {usersStore.isLoadingCommunityMemberships && (
+                        <LoadingSection />
                     )}
                 </>
             )}

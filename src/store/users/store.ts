@@ -2,6 +2,7 @@ import { observable, action, computed } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
+import notify from "../../notifications";
 
 import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
 import { Membership } from "../models/leaderboards/types";
@@ -11,7 +12,6 @@ import { calculateAccuracy, calculateBpm, calculateLength, calculateCircleSize, 
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
 import { ScoreSet } from "../models/profiles/enums";
-import { notify } from "../../notifications";
 import { unchokeForScoreSet, getScoreResult } from "../../utils/osuchan";
 
 function calculateScoreStyleValue(values: number[]) {
@@ -25,9 +25,14 @@ function calculateScoreStyleValue(values: number[]) {
 export class UsersStore {
     @observable gamemode: Gamemode | null = null;
     @observable isLoading: boolean = false;
-    @observable isLoadingCommunityMemberships: boolean = false;
     @observable isLoadingSandboxScores: boolean = false;
+    @observable isLoadingGlobalMembershipsPage: boolean = false;
+    @observable globalMembershipsPagesEnded: boolean = false;
+    @observable isLoadingCommunityMemberships: boolean = false;
     @observable communityMembershipsLoaded: boolean = false;
+    @observable isLoadingCommunityMembershipsPage: boolean = false;
+    @observable communityMembershipsPagesEnded: boolean = false;
+
     @observable currentUserStats: UserStats | null = null;
 
     readonly scores = observable<Score>([]);
@@ -73,6 +78,7 @@ export class UsersStore {
         this.currentUserStats = null;
         this.scores.clear();
         this.globalMemberships.clear();
+        this.communityMemberships.clear();
         this.sandboxScores.clear();
         this.communityMembershipsLoaded = false;
         this.isLoading = true;
@@ -90,18 +96,22 @@ export class UsersStore {
             const scoresResponse = await http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
             
-            const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships`, {
+            const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
                 params: {
-                    "type": "global",
-                    "gamemode": gamemode
+                    "offset": 0,
+                    "limit": 25
                 }
             });
-            const globalMemberships: Membership[] = globalMembershipsResponse.data.map((data: any) => membershipFromJson(data));
+            const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
 
             this.currentUserStats = userStats;
             this.scores.replace(scores);
             this.globalMemberships.replace(globalMemberships);
             this.sandboxScores.replace(scores);
+            
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                this.globalMembershipsPagesEnded = true;
+            }
         } catch (error) {
             console.log(error);
         }
@@ -110,26 +120,83 @@ export class UsersStore {
     }
 
     @action
-    loadCommunityMemberships = async () => {
-        this.communityMemberships.clear();
-        this.isLoadingCommunityMemberships = true;
+    loadNextGlobalMembershipsPage = async () => {
+        this.isLoadingGlobalMembershipsPage = true;
 
         try {
-            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships`, {
+            const globalMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/global/${this.gamemode}`, {
                 params: {
-                    "type": "community",
-                    "gamemode": this.gamemode
+                    "offset": this.globalMemberships.length,
+                    "limit": 25
                 }
             });
-            const communityMemberships: Membership[] = communityMembershipsResponse.data.map((data: any) => membershipFromJson(data));
-
-            this.communityMemberships.replace(communityMemberships);
-            this.communityMembershipsLoaded = true;
+            const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            
+            this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+            
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                this.globalMembershipsPagesEnded = true;
+            }
         } catch (error) {
             console.log(error);
         }
 
+        this.isLoadingGlobalMembershipsPage = false;
+    }
+
+    @action
+    loadCommunityMemberships = async () => {
+        this.isLoadingCommunityMemberships = true;
+        this.communityMembershipsLoaded = false;
+        this.communityMembershipsPagesEnded = false;
+        
+        this.communityMemberships.clear();
+
+        try {
+            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
+                params: {
+                    "offset": 0,
+                    "limit": 5
+                }
+            });
+            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            
+            this.communityMemberships.replace(communityMemberships);
+            
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.communityMembershipsLoaded = true;
         this.isLoadingCommunityMemberships = false;
+    }
+
+    @action
+    loadNextCommunityMembershipsPage = async () => {
+        this.isLoadingCommunityMembershipsPage = true;
+
+        try {
+            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
+                params: {
+                    "offset": this.communityMemberships.length,
+                    "limit": 10
+                }
+            });
+            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            
+            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+            
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.isLoadingCommunityMembershipsPage = false;
     }
 
     @action

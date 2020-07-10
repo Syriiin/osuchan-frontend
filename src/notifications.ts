@@ -22,3 +22,5 @@ export const notify = {
     positive: (message: string) => toast.success(message),
     negative: (message: string) => toast.error(message)
 }
+
+export default notify;

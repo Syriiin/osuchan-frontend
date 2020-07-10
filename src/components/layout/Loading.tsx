@@ -106,6 +106,10 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 `;
 
+interface LoadingWrapperProps {
+    scale?: number;
+}
+
 const LoadingPageWrapper = styled.div`
     margin-top: 25vh;
     display: block;
@@ -117,34 +121,35 @@ const LoadingText = styled.h1`
     font-weight: 300;
 `;
 
-interface LoadingWrapperProps {
-    scale?: number;
-}
+const LoadingContainer = styled.div`
+    text-align: center;
+    margin: 50px 0;
+`;
 
-export const LoadingSpinner = (props: LoadingProps) => {
-    return (
-        <LoadingWrapper scale={props.scale}>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </LoadingWrapper>
-    );
-}
+export const LoadingSpinner = (props: LoadingSpinnerProps) => (
+    <LoadingWrapper scale={props.scale}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </LoadingWrapper>
+)
 
-interface LoadingProps {
-    scale?: number;
-}
+interface LoadingSpinnerProps extends LoadingWrapperProps {}
 
-export const LoadingPage = () => {
-    return (
-        <LoadingPageWrapper>
-            <LoadingSpinner scale={2} />
-            <LoadingText>Loading...</LoadingText>
-        </LoadingPageWrapper>
-    );
-}
+export const LoadingPage = () => (
+    <LoadingPageWrapper>
+        <LoadingSpinner scale={2} />
+        <LoadingText>Loading...</LoadingText>
+    </LoadingPageWrapper>
+)
+
+export const LoadingSection = () => (
+    <LoadingContainer>
+        <LoadingSpinner />
+    </LoadingContainer>
+);

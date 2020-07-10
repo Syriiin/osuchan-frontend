@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { RouteComponentProps } from "react-router";
+import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
@@ -15,6 +15,9 @@ import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums"
 import { Gamemode, Mods } from "../../../store/models/common/enums";
 import { AllowedBeatmapStatus, ScoreSet } from "../../../store/models/profiles/enums";
 import { scoreFilterIsDefault } from "../../../utils/osuchan";
+import { gamemodeIdFromName } from "../../../utils/osu";
+import ManageInvitesModal from "./ManageInvitesModal";
+import MemberModal from "./MemberModal";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -139,22 +142,23 @@ interface LeaderboardFiltersProps {
 }
 
 const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
+    const match = useRouteMatch();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
-
-    const handleDelete = () => detailStore.deleteLeaderboard(leaderboard!.id);
-    const handleJoin = async () => {
-        await meStore.joinLeaderboard(leaderboard!.id);
-        await detailStore.loadLeaderboard(leaderboard!.id);
-    }
-    const handleLeave = async () => {
-        await meStore.leaveLeaderboard(leaderboard!.id);
-        await detailStore.loadLeaderboard(leaderboard!.id);
-    }
-
+    
     const leaderboard = props.leaderboard;
     const meOsuUser = props.meOsuUser;
+    
+    const handleDelete = () => detailStore.deleteLeaderboard();
+    const handleJoin = async () => {
+        await detailStore.joinLeaderboard();
+        await detailStore.reloadLeaderboard();
+    }
+    const handleLeave = async () => {
+        await detailStore.leaveLeaderboard();
+        await detailStore.reloadLeaderboard();
+    }
     
     return (
         <>
@@ -169,7 +173,7 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
 
                             {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
-                                <UnstyledLink to={`/leaderboards/${leaderboard.id}/invites`}>
+                                <UnstyledLink to={`${match.url}/invites`}>
                                     <Button type="button">Manage Invites</Button>
                                 </UnstyledLink>
                             )}
@@ -177,13 +181,13 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     )}
                     
                     {/* Join button if public or pending invite, and not member */}
-                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && !meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button type="button" positive isLoading={meStore.isJoiningLeaderboard} action={handleJoin}>Join Leaderboard</Button>
+                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && detailStore.userMembership === null && (
+                        <Button type="button" positive isLoading={detailStore.isJoiningLeaderboard} action={handleJoin}>Join Leaderboard</Button>
                     )}
 
                     {/* Leave button if member and not owner */}
-                    {leaderboard.ownerId !== meOsuUser.id && meStore.memberships.find(m => m.leaderboardId === leaderboard.id) && (
-                        <Button type="button" negative isLoading={meStore.isLeavingLeaderboard} action={handleLeave} confirmationMessage="Are you sure you want to leave this leaderboard?">Leave Leaderboard</Button>
+                    {leaderboard.ownerId !== meOsuUser.id && detailStore.userMembership !== null && (
+                        <Button type="button" negative isLoading={detailStore.isLeavingLeaderboard} action={handleLeave} confirmationMessage="Are you sure you want to leave this leaderboard?">Leave Leaderboard</Button>
                     )}
                 </>
             )}
@@ -196,17 +200,31 @@ interface LeaderboardButtonsProps {
     meOsuUser: OsuUser | null;
 }
 
-const LeaderboardHome = (props: LeaderboardHomeProps) => {
+const LeaderboardHome = observer(() => {
+    const match = useRouteMatch();
+    const history = useHistory();
+    const params = useParams<RouteParams>();
+    const leaderboardType = params.leaderboardType;
+    const gamemode = gamemodeIdFromName(params.gamemode);
+    const leaderboardId = parseInt(params.leaderboardId);
+
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
 
     // use effect to fetch leaderboards data
-    const leaderboardId = parseInt(props.match.params.leaderboardId);
     const { loadLeaderboard } = detailStore;
     useEffect(() => {
-        loadLeaderboard(leaderboardId);
-    }, [loadLeaderboard, leaderboardId]);
+        loadLeaderboard(leaderboardType, gamemode, leaderboardId);
+    }, [loadLeaderboard, leaderboardType, gamemode, leaderboardId]);
+    
+    const userId = meStore.user?.osuUserId;
+    const { loadUserMembership } = detailStore;
+    useEffect(() => {
+        if (userId) {
+            loadUserMembership(userId);
+        }
+    }, [loadUserMembership, userId]);
 
     const leaderboard = detailStore.leaderboard;
 
@@ -264,7 +282,7 @@ const LeaderboardHome = (props: LeaderboardHomeProps) => {
                     </LeaderboardSurface>
                     
                     {/* Top Scores */}
-                    <TopScores scores={detailStore.topScores} />
+                    <TopScores scores={detailStore.leaderboardScores} />
 
                     {/* Rankings */}
                     <Rankings memberships={detailStore.rankings} />
@@ -273,14 +291,29 @@ const LeaderboardHome = (props: LeaderboardHomeProps) => {
             {!detailStore.isLoading && !leaderboard && (
                 <h3>Leaderboard not found!</h3>
             )}
+            <Route exact path={`${match.path}/invites`}>
+                {props => (
+                    <>
+                        <ManageInvitesModal open={props.match !== null && leaderboard !== null} onClose={() => history.push(match.url)} />
+                        {props.match !== null && leaderboard && leaderboard.ownerId !== meStore.user?.osuUserId && (
+                            <Redirect to={match.url} />
+                        )}
+                    </>
+                )}
+            </Route>
+            <Route exact path={`${match.path}/members/:userId`}>
+                {props => (
+                    <MemberModal open={props.match !== null && leaderboard !== null} onClose={() => history.push(match.url)} />
+                )}
+            </Route>
         </>
     );
-}
+});
 
 interface RouteParams {
+    leaderboardType: "global" | "community";
+    gamemode: "osu" | "taiko" | "catch" | "mania";
     leaderboardId: string;
 }
 
-interface LeaderboardHomeProps extends RouteComponentProps<RouteParams> {}
-
-export default observer(LeaderboardHome);
+export default LeaderboardHome;

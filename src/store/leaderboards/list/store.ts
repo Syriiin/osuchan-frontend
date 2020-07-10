@@ -2,86 +2,249 @@ import { observable, action } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
+import notify from "../../../notifications";
 
-import { Leaderboard } from "../../models/leaderboards/types";
-import { leaderboardFromJson } from "../../models/leaderboards/deserialisers";
+import { Leaderboard, Membership } from "../../models/leaderboards/types";
+import { leaderboardFromJson, membershipFromJson } from "../../models/leaderboards/deserialisers";
 import { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 import { ScoreSet } from "../../models/profiles/enums";
-import { notify } from "../../../notifications";
+import { formatGamemodeNameShort } from "../../../utils/formatting";
 
 export class ListStore {
     @observable gamemode: Gamemode | null = null;
-    @observable isLoading: boolean = false;
+    @observable isLoadingGlobalLeaderboards: boolean = false;
+    @observable globalLeaderboardsLoaded: boolean = false;
+    @observable isLoadingGlobalLeaderboardsPage: boolean = false;
+    @observable globalLeaderboardsPagesEnded: boolean = false;
+    @observable isLoadingCommunityLeaderboards: boolean = false;
+    @observable communityLeaderboardsLoaded: boolean = false;
+    @observable isLoadingCommunityLeaderboardsPage: boolean = false;
+    @observable communityLeaderboardsPagesEnded: boolean = false;
+    @observable isLoadingCommunityMemberships: boolean = false;
+    @observable communityMembershipsLoaded: boolean = false;
+    @observable isLoadingCommunityMembershipsPage: boolean = false;
+    @observable communityMembershipsPagesEnded: boolean = false;
     @observable isCreating: boolean = false;
-    @observable isLoadingCommunityLeaderboardPage: boolean = false;
-    @observable currentCommunityLeaderboardPage: number = 0;
-    @observable communityLeaderboardPagesEnded: boolean = false;
 
     readonly globalLeaderboards = observable<Leaderboard>([]);
+    readonly globalMemberships = observable<Membership>([]);
     readonly communityLeaderboards = observable<Leaderboard>([]);
+    readonly communityMemberships = observable<Membership>([]);
 
     @action
-    loadLeaderboards = async (gamemode: Gamemode) => {
-        this.gamemode = gamemode;
+    unload = async () => {
+        this.gamemode = null;
+        this.isLoadingGlobalLeaderboards = false;
+        this.globalLeaderboardsLoaded = false;
+        this.isLoadingGlobalLeaderboardsPage = false;
+        this.globalLeaderboardsPagesEnded = false;
+        this.isLoadingCommunityLeaderboards = false;
+        this.communityLeaderboardsLoaded = false;
+        this.isLoadingCommunityLeaderboardsPage = false;
+        this.communityLeaderboardsPagesEnded = false;
+        this.isLoadingCommunityMemberships = false;
+        this.communityMembershipsLoaded = false;
+        this.isLoadingCommunityMembershipsPage = false;
+        this.communityMembershipsPagesEnded = false;
+        this.isCreating = false;
+
         this.globalLeaderboards.clear();
+        this.globalMemberships.clear();
         this.communityLeaderboards.clear();
-        this.isLoading = true;
-        this.currentCommunityLeaderboardPage = 0;
-        this.communityLeaderboardPagesEnded = false;
-
-        try {
-            const globalLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
-                params: {
-                    type: "global",
-                    gamemode: gamemode
-                }
-            });
-            const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
-
-            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
-                params: {
-                    type: "community",
-                    gamemode: gamemode,
-                    page: 1
-                }
-            });
-            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
-            
-            this.globalLeaderboards.replace(globalLeaderboards);
-            this.communityLeaderboards.replace(communityLeaderboards);
-            this.currentCommunityLeaderboardPage = 1
-        } catch (error) {
-            console.log(error);
-        }
-
-        this.isLoading = false;
+        this.communityMemberships.clear();
     }
 
     @action
-    loadNextCommunityLeaderboardPage = async () => {
-        this.isLoadingCommunityLeaderboardPage = true;
+    loadGlobalLeaderboards = async (gamemode: Gamemode, userId?: number) => {
+        this.gamemode = gamemode;
+        this.globalLeaderboardsLoaded = false;
+        this.globalLeaderboards.clear();
+        this.globalMemberships.clear();
+        this.isLoadingGlobalLeaderboards = true;
 
         try {
-            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/leaderboards`, {
-                params: {
-                    type: "community",
-                    gamemode: this.gamemode,
-                    page: this.currentCommunityLeaderboardPage + 1
-                }
-            });
-            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data.map((data: any) => leaderboardFromJson(data));
-            
-            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
-            this.currentCommunityLeaderboardPage += 1
+            if (userId) {
+                const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
+                    params: {
+                        "offset": 0,
+                        "limit": 25
+                    }
+                });
+                const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+                
+                this.globalMemberships.replace(globalMemberships);
+            } else {
+                const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${gamemode}`, {
+                    params: {
+                        "offset": 0,
+                        "limit": 25
+                    }
+                });
+                const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+                
+                this.globalLeaderboards.replace(globalLeaderboards);
+            }
         } catch (error) {
             console.log(error);
-
-            this.communityLeaderboardPagesEnded = true;
         }
 
-        this.isLoadingCommunityLeaderboardPage = false;
+        this.isLoadingGlobalLeaderboards = false;
+        this.globalLeaderboardsLoaded = true;
+    }
+
+    @action
+    loadNextGlobalLeaderboardsPage = async (userId?: number) => {
+        this.isLoadingGlobalLeaderboardsPage = true;
+
+        try {
+            if (userId) {
+                const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${this.gamemode}`, {
+                    params: {
+                        "offset": this.globalMemberships.length,
+                        "limit": 25
+                    }
+                });
+                const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+                
+                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+                
+                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                    this.globalLeaderboardsPagesEnded = true;
+                }
+            } else {
+                const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${this.gamemode}`, {
+                    params: {
+                        "offset": this.globalLeaderboards.length,
+                        "limit": 25
+                    }
+                });
+                const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+                
+                this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
+                
+                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
+                    this.globalLeaderboardsPagesEnded = true;
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.isLoadingGlobalLeaderboardsPage = false;
+    }
+
+    @action
+    loadCommunityLeaderboards = async (gamemode: Gamemode) => {
+        this.isLoadingCommunityLeaderboards = true;
+        this.communityLeaderboardsLoaded = false;
+        this.communityLeaderboardsPagesEnded = false;
+        
+        this.gamemode = gamemode;
+        this.communityLeaderboards.clear();
+
+        try {
+            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/community/${gamemode}`, {
+                params: {
+                    "offset": 0,
+                    "limit": 10
+                }
+            });
+            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+            
+            this.communityLeaderboards.replace(communityLeaderboards);
+            
+            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                this.communityLeaderboardsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.communityLeaderboardsLoaded = true;
+        this.isLoadingCommunityLeaderboards = false;
+    }
+
+    @action
+    loadNextCommunityLeaderboardsPage = async () => {
+        this.isLoadingCommunityLeaderboardsPage = true;
+
+        try {
+            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/community/${this.gamemode}`, {
+                params: {
+                    "offset": this.communityLeaderboards.length,
+                    "limit": 25
+                }
+            });
+            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+            
+            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
+            
+            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                this.communityLeaderboardsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.isLoadingCommunityLeaderboardsPage = false;
+    }
+
+    @action
+    loadCommunityMemberships = async (gamemode: Gamemode, userId: number) => {
+        this.isLoadingCommunityMemberships = true;
+        this.communityMembershipsLoaded = false;
+        this.communityMembershipsPagesEnded = false;
+        
+        this.gamemode = gamemode;
+        this.communityMemberships.clear();
+
+        try {
+            const communityMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/community/${gamemode}`, {
+                params: {
+                    "offset": 0,
+                    "limit": 5
+                }
+            });
+            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            
+            this.communityMemberships.replace(communityMemberships);
+            
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.communityMembershipsLoaded = true;
+        this.isLoadingCommunityMemberships = false;
+    }
+
+    @action
+    loadNextCommunityMembershipsPage = async (userId: number) => {
+        this.isLoadingCommunityMembershipsPage = true;
+
+        try {
+            const communityMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/community/${this.gamemode}`, {
+                params: {
+                    "offset": this.communityMemberships.length,
+                    "limit": 10
+                }
+            });
+            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            
+            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+            
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsPagesEnded = true;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.isLoadingCommunityMembershipsPage = false;
     }
 
     @action
@@ -89,8 +252,7 @@ export class ListStore {
         this.isCreating = true;
 
         try {
-            const leaderboardResponse = await http.post(`/api/leaderboards/leaderboards`, {
-                "gamemode": gamemode,
+            const leaderboardResponse = await http.post(`/api/leaderboards/community/${gamemode}`, {
                 "score_set": scoreSet,
                 "access_type": accessType,
                 "name": name,
@@ -121,7 +283,7 @@ export class ListStore {
             this.communityLeaderboards.push(leaderboard);
 
             // Navigate to leaderboard page after creation
-            history.push(`/leaderboards/${leaderboard.id}`);
+            history.push(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
 
             notify.positive("Leaderboard created");
         } catch (error) {

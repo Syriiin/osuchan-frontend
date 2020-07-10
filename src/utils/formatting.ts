@@ -46,3 +46,18 @@ export function formatGamemodeName(gamemodeId: Gamemode) {
             return "Unknown";
     }
 }
+
+export function formatGamemodeNameShort(gamemodeId: Gamemode) {
+    switch (gamemodeId) {
+        case Gamemode.Standard:
+            return "osu";
+        case Gamemode.Taiko:
+            return "taiko";
+        case Gamemode.Catch:
+            return "catch";
+        case Gamemode.Mania:
+            return "mania";
+        default:
+            return "Unknown";
+    }
+}

@@ -1,58 +1,182 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
+import { useParams } from "react-router";
+import styled from "styled-components";
 
 import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
-import { LoadingPage, BottomScrollDetector } from "../../components";
-import { Gamemode } from "../../store/models/common/enums";
+import { BottomScrollDetector, Surface, SurfaceHeaderContainer, SurfaceTitle, ButtonGroup, Button, UnstyledLink, Divider, SurfaceSubtitle, LoadingSection } from "../../components";
+import { gamemodeIdFromName } from "../../utils/osu";
+import JoinedLeaderboards from "./JoinedLeaderboards";
+import CreateLeaderboardModal from "./CreateLeaderboardModal";
 
-const LeaderboardList = () => {
+const LeaderboardsSurface = styled(Surface)`
+    margin: 20px auto;
+    width: 1000px;
+    padding: 20px;
+`;
+
+const SwitcherButtonGroup = styled(ButtonGroup)`
+    margin-left: 5px;
+`;
+
+const LeaderboardList = observer(() => {
+    const params = useParams<RouteParams>();
+    const leaderboardType = params.leaderboardType;
+    const gamemode = gamemodeIdFromName(params.gamemode);
+
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
+    const meStore = store.meStore;
 
-    // use effect to fetch leaderboards data
-    const { loadLeaderboards } = listStore;
-    useEffect(() => {
-        loadLeaderboards(Gamemode.Standard);
-    }, [loadLeaderboards]);
+    const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships, unload, loadGlobalLeaderboards, loadCommunityLeaderboards, loadCommunityMemberships } = listStore;
+    const { user } = meStore;
 
-    // use effect to update title
-    const { isLoading } = listStore;
     useEffect(() => {
-        if (isLoading) {
-            document.title = "Loading...";
-        } else {
-            document.title = "Leaderboards - osu!chan";
+        document.title = "Leaderboards - osu!chan";
+        return () => {
+            unload();
         }
-    }, [isLoading]);
+    }, [unload]);
 
-    const globalLeaderboards = listStore.globalLeaderboards;
-    const communityLeaderboards = listStore.communityLeaderboards;
+    useEffect(() => {
+        unload();
 
-    const loadNextCommunityLeaderboardPage = () => {
-        if (!listStore.communityLeaderboardPagesEnded && !listStore.isLoadingCommunityLeaderboardPage) {
-            listStore.loadNextCommunityLeaderboardPage();
+        // Load community leaderboards
+        if (leaderboardType === "community") {
+            loadCommunityLeaderboards(gamemode);
+
+            if (user !== null) {
+                loadCommunityMemberships(gamemode, user.osuUserId);
+            }
+        }
+
+        // Load global leaderboards
+        if (leaderboardType === "global") {
+            loadGlobalLeaderboards(gamemode, user?.osuUserId);
+        }
+    }, [user, leaderboardType, gamemode, unload, loadCommunityMemberships, loadGlobalLeaderboards, loadCommunityLeaderboards]);
+
+    const loadNextGlobalLeaderboardPage = () => {
+        if (!listStore.globalLeaderboardsPagesEnded && !listStore.isLoadingGlobalLeaderboardsPage) {
+            listStore.loadNextGlobalLeaderboardsPage(user?.osuUserId);
         }
     }
 
-    return (
-        <>
-            {listStore.isLoading ? (
-                <LoadingPage />
-            ) : (
-                <>
-                    {/* Global leaderboards */}
-                    <GlobalLeaderboards leaderboards={globalLeaderboards} />
+    const loadNextCommunityLeaderboardPage = () => {
+        if (!listStore.communityLeaderboardsPagesEnded && !listStore.isLoadingCommunityLeaderboardsPage) {
+            listStore.loadNextCommunityLeaderboardsPage();
+        }
+    }
 
-                    {/* Community leaderboards */}
-                    <BottomScrollDetector onBottomScrolled={loadNextCommunityLeaderboardPage}>
-                        <CommunityLeaderboards leaderboards={communityLeaderboards} />
-                    </BottomScrollDetector>
+    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] = useState(false);
+
+    return (
+        <LeaderboardsSurface>
+            <SurfaceHeaderContainer>
+                <SurfaceTitle>Leaderboards</SurfaceTitle>
+                <SwitcherButtonGroup>
+                    <UnstyledLink to={`../global/${params.gamemode}`}>
+                        <Button active={params.leaderboardType === "global"}>Global</Button>
+                    </UnstyledLink>
+                    <UnstyledLink to={`../community/${params.gamemode}`}>
+                        <Button active={params.leaderboardType === "community"}>Community</Button>
+                    </UnstyledLink>
+                </SwitcherButtonGroup>
+                <SwitcherButtonGroup>
+                    <UnstyledLink to={`../${params.leaderboardType}/osu`}>
+                        <Button active={params.gamemode === "osu"}>osu!</Button>
+                    </UnstyledLink>
+                    <UnstyledLink to={`../${params.leaderboardType}/taiko`}>
+                        <Button active={params.gamemode === "taiko"}>osu!taiko</Button>
+                    </UnstyledLink>
+                    <UnstyledLink to={`../${params.leaderboardType}/catch`}>
+                        <Button active={params.gamemode === "catch"}>osu!catch</Button>
+                    </UnstyledLink>
+                    <UnstyledLink to={`../${params.leaderboardType}/mania`}>
+                        <Button active={params.gamemode === "mania"}>osu!mania</Button>
+                    </UnstyledLink>
+                </SwitcherButtonGroup>
+            </SurfaceHeaderContainer>
+            
+            {params.leaderboardType === "global" && (
+                <>
+                    {listStore.globalLeaderboardsLoaded && (
+                        <>
+                            {/* NOTE: ideally we want to defer loading leaderboards until we are logged in so we dont needlessly load the leaderboards and then memberships straight after */}
+                            <BottomScrollDetector onBottomScrolled={loadNextGlobalLeaderboardPage}>
+                                {globalMemberships.length > 0 ? (
+                                    <GlobalLeaderboards memberships={globalMemberships} />
+                                ) : (
+                                    <GlobalLeaderboards leaderboards={globalLeaderboards} />
+                                )}
+                            </BottomScrollDetector>
+                        </>
+                    )}
+                    {listStore.isLoadingGlobalLeaderboardsPage && (
+                        <LoadingSection />
+                    )}
+                    {listStore.isLoadingGlobalLeaderboards && (
+                        <LoadingSection />
+                    )}
                 </>
             )}
-        </>
+            {params.leaderboardType === "community" && (
+                <>
+                    {user !== null && (
+                        <>
+                            <SurfaceSubtitle>Joined Leaderboards</SurfaceSubtitle>
+                            {listStore.communityMembershipsLoaded && (
+                                <>
+                                    <JoinedLeaderboards memberships={communityMemberships} />
+
+                                    {!listStore.communityMembershipsPagesEnded && (
+                                        <Button fullWidth isLoading={listStore.isLoadingCommunityMembershipsPage} action={() => listStore.loadNextCommunityMembershipsPage(user.osuUserId)}>Load More</Button>
+                                    )}
+
+                                    {communityMemberships.length === 0 && (
+                                        <p>You have not joined any community leaderboards yet...</p>
+                                    )}
+
+                                    <Divider spacingScale={5} />
+                                </>
+                            )}
+                            {listStore.isLoadingCommunityMemberships && (
+                                <LoadingSection />
+                            )}
+                        </>
+                    )}
+
+                    <SurfaceHeaderContainer>
+                        <SurfaceSubtitle>Popular Leaderboards</SurfaceSubtitle>
+                        {user?.osuUser && (
+                            <div>
+                                <Button fullWidth action={() => setCreateLeaderboardModalOpen(true)}>Create New Leaderboard</Button>
+                            </div>
+                        )}
+                    </SurfaceHeaderContainer>
+                    {listStore.communityLeaderboardsLoaded && (
+                        <BottomScrollDetector onBottomScrolled={loadNextCommunityLeaderboardPage}>
+                            <CommunityLeaderboards leaderboards={communityLeaderboards} />
+                        </BottomScrollDetector>
+                    )}
+                    {listStore.isLoadingCommunityLeaderboardsPage && (
+                        <LoadingSection />
+                    )}
+                    {listStore.isLoadingCommunityLeaderboards && (
+                        <LoadingSection />
+                    )}
+                    <CreateLeaderboardModal open={createLeaderboardModalOpen} onClose={() => setCreateLeaderboardModalOpen(false)} />
+                </>
+            )}
+        </LeaderboardsSurface>
     );
+});
+
+interface RouteParams {
+    leaderboardType: "global" | "community";
+    gamemode: "osu" | "taiko" | "catch" | "mania";
 }
 
-export default observer(LeaderboardList);
+export default LeaderboardList;

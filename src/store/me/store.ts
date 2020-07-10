@@ -1,34 +1,30 @@
 import { observable, action } from "mobx";
 
 import http from "../../http";
+import notify from "../../notifications";
 
 import { ScoreFilter } from "../models/profiles/types";
-import { Invite, Membership } from "../models/leaderboards/types";
-import { inviteFromJson, membershipFromJson } from "../models/leaderboards/deserialisers";
+import { Invite } from "../models/leaderboards/types";
+import { inviteFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
 import { User, ScoreFilterPreset } from "../models/users/types";
 import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deserialisers";
-import { notify } from "../../notifications";
 
 export class MeStore {
     @observable user: User | null = null;
     @observable isLoading: boolean = false;
     @observable isAddingScores: boolean = false;
-    @observable isJoiningLeaderboard: boolean = false;
-    @observable isLeavingLeaderboard: boolean = false;
     @observable isDecliningInvite: boolean = false;
     @observable isCreatingScoreFilterPreset: boolean = false;
     @observable isUpdatingScoreFilterPreset: boolean = false;
     @observable isDeletingScoreFilterPreset: boolean = false;
 
-    readonly memberships = observable<Membership>([]);
     readonly invites = observable<Invite>([]);
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
 
     @action
     loadMe = async () => {
         this.user = null;
-        this.memberships.clear();
         this.invites.clear();
         this.scoreFilterPresets.clear();
         this.isLoading = true;
@@ -40,16 +36,12 @@ export class MeStore {
             this.user = user;
 
             if (user.osuUser !== null) {
-                const membershipsResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/memberships`);
-                const memberships: Membership[] = membershipsResponse.data.map((data: any) => membershipFromJson(data));
-
                 const invitesResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/invites`);
                 const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
                 const scoreFilterPresetsResponse = await http.get(`/api/users/me/scorefilterpresets`);
                 const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
-                this.memberships.replace(memberships);
                 this.invites.replace(invites);
                 this.scoreFilterPresets.replace(scoreFilterPresets);
             }
@@ -85,57 +77,6 @@ export class MeStore {
         }
 
         this.isAddingScores = false;
-    }
-
-    @action
-    joinLeaderboard = async (leaderboardId: number) => {
-        this.isJoiningLeaderboard = true;
-
-        try {
-            const membershipResponse = await http.post(`/api/leaderboards/leaderboards/${leaderboardId}/members`);
-            const membership = membershipFromJson(membershipResponse.data);
-
-            this.memberships.push(membership);
-
-            notify.positive("Leaderboard joined");
-        } catch (error) {
-            console.log(error);
-
-            const errorMessage = error.response.data.detail;
-
-            if (errorMessage) {
-                notify.negative(`Failed to join leaderboard: ${errorMessage}`);
-            } else {
-                notify.negative("Failed to join leaderboard");
-            }
-        }
-
-        this.isJoiningLeaderboard = false;
-    }
-
-    @action
-    leaveLeaderboard = async (leaderboardId: number) => {
-        this.isLeavingLeaderboard = true;
-
-        try {
-            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/members/${this.user!.osuUserId}`);
-
-            this.memberships.replace(this.memberships.filter(m => m.leaderboardId !== leaderboardId));
-
-            notify.positive("Leaderboard left");
-        } catch (error) {
-            console.log(error);
-
-            const errorMessage = error.response.data.detail;
-
-            if (errorMessage) {
-                notify.negative(`Failed to leave leaderboard: ${errorMessage}`);
-            } else {
-                notify.negative("Failed to leave leaderboard");
-            }
-        }
-
-        this.isLeavingLeaderboard = false;
     }
 
     @action

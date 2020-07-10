@@ -45,7 +45,7 @@ const Scores = (props: ScoresProps) => {
                 <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
             ))}
             {props.scores.length <= 5 || showAllScores || (
-                <Button type="button" fullWidth action={() => setShowAllScores(true)}>Show all scores</Button>
+                <Button type="button" fullWidth action={() => setShowAllScores(true)}>Show More</Button>
             )}
             {props.scores.length === 0 && (
                 <p>No scores found...</p>

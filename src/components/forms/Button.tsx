@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { LoadingSpinner } from "../layout/Loading";
 import { SimpleModal, SimpleModalTitle } from "../layout/SimpleModal";
+import { UnstyledLink } from "../helpers/UnstyledLink";
 
 const StyledButton = styled.button<StyledButtonProps>`
     padding: 10px;
@@ -40,8 +41,6 @@ export const Button = (props: ButtonProps) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.stopPropagation();
-        
         if (props.action) {
             if (props.confirmationMessage) {
                 setConfirmationModalOpen(true);
@@ -90,3 +89,31 @@ interface ConfirmationModalProps {
     message: string;
     action: () => void;
 }
+
+export const ButtonGroup = styled.div`
+    ${StyledButton} {
+        border-radius: 0;
+    }
+
+    /* Direct child buttons */
+    > ${StyledButton}:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    > ${StyledButton}:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    /* Link wrapped child buttons */
+    ${UnstyledLink}:first-child > ${StyledButton} {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    ${UnstyledLink}:last-child > ${StyledButton} {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+`;

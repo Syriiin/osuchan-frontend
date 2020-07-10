@@ -1,4 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
+import { observer } from "mobx-react-lite";
 
 import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
 import { StoreContext } from "../../store";
@@ -6,7 +7,6 @@ import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
-import { observer } from "mobx-react-lite";
 
 const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
     const store = useContext(StoreContext);

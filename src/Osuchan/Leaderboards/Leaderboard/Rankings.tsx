@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Surface, Row, SurfaceTitle, UnstyledLink } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
+import { useRouteMatch } from "react-router";
 
 const RankingsSurface = styled(Surface)`
     margin: 20px auto;
@@ -79,11 +80,13 @@ interface RankingRowProps {
 }
 
 const Rankings = (props: TopScoresProps) => {
+    const match = useRouteMatch();
+
     return (
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
-                <UnstyledLink key={i} to={`/leaderboards/${membership.leaderboardId}/users/${membership.osuUserId}`}>
+                <UnstyledLink key={i} to={`${match.url}/members/${membership.osuUserId}`}>
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>
             ))}
