@@ -42,7 +42,7 @@ const LeaderboardType = styled.span`
     color: ${props => props.theme.colours.mango};
 `;
 
-const LeaderboardCreator = styled.span`
+const LeaderboardSubtitle = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
@@ -71,7 +71,7 @@ const InviteRow = observer((props: InviteRowProps) => {
                     {invite.leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
                     {invite.leaderboard!.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                 </LeaderboardType>
-                <LeaderboardCreator>{invite.leaderboard!.owner!.username}</LeaderboardCreator>
+                <LeaderboardSubtitle>{invite.leaderboard!.memberCount} members</LeaderboardSubtitle>
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
             <UnstyledLink to={`/leaderboards/community/${formatGamemodeNameShort(invite.leaderboard!.gamemode)}/${invite.leaderboardId}`}>
