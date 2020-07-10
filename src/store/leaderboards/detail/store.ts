@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, runInAction } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -57,15 +57,19 @@ export class DetailStore {
             const scoresResponse = await http.get(`${this.resourceUrl}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            this.leaderboard = leaderboard;
-            this.rankings.replace(members);
-            // transform scores into their intended form for abnormal score sets
-            this.leaderboardScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
+            runInAction(() => {
+                this.leaderboard = leaderboard;
+                this.rankings.replace(members);
+                // transform scores into their intended form for abnormal score sets
+                this.leaderboardScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoading = false;
+        runInAction(() => {
+            this.isLoading = false;
+        });
     }
 
     @action
@@ -76,7 +80,9 @@ export class DetailStore {
             const membershipResponse = await http.get(`${this.resourceUrl}/members/${userId}`);
             const membership = membershipFromJson(membershipResponse.data);
 
-            this.userMembership = membership;
+            runInAction(() => {
+                this.userMembership = membership;
+            });
         } catch (error) {
             console.log(error);
         }
@@ -95,9 +101,11 @@ export class DetailStore {
             // Navigate to leaderboard list page after deletion
             history.push(`/leaderboards/community/${this.gamemode}`);
 
-            this.leaderboard = null;
-            this.rankings.clear();
-            this.leaderboardScores.clear();
+            runInAction(() => {
+                this.leaderboard = null;
+                this.rankings.clear();
+                this.leaderboardScores.clear();
+            });
 
             notify.positive("Leaderboard deleted");
         } catch (error) {
@@ -112,7 +120,9 @@ export class DetailStore {
             }
         }
 
-        this.isDeleting = false;
+        runInAction(() => {
+            this.isDeleting = false;
+        });
     }
 
     @action
@@ -124,12 +134,16 @@ export class DetailStore {
             const invitesResponse = await http.get(`${this.resourceUrl}/invites`);
             const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
             
-            this.invites.replace(invites);
+            runInAction(() => {
+                this.invites.replace(invites);
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingInvites = false;
+        runInAction(() => {
+            this.isLoadingInvites = false;
+        });
     }
 
     @action
@@ -144,7 +158,9 @@ export class DetailStore {
 
             const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
-            this.invites.replace(this.invites.concat(invites));
+            runInAction(() => {
+                this.invites.replace(this.invites.concat(invites));
+            });
             
             notify.positive("Invitations sent");
         } catch (error) {
@@ -159,7 +175,9 @@ export class DetailStore {
             }
         }
 
-        this.isInviting = false;
+        runInAction(() => {
+            this.isInviting = false;
+        });
     }
 
     @action
@@ -169,7 +187,9 @@ export class DetailStore {
         try {
             await http.delete(`${this.resourceUrl}/invites/${userId}`);
 
-            this.invites.replace(this.invites.filter(i => i.osuUserId !== userId));
+            runInAction(() => {
+                this.invites.replace(this.invites.filter(i => i.osuUserId !== userId));
+            });
 
             notify.positive("Invite cancelled");
         } catch (error) {
@@ -184,7 +204,9 @@ export class DetailStore {
             }
         }
 
-        this.isCancellingInvite = false;
+        runInAction(() => {
+            this.isCancellingInvite = false;
+        });
     }
 
     @action    
@@ -199,14 +221,18 @@ export class DetailStore {
             const scoresResponse = await http.get(`${this.resourceUrl}/members/${userId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            this.membership = membership;
-            // transform scores into their intended form for abnormal score sets
-            this.membershipScores.replace(unchokeForScoreSet(scores, this.leaderboard!.scoreSet));
+            runInAction(() => {
+                this.membership = membership;
+                // transform scores into their intended form for abnormal score sets
+                this.membershipScores.replace(unchokeForScoreSet(scores, this.leaderboard!.scoreSet));
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingMembership = false;
+        runInAction(() => {
+            this.isLoadingMembership = false;
+        });
     }
 
     @action
@@ -217,7 +243,9 @@ export class DetailStore {
             const membershipResponse = await http.post(`${this.resourceUrl}/members`);
             const membership = membershipFromJson(membershipResponse.data);
 
-            this.userMembership = membership;
+            runInAction(() => {
+                this.userMembership = membership;
+            });
 
             notify.positive("Leaderboard joined");
         } catch (error) {
@@ -232,7 +260,9 @@ export class DetailStore {
             }
         }
 
-        this.isJoiningLeaderboard = false;
+        runInAction(() => {
+            this.isJoiningLeaderboard = false;
+        });
     }
 
     @action
@@ -242,7 +272,9 @@ export class DetailStore {
         try {
             await http.delete(`${this.resourceUrl}/members/${this.userMembership!.osuUserId}`);
 
-            this.userMembership = null;
+            runInAction(() => {
+                this.userMembership = null;
+            });
 
             notify.positive("Leaderboard left");
         } catch (error) {
@@ -257,6 +289,8 @@ export class DetailStore {
             }
         }
 
-        this.isLeavingLeaderboard = false;
+        runInAction(() => {
+            this.isLeavingLeaderboard = false;
+        });
     }
 }

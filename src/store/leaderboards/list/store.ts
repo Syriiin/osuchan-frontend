@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, runInAction } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -74,7 +74,9 @@ export class ListStore {
                 });
                 const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
                 
-                this.globalMemberships.replace(globalMemberships);
+                runInAction(() => {
+                    this.globalMemberships.replace(globalMemberships);
+                });
             } else {
                 const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${gamemode}`, {
                     params: {
@@ -84,14 +86,18 @@ export class ListStore {
                 });
                 const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
                 
-                this.globalLeaderboards.replace(globalLeaderboards);
+                runInAction(() => {
+                    this.globalLeaderboards.replace(globalLeaderboards);
+                });
             }
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingGlobalLeaderboards = false;
-        this.globalLeaderboardsLoaded = true;
+        runInAction(() => {
+            this.isLoadingGlobalLeaderboards = false;
+            this.globalLeaderboardsLoaded = true;
+        });
     }
 
     @action
@@ -108,11 +114,13 @@ export class ListStore {
                 });
                 const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
                 
-                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
-                
-                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalLeaderboardsPagesEnded = true;
-                }
+                runInAction(() => {
+                    this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+                    
+                    if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                        this.globalLeaderboardsPagesEnded = true;
+                    }
+                });
             } else {
                 const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${this.gamemode}`, {
                     params: {
@@ -122,11 +130,13 @@ export class ListStore {
                 });
                 const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
                 
-                this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
-                
-                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
-                    this.globalLeaderboardsPagesEnded = true;
-                }
+                runInAction(() => {
+                    this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
+                    
+                    if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
+                        this.globalLeaderboardsPagesEnded = true;
+                    }
+                });
             }
         } catch (error) {
             console.log(error);
@@ -153,17 +163,21 @@ export class ListStore {
             });
             const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
             
-            this.communityLeaderboards.replace(communityLeaderboards);
-            
-            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                this.communityLeaderboardsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityLeaderboards.replace(communityLeaderboards);
+                
+                if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                    this.communityLeaderboardsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.communityLeaderboardsLoaded = true;
-        this.isLoadingCommunityLeaderboards = false;
+        runInAction(() => {
+            this.communityLeaderboardsLoaded = true;
+            this.isLoadingCommunityLeaderboards = false;
+        });
     }
 
     @action
@@ -179,16 +193,20 @@ export class ListStore {
             });
             const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
             
-            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
-            
-            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                this.communityLeaderboardsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
+                
+                if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                    this.communityLeaderboardsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingCommunityLeaderboardsPage = false;
+        runInAction(() => {
+            this.isLoadingCommunityLeaderboardsPage = false;
+        });
     }
 
     @action
@@ -209,17 +227,21 @@ export class ListStore {
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
             
-            this.communityMemberships.replace(communityMemberships);
-            
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityMemberships.replace(communityMemberships);
+                
+                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                    this.communityMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.communityMembershipsLoaded = true;
-        this.isLoadingCommunityMemberships = false;
+        runInAction(() => {
+            this.communityMembershipsLoaded = true;
+            this.isLoadingCommunityMemberships = false;
+        });
     }
 
     @action
@@ -235,16 +257,20 @@ export class ListStore {
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
             
-            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
-            
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+                
+                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                    this.communityMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingCommunityMembershipsPage = false;
+        runInAction(() => {
+            this.isLoadingCommunityMembershipsPage = false;
+        });
     }
 
     @action
@@ -280,7 +306,9 @@ export class ListStore {
             });
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
-            this.communityLeaderboards.push(leaderboard);
+            runInAction(() => {
+                this.communityLeaderboards.push(leaderboard);
+            });
 
             // Navigate to leaderboard page after creation
             history.push(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
@@ -298,6 +326,8 @@ export class ListStore {
             }
         }
 
-        this.isCreating = false;
+        runInAction(() => {
+            this.isCreating = false;
+        });
     }
 }

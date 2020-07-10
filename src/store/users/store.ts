@@ -1,4 +1,4 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, runInAction } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
@@ -104,19 +104,23 @@ export class UsersStore {
             });
             const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
 
-            this.currentUserStats = userStats;
-            this.scores.replace(scores);
-            this.globalMemberships.replace(globalMemberships);
-            this.sandboxScores.replace(scores);
-            
-            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                this.globalMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.currentUserStats = userStats;
+                this.scores.replace(scores);
+                this.globalMemberships.replace(globalMemberships);
+                this.sandboxScores.replace(scores);
+                
+                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                    this.globalMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
         
-        this.isLoading = false;
+        runInAction(() => {
+            this.isLoading = false;
+        });
     }
 
     @action
@@ -132,16 +136,20 @@ export class UsersStore {
             });
             const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
             
-            this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
-            
-            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                this.globalMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+                
+                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                    this.globalMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingGlobalMembershipsPage = false;
+        runInAction(() => {
+            this.isLoadingGlobalMembershipsPage = false;
+        });
     }
 
     @action
@@ -161,17 +169,21 @@ export class UsersStore {
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
             
-            this.communityMemberships.replace(communityMemberships);
-            
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityMemberships.replace(communityMemberships);
+                
+                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                    this.communityMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.communityMembershipsLoaded = true;
-        this.isLoadingCommunityMemberships = false;
+        runInAction(() => {
+            this.communityMembershipsLoaded = true;
+            this.isLoadingCommunityMemberships = false;
+        });
     }
 
     @action
@@ -187,16 +199,20 @@ export class UsersStore {
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
             
-            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
-            
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsPagesEnded = true;
-            }
+            runInAction(() => {
+                this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+                
+                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                    this.communityMembershipsPagesEnded = true;
+                }
+            });
         } catch (error) {
             console.log(error);
         }
 
-        this.isLoadingCommunityMembershipsPage = false;
+        runInAction(() => {
+            this.isLoadingCommunityMembershipsPage = false;
+        });
     }
 
     @action
@@ -231,7 +247,9 @@ export class UsersStore {
             // transform scores into their intended form for abnormal score sets
             scores = unchokeForScoreSet(scores, scoreSet);
 
-            this.sandboxScores.replace(scores);
+            runInAction(() => {
+                this.sandboxScores.replace(scores);
+            });
 
             notify.neutral("Sandbox scores loaded");
         } catch (error) {
@@ -246,7 +264,9 @@ export class UsersStore {
             }
         }
         
-        this.isLoadingSandboxScores = false;
+        runInAction(() => {
+            this.isLoadingSandboxScores = false;
+        });
     }
 
     @action
@@ -294,8 +314,10 @@ export class UsersStore {
         score.pp = pp.total;
         score.nochokePp = nochokePp.total;
 
-        // Sort observable array
-        this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
+        runInAction(() => {
+            // Sort observable array
+            this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
+        });
 
         notify.neutral("Sandbox scores recalculated");
     }

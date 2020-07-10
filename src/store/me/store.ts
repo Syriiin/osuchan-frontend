@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, runInAction } from "mobx";
 
 import http from "../../http";
 import notify from "../../notifications";
@@ -33,7 +33,9 @@ export class MeStore {
             const meResponse = await http.get("/api/users/me");
             const user: User = userFromJson(meResponse.data);
 
-            this.user = user;
+            runInAction(() => {
+                this.user = user;
+            });
 
             if (user.osuUser !== null) {
                 const invitesResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/invites`);
@@ -42,8 +44,10 @@ export class MeStore {
                 const scoreFilterPresetsResponse = await http.get(`/api/users/me/scorefilterpresets`);
                 const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
-                this.invites.replace(invites);
-                this.scoreFilterPresets.replace(scoreFilterPresets);
+                runInAction(() => {
+                    this.invites.replace(invites);
+                    this.scoreFilterPresets.replace(scoreFilterPresets);
+                });
             }
 
 
@@ -51,7 +55,9 @@ export class MeStore {
             console.log(error);
         }
 
-        this.isLoading = false;
+        runInAction(() => {
+            this.isLoading = false;
+        });
     }
 
     @action
@@ -76,7 +82,9 @@ export class MeStore {
             }
         }
 
-        this.isAddingScores = false;
+        runInAction(() => {
+            this.isAddingScores = false;
+        });
     }
 
     @action
@@ -86,7 +94,9 @@ export class MeStore {
         try {
             await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/invites/${this.user!.osuUserId}`);
 
-            this.invites.replace(this.invites.filter(i => i.leaderboardId !== leaderboardId));
+            runInAction(() => {
+                this.invites.replace(this.invites.filter(i => i.leaderboardId !== leaderboardId));
+            });
 
             notify.positive("Invite declined");
         } catch (error) {
@@ -101,7 +111,9 @@ export class MeStore {
             }
         }
 
-        this.isDecliningInvite = false;
+        runInAction(() => {
+            this.isDecliningInvite = false;
+        });
     }
 
     @action
@@ -134,7 +146,9 @@ export class MeStore {
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
-            this.scoreFilterPresets.push(scoreFilterPreset);
+            runInAction(() => {
+                this.scoreFilterPresets.push(scoreFilterPreset);
+            });
 
             notify.positive("Score filter preset created");
         } catch (error) {
@@ -149,7 +163,9 @@ export class MeStore {
             }
         }
 
-        this.isCreatingScoreFilterPreset = false;
+        runInAction(() => {
+            this.isCreatingScoreFilterPreset = false;
+        });
     }
 
     @action
@@ -182,7 +198,9 @@ export class MeStore {
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
-            this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
+            runInAction(() => {
+                this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
+            });
 
             notify.positive("Score filter preset updated");
         } catch (error) {
@@ -197,7 +215,9 @@ export class MeStore {
             }
         }
 
-        this.isUpdatingScoreFilterPreset = false;
+        runInAction(() => {
+            this.isUpdatingScoreFilterPreset = false;
+        });
     }
 
     @action
@@ -207,7 +227,9 @@ export class MeStore {
         try {
             await http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
 
-            this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
+            runInAction(() => {
+                this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
+            });
 
             notify.positive("Score filter preset deleted");
         } catch (error) {
@@ -222,6 +244,8 @@ export class MeStore {
             }
         }
 
-        this.isDeletingScoreFilterPreset = false;
+        runInAction(() => {
+            this.isDeletingScoreFilterPreset = false;
+        });
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router } from "react-router-dom";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
+import { configure } from 'mobx';
 
 import "react-vis/dist/style.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,6 +12,10 @@ import { osuchanTheme } from "./osuchanTheme";
 import { NotificationContainer } from "./notifications";
 
 import Osuchan from "./Osuchan/Osuchan";
+
+configure({
+    enforceActions: "always"
+});
 
 const GlobalStyle = createGlobalStyle`
     * {
