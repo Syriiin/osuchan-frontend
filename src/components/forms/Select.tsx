@@ -39,6 +39,7 @@ export const Select = <T extends OptionValue = number>(props: SelectProps<T>) =>
             onChange={option => props.onChange((option as Option<T>).value)}
             isDisabled={props.disabled}
             styles={styles}
+            isSearchable={false}
         />
     )
 }

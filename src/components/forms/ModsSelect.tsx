@@ -77,6 +77,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
             }}
             options={selectModOptions}
             styles={styles}
+            isSearchable={false}
         />
     );
 }
