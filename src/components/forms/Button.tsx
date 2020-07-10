@@ -40,7 +40,7 @@ interface StyledButtonProps {
 export const Button = (props: ButtonProps) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleClick = () => {
         if (props.action) {
             if (props.confirmationMessage) {
                 setConfirmationModalOpen(true);

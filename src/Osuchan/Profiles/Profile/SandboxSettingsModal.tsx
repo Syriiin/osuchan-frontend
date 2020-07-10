@@ -24,7 +24,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
     const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
 
     return (
-        <SimpleModal open={props.open} onClose={() => props.onClose()}>
+        <SimpleModal open={props.open} onClose={props.onClose}>
             <SimpleModalTitle>Sandbox Settings</SimpleModalTitle>
             <form onSubmit={handleSandboxSettingsSubmit}>
                 <FormLabel>Score Set</FormLabel>
