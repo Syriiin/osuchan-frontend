@@ -6,7 +6,9 @@ import Invites from "./Invites";
 const Me = () => {
     return (
         <Switch>
-            <Route exact path="/me/invites" component={Invites} />
+            <Route exact path="/me/invites" >
+                <Invites />
+            </Route>
             <Redirect to="/" />
         </Switch>
     );

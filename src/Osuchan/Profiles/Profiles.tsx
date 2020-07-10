@@ -6,8 +6,12 @@ import Profile from "./Profile/Profile";
 const Profiles = () => {
     return (
         <Switch>
-            <Route exact path="/users/:userString" component={Profile} />
-            <Route path="/users/:userString/:gamemodeName" component={Profile} />
+            <Route exact path="/users/:userString">
+                <Profile />
+            </Route>
+            <Route path="/users/:userString/:gamemodeName">
+                <Profile />
+            </Route>
             <Redirect to="/" />
         </Switch>
     );

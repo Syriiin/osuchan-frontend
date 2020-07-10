@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import { RouteComponentProps } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
@@ -14,6 +13,7 @@ import ScoresChart from "./ScoresChart";
 import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
+import { useParams } from "react-router";
 
 const ProfileGrid = styled.div`
     margin: 20px auto;
@@ -29,14 +29,16 @@ const ProfileGrid = styled.div`
         "leaderboards leaderboards leaderboards leaderboards leaderboards leaderboards";
 `;
 
-const Profile = observer((props: ProfileProps) => {
+const Profile = observer(() => {
+    const params = useParams<RouteParams>();
+
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
 
     // use effect to fetch profile data
     const { loadUser } = usersStore;
-    const { userString } = props.match.params;
-    const gamemodeId = gamemodeIdFromName(props.match.params.gamemodeName);
+    const { userString } = params;
+    const gamemodeId = gamemodeIdFromName(params.gamemodeName);
     useEffect(() => {
         loadUser(userString, gamemodeId);
     }, [loadUser, userString, gamemodeId]);
@@ -71,7 +73,7 @@ const Profile = observer((props: ProfileProps) => {
                     <UserInfo osuUser={osuUser} />
 
                     {/* Mode switcher */}
-                    <ModeSwitcher gamemodeId={gamemodeId} userString={props.match.params.userString} />
+                    <ModeSwitcher gamemodeId={gamemodeId} userString={params.userString} />
 
                     {/* Sandbox controls */}
                     <SandboxControls gamemode={userStats.gamemode} sandboxMode={sandboxMode} setSandboxMode={setSandboxMode} />
@@ -112,7 +114,5 @@ interface RouteParams {
     userString: string;
     gamemodeName?: string;
 }
-
-interface ProfileProps extends RouteComponentProps<RouteParams> {}
 
 export default Profile;

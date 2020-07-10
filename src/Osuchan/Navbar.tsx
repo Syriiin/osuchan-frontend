@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, withRouter, LinkProps, RouteComponentProps, matchPath } from "react-router-dom";
+import { Link, LinkProps, matchPath, useHistory, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
 import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
+import { formatGamemodeNameShort } from "../utils/formatting";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -121,7 +122,10 @@ const UserAvatar = styled.img`
     }
 `;
 
-const Navbar = observer((props: NavbarProps) => {
+const Navbar = observer(() => {
+    const history = useHistory();
+    const location = useLocation();
+
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     
@@ -139,7 +143,7 @@ const Navbar = observer((props: NavbarProps) => {
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            props.history.push(`/users/${searchValue}`);
+            history.push(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();
@@ -180,8 +184,8 @@ const Navbar = observer((props: NavbarProps) => {
         <NavbarWrapper>
             <LinksContainer>
                 {/* Links */}
-                <NavbarLink to="/" active={props.location.pathname === "/"}>Home</NavbarLink>
-                <NavbarLink to="/leaderboards" active={matchPath(props.location.pathname, {path: "/leaderboards"}) !== null}>Leaderboards</NavbarLink>
+                <NavbarLink to="/" active={location.pathname === "/"}>Home</NavbarLink>
+                <NavbarLink to="/leaderboards" active={matchPath(location.pathname, {path: "/leaderboards"}) !== null}>Leaderboards</NavbarLink>
             </LinksContainer>
 
             {/* osu!chan title */}
@@ -212,7 +216,7 @@ const Navbar = observer((props: NavbarProps) => {
                             </InviteIconWrapper>
                         }>
                             {invites.slice(0, 5).map((invite, i) => (
-                                <Link key={i} to={`/leaderboards/${invite.leaderboardId}`}>
+                                <Link key={i} to={`/leaderboards/community/${formatGamemodeNameShort(invite.leaderboard!.gamemode)}/${invite.leaderboardId}`}>
                                     <SimpleMenuItem>
                                         <InviteWrapper>
                                             <InviteLeaderboardImage src={invite.leaderboard!.iconUrl} alt="Leaderboard icon" />
@@ -277,6 +281,4 @@ const Navbar = observer((props: NavbarProps) => {
     );
 });
 
-interface NavbarProps extends RouteComponentProps {}
-
-export default withRouter(Navbar);
+export default Navbar;

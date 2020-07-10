@@ -6,6 +6,7 @@ import { StoreContext } from "../../store";
 import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
 import { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
+import { formatGamemodeNameShort } from "../../utils/formatting";
 
 const InvitesSurface = styled(Surface)`
     margin: 20px auto;
@@ -73,7 +74,7 @@ const InviteRow = observer((props: InviteRowProps) => {
                 <LeaderboardCreator>{invite.leaderboard!.owner!.username}</LeaderboardCreator>
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
-            <UnstyledLink to={`/leaderboards/${invite.leaderboardId}`}>
+            <UnstyledLink to={`/leaderboards/community/${formatGamemodeNameShort(invite.leaderboard!.gamemode)}/${invite.leaderboardId}`}>
                 <Button type="button">View Leaderboard</Button>
             </UnstyledLink>
             <DeclineButton negative isLoading={meStore.isDecliningInvite} action={() => meStore.declineInvite(invite.leaderboardId)} confirmationMessage="Are you sure you want to decline this invite?">Decline Invite</DeclineButton>

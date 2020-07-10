@@ -37,10 +37,18 @@ const Osuchan = observer(() => {
             <Navbar />
             <ContentWrapper>
                 <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/me" component={Me} />
-                    <Route path="/users" component={Profiles} />
-                    <Route path="/leaderboards" component={LeaderboardsRoot} />
+                    <Route path="/" exact>
+                        <Home />
+                    </Route>
+                    <Route path="/me">
+                        <Me />
+                    </Route>
+                    <Route path="/users">
+                        <Profiles />
+                    </Route>
+                    <Route path="/leaderboards">
+                        <LeaderboardsRoot />
+                    </Route>
                     <Redirect to="/" />
                 </Switch>
             </ContentWrapper>
