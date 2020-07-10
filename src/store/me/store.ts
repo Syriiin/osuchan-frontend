@@ -38,7 +38,7 @@ export class MeStore {
             });
 
             if (user.osuUser !== null) {
-                const invitesResponse = await http.get(`/api/profiles/users/${user.osuUser.id}/invites`);
+                const invitesResponse = await http.get(`/api/users/me/invites`);
                 const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
                 const scoreFilterPresetsResponse = await http.get(`/api/users/me/scorefilterpresets`);
