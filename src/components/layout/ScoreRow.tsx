@@ -7,6 +7,7 @@ import { ModIcons } from "./ModIcons";
 import { formatScoreResult } from "../../utils/formatting";
 import { ScoreModal } from "./ScoreModal";
 import { Button } from "../forms/Button";
+import { ClickPropagationSupressor } from "../helpers/ClickPropagationSupressor";
 
 const ScoreRowWrapper = styled(Row)`
     padding: 0;
@@ -94,6 +95,7 @@ const Result = styled.span`
 
 const ActionButton = styled(Button)`
     border-radius: 0 5px 5px 0;
+    height: 100%;
 `;
 
 export const ScoreRow = (props: ScoreRowProps) => {
@@ -147,7 +149,9 @@ export const ScoreRow = (props: ScoreRowProps) => {
                     </PerformanceContainer>
                 </ScoreInfo>
                 {props.actionButton && (
-                    <ActionButton minWidth={0} action={props.actionButtonOnClick}>{props.actionButtonText}</ActionButton>
+                    <ClickPropagationSupressor>
+                        <ActionButton minWidth={0} action={props.actionButtonOnClick}>{props.actionButtonText}</ActionButton>
+                    </ClickPropagationSupressor>
                 )}
             </ScoreRowWrapper>
             <ScoreModal score={score} open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} />

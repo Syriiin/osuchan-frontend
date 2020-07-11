@@ -13,6 +13,7 @@ export * from "./layout/CommunityLeaderboardRow";
 export * from "./layout/GlobalLeaderboardRow";
 export * from "./helpers/UnstyledLink";
 export * from "./helpers/BottomScrollDetector";
+export * from "./helpers/ClickPropagationSupressor";
 export * from "./forms/Button";
 export * from "./forms/TextInput";
 export * from "./forms/ModsSelect";
