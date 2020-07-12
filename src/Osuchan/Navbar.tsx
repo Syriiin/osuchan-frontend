@@ -9,6 +9,7 @@ import { gamemodeIdFromName } from "../utils/osu";
 import { StoreContext } from "../store";
 import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 import { formatGamemodeNameShort } from "../utils/formatting";
+import { ResourceStatus } from "../store/status";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -272,7 +273,7 @@ const Navbar = observer(() => {
                             </form>
                         </SimpleModal>
                     </>
-                ) : meStore.isLoading || (
+                ) : meStore.loadingStatus === ResourceStatus.Loading || (
                     <LoginLink href="/osuauth/login">Login</LoginLink>
                 )}
             </UserMenuContainer>

@@ -6,6 +6,7 @@ import countries from "i18n-iso-countries";
 
 import { SimpleModal, LoadingSection, Divider, ScoreRow, Button } from "../../../components";
 import { StoreContext } from "../../../store";
+import { ResourceStatus } from "../../../store/status";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
@@ -61,17 +62,17 @@ const MemberInfo = observer(() => {
     const detailStore = store.leaderboardsStore.detailStore;
 
     const userId = parseInt(params.userId);
-    const { isLoading, isLoadingMembership, leaderboard, membership, membershipScores, loadMembership } = detailStore;
+    const { loadingStatus, loadingMembershipStatus, leaderboard, membership, membershipScores, loadMembership } = detailStore;
 
     useEffect(() => {
-        if (isLoadingMembership) {
+        if (loadingMembershipStatus === ResourceStatus.Loading) {
             document.title = "Loading...";
         } else if (leaderboard && membership) {
             document.title = `${membership.osuUser!.username} - ${leaderboard.name} - osu!chan`;
         } else {
             document.title = `Leaderboard not found - osu!chan`;
         }
-    }, [isLoading, isLoadingMembership, leaderboard, membership]);
+    }, [loadingStatus, loadingMembershipStatus, leaderboard, membership]);
 
     useEffect(() => {
         if (leaderboard !== null && !isNaN(userId)) {
@@ -83,30 +84,30 @@ const MemberInfo = observer(() => {
 
     return (
         <>
-            {!isLoadingMembership && membership && (
+            {loadingMembershipStatus === ResourceStatus.Loaded && (
                 <>
                     <UserInfo>
-                        <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
+                        <Avatar src={`https://a.ppy.sh/${membership!.osuUserId}`} />
                         <UserInfoContainer>
                             <UserInfoRow>
                                 <Username>
-                                    {membership.osuUser!.username}
+                                    {membership!.osuUser!.username}
                                 </Username>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Flag src={`https://osu.ppy.sh/images/flags/${membership.osuUser!.country}.png`} />
-                                {countries.getName(membership.osuUser!.country, "en")}
+                                <Flag src={`https://osu.ppy.sh/images/flags/${membership!.osuUser!.country}.png`} />
+                                {countries.getName(membership!.osuUser!.country, "en")}
                             </UserInfoRow>
                             <UserInfoRow>
-                                <ScoreCount>{membership.scoreCount} scores</ScoreCount>
+                                <ScoreCount>{membership!.scoreCount} scores</ScoreCount>
                             </UserInfoRow>
                         </UserInfoContainer>
                         <UserInfoContainer>
                             <UserInfoRow>
-                                <Rank>#{membership.rank}</Rank>
+                                <Rank>#{membership!.rank}</Rank>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Performance>{membership.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
+                                <Performance>{membership!.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
                             </UserInfoRow>
                         </UserInfoContainer>
                     </UserInfo>
@@ -124,7 +125,7 @@ const MemberInfo = observer(() => {
                     )}
                 </>
             )}
-            {isLoadingMembership && (
+            {loadingMembershipStatus === ResourceStatus.Loading && (
                 <LoadingSection />
             )}
         </>

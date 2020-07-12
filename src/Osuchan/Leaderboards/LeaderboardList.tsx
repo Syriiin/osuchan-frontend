@@ -10,6 +10,8 @@ import { BottomScrollDetector, Surface, SurfaceHeaderContainer, SurfaceTitle, Bu
 import { gamemodeIdFromName } from "../../utils/osu";
 import JoinedLeaderboards from "./JoinedLeaderboards";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
+import { PaginatedResourceStatus } from "../../store/status";
+import { hasFlag } from "../../utils/general";
 
 const LeaderboardsSurface = styled(Surface)`
     margin: 20px auto;
@@ -59,13 +61,13 @@ const LeaderboardList = observer(() => {
     }, [user, leaderboardType, gamemode, unload, loadCommunityMemberships, loadGlobalLeaderboards, loadCommunityLeaderboards]);
 
     const loadNextGlobalLeaderboardPage = () => {
-        if (!listStore.globalLeaderboardsPagesEnded && !listStore.isLoadingGlobalLeaderboardsPage) {
+        if (listStore.globalLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {
             listStore.loadNextGlobalLeaderboardsPage(user?.osuUserId);
         }
     }
 
     const loadNextCommunityLeaderboardPage = () => {
-        if (!listStore.communityLeaderboardsPagesEnded && !listStore.isLoadingCommunityLeaderboardsPage) {
+        if (listStore.communityLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {
             listStore.loadNextCommunityLeaderboardsPage();
         }
     }
@@ -102,7 +104,7 @@ const LeaderboardList = observer(() => {
             
             {params.leaderboardType === "global" && (
                 <>
-                    {listStore.globalLeaderboardsLoaded && (
+                    {hasFlag(listStore.globalLeaderboardsStatus, PaginatedResourceStatus.ContentAvailable) && (
                         <>
                             {/* NOTE: ideally we want to defer loading leaderboards until we are logged in so we dont needlessly load the leaderboards and then memberships straight after */}
                             <BottomScrollDetector onBottomScrolled={loadNextGlobalLeaderboardPage}>
@@ -114,10 +116,7 @@ const LeaderboardList = observer(() => {
                             </BottomScrollDetector>
                         </>
                     )}
-                    {listStore.isLoadingGlobalLeaderboardsPage && (
-                        <LoadingSection />
-                    )}
-                    {listStore.isLoadingGlobalLeaderboards && (
+                    {listStore.globalLeaderboardsStatus === PaginatedResourceStatus.LoadingInitial && (
                         <LoadingSection />
                     )}
                 </>
@@ -127,12 +126,12 @@ const LeaderboardList = observer(() => {
                     {user !== null && (
                         <>
                             <SurfaceSubtitle>Joined Leaderboards</SurfaceSubtitle>
-                            {listStore.communityMembershipsLoaded && (
+                            {hasFlag(listStore.communityMembershipsStatus, PaginatedResourceStatus.ContentAvailable) && (
                                 <>
                                     <JoinedLeaderboards memberships={communityMemberships} />
 
-                                    {!listStore.communityMembershipsPagesEnded && (
-                                        <Button fullWidth isLoading={listStore.isLoadingCommunityMembershipsPage} action={() => listStore.loadNextCommunityMembershipsPage(user.osuUserId)}>Load More</Button>
+                                    {hasFlag(listStore.communityMembershipsStatus, PaginatedResourceStatus.MoreToLoad) && (
+                                        <Button fullWidth isLoading={listStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingMore} action={() => listStore.loadNextCommunityMembershipsPage(user.osuUserId)}>Load More</Button>
                                     )}
 
                                     {communityMemberships.length === 0 && (
@@ -142,7 +141,7 @@ const LeaderboardList = observer(() => {
                                     <Divider spacingScale={5} />
                                 </>
                             )}
-                            {listStore.isLoadingCommunityMemberships && (
+                            {listStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingInitial && (
                                 <LoadingSection />
                             )}
                         </>
@@ -156,15 +155,12 @@ const LeaderboardList = observer(() => {
                             </div>
                         )}
                     </SurfaceHeaderContainer>
-                    {listStore.communityLeaderboardsLoaded && (
+                    {hasFlag(listStore.communityLeaderboardsStatus, PaginatedResourceStatus.ContentAvailable) && (
                         <BottomScrollDetector onBottomScrolled={loadNextCommunityLeaderboardPage}>
                             <CommunityLeaderboards leaderboards={communityLeaderboards} />
                         </BottomScrollDetector>
                     )}
-                    {listStore.isLoadingCommunityLeaderboardsPage && (
-                        <LoadingSection />
-                    )}
-                    {listStore.isLoadingCommunityLeaderboards && (
+                    {hasFlag(listStore.communityLeaderboardsStatus, PaginatedResourceStatus.Loading) && (
                         <LoadingSection />
                     )}
                     <CreateLeaderboardModal open={createLeaderboardModalOpen} onClose={() => setCreateLeaderboardModalOpen(false)} />

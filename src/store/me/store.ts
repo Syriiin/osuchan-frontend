@@ -9,25 +9,26 @@ import { inviteFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
 import { User, ScoreFilterPreset } from "../models/users/types";
 import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deserialisers";
+import { ResourceStatus } from "../status";
 
 export class MeStore {
     @observable user: User | null = null;
-    @observable isLoading: boolean = false;
-    @observable isAddingScores: boolean = false;
-    @observable isDecliningInvite: boolean = false;
-    @observable isCreatingScoreFilterPreset: boolean = false;
-    @observable isUpdatingScoreFilterPreset: boolean = false;
-    @observable isDeletingScoreFilterPreset: boolean = false;
+    @observable loadingStatus = ResourceStatus.NotLoaded;
+    @observable isAddingScores = false;
+    @observable isDecliningInvite = false;
+    @observable isCreatingScoreFilterPreset = false;
+    @observable isUpdatingScoreFilterPreset = false;
+    @observable isDeletingScoreFilterPreset = false;
 
     readonly invites = observable<Invite>([]);
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
 
     @action
     loadMe = async () => {
+        this.loadingStatus = ResourceStatus.Loading;
         this.user = null;
         this.invites.clear();
         this.scoreFilterPresets.clear();
-        this.isLoading = true;
 
         try {
             const meResponse = await http.get("/api/users/me");
@@ -47,17 +48,19 @@ export class MeStore {
                 runInAction(() => {
                     this.invites.replace(invites);
                     this.scoreFilterPresets.replace(scoreFilterPresets);
+
+                    this.loadingStatus = ResourceStatus.Loaded;
                 });
             }
 
 
         } catch (error) {
             console.log(error);
-        }
 
-        runInAction(() => {
-            this.isLoading = false;
-        });
+            runInAction(() => {
+                this.loadingStatus = ResourceStatus.Error;
+            });
+        }
     }
 
     @action

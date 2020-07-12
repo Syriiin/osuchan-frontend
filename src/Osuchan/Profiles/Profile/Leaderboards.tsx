@@ -7,6 +7,8 @@ import { Membership } from "../../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { StoreContext } from "../../../store";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
+import { PaginatedResourceStatus } from "../../../store/status";
+import { hasFlag } from "../../../utils/general";
 
 const LeaderboardsSurface = styled(Surface)`
     padding: 20px;
@@ -122,7 +124,7 @@ const Leaderboards = observer(() => {
     const handleGlobalClick = () => setLeaderboardType("global");
     const handleCommunityClick = () => {
         setLeaderboardType("community");
-        if (!usersStore.communityMembershipsLoaded) {
+        if (usersStore.communityMembershipsStatus === PaginatedResourceStatus.NotLoaded) {
             usersStore.loadCommunityMemberships();
         }
     }
@@ -143,22 +145,22 @@ const Leaderboards = observer(() => {
             ))}
             {leaderboardType === "community" && (
                 <>
-                    {usersStore.communityMembershipsLoaded && (
+                    {hasFlag(usersStore.communityMembershipsStatus, PaginatedResourceStatus.ContentAvailable) && (
                         <>
                             {communityMemberships.map((membership, i) => (
                                 <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
                                     <CommunityLeaderboardRow membership={membership} />
                                 </UnstyledLink>
                             ))}
-                            {!usersStore.communityMembershipsPagesEnded && (
-                                <Button fullWidth isLoading={usersStore.isLoadingCommunityMembershipsPage} action={() => usersStore.loadNextCommunityMembershipsPage()}>Load More</Button>
+                            {hasFlag(usersStore.communityMembershipsStatus, PaginatedResourceStatus.MoreToLoad) && (
+                                <Button fullWidth isLoading={usersStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingMore} action={() => usersStore.loadNextCommunityMembershipsPage()}>Load More</Button>
                             )}
                             {communityMemberships.length === 0 && (
                                 <p>This user has not joined any community leaderboards yet...</p>
                             )}
                         </>
                     )}
-                    {usersStore.isLoadingCommunityMemberships && (
+                    {usersStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingInitial && (
                         <LoadingSection />
                     )}
                 </>

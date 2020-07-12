@@ -83,7 +83,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 {/* Score filters */}
                 <ScoreFilterForm gamemode={gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
 
-                <Button isLoading={listStore.isCreating} positive type="submit">Create</Button>
+                <Button isLoading={listStore.isCreatingLeaderboard} positive type="submit">Create</Button>
             </form>
         </SimpleModal>
     );

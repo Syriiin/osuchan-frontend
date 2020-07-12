@@ -13,6 +13,7 @@ import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import { Gamemode, Mods } from "../models/common/enums";
 import { ScoreSet } from "../models/profiles/enums";
 import { unchokeForScoreSet, getScoreResult } from "../../utils/osuchan";
+import { ResourceStatus, PaginatedResourceStatus } from "../status";
 
 function calculateScoreStyleValue(values: number[]) {
     let weighting_value = 0;
@@ -24,16 +25,11 @@ function calculateScoreStyleValue(values: number[]) {
 
 export class UsersStore {
     @observable gamemode: Gamemode | null = null;
-    @observable isLoading: boolean = false;
-    @observable isLoadingSandboxScores: boolean = false;
-    @observable isLoadingGlobalMembershipsPage: boolean = false;
-    @observable globalMembershipsPagesEnded: boolean = false;
-    @observable isLoadingCommunityMemberships: boolean = false;
-    @observable communityMembershipsLoaded: boolean = false;
-    @observable isLoadingCommunityMembershipsPage: boolean = false;
-    @observable communityMembershipsPagesEnded: boolean = false;
-
     @observable currentUserStats: UserStats | null = null;
+    @observable loadingStatus = ResourceStatus.NotLoaded;
+    @observable loadingSandboxScoresStatus = ResourceStatus.NotLoaded;
+    @observable globalMembershipsStatus = PaginatedResourceStatus.NotLoaded;
+    @observable communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
 
     readonly scores = observable<Score>([]);
     readonly globalMemberships = observable<Membership>([]);
@@ -80,8 +76,9 @@ export class UsersStore {
         this.globalMemberships.clear();
         this.communityMemberships.clear();
         this.sandboxScores.clear();
-        this.communityMembershipsLoaded = false;
-        this.isLoading = true;
+        this.loadingStatus = ResourceStatus.Loading;
+        this.globalMembershipsStatus = PaginatedResourceStatus.Loading;
+        this.communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
 
         try {
             const userStatsResponse = await http.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {
@@ -109,23 +106,28 @@ export class UsersStore {
                 this.scores.replace(scores);
                 this.globalMemberships.replace(globalMemberships);
                 this.sandboxScores.replace(scores);
+
+                this.loadingStatus = ResourceStatus.Loaded;
                 
                 if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalMembershipsPagesEnded = true;
+                    this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
                 }
             });
         } catch (error) {
             console.log(error);
+
+            runInAction(() => {
+                this.loadingStatus = ResourceStatus.Error;
+                this.globalMembershipsStatus = PaginatedResourceStatus.Error;
+            });
         }
-        
-        runInAction(() => {
-            this.isLoading = false;
-        });
     }
 
     @action
     loadNextGlobalMembershipsPage = async () => {
-        this.isLoadingGlobalMembershipsPage = true;
+        this.globalMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
             const globalMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/global/${this.gamemode}`, {
@@ -140,23 +142,23 @@ export class UsersStore {
                 this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
                 
                 if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalMembershipsPagesEnded = true;
+                    this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
                 }
             });
         } catch (error) {
             console.log(error);
-        }
 
-        runInAction(() => {
-            this.isLoadingGlobalMembershipsPage = false;
-        });
+            runInAction(() => {
+                this.globalMembershipsStatus = PaginatedResourceStatus.Error;
+            });
+        }
     }
 
     @action
     loadCommunityMemberships = async () => {
-        this.isLoadingCommunityMemberships = true;
-        this.communityMembershipsLoaded = false;
-        this.communityMembershipsPagesEnded = false;
+        this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
         
         this.communityMemberships.clear();
 
@@ -173,22 +175,23 @@ export class UsersStore {
                 this.communityMemberships.replace(communityMemberships);
                 
                 if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsPagesEnded = true;
+                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
                 }
             });
         } catch (error) {
             console.log(error);
-        }
 
-        runInAction(() => {
-            this.communityMembershipsLoaded = true;
-            this.isLoadingCommunityMemberships = false;
-        });
+            runInAction(() => {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
+            });
+        }
     }
 
     @action
     loadNextCommunityMembershipsPage = async () => {
-        this.isLoadingCommunityMembershipsPage = true;
+        this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
             const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
@@ -203,21 +206,23 @@ export class UsersStore {
                 this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
                 
                 if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsPagesEnded = true;
+                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
                 }
             });
         } catch (error) {
             console.log(error);
-        }
 
-        runInAction(() => {
-            this.isLoadingCommunityMembershipsPage = false;
-        });
+            runInAction(() => {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
+            });
+        }
     }
 
     @action
     loadSandboxScores = async (scoreSet: ScoreSet, scoreFilter: ScoreFilter) => {
-        this.isLoadingSandboxScores = true;
+        this.loadingSandboxScoresStatus = ResourceStatus.Loading;
 
         try {
             const scoresResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
@@ -249,11 +254,17 @@ export class UsersStore {
 
             runInAction(() => {
                 this.sandboxScores.replace(scores);
+
+                this.loadingSandboxScoresStatus = ResourceStatus.Loaded;
             });
 
             notify.neutral("Sandbox scores loaded");
         } catch (error) {
             console.log(error);
+            
+            runInAction(() => {
+                this.loadingSandboxScoresStatus = ResourceStatus.Error;
+            });
 
             const errorMessage = error.response.data.detail;
 
@@ -263,10 +274,6 @@ export class UsersStore {
                 notify.negative("Failed to load sandbox scores");
             }
         }
-        
-        runInAction(() => {
-            this.isLoadingSandboxScores = false;
-        });
     }
 
     @action

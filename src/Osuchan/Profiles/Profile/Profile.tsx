@@ -14,6 +14,7 @@ import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
 import { useParams } from "react-router";
+import { ResourceStatus } from "../../../store/status";
 
 const ProfileGrid = styled.div`
     margin: 20px auto;
@@ -49,22 +50,22 @@ const Profile = observer(() => {
     const sandboxScores = usersStore.sandboxScores;
 
     // use effect to update title
-    const { isLoading } = usersStore;
+    const { loadingStatus } = usersStore;
     useEffect(() => {
-        if (isLoading) {
+        if (loadingStatus === ResourceStatus.Loading) {
             document.title = "Loading...";
         } else if (osuUser) {
             document.title = `${osuUser.username} - osu!chan`;
         } else {
             document.title = "User not found - osu!chan";
         }
-    }, [isLoading, osuUser]);
+    }, [loadingStatus, osuUser]);
 
     const [sandboxMode, setSandboxMode] = useState(false);
 
     return (
         <>
-            {usersStore.isLoading && (
+            {usersStore.loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}
             {userStats && osuUser && (
@@ -103,7 +104,7 @@ const Profile = observer(() => {
                     
                 </ProfileGrid>
             )}
-            {!usersStore.isLoading && !osuUser && (
+            {loadingStatus === ResourceStatus.Error && (
                 <h3>User not found!</h3>
             )}
         </>

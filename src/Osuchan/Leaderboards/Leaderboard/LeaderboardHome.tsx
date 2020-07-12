@@ -18,6 +18,7 @@ import { scoreFilterIsDefault } from "../../../utils/osuchan";
 import { gamemodeIdFromName } from "../../../utils/osu";
 import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
+import { ResourceStatus } from "../../../store/status";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -169,7 +170,7 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     {leaderboard.ownerId === meOsuUser.id && (
                         <>
                             {/* Delete button */}
-                            <DeleteButton negative isLoading={detailStore.isDeleting} action={handleDelete} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
+                            <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={handleDelete} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
 
                             {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
@@ -229,20 +230,20 @@ const LeaderboardHome = observer(() => {
     const leaderboard = detailStore.leaderboard;
 
     // use effect to update title
-    const { isLoading } = detailStore;
+    const { loadingStatus } = detailStore;
     useEffect(() => {
-        if (isLoading) {
+        if (loadingStatus === ResourceStatus.Loading) {
             document.title = "Loading...";
         } else if (leaderboard) {
             document.title = `${leaderboard.name} - osu!chan`;
         } else {
             document.title = "Leaderboard not found - osu!chan";
         }
-    }, [isLoading, leaderboard]);
+    }, [loadingStatus, leaderboard]);
 
     return (
         <>
-            {detailStore.isLoading && (
+            {detailStore.loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}
             {leaderboard && (
@@ -288,7 +289,7 @@ const LeaderboardHome = observer(() => {
                     <Rankings memberships={detailStore.rankings} />
                 </>
             )}
-            {!detailStore.isLoading && !leaderboard && (
+            {detailStore.loadingStatus === ResourceStatus.Error && (
                 <h3>Leaderboard not found!</h3>
             )}
             <Route exact path={`${match.path}/invites`}>

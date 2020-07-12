@@ -6,6 +6,7 @@ import { SimpleModal, SimpleModalTitle, Button, Row, FormLabel, FormControl, Tex
 import { StoreContext } from "../../../store";
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Invite } from "../../../store/models/leaderboards/types";
+import { ResourceStatus } from "../../../store/status";
 
 const InvitesList = styled.div`
     margin-top: 10px;
@@ -103,17 +104,17 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
 
-    const { isLoading, isLoadingInvites, leaderboard, invites, loadInvites } = detailStore;
+    const { loadingStatus, loadingInvitesStatus, leaderboard, invites, loadInvites } = detailStore;
 
     useEffect(() => {
-        if (isLoadingInvites) {
+        if (loadingInvitesStatus === ResourceStatus.Loading) {
             document.title = "Loading...";
         } else if (leaderboard) {
             document.title = `Manage Invites - ${leaderboard!.name} - osu!chan`;
         } else {
             document.title = `Leaderboard not found - osu!chan`;
         }
-    }, [isLoading, isLoadingInvites, leaderboard]);
+    }, [loadingStatus, loadingInvitesStatus, leaderboard]);
 
     const open = props.open;
     useEffect(() => {
@@ -136,11 +137,11 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
                 ))}
             </InvitesList>
 
-            {!isLoadingInvites && invites.length === 0 && (
+            {loadingInvitesStatus === ResourceStatus.Loaded && invites.length === 0 && (
                 <p>There are no pending invites for this leaderboard...</p>
             )}
 
-            {isLoadingInvites && (
+            {loadingInvitesStatus === ResourceStatus.Loading && (
                 <LoadingSection />
             )}
             

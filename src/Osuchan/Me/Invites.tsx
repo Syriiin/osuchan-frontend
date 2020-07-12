@@ -7,6 +7,7 @@ import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from ".
 import { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { formatGamemodeNameShort } from "../../utils/formatting";
+import { ResourceStatus } from "../../store/status";
 
 const InvitesSurface = styled(Surface)`
     margin: 20px auto;
@@ -97,24 +98,23 @@ const Invites = observer(() => {
     }, [loadMe]);
 
     // use effect to update title
-    const { isLoading } = meStore;
+    const { loadingStatus } = meStore;
     useEffect(() => {
-        if (isLoading) {
+        if (loadingStatus === ResourceStatus.Loading) {
             document.title = "Loading...";
         } else {
             document.title = "Invites - osu!chan";
         }
-    }, [isLoading]);
+    }, [loadingStatus]);
 
-    const user = meStore.user;
     const invites = meStore.invites;
 
     return (
         <>
-            {meStore.isLoading && (
+            {loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}
-            {!meStore.isLoading && user && (
+            {loadingStatus === ResourceStatus.Loaded && (
                 <InvitesSurface>
                     <SurfaceTitle>My Invites</SurfaceTitle>
                     {invites.map(invite => (
