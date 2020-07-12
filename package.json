@@ -32,6 +32,7 @@
         "react-select": "^3.1.0",
         "react-switch": "^5.0.1",
         "react-toastify": "^6.0.8",
+        "react-tooltip": "^4.2.7",
         "react-transition-group": "^4.4.1",
         "react-vis": "^1.11.7",
         "styled-components": "^5.1.1",

@@ -71,6 +71,59 @@ export function modsShortFromBitwise(bitwiseMods: Mods) {
     return mods;
 }
 
+export function modsAsArray(bitwiseMods: Mods) {
+    const allMods: Mods[] = [
+        Mods.NoFail,
+        Mods.Easy,
+        Mods.TouchDevice,
+        Mods.Hidden,
+        Mods.HardRock,
+        Mods.SuddenDeath,
+        Mods.DoubleTime,
+        Mods.Relax,
+        Mods.HalfTime,
+        Mods.Nightcore,
+        Mods.Flashlight,
+        Mods.Auto,
+        Mods.SpunOut,
+        Mods.Autopilot,
+        Mods.Perfect,
+        Mods.Key4,
+        Mods.Key5,
+        Mods.Key6,
+        Mods.Key7,
+        Mods.Key8,
+        Mods.FadeIn,
+        Mods.Random,
+        Mods.Cinema,
+        Mods.TargetPractice,
+        Mods.Key9,
+        Mods.KeyCoop,
+        Mods.Key1,
+        Mods.Key2,
+        Mods.Key3,
+        Mods.ScoreV2,
+        Mods.Mirror
+    ];
+
+    const mods: Mods[] = [];
+
+    for (const mod of allMods) {
+        if (mod & bitwiseMods) {
+            mods.push(mod);
+        }
+    }
+
+    if (mods.includes(Mods.Nightcore) && mods.includes(Mods.DoubleTime)) {
+        mods.splice(mods.indexOf(Mods.DoubleTime), 1);
+    }
+    if (mods.includes(Mods.Perfect) && mods.includes(Mods.SuddenDeath)) {
+        mods.splice(mods.indexOf(Mods.SuddenDeath), 1);
+    }
+
+    return mods;
+}
+
 export function calculateAccuracy(gamemode: Gamemode, count300: number, count100: number, count50: number, countMiss: number, countKatu?: number, countGeki?: number) {
     let totalHits;
     let points;

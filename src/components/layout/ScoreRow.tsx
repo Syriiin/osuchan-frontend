@@ -75,7 +75,7 @@ const Accuracy = styled.span`
 
 `;
 
-const ScoreDate = styled(TimeAgo)`
+const ScoreDate = styled.span`
     font-size: 0.8em;
 `;
 
@@ -137,7 +137,9 @@ export const ScoreRow = (props: ScoreRowProps) => {
                         <Accuracy>
                             {score.accuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%
                         </Accuracy>
-                        <ScoreDate datetime={score.date} />
+                        <ScoreDate>
+                            <TimeAgo datetime={score.date} />
+                        </ScoreDate>
                     </AccuracyContainer>
                     <PerformanceContainer>
                         <Performance>

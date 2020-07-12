@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { modsShortFromBitwise } from "../../utils/osu";
+import { modsAsArray } from "../../utils/osu";
 import { Mods } from "../../store/models/common/enums";
+import { Tooltip } from "./Tooltip";
+import { formatModName, formatModNameShort } from "../../utils/formatting";
 
 const ModsContainer = styled.div`
     display: flex;
@@ -13,12 +15,15 @@ const ModImage = styled.img`
 `;
 
 export const ModIcons = (props: ModIconsProps) => {
-    const mods = modsShortFromBitwise(props.bitwiseMods);
+    const mods = modsAsArray(props.bitwiseMods);
 
     return (
         <ModsContainer>
             {mods.map((mod, i) => (
-                <ModImage key={i} src={`/static/images/mods/mod_${mod}${props.small ? "" : "@2x"}.png`} />
+                <>
+                    <ModImage data-tip={formatModName(mod)} data-for={`mod-${mod}`} key={i} src={`/static/images/mods/mod_${formatModNameShort(mod)}${props.small ? "" : "@2x"}.png`} />
+                    <Tooltip id={`mod-${mod}`} />
+                </>
             ))}
         </ModsContainer>
     )
