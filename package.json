@@ -35,11 +35,13 @@
         "react-tooltip": "^4.2.7",
         "react-transition-group": "^4.4.1",
         "react-vis": "^1.11.7",
+        "source-map-explorer": "^2.4.2",
         "styled-components": "^5.1.1",
         "timeago-react": "^3.0.0",
         "typescript": "^3.9.6"
     },
     "scripts": {
+        "analyse": "source-map-explorer 'build/static/js/*.js'",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
