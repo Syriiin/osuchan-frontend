@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { OsuUser } from "../../../store/models/profiles/types";
-import { Surface } from "../../../components";
+import { Surface, TimeAgo } from "../../../components";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
@@ -67,7 +67,7 @@ const UserInfo = (props: UserInfoProps) => {
                 </UserInfoRow>
                 <UserInfoRow>
                     <JoinIcon icon={faSignInAlt} />
-                    {osuUser.joinDate.toDateString()}
+                    <TimeAgo datetime={osuUser.joinDate} />
                 </UserInfoRow>
             </UserInfoContainer>
         </UserInfoSurface>

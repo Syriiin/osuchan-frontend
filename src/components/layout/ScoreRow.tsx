@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import TimeAgo from "timeago-react";
 import { Score } from "../../store/models/profiles/types";
 import { Row } from "./Row";
 import { ModIcons } from "./ModIcons";
@@ -8,6 +7,7 @@ import { formatScoreResult } from "../../utils/formatting";
 import { ScoreModal } from "./ScoreModal";
 import { Button } from "../forms/Button";
 import { ClickPropagationSupressor } from "../helpers/ClickPropagationSupressor";
+import { TimeAgo } from "./TimeAgo";
 
 const ScoreRowWrapper = styled(Row)`
     padding: 0;

@@ -11,6 +11,7 @@ export * from "./layout/Loading";
 export * from "./layout/Divider";
 export * from "./layout/CommunityLeaderboardRow";
 export * from "./layout/GlobalLeaderboardRow";
+export * from "./layout/TimeAgo";
 export * from "./helpers/UnstyledLink";
 export * from "./helpers/BottomScrollDetector";
 export * from "./helpers/ClickPropagationSupressor";

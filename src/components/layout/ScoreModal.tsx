@@ -5,10 +5,10 @@ import { Score } from "../../store/models/profiles/types";
 import { BasicModal } from "./BasicModal";
 import { formatScoreResult, formatTime } from "../../utils/formatting";
 import { DataTable, DataCell } from "./DataTable";
-import TimeAgo from "timeago-react";
 import { ModIcons } from "./ModIcons";
 import { ScoreResult } from "../../store/models/profiles/enums";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
+import { TimeAgo } from "./TimeAgo";
 
 const BannerImage = styled.img`
     width: 100%;
