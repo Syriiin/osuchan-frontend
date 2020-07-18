@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { Surface, SurfaceTitle, UnstyledLink, Row, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection } from "../../../components";
+import { Surface, SurfaceTitle, UnstyledLink, Row, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection, NumberFormat } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { StoreContext } from "../../../store";
@@ -70,10 +70,10 @@ const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
         </LeaderboardTitleContainer>
         <MembershipInfoContainer>
             <MembershipRank>
-                #{props.membership.rank}
+                #{props.membership.rank.toLocaleString("en")}
             </MembershipRank>
             <MembershipPerformance>
-                {props.membership.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp
+                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
             </MembershipPerformance>
         </MembershipInfoContainer>
     </Row>
@@ -99,10 +99,10 @@ const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => (
         </LeaderboardTitleContainer>
         <MembershipInfoContainer>
             <MembershipRank>
-                #{props.membership.rank}
+                #{props.membership.rank.toLocaleString("en")}
             </MembershipRank>
             <MembershipPerformance>
-                {props.membership.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp
+                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
             </MembershipPerformance>
         </MembershipInfoContainer>
     </Row>

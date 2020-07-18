@@ -9,6 +9,7 @@ import { ModIcons } from "./ModIcons";
 import { ScoreResult } from "../../store/models/profiles/enums";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
 import { TimeAgo } from "./TimeAgo";
+import { NumberFormat } from "./NumberFormat";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -114,7 +115,7 @@ export const ScoreModal = (props: ScoreModalProps) => {
                     <BeatmapDataTable>
                         <tr>
                             <td>BPM</td>
-                            <DataCell>{score.bpm.toLocaleString("en", { maximumFractionDigits: 0 })}</DataCell>
+                            <DataCell><NumberFormat value={score.bpm} decimalPlaces={0} /></DataCell>
                         </tr>
                         <tr>
                             <td>Length</td>
@@ -123,22 +124,22 @@ export const ScoreModal = (props: ScoreModalProps) => {
                         {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(score.gamemode) && (
                             <tr>
                                 <td>{score.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
-                                <DataCell>{score.circleSize.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                                <DataCell><NumberFormat value={score.circleSize} decimalPlaces={1} /></DataCell>
                             </tr>
                         )}
                         {[Gamemode.Standard, Gamemode.Catch].includes(score.gamemode) && (
                             <tr>
                                 <td>Approach Rate</td>
-                                <DataCell>{score.approachRate.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                                <DataCell><NumberFormat value={score.approachRate} decimalPlaces={1} /></DataCell>
                             </tr>
                         )}
                         <tr>
                             <td>Overall Difficulty</td>
-                            <DataCell>{score.overallDifficulty.toLocaleString("en", { maximumFractionDigits: 1 })}</DataCell>
+                            <DataCell><NumberFormat value={score.overallDifficulty} decimalPlaces={1} /></DataCell>
                         </tr>
                     </BeatmapDataTable>
                     {score.gamemode === Gamemode.Standard && (
-                        <StarRating>{score.starRating.toLocaleString("en", { maximumFractionDigits: 2 })} stars</StarRating>
+                        <StarRating><NumberFormat value={score.starRating} decimalPlaces={2} /> stars</StarRating>
                     )}
                 </BeatmapInfo>
 
@@ -163,12 +164,12 @@ export const ScoreModal = (props: ScoreModalProps) => {
                             <DataCell>{score.countMiss}</DataCell>
                         </tr>
                     </ScoreDataTable>
-                    <Accuracy>{score.accuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%</Accuracy>
+                    <Accuracy><NumberFormat value={score.accuracy} decimalPlaces={2} />%</Accuracy>
                     <Combo>{score.bestCombo}x / {beatmap.maxCombo}x</Combo>
-                    <Performance>{score.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
+                    <Performance><NumberFormat value={score.pp} decimalPlaces={0} />pp</Performance>
                     <Result>{formatScoreResult(score.result)}</Result>
                     {Boolean(score.result & ScoreResult.Choke) && (
-                        <NochokePerformance>No-choke {score.nochokePp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</NochokePerformance>
+                        <NochokePerformance>No-choke <NumberFormat value={score.nochokePp} decimalPlaces={0} />pp</NochokePerformance>
                     )}
                 </ScoreInfo>
             </InfoContainer>

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import countries from "i18n-iso-countries";
 
-import { SimpleModal, LoadingSection, Divider, ScoreRow, Button } from "../../../components";
+import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat } from "../../../components";
 import { StoreContext } from "../../../store";
 import { ResourceStatus } from "../../../store/status";
 
@@ -104,10 +104,12 @@ const MemberInfo = observer(() => {
                         </UserInfoContainer>
                         <UserInfoContainer>
                             <UserInfoRow>
-                                <Rank>#{membership!.rank}</Rank>
+                                <Rank>#{membership!.rank.toLocaleString("en")}</Rank>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Performance>{membership!.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</Performance>
+                                <Performance>
+                                    <NumberFormat value={membership!.pp} decimalPlaces={0} />pp
+                                </Performance>
                             </UserInfoRow>
                         </UserInfoContainer>
                     </UserInfo>

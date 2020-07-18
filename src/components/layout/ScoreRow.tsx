@@ -8,6 +8,7 @@ import { ScoreModal } from "./ScoreModal";
 import { Button } from "../forms/Button";
 import { ClickPropagationSupressor } from "../helpers/ClickPropagationSupressor";
 import { TimeAgo } from "./TimeAgo";
+import { NumberFormat } from "./NumberFormat";
 
 const ScoreRowWrapper = styled(Row)`
     padding: 0;
@@ -135,7 +136,7 @@ export const ScoreRow = (props: ScoreRowProps) => {
                 <ScoreInfo>
                     <AccuracyContainer>
                         <Accuracy>
-                            {score.accuracy.toLocaleString("en", { maximumFractionDigits: 2 })}%
+                            <NumberFormat value={score.accuracy} decimalPlaces={2} />%
                         </Accuracy>
                         <ScoreDate>
                             <TimeAgo datetime={score.date} />
@@ -143,7 +144,7 @@ export const ScoreRow = (props: ScoreRowProps) => {
                     </AccuracyContainer>
                     <PerformanceContainer>
                         <Performance>
-                            {score.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp
+                            <NumberFormat value={score.pp} decimalPlaces={0} />pp
                         </Performance>
                         <Result>
                             {formatScoreResult(score.result)}

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Row } from "./Row";
 import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import { NumberFormat } from "./NumberFormat";
 
 const LeaderboardIconContainer = styled.div`
     height: 86px;
@@ -55,10 +56,10 @@ export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => {
             {props.membership && (
                 <MembershipInfoContainer>
                     <MembershipRank>
-                        #{props.membership.rank}
+                        #{props.membership.rank.toLocaleString("en")}
                     </MembershipRank>
                     <MembershipPerformance>
-                        {props.membership.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp
+                        <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
                     </MembershipPerformance>
                 </MembershipInfoContainer>
             )}

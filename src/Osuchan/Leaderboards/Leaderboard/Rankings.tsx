@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Surface, Row, SurfaceTitle, UnstyledLink } from "../../../components";
+import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
 import { useRouteMatch } from "react-router";
 
@@ -55,7 +55,7 @@ const RankingRow = (props: RankingRowProps) => {
 
     return (
         <Row hoverable>
-            <Rank>#{props.rank}</Rank>
+            <Rank>#{props.rank.toLocaleString("en")}</Rank>
             <PlayerInfo>
                 <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
                 <Username>
@@ -64,7 +64,7 @@ const RankingRow = (props: RankingRowProps) => {
             </PlayerInfo>
             <PerformanceContainer>
                 <Performance>
-                    {membership.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp
+                    <NumberFormat value={membership.pp} decimalPlaces={0} />pp
                 </Performance>
                 <ScoreCount>
                     {membership.scoreCount} scores

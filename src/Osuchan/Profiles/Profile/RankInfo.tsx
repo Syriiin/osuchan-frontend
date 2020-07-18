@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
-import { Surface, DataCell, DataTable } from "../../../components";
+import { Surface, DataCell, DataTable, NumberFormat } from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { StoreContext } from "../../../store";
 
@@ -40,16 +40,20 @@ const RankInfo = observer((props: RankInfoProps) => {
                     <tr>
                         <td>Performance</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>{usersStore.sandboxPerformance.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                            <DataCell highlighted>
+                                <NumberFormat value={usersStore.sandboxPerformance} decimalPlaces={0} />pp
+                            </DataCell>
                         )}
-                        <DataCell>{props.userStats.pp.toLocaleString("en", { maximumFractionDigits: 0 })}pp</DataCell>
+                        <DataCell>
+                            <NumberFormat value={props.userStats.pp} decimalPlaces={0} />pp
+                        </DataCell>
                     </tr>
                     <tr>
                         <td>Rank</td>
                         {props.sandboxMode && (
                             <DataCell highlighted>-</DataCell>
                         )}
-                        <DataCell>#{props.userStats.rank.toLocaleString("en", { maximumFractionDigits: 0 })}</DataCell>
+                        <DataCell>#{props.userStats.rank.toLocaleString("en")}</DataCell>
                     </tr>
                     <tr>
                         <td>Country Rank</td>
