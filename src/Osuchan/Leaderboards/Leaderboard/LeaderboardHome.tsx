@@ -195,15 +195,16 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                                     <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={() => detailStore.deleteLeaderboard()} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
                                 </>
                             ) : (
-                                <ArchiveButton negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</ArchiveButton>
-                            )}
-                            
+                                <>
+                                    <ArchiveButton negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</ArchiveButton>
 
-                            {/* Manage invites button if either private or public invite-only */}
-                            {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
-                                <UnstyledLink to={`${match.url}/invites`}>
-                                    <Button type="button">Manage Invites</Button>
-                                </UnstyledLink>
+                                    {/* Manage invites button if either private or public invite-only */}
+                                    {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
+                                        <UnstyledLink to={`${match.url}/invites`}>
+                                            <Button type="button">Manage Invites</Button>
+                                        </UnstyledLink>
+                                    )}
+                                </>
                             )}
                         </>
                     )}
