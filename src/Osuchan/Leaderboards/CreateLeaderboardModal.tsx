@@ -1,5 +1,6 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import styled from "styled-components";
 
 import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
 import { StoreContext } from "../../store";
@@ -8,22 +9,46 @@ import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
 
+const LeaderboardIcon = styled.img`
+    max-width: 128px;
+    max-height: 128px;
+    border-radius: 5px;
+`;
+
 const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
+    const meStore = store.meStore;
+
+    const { user } = meStore;
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);
     const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
     const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [iconUrl, setIconUrl] = useState("");
     const [allowPastScores, setAllowPastScores] = useState(true);
     const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
+
+    // Interval updated icon url so we don't spam preview image requests on every character change
+    const [delayedIconUrl, setDelayedIconUrl] = useState(iconUrl);
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDelayedIconUrl(iconUrl);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [setDelayedIconUrl, iconUrl]);
+
+    useEffect(() => {
+        setIconUrl(`https://a.ppy.sh/${user?.osuUserId}` || "");
+    }, [user])
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        listStore.createLeaderboard(gamemode, scoreSet, accessType, name, description, allowPastScores, scoreFilter as ScoreFilter);
+        listStore.createLeaderboard(gamemode, scoreSet, accessType, name, description, iconUrl, allowPastScores, scoreFilter as ScoreFilter);
     }
 
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
@@ -71,6 +96,9 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
+                <FormLabel>Icon URL</FormLabel>
+                <TextInput fullWidth placeholder={`https://a.ppy.sh/${user?.osuUserId}`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
+                <LeaderboardIcon src={delayedIconUrl} />
                 <FormLabel>Allow scores set prior to member joining</FormLabel>
                 <FormControl>
                     <Switch

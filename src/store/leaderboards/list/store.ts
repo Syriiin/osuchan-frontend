@@ -274,7 +274,7 @@ export class ListStore {
     }
 
     @action
-    createLeaderboard = async (gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
+    createLeaderboard = async (gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, iconUrl: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
         this.isCreatingLeaderboard = true;
 
         try {
@@ -283,6 +283,7 @@ export class ListStore {
                 "access_type": accessType,
                 "name": name,
                 "description": description,
+                "icon_url": iconUrl,
                 "allow_past_scores": allowPastScores,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,

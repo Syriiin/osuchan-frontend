@@ -8,7 +8,7 @@ import { formatMods, formatTime } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
 import { OsuUser, ScoreFilter } from "../../../store/models/profiles/types";
 import { Leaderboard } from "../../../store/models/leaderboards/types";
-import { Surface, SurfaceTitle, Button, LoadingPage, UnstyledLink } from "../../../components";
+import { Surface, SurfaceTitle, Button, LoadingPage, UnstyledLink, SurfaceHeaderContainer } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
@@ -24,6 +24,12 @@ const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
     width: 1000px;
     padding: 20px;
+`;
+
+const LeaderboardIcon = styled.img`
+    max-width: 128px;
+    max-height: 128px;
+    border-radius: 5px;
 `;
 
 const Owner = styled(Link)`
@@ -250,7 +256,10 @@ const LeaderboardHome = observer(() => {
                 <>
                     {/*Leaderboard Details */}
                     <LeaderboardSurface>
-                        <SurfaceTitle>{leaderboard.name}</SurfaceTitle>
+                        <SurfaceHeaderContainer>
+                            <SurfaceTitle>{leaderboard.name}</SurfaceTitle>
+                            <LeaderboardIcon src={leaderboard.iconUrl} />
+                        </SurfaceHeaderContainer>
                         {leaderboard.accessType === LeaderboardAccessType.Global ? (
                             <AccessType>GLOBAL</AccessType>
                         ) : (
