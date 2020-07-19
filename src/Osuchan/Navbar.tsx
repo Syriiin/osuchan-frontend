@@ -180,12 +180,14 @@ const Navbar = observer(() => {
     // Variables
     const { user, invites, isAuthenticated } = meStore;
 
+    const leaderboardsMatch = matchPath(location.pathname, {path: "/leaderboards/:leaderboardType/:gamemode"});
+
     return (
         <NavbarWrapper>
             <LinksContainer>
                 {/* Links */}
                 <NavbarLink to="/" active={location.pathname === "/"}>Home</NavbarLink>
-                <NavbarLink to="/leaderboards" active={matchPath(location.pathname, {path: "/leaderboards"}) !== null}>Leaderboards</NavbarLink>
+                <NavbarLink to={leaderboardsMatch?.url ?? "/leaderboards/global/osu"} active={leaderboardsMatch !== null}>Leaderboards</NavbarLink>
             </LinksContainer>
 
             {/* osu!chan title */}
