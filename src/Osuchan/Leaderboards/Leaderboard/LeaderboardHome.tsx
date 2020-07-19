@@ -32,6 +32,12 @@ const LeaderboardIcon = styled.img`
     border-radius: 5px;
 `;
 
+const ArchivedNotice = styled.div`
+    font-size: 1.5em;
+    color: ${props => props.theme.colours.negative};
+    margin-bottom: 10px;
+`;
+
 const Owner = styled(Link)`
     display: inline-block;
     color: ${props => props.theme.colours.timber};
@@ -60,6 +66,14 @@ const FilterValue = styled.span`
 `;
 
 const DeleteButton = styled(Button)`
+
+`;
+
+const ArchiveButton = styled(Button)`
+    margin-right: 5px;
+`;
+
+const RestoreButton = styled(Button)`
     margin-right: 5px;
 `;
 
@@ -157,7 +171,6 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
     const leaderboard = props.leaderboard;
     const meOsuUser = props.meOsuUser;
     
-    const handleDelete = () => detailStore.deleteLeaderboard();
     const handleJoin = async () => {
         await detailStore.joinLeaderboard();
         await detailStore.reloadLeaderboard();
@@ -175,8 +188,16 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                     {/* If owner */}
                     {leaderboard.ownerId === meOsuUser.id && (
                         <>
-                            {/* Delete button */}
-                            <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={handleDelete} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
+                            {/* Delete / archive / restore buttons */}
+                            {leaderboard.archived ? (
+                                <>
+                                    <RestoreButton positive isLoading={detailStore.isRestoringLeaderboard} action={() => detailStore.restoreLeaderboard()}>Restore Leaderboard</RestoreButton>
+                                    <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={() => detailStore.deleteLeaderboard()} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
+                                </>
+                            ) : (
+                                <ArchiveButton negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</ArchiveButton>
+                            )}
+                            
 
                             {/* Manage invites button if either private or public invite-only */}
                             {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
@@ -260,6 +281,9 @@ const LeaderboardHome = observer(() => {
                             <SurfaceTitle>{leaderboard.name}</SurfaceTitle>
                             <LeaderboardIcon src={leaderboard.iconUrl} />
                         </SurfaceHeaderContainer>
+                        {leaderboard.archived && (
+                            <ArchivedNotice>ARCHIVED</ArchivedNotice>
+                        )}
                         {leaderboard.accessType === LeaderboardAccessType.Global ? (
                             <AccessType>GLOBAL</AccessType>
                         ) : (

@@ -13,6 +13,7 @@ export interface Leaderboard {
     iconUrl: string;
     allowPastScores: boolean | null;
     memberCount: number | null;
+    archived: boolean;
     scoreFilter: ScoreFilter | null;
     scoreFilterId: number;
     owner: OsuUser | null;

@@ -12,6 +12,7 @@ export function leaderboardFromJson(data: any): Leaderboard {
         iconUrl: data["icon_url"],
         allowPastScores: data["allow_past_scores"],
         memberCount: data["member_count"],
+        archived: data["archived"],
         scoreFilter: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? scoreFilterFromJson(data["score_filter"]) : null,
         scoreFilterId: data["score_filter"] === null ? null : typeof data["score_filter"] === "object" ? data["score_filter"]["id"] : data["score_filter"],
         owner: data["owner"] === null ? null : typeof data["owner"] === "object" ? osuUserFromJson(data["owner"]) : null,

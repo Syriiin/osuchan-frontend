@@ -23,6 +23,8 @@ export class DetailStore {
     @observable loadingStatus = ResourceStatus.NotLoaded;
     @observable loadingUserMembershipStatus = ResourceStatus.NotLoaded;
     @observable isDeletingLeaderboard = false;
+    @observable isArchivingLeaderboard = false;
+    @observable isRestoringLeaderboard = false;
     @observable loadingInvitesStatus = ResourceStatus.NotLoaded;
     @observable isInviting = false;
     @observable isCancellingInvite = false;
@@ -105,6 +107,68 @@ export class DetailStore {
     reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
 
     @action
+    archiveLeaderboard = async () => {
+        this.isArchivingLeaderboard = true;
+
+        try {
+            const leaderboardResponse = await http.patch(this.resourceUrl, {
+                "archived": true
+            });
+
+            runInAction(() => {
+                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            });
+
+            notify.positive("Leaderboard archived");
+        } catch (error) {
+            console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to archive leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to archive leaderboard");
+            }
+        }
+
+        runInAction(() => {
+            this.isArchivingLeaderboard = false;
+        });
+    }
+
+    @action
+    restoreLeaderboard = async () => {
+        this.isRestoringLeaderboard = true;
+
+        try {
+            const leaderboardResponse = await http.patch(this.resourceUrl, {
+                "archived": false
+            });
+
+            runInAction(() => {
+                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            });
+
+            notify.positive("Leaderboard restored");
+        } catch (error) {
+            console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to restore leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to restore leaderboard");
+            }
+        }
+
+        runInAction(() => {
+            this.isRestoringLeaderboard = false;
+        });
+    }
+
+    @action
     deleteLeaderboard = async () => {
         this.isDeletingLeaderboard = true;
 
@@ -112,7 +176,7 @@ export class DetailStore {
             await http.delete(this.resourceUrl);
 
             // Navigate to leaderboard list page after deletion
-            history.push(`/leaderboards/community/${this.gamemode}`);
+            history.push(`/leaderboards/community/${formatGamemodeNameShort(this.gamemode!)}`);
 
             runInAction(() => {
                 this.leaderboard = null;
