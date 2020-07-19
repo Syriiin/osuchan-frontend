@@ -60,9 +60,11 @@ const MemberInfo = observer(() => {
     const params = useParams<RouteParams>();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
+    const meStore = store.meStore;
 
     const userId = parseInt(params.userId);
     const { loadingStatus, loadingMembershipStatus, leaderboard, membership, membershipScores, loadMembership } = detailStore;
+    const { isAuthenticated, user } = meStore;
 
     useEffect(() => {
         if (loadingMembershipStatus === ResourceStatus.Loading) {
@@ -70,7 +72,7 @@ const MemberInfo = observer(() => {
         } else if (leaderboard && membership) {
             document.title = `${membership.osuUser!.username} - ${leaderboard.name} - osu!chan`;
         } else {
-            document.title = `Leaderboard not found - osu!chan`;
+            document.title = `Member not found - osu!chan`;
         }
     }, [loadingStatus, loadingMembershipStatus, leaderboard, membership]);
 
@@ -84,35 +86,42 @@ const MemberInfo = observer(() => {
 
     return (
         <>
-            {loadingMembershipStatus === ResourceStatus.Loaded && (
+            {loadingMembershipStatus === ResourceStatus.Loaded && membership && (
                 <>
                     <UserInfo>
-                        <Avatar src={`https://a.ppy.sh/${membership!.osuUserId}`} />
+                        <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
                         <UserInfoContainer>
                             <UserInfoRow>
                                 <Username>
-                                    {membership!.osuUser!.username}
+                                    {membership.osuUser!.username}
                                 </Username>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Flag src={`https://osu.ppy.sh/images/flags/${membership!.osuUser!.country}.png`} />
-                                {countries.getName(membership!.osuUser!.country, "en")}
+                                <Flag src={`https://osu.ppy.sh/images/flags/${membership.osuUser!.country}.png`} />
+                                {countries.getName(membership.osuUser!.country, "en")}
                             </UserInfoRow>
                             <UserInfoRow>
-                                <ScoreCount>{membership!.scoreCount} scores</ScoreCount>
+                                <ScoreCount>{membership.scoreCount} scores</ScoreCount>
                             </UserInfoRow>
                         </UserInfoContainer>
                         <UserInfoContainer>
                             <UserInfoRow>
-                                <Rank>#{membership!.rank.toLocaleString("en")}</Rank>
+                                <Rank>#{membership.rank.toLocaleString("en")}</Rank>
                             </UserInfoRow>
                             <UserInfoRow>
                                 <Performance>
-                                    <NumberFormat value={membership!.pp} decimalPlaces={0} />pp
+                                    <NumberFormat value={membership.pp} decimalPlaces={0} />pp
                                 </Performance>
                             </UserInfoRow>
                         </UserInfoContainer>
                     </UserInfo>
+
+                    {isAuthenticated && leaderboard!.ownerId === user!.osuUserId && membership?.osuUserId !== user!.osuUserId && (
+                        <>
+                            <Divider spacingScale={5} />
+                            <Button negative isLoading={detailStore.isKickingMember} action={() => detailStore.kickMember()} confirmationMessage="Are you sure you want to kick this member from the leaderboard?">Kick Member</Button>
+                        </>
+                    )}
 
                     <Divider spacingScale={5} />
 
@@ -129,6 +138,9 @@ const MemberInfo = observer(() => {
             )}
             {loadingMembershipStatus === ResourceStatus.Loading && (
                 <LoadingSection />
+            )}
+            {loadingMembershipStatus === ResourceStatus.Error && (
+                <h3>Member not found!</h3>
             )}
         </>
     );

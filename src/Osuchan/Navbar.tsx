@@ -178,8 +178,7 @@ const Navbar = observer(() => {
     }
 
     // Variables
-    const osuUser = meStore.user?.osuUser;
-    const invites = meStore.invites;
+    const { user, invites, isAuthenticated } = meStore;
 
     return (
         <NavbarWrapper>
@@ -206,7 +205,7 @@ const Navbar = observer(() => {
                 </form>
                 
                 {/* Login button / user menu */}
-                {osuUser ? (
+                {isAuthenticated ? (
                     <>
                         <SimpleMenu width={150} triggerElement={
                             <InviteIconWrapper>
@@ -239,10 +238,10 @@ const Navbar = observer(() => {
                         </SimpleMenu>
                         <SimpleMenu width={150} triggerElement={
                             <UserAvatarWrapper>
-                                <UserAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
+                                <UserAvatar src={`https://a.ppy.sh/${user!.osuUserId}`} />
                             </UserAvatarWrapper>
                         }>
-                            <Link to={`/users/${osuUser.username}`}>
+                            <Link to={`/users/${user!.osuUser!.username}`}>
                                 <SimpleMenuItem>My Profile</SimpleMenuItem>
                             </Link>
                             <SimpleMenuItem onClick={() => setAddScoreModalOpen(true)}>Add Scores</SimpleMenuItem>

@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { observer } from "mobx-react-lite";
+import { useRouteMatch } from "react-router";
 
 import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
-import { useRouteMatch } from "react-router";
 
 const RankingsSurface = styled(Surface)`
     margin: 20px auto;
@@ -50,36 +51,32 @@ const ScoreCount = styled.span`
     font-size: 0.8em;
 `;
 
-const RankingRow = (props: RankingRowProps) => {
-    const membership = props.membership;
-
-    return (
-        <Row hoverable>
-            <Rank>#{props.rank.toLocaleString("en")}</Rank>
-            <PlayerInfo>
-                <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
-                <Username>
-                    {membership.osuUser!.username}
-                </Username>
-            </PlayerInfo>
-            <PerformanceContainer>
-                <Performance>
-                    <NumberFormat value={membership.pp} decimalPlaces={0} />pp
-                </Performance>
-                <ScoreCount>
-                    {membership.scoreCount} scores
-                </ScoreCount>
-            </PerformanceContainer>
-        </Row>
-    );
-}
+const RankingRow = (props: RankingRowProps) => (
+    <Row hoverable>
+        <Rank>#{props.rank.toLocaleString("en")}</Rank>
+        <PlayerInfo>
+            <Avatar src={`https://a.ppy.sh/${props.membership.osuUserId}`} />
+            <Username>
+                {props.membership.osuUser!.username}
+            </Username>
+        </PlayerInfo>
+        <PerformanceContainer>
+            <Performance>
+                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
+            </Performance>
+            <ScoreCount>
+                {props.membership.scoreCount} scores
+            </ScoreCount>
+        </PerformanceContainer>
+    </Row>
+);
 
 interface RankingRowProps {
     membership: Membership;
     rank: number;
 }
 
-const Rankings = (props: TopScoresProps) => {
+const Rankings = observer((props: TopScoresProps) => {
     const match = useRouteMatch();
 
     return (
@@ -92,7 +89,7 @@ const Rankings = (props: TopScoresProps) => {
             ))}
         </RankingsSurface>
     );
-}
+});
 
 interface TopScoresProps {
     memberships: Membership[];

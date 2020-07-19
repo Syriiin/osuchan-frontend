@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from "mobx";
+import { observable, action, computed, runInAction } from "mobx";
 
 import http from "../../http";
 import notify from "../../notifications";
@@ -22,6 +22,10 @@ export class MeStore {
 
     readonly invites = observable<Invite>([]);
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
+
+    @computed get isAuthenticated() {
+        return this.user !== null;
+    }
 
     @action
     loadMe = async () => {

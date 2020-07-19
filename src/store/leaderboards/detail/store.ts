@@ -11,6 +11,7 @@ import { scoreFromJson } from "../../models/profiles/deserialisers";
 import { unchokeForScoreSet } from "../../../utils/osuchan";
 import { Gamemode } from "../../models/common/enums";
 import { ResourceStatus } from "../../status";
+import { formatGamemodeNameShort } from "../../../utils/formatting";
 
 export class DetailStore {
     @observable leaderboardType: string | null = null;
@@ -28,6 +29,7 @@ export class DetailStore {
     @observable loadingMembershipStatus = ResourceStatus.NotLoaded;
     @observable isJoiningLeaderboard = false;
     @observable isLeavingLeaderboard = false;
+    @observable isKickingMember = false;
 
     readonly rankings = observable<Membership>([]);
     readonly leaderboardScores = observable<Score>([]);
@@ -306,6 +308,38 @@ export class DetailStore {
 
         runInAction(() => {
             this.isLeavingLeaderboard = false;
+        });
+    }
+
+    @action
+    kickMember = async () => {
+        this.isKickingMember = true;
+
+        try {
+            await http.delete(`${this.resourceUrl}/members/${this.membership!.osuUserId}`);
+
+            history.push(`/leaderboards/${this.leaderboardType}/${formatGamemodeNameShort(this.gamemode!)}/${this.leaderboardId}`);
+            runInAction(() => {
+                this.rankings.replace(this.rankings.filter(m => m.osuUserId !== this.membership!.osuUserId));
+                this.leaderboardScores.replace(this.leaderboardScores.filter(s => s.userStats!.osuUserId !== this.membership!.osuUserId));
+                this.membership = null;
+            });
+
+            notify.positive("Member kicked");
+        } catch (error) {
+            console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to kick member: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to kick member");
+            }
+        }
+
+        runInAction(() => {
+            this.isKickingMember = false;
         });
     }
 }

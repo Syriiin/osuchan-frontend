@@ -33,7 +33,7 @@ const LeaderboardList = observer(() => {
     const meStore = store.meStore;
 
     const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships, unload, loadGlobalLeaderboards, loadCommunityLeaderboards, loadCommunityMemberships } = listStore;
-    const { user } = meStore;
+    const { user, isAuthenticated } = meStore;
 
     useEffect(() => {
         document.title = "Leaderboards - osu!chan";
@@ -49,8 +49,8 @@ const LeaderboardList = observer(() => {
         if (leaderboardType === "community") {
             loadCommunityLeaderboards(gamemode);
 
-            if (user !== null) {
-                loadCommunityMemberships(gamemode, user.osuUserId);
+            if (isAuthenticated) {
+                loadCommunityMemberships(gamemode, user!.osuUserId);
             }
         }
 
@@ -58,7 +58,7 @@ const LeaderboardList = observer(() => {
         if (leaderboardType === "global") {
             loadGlobalLeaderboards(gamemode, user?.osuUserId);
         }
-    }, [user, leaderboardType, gamemode, unload, loadCommunityMemberships, loadGlobalLeaderboards, loadCommunityLeaderboards]);
+    }, [isAuthenticated, user, leaderboardType, gamemode, unload, loadCommunityMemberships, loadGlobalLeaderboards, loadCommunityLeaderboards]);
 
     const loadNextGlobalLeaderboardPage = () => {
         if (listStore.globalLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {
@@ -123,7 +123,7 @@ const LeaderboardList = observer(() => {
             )}
             {params.leaderboardType === "community" && (
                 <>
-                    {user !== null && (
+                    {isAuthenticated && (
                         <>
                             <SurfaceSubtitle>Joined Leaderboards</SurfaceSubtitle>
                             {hasFlag(listStore.communityMembershipsStatus, PaginatedResourceStatus.ContentAvailable) && (
@@ -131,7 +131,7 @@ const LeaderboardList = observer(() => {
                                     <JoinedLeaderboards memberships={communityMemberships} />
 
                                     {hasFlag(listStore.communityMembershipsStatus, PaginatedResourceStatus.MoreToLoad) && (
-                                        <Button fullWidth isLoading={listStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingMore} action={() => listStore.loadNextCommunityMembershipsPage(user.osuUserId)}>Load More</Button>
+                                        <Button fullWidth isLoading={listStore.communityMembershipsStatus === PaginatedResourceStatus.LoadingMore} action={() => listStore.loadNextCommunityMembershipsPage(user!.osuUserId)}>Load More</Button>
                                     )}
 
                                     {communityMemberships.length === 0 && (
