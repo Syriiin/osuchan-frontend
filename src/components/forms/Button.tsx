@@ -78,7 +78,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => (
     <SimpleModal open={props.open} onClose={props.onClose}>
         <SimpleModalTitle>Are you sure?</SimpleModalTitle>
         <p>{props.message}</p>
-        <Button type="button" action={() => props.onClose()}>No</Button>
+        <Button type="button" action={props.onClose}>No</Button>
         <YesButton type="button" negative action={() => { props.action(); props.onClose(); }}>Yes</YesButton>
     </SimpleModal>
 );

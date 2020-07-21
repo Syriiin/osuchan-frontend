@@ -67,15 +67,15 @@ const FilterValue = styled.span`
 `;
 
 const DeleteButton = styled(Button)`
-
+    margin-left: 5px;
 `;
 
-const ArchiveButton = styled(Button)`
-    margin-right: 5px;
+const ManageInvitesButton = styled(Button)`
+    margin-left: 5px;
 `;
 
-const RestoreButton = styled(Button)`
-    margin-right: 5px;
+const EditButton = styled(Button)`
+    margin-left: 5px;
 `;
 
 const AllowPastScores = styled.div`
@@ -194,17 +194,17 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                             {/* Delete / archive / restore buttons */}
                             {leaderboard.archived ? (
                                 <>
-                                    <RestoreButton positive isLoading={detailStore.isRestoringLeaderboard} action={() => detailStore.restoreLeaderboard()}>Restore Leaderboard</RestoreButton>
+                                    <Button positive isLoading={detailStore.isRestoringLeaderboard} action={() => detailStore.restoreLeaderboard()}>Restore Leaderboard</Button>
                                     <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={() => detailStore.deleteLeaderboard()} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
                                 </>
                             ) : (
                                 <>
-                                    <ArchiveButton negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</ArchiveButton>
+                                    <Button negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</Button>
 
                                     {/* Manage invites button if either private or public invite-only */}
                                     {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
                                         <UnstyledLink to={`${match.url}/invites`}>
-                                            <Button type="button">Manage Invites</Button>
+                                            <ManageInvitesButton type="button">Manage Invites</ManageInvitesButton>
                                         </UnstyledLink>
                                     )}
                                 </>

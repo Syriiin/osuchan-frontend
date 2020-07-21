@@ -31,7 +31,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
     const [allowPastScores, setAllowPastScores] = useState(true);
     const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
 
-    // Interval updated icon url so we don't spam preview image requests on every character change
+    // Timeout updated icon url so we don't spam preview image requests on every character change
     const [delayedIconUrl, setDelayedIconUrl] = useState(iconUrl);
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -43,7 +43,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
 
     useEffect(() => {
         setIconUrl(`https://a.ppy.sh/${user?.osuUserId}` || "");
-    }, [user])
+    }, [user]);
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -63,7 +63,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
     }
 
     return (
-        <SimpleModal open={props.open} onClose={() => props.onClose()}>
+        <SimpleModal open={props.open} onClose={props.onClose}>
             <SimpleModalTitle>Create Leaderboard</SimpleModalTitle>
             <form onSubmit={handleCreateLeaderboardSubmit}>
                 {/* Basic details */}
@@ -97,8 +97,10 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 <FormLabel>Description</FormLabel>
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
                 <FormLabel>Icon URL</FormLabel>
-                <TextInput fullWidth placeholder={`https://a.ppy.sh/${user?.osuUserId}`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
-                <LeaderboardIcon src={delayedIconUrl} />
+                <FormControl>
+                    <TextInput fullWidth placeholder={`https://a.ppy.sh/${user?.osuUserId}`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
+                    <LeaderboardIcon src={delayedIconUrl} />
+                </FormControl>
                 <FormLabel>Allow scores set prior to member joining</FormLabel>
                 <FormControl>
                     <Switch
