@@ -1,14 +1,12 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { formatMods, formatTime } from "../../../utils/formatting";
+import { formatTime, formatGamemodeName } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
-import { OsuUser, ScoreFilter } from "../../../store/models/profiles/types";
-import { Leaderboard } from "../../../store/models/leaderboards/types";
-import { Surface, SurfaceTitle, Button, LoadingPage, UnstyledLink, SurfaceHeaderContainer } from "../../../components";
+import { ScoreFilter } from "../../../store/models/profiles/types";
+import { Surface, Button, LoadingPage, UnstyledLink, Label, LabelGroup, VerticalButtonGroup, ModIcons } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
@@ -22,138 +20,214 @@ import { ResourceStatus } from "../../../store/status";
 import EditLeaderboardModal from "./EditLeaderboardModal";
 
 const LeaderboardSurface = styled(Surface)`
+    display: flex;
+    justify-content: space-between;
     margin: 20px auto;
     width: 1000px;
     padding: 20px;
+`;
+
+const LeaderboardDetailsContainer = styled.div`
+    max-width: 400px;
+`;
+
+const LeaderboardInfoContainer = styled.div`
+    display: flex;
+    align-items: center;
+    height: 128px;
 `;
 
 const LeaderboardIcon = styled.img`
     max-width: 128px;
     max-height: 128px;
     border-radius: 5px;
+    margin-right: 20px;
 `;
 
-const ArchivedNotice = styled.div`
-    font-size: 1.5em;
-    color: ${props => props.theme.colours.negative};
-    margin-bottom: 10px;
+const LeaderboardInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 `;
 
-const Owner = styled(Link)`
-    display: inline-block;
+const LeaderboardInfoRow = styled.div`
+
+`;
+
+const LeaderboardName = styled.div`
+    font-size: 2em;
+`;
+
+const Owner = styled.span`
     color: ${props => props.theme.colours.timber};
-    margin-bottom: 5px;
-`;
-
-const AccessType = styled.div`
-    margin-bottom: 5px;
-    font-size: 0.8em;
-`;
-
-const ScoreSetLabel = styled.div`
-
 `;
 
 const Description = styled.div`
-
+    margin-top: 20px;
 `;
 
-const FiltersHeading = styled.h3`
-    font-weight: 400;
+const LeaderboardScoreFilterContainer = styled.div`
+    margin-left: 20px;
+    margin-right: 20px;
 `;
 
-const FilterValue = styled.span`
+const ScoreFiltersHeading = styled.div`
+    font-size: 1.3em;
+    text-align: center;
+    margin-bottom: 10px;
+`;
+
+const ScoreFilters = styled.div`
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 5px;
+    background-color: ${props => props.theme.colours.foreground};
+    padding: 5px;
+    border-radius: 5px;
+    min-width: 300px;
+`;
+
+const ScoreFilterName = styled.div`
+    height: 20px;
+`;
+
+const ScoreFilterValue = styled.div`
     color: ${props => props.theme.colours.timber};
+    display: flex;
+    justify-content: flex-end;
+    height: 20px;
 `;
 
-const DeleteButton = styled(Button)`
-    margin-left: 5px;
-`;
+const LeaderboardButtonsContainer = styled.div`
 
-const ManageInvitesButton = styled(Button)`
-    margin-left: 5px;
-`;
-
-const EditButton = styled(Button)`
-    margin-left: 5px;
-`;
-
-const AllowPastScores = styled.div`
-    color: ${props => props.theme.colours.timber};
 `;
 
 const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
-    const scoreFilter = props.scoreFilter;
-    const gamemode = props.gamemode;
+    const { scoreFilter, gamemode } = props;
 
     return (
         <>
-            <FiltersHeading>Score Filters</FiltersHeading>
-            <ul>
+            <ScoreFiltersHeading>Score Filters</ScoreFiltersHeading>
+            <ScoreFilters>
                 {/* Mods */}
                 {scoreFilter.requiredMods !== Mods.None && (
-                    <li>Required Mods: <FilterValue>{formatMods(scoreFilter.requiredMods)}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Required Mods</ScoreFilterName>
+                        <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.requiredMods} small /></ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.disqualifiedMods !== Mods.None && (
-                    <li>Disqualified Mods: <FilterValue>{formatMods(scoreFilter.disqualifiedMods)}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Disqualified Mods</ScoreFilterName>
+                        <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.disqualifiedMods} small /></ScoreFilterValue>
+                    </>
                 )}
                 {/* Beatmap status */}
                 {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
-                    <li>Beatmap Status: <FilterValue>Ranked or Loved</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                        <ScoreFilterValue>Ranked or Loved</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
-                    <li>Beatmap Status: <FilterValue>Loved</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                        <ScoreFilterValue>Loved</ScoreFilterValue>
+                    </>
                 )}
                 {/* Beatmap date */}
                 {scoreFilter.oldestBeatmapDate !== null && (
-                    <li>Oldest Beatmap Date: <FilterValue>{scoreFilter.oldestBeatmapDate.toLocaleDateString()}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Oldest Beatmap Date</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.oldestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.newestBeatmapDate !== null && (
-                    <li>Newest Beatmap Date: <FilterValue>{scoreFilter.newestBeatmapDate.toLocaleDateString()}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Newest Beatmap Date</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.newestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
+                    </>
                 )}
                 {/* Score date */}
                 {scoreFilter.oldestScoreDate !== null && (
-                    <li>Oldest Score Date: <FilterValue>{scoreFilter.oldestScoreDate.toLocaleDateString()}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Oldest Score Date</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.oldestScoreDate.toLocaleDateString()}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.newestScoreDate !== null && (
-                    <li>Newest Score Date: <FilterValue>{scoreFilter.newestScoreDate.toLocaleDateString()}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Newest Score Date</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.newestScoreDate.toLocaleDateString()}</ScoreFilterValue>
+                    </>
                 )}
                 {/* Accuracy */}
                 {scoreFilter.lowestAccuracy !== null && (
-                    <li>Min Accuracy: <FilterValue>{scoreFilter.lowestAccuracy}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Min Accuracy</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.lowestAccuracy}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.highestAccuracy !== null && (
-                    <li>Max Accuracy: <FilterValue>{scoreFilter.highestAccuracy}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Max Accuracy</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.highestAccuracy}</ScoreFilterValue>
+                    </>
                 )}
                 {/* Length */}
                 {scoreFilter.lowestLength !== null && (
-                    <li>Min Length: <FilterValue>{formatTime(scoreFilter.lowestLength)}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Min Length</ScoreFilterName>
+                        <ScoreFilterValue>{formatTime(scoreFilter.lowestLength)}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.highestLength !== null && (
-                    <li>Max Length: <FilterValue>{formatTime(scoreFilter.highestLength)}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Max Length</ScoreFilterName>
+                        <ScoreFilterValue>{formatTime(scoreFilter.highestLength)}</ScoreFilterValue>
+                    </>
                 )}
                 {/* CS */}
                 {scoreFilter.lowestCs !== null && (
-                    <li>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{scoreFilter.lowestCs}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.lowestCs}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.highestCs !== null && (
-                    <li>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}: <FilterValue>{scoreFilter.highestCs}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.highestCs}</ScoreFilterValue>
+                    </>
                 )}
                 {/* AR */}
                 {scoreFilter.lowestAr !== null && (
-                    <li>Min AR: <FilterValue>{scoreFilter.lowestAr}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Min AR</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.lowestAr}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.highestAr !== null && (
-                    <li>Max AR: <FilterValue>{scoreFilter.highestAr}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Max AR</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.highestAr}</ScoreFilterValue>
+                    </>
                 )}
                 {/* OD */}
                 {scoreFilter.lowestOd !== null && (
-                    <li>Min OD: <FilterValue>{scoreFilter.lowestOd}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Min OD</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.lowestOd}</ScoreFilterValue>
+                    </>
                 )}
                 {scoreFilter.highestOd !== null && (
-                    <li>Max OD: <FilterValue>{scoreFilter.highestOd}</FilterValue></li>
+                    <>
+                        <ScoreFilterName>Max OD</ScoreFilterName>
+                        <ScoreFilterValue>{scoreFilter.highestOd}</ScoreFilterValue>
+                    </>
                 )}
-            </ul>
+            </ScoreFilters>
         </>
     );
 }
@@ -163,14 +237,14 @@ interface LeaderboardFiltersProps {
     gamemode: Gamemode;
 }
 
-const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
+const LeaderboardButtons = observer(() => {
     const match = useRouteMatch();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
     
-    const leaderboard = props.leaderboard;
-    const meOsuUser = props.meOsuUser;
+    const { leaderboard } = detailStore;
+    const { user } = meStore;
     
     const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -185,54 +259,46 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
     
     return (
         <>
-            {/* If not global leaderboard */}
-            {leaderboard.accessType !== LeaderboardAccessType.Global && meOsuUser && (
-                <>
-                    {/* If owner */}
-                    {leaderboard.ownerId === meOsuUser.id && (
-                        <>
-                            {/* Delete / archive / restore buttons */}
-                            {leaderboard.archived ? (
-                                <>
-                                    <Button positive isLoading={detailStore.isRestoringLeaderboard} action={() => detailStore.restoreLeaderboard()}>Restore Leaderboard</Button>
-                                    <DeleteButton negative isLoading={detailStore.isDeletingLeaderboard} action={() => detailStore.deleteLeaderboard()} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</DeleteButton>
-                                </>
-                            ) : (
-                                <>
-                                    <Button negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</Button>
+            <VerticalButtonGroup>
+                {/* Join button if public or pending invite, and not member */}
+                {(leaderboard!.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard!.id) !== undefined) && detailStore.userMembership === null && (
+                    <Button type="button" positive isLoading={detailStore.isJoiningLeaderboard} action={handleJoin}>Join Leaderboard</Button>
+                )}
+        
+                {/* If owner */}
+                {leaderboard!.ownerId === user?.osuUserId && (
+                    <>
+                        {/* Edit button */}
+                        <Button action={() => setEditModalOpen(true)}>Edit Leaderboard</Button>
 
-                                    {/* Manage invites button if either private or public invite-only */}
-                                    {(leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard.accessType === LeaderboardAccessType.Private) && (
-                                        <UnstyledLink to={`${match.url}/invites`}>
-                                            <ManageInvitesButton type="button">Manage Invites</ManageInvitesButton>
-                                        </UnstyledLink>
-                                    )}
-                                </>
-                            )}
-                            <EditButton action={() => setEditModalOpen(true)}>Edit Leaderboard</EditButton>
-                            <EditLeaderboardModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
-                        </>
-                    )}
-                    
-                    {/* Join button if public or pending invite, and not member */}
-                    {(leaderboard.accessType === LeaderboardAccessType.Public || meStore.invites.find(i => i.leaderboardId === leaderboard.id) !== undefined) && detailStore.userMembership === null && (
-                        <Button type="button" positive isLoading={detailStore.isJoiningLeaderboard} action={handleJoin}>Join Leaderboard</Button>
-                    )}
+                        {/* Delete / archive / restore buttons */}
+                        {leaderboard!.archived ? (
+                            <>
+                                <Button positive isLoading={detailStore.isRestoringLeaderboard} action={() => detailStore.restoreLeaderboard()}>Restore Leaderboard</Button>
+                                <Button negative isLoading={detailStore.isDeletingLeaderboard} action={() => detailStore.deleteLeaderboard()} confirmationMessage="Are you sure you want to delete this leaderboard?">Delete Leaderboard</Button>
+                            </>
+                        ) : (
+                            <>
+                                {/* Manage invites button if either private or public invite-only */}
+                                {(leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly || leaderboard!.accessType === LeaderboardAccessType.Private) && (
+                                    <Button as={UnstyledLink} to={`${match.url}/invites`} type="button">Manage Invites</Button>
+                                )}
 
-                    {/* Leave button if member and not owner */}
-                    {leaderboard.ownerId !== meOsuUser.id && detailStore.userMembership !== null && (
-                        <Button type="button" negative isLoading={detailStore.isLeavingLeaderboard} action={handleLeave} confirmationMessage="Are you sure you want to leave this leaderboard?">Leave Leaderboard</Button>
-                    )}
-                </>
-            )}
+                                <Button negative isLoading={detailStore.isArchivingLeaderboard} action={() => detailStore.archiveLeaderboard()} confirmationMessage="Are you sure you want to archive this leaderboard?">Archive Leaderboard</Button>
+                            </>
+                        )}
+                    </>
+                )}
+
+                {/* Leave button if member and not owner */}
+                {leaderboard!.ownerId !== user?.osuUserId && detailStore.userMembership !== null && (
+                    <Button type="button" negative isLoading={detailStore.isLeavingLeaderboard} action={handleLeave} confirmationMessage="Are you sure you want to leave this leaderboard?">Leave Leaderboard</Button>
+                )}
+            </VerticalButtonGroup>
+            <EditLeaderboardModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
         </>
     );
 });
-
-interface LeaderboardButtonsProps {
-    leaderboard: Leaderboard;
-    meOsuUser: OsuUser | null;
-}
 
 const LeaderboardHome = observer(() => {
     const match = useRouteMatch();
@@ -283,42 +349,60 @@ const LeaderboardHome = observer(() => {
                 <>
                     {/*Leaderboard Details */}
                     <LeaderboardSurface>
-                        <SurfaceHeaderContainer>
-                            <SurfaceTitle>{leaderboard.name}</SurfaceTitle>
-                            <LeaderboardIcon src={leaderboard.iconUrl} />
-                        </SurfaceHeaderContainer>
-                        {leaderboard.archived && (
-                            <ArchivedNotice>ARCHIVED</ArchivedNotice>
-                        )}
-                        {leaderboard.accessType === LeaderboardAccessType.Global ? (
-                            <AccessType>GLOBAL</AccessType>
-                        ) : (
-                            <>
-                                <Owner to={`/users/${leaderboard.ownerId}`}>
-                                    {leaderboard.owner!.username}
-                                </Owner>
-                                <AccessType>
-                                    {leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
-                                    {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                                    {leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
-                                </AccessType>
-                            </>
-                        )}
-                        {leaderboard.scoreSet !== ScoreSet.Normal && (
-                            <ScoreSetLabel>
-                                {leaderboard.scoreSet === ScoreSet.NeverChoke && "Never Choke"}
-                                {leaderboard.scoreSet === ScoreSet.AlwaysFullCombo && "Always Full Combo"}
-                            </ScoreSetLabel>
-                        )}
-                        <Description>{leaderboard.description}</Description>
-                        {/* Allow past scores */}
-                        {!leaderboard.allowPastScores && (
-                            <AllowPastScores>Scores must be set after joining</AllowPastScores>
-                        )}
+                        <LeaderboardDetailsContainer>
+                            <LeaderboardInfoContainer>
+                                {leaderboard.iconUrl && (
+                                    <LeaderboardIcon src={leaderboard.iconUrl} />
+                                )}
+                                <LeaderboardInfo>
+                                    <LeaderboardInfoRow>
+                                        <LeaderboardName>{leaderboard.name}</LeaderboardName>
+                                    </LeaderboardInfoRow>
+                                    <LeaderboardInfoRow>
+                                        {/* Labels */}
+                                        <LabelGroup>
+                                            {leaderboard.archived && (
+                                                <Label negative>ARCHIVED</Label>
+                                            )}
+                                            <Label>{formatGamemodeName(leaderboard.gamemode)}</Label>
+                                            <Label>
+                                                {leaderboard.accessType === LeaderboardAccessType.Global && "Global"}
+                                                {leaderboard.accessType === LeaderboardAccessType.Public && "Public"}
+                                                {leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly && "Invite-Only"}
+                                                {leaderboard.accessType === LeaderboardAccessType.Private && "Private"}
+                                            </Label>
+                                            {leaderboard.scoreSet !== ScoreSet.Normal && (
+                                                <Label special>
+                                                    {leaderboard.scoreSet === ScoreSet.NeverChoke && "Never Choke"}
+                                                    {leaderboard.scoreSet === ScoreSet.AlwaysFullCombo && "Always Full Combo"}
+                                                </Label>
+                                            )}
+                                            {!leaderboard.allowPastScores && (
+                                                <Label special>
+                                                    Only scores after joining
+                                                </Label>
+                                            )}
+                                        </LabelGroup>
+                                    </LeaderboardInfoRow>
+                                    {leaderboard.owner && (
+                                        <LeaderboardInfoRow>
+                                            Owned by <Owner>{leaderboard.owner.username}</Owner>
+                                        </LeaderboardInfoRow>
+                                    )}
+                                </LeaderboardInfo>
+                            </LeaderboardInfoContainer>
+                            <Description>{leaderboard.description}</Description>
+                        </LeaderboardDetailsContainer>
                         {leaderboard.scoreFilter && !scoreFilterIsDefault(leaderboard.scoreFilter) && (
-                            <LeaderboardFilters gamemode={leaderboard.gamemode} scoreFilter={leaderboard.scoreFilter} />
+                            <LeaderboardScoreFilterContainer>
+                                <LeaderboardFilters gamemode={leaderboard.gamemode} scoreFilter={leaderboard.scoreFilter} />
+                            </LeaderboardScoreFilterContainer>
                         )}
-                        <LeaderboardButtons leaderboard={leaderboard} meOsuUser={meStore.user?.osuUser ?? null} />
+                        {leaderboard.accessType !== LeaderboardAccessType.Global && meStore.isAuthenticated && (
+                            <LeaderboardButtonsContainer>
+                                <LeaderboardButtons />
+                            </LeaderboardButtonsContainer>
+                        )}
                     </LeaderboardSurface>
                     
                     {/* Top Scores */}

@@ -11,7 +11,7 @@ export interface Leaderboard {
     name: string;
     description: string;
     iconUrl: string;
-    allowPastScores: boolean | null;
+    allowPastScores: boolean;
     memberCount: number | null;
     archived: boolean;
     scoreFilter: ScoreFilter | null;

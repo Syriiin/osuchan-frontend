@@ -11,7 +11,7 @@ const ModsContainer = styled.div`
 `;
 
 const ModImage = styled.img`
-    
+    max-height: 100%;
 `;
 
 export const ModIcons = (props: ModIconsProps) => {
