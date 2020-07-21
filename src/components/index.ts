@@ -18,6 +18,7 @@ export * from "./layout/Flag";
 export * from "./helpers/UnstyledLink";
 export * from "./helpers/BottomScrollDetector";
 export * from "./helpers/ClickPropagationSupressor";
+export * from "./helpers/RootPortal";
 export * from "./forms/Button";
 export * from "./forms/TextInput";
 export * from "./forms/ModsSelect";

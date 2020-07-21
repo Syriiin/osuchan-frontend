@@ -1,6 +1,7 @@
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
+import { RootPortal } from "../helpers/RootPortal";
 
 const ModalBase = styled.div`
     position: fixed;
@@ -52,19 +53,21 @@ export const BasicModal = (props: BasicModalProps) => {
     }
 
     return (
-        <CSSTransition
-            in={props.open}
-            timeout={200}
-            classNames="modal-base"
-            mountOnEnter
-            unmountOnExit
-        >
-            <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
-                <ModalBody>
-                    {props.children}
-                </ModalBody>
-            </ModalBase>
-        </CSSTransition>
+        <RootPortal>
+            <CSSTransition
+                in={props.open}
+                timeout={200}
+                classNames="modal-base"
+                mountOnEnter
+                unmountOnExit
+            >
+                <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
+                    <ModalBody>
+                        {props.children}
+                    </ModalBody>
+                </ModalBase>
+            </CSSTransition>
+        </RootPortal>
     );
 }
 
