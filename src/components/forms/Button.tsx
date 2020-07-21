@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, ComponentProps } from "react";
 import styled from "styled-components";
 import { LoadingSpinner } from "../layout/Loading";
 import { SimpleModal, SimpleModalTitle } from "../layout/SimpleModal";
-import { UnstyledLink } from "../helpers/UnstyledLink";
 
 const StyledButton = styled.button<StyledButtonProps>`
     padding: 10px;
     border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    display: inline-block;
     color: #fff;
     background-color: ${props => 
         props.negative ? props.theme.colours.negative :
@@ -37,7 +39,7 @@ interface StyledButtonProps {
     active?: boolean;
 }
 
-export const Button = (props: ButtonProps) => {
+export const Button = (props: ButtonProps & ComponentProps<typeof StyledButton>) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -62,7 +64,7 @@ export const Button = (props: ButtonProps) => {
     );
 }
 
-interface ButtonProps extends StyledButtonProps {
+interface ButtonProps {
     children: React.ReactNode;
     type?: "submit" | "reset" | "button";
     isLoading?: boolean;
@@ -91,7 +93,7 @@ interface ConfirmationModalProps {
 }
 
 export const ButtonGroup = styled.div`
-    ${StyledButton} {
+    > ${StyledButton} {
         border-radius: 0;
     }
 
@@ -105,15 +107,25 @@ export const ButtonGroup = styled.div`
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
     }
+`;
 
-    /* Link wrapped child buttons */
-    ${UnstyledLink}:first-child > ${StyledButton} {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
+export const VerticalButtonGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    
+    /* Direct child buttons */
+    > ${StyledButton} {
+        border-radius: 0;
+        width: 100%;
     }
 
-    ${UnstyledLink}:last-child > ${StyledButton} {
+    > ${StyledButton}:first-child {
+        border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+    }
+
+    > ${StyledButton}:last-child {
+        border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
     }
 `;

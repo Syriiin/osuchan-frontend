@@ -75,9 +75,7 @@ const InviteRow = observer((props: InviteRowProps) => {
                 <LeaderboardSubtitle>{invite.leaderboard!.memberCount} members</LeaderboardSubtitle>
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
-            <UnstyledLink to={`/leaderboards/community/${formatGamemodeNameShort(invite.leaderboard!.gamemode)}/${invite.leaderboardId}`}>
-                <Button type="button">View Leaderboard</Button>
-            </UnstyledLink>
+            <Button as={UnstyledLink} to={`/leaderboards/community/${formatGamemodeNameShort(invite.leaderboard!.gamemode)}/${invite.leaderboardId}`} type="button">View Leaderboard</Button>
             <DeclineButton negative isLoading={meStore.isDecliningInvite} action={() => meStore.declineInvite(invite.leaderboardId)} confirmationMessage="Are you sure you want to decline this invite?">Decline Invite</DeclineButton>
         </Row>
     );

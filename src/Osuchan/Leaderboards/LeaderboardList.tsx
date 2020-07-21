@@ -79,26 +79,14 @@ const LeaderboardList = observer(() => {
             <SurfaceHeaderContainer>
                 <SurfaceTitle>Leaderboards</SurfaceTitle>
                 <SwitcherButtonGroup>
-                    <UnstyledLink to={`../global/${params.gamemode}`}>
-                        <Button active={params.leaderboardType === "global"}>Global</Button>
-                    </UnstyledLink>
-                    <UnstyledLink to={`../community/${params.gamemode}`}>
-                        <Button active={params.leaderboardType === "community"}>Community</Button>
-                    </UnstyledLink>
+                    <Button as={UnstyledLink} to={`../global/${params.gamemode}`} active={params.leaderboardType === "global"}>Global</Button>
+                    <Button as={UnstyledLink} to={`../community/${params.gamemode}`} active={params.leaderboardType === "community"}>Community</Button>
                 </SwitcherButtonGroup>
                 <SwitcherButtonGroup>
-                    <UnstyledLink to={`../${params.leaderboardType}/osu`}>
-                        <Button active={params.gamemode === "osu"}>osu!</Button>
-                    </UnstyledLink>
-                    <UnstyledLink to={`../${params.leaderboardType}/taiko`}>
-                        <Button active={params.gamemode === "taiko"}>osu!taiko</Button>
-                    </UnstyledLink>
-                    <UnstyledLink to={`../${params.leaderboardType}/catch`}>
-                        <Button active={params.gamemode === "catch"}>osu!catch</Button>
-                    </UnstyledLink>
-                    <UnstyledLink to={`../${params.leaderboardType}/mania`}>
-                        <Button active={params.gamemode === "mania"}>osu!mania</Button>
-                    </UnstyledLink>
+                    <Button as={UnstyledLink} to={`../${params.leaderboardType}/osu`} active={params.gamemode === "osu"}>osu!</Button>
+                    <Button as={UnstyledLink} to={`../${params.leaderboardType}/taiko`} active={params.gamemode === "taiko"}>osu!taiko</Button>
+                    <Button as={UnstyledLink} to={`../${params.leaderboardType}/catch`} active={params.gamemode === "catch"}>osu!catch</Button>
+                    <Button as={UnstyledLink} to={`../${params.leaderboardType}/mania`} active={params.gamemode === "mania"}>osu!mania</Button>
                 </SwitcherButtonGroup>
             </SurfaceHeaderContainer>
             
