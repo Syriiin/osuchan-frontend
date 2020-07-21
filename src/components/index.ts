@@ -15,6 +15,7 @@ export * from "./layout/TimeAgo";
 export * from "./layout/Tooltip";
 export * from "./layout/NumberFormat";
 export * from "./layout/Flag";
+export * from "./layout/Label";
 export * from "./helpers/UnstyledLink";
 export * from "./helpers/BottomScrollDetector";
 export * from "./helpers/ClickPropagationSupressor";
