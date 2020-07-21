@@ -2,13 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import countries from "i18n-iso-countries";
 
-import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat } from "../../../components";
+import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat, Flag } from "../../../components";
 import { StoreContext } from "../../../store";
 import { ResourceStatus } from "../../../store/status";
-
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 const UserInfo = styled.div`
     display: flex;
@@ -37,11 +34,6 @@ const UserInfoRow = styled.div`
 
 const Username = styled.span`
     font-size: 1.5em;
-`;
-
-const Flag = styled.img`
-    width: 30px;
-    margin-right: 0.5em;
 `;
 
 const Rank = styled.span`
@@ -97,8 +89,7 @@ const MemberInfo = observer(() => {
                                 </Username>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Flag src={`https://osu.ppy.sh/images/flags/${membership.osuUser!.country}.png`} />
-                                {countries.getName(membership.osuUser!.country, "en")}
+                                <Flag countryCode={membership.osuUser!.country} showFullName />
                             </UserInfoRow>
                             <UserInfoRow>
                                 <ScoreCount>{membership.scoreCount} scores</ScoreCount>

@@ -9,6 +9,7 @@ import { Button } from "../forms/Button";
 import { ClickPropagationSupressor } from "../helpers/ClickPropagationSupressor";
 import { TimeAgo } from "./TimeAgo";
 import { NumberFormat } from "./NumberFormat";
+import { Flag } from "./Flag";
 
 const ScoreRowWrapper = styled(Row)`
     padding: 0;
@@ -25,6 +26,10 @@ const PlayerInfo = styled.div`
 const Avatar = styled.img`
     width: 50px;
     border-radius: 5px;
+    margin-right: 10px;
+`;
+
+const FlagContainer = styled.div`
     margin-right: 10px;
 `;
 
@@ -112,6 +117,9 @@ export const ScoreRow = (props: ScoreRowProps) => {
                 {!props.hidePlayerInfo && (
                     <PlayerInfo>
                         <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
+                        <FlagContainer>
+                            <Flag countryCode={userStats.osuUser!.country} />
+                        </FlagContainer>
                         <Username>
                             {userStats.osuUser!.username}
                         </Username>

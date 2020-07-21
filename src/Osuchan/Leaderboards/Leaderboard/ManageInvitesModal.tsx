@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { SimpleModal, SimpleModalTitle, Button, Row, FormLabel, FormControl, TextField, LoadingSection } from "../../../components";
+import { SimpleModal, SimpleModalTitle, Button, Row, FormLabel, FormControl, TextField, LoadingSection, Flag } from "../../../components";
 import { StoreContext } from "../../../store";
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Invite } from "../../../store/models/leaderboards/types";
@@ -16,6 +16,10 @@ const InviteeAvatar = styled.img`
     width: 50px;
     margin-right: 10px;
     border-radius: 5px;
+`;
+
+const FlagContainer = styled.div`
+    margin-right: 10px;
 `;
 
 const InviteeUsername = styled.span`
@@ -38,6 +42,9 @@ const InviteRow = observer((props: InviteRowProps) => {
     return (
         <Row>
             <InviteeAvatar src={`https://a.ppy.sh/${osuUser.id}`} />
+            <FlagContainer>
+                <Flag countryCode={osuUser.country} />
+            </FlagContainer>
             <InviteeUsername>{osuUser.username}</InviteeUsername>
             <InviteMessage>{props.invite.message}</InviteMessage>
             <Button type="button" negative isLoading={detailStore.isCancellingInvite} action={() => detailStore.cancelInvite(osuUser.id)} confirmationMessage="Are you sure you want to cancel this invite?">Cancel Invite</Button>

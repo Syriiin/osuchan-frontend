@@ -1,13 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import countries from "i18n-iso-countries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { OsuUser } from "../../../store/models/profiles/types";
-import { Surface, TimeAgo } from "../../../components";
-
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+import { Surface, TimeAgo, Flag } from "../../../components";
 
 const UserInfoSurface = styled(Surface)`
     padding: 20px;
@@ -40,11 +37,6 @@ const Username = styled.span`
     font-size: 1.5em;
 `;
 
-const Flag = styled.img`
-    width: 30px;
-    margin-right: 0.5em;
-`;
-
 const JoinIcon = styled(FontAwesomeIcon)`
     margin-right: 0.5em;
 `;
@@ -62,8 +54,7 @@ const UserInfo = (props: UserInfoProps) => {
                     </Username>
                 </UserInfoRow>
                 <UserInfoRow>
-                    <Flag src={`https://osu.ppy.sh/images/flags/${osuUser.country}.png`} />
-                    {countries.getName(osuUser.country, "en")}
+                    <Flag countryCode={osuUser.country} showFullName />
                 </UserInfoRow>
                 <UserInfoRow>
                     <JoinIcon icon={faSignInAlt} />

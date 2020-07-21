@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { useRouteMatch } from "react-router";
 
-import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat } from "../../../components";
+import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat, Flag } from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
 
 const RankingsSurface = styled(Surface)`
@@ -33,6 +33,10 @@ const Avatar = styled.img`
     margin-right: 10px;
 `;
 
+const FlagContainer = styled.div`
+    margin-right: 10px;
+`;
+
 const Username = styled.span`
     font-size: 1.1em;
 `;
@@ -56,6 +60,9 @@ const RankingRow = (props: RankingRowProps) => (
         <Rank>#{props.rank.toLocaleString("en")}</Rank>
         <PlayerInfo>
             <Avatar src={`https://a.ppy.sh/${props.membership.osuUserId}`} />
+            <FlagContainer>
+                <Flag countryCode={props.membership.osuUser!.country} />
+            </FlagContainer>
             <Username>
                 {props.membership.osuUser!.username}
             </Username>
