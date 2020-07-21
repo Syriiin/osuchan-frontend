@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -19,6 +19,7 @@ import { gamemodeIdFromName } from "../../../utils/osu";
 import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
 import { ResourceStatus } from "../../../store/status";
+import EditLeaderboardModal from "./EditLeaderboardModal";
 
 const LeaderboardSurface = styled(Surface)`
     margin: 20px auto;
@@ -171,6 +172,8 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
     const leaderboard = props.leaderboard;
     const meOsuUser = props.meOsuUser;
     
+    const [editModalOpen, setEditModalOpen] = useState(false);
+
     const handleJoin = async () => {
         await detailStore.joinLeaderboard();
         await detailStore.reloadLeaderboard();
@@ -206,6 +209,8 @@ const LeaderboardButtons = observer((props: LeaderboardButtonsProps) => {
                                     )}
                                 </>
                             )}
+                            <EditButton action={() => setEditModalOpen(true)}>Edit Leaderboard</EditButton>
+                            <EditLeaderboardModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
                         </>
                     )}
                     

@@ -23,6 +23,7 @@ export class DetailStore {
     @observable loadingStatus = ResourceStatus.NotLoaded;
     @observable loadingUserMembershipStatus = ResourceStatus.NotLoaded;
     @observable isDeletingLeaderboard = false;
+    @observable isUpdatingLeaderboard = false;
     @observable isArchivingLeaderboard = false;
     @observable isRestoringLeaderboard = false;
     @observable loadingInvitesStatus = ResourceStatus.NotLoaded;
@@ -105,6 +106,40 @@ export class DetailStore {
 
     @action
     reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
+
+    @action
+    updateLeaderboard = async (leaderboardData: Partial<Leaderboard>) => {
+        this.isUpdatingLeaderboard = true;
+
+        try {
+            const leaderboardResponse = await http.patch(this.resourceUrl, {
+                "access_type": leaderboardData.accessType,
+                "name": leaderboardData.name,
+                "description": leaderboardData.description,
+                "icon_url": leaderboardData.iconUrl
+            });
+
+            runInAction(() => {
+                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            });
+
+            notify.positive("Leaderboard updated");
+        } catch (error) {
+            console.log(error);
+
+            const errorMessage = error.response.data.detail;
+
+            if (errorMessage) {
+                notify.negative(`Failed to update leaderboard: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to update leaderboard");
+            }
+        }
+
+        runInAction(() => {
+            this.isUpdatingLeaderboard = false;
+        });
+    }
 
     @action
     archiveLeaderboard = async () => {
