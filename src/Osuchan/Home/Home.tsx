@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
+
+const UpdateTitle = styled.span`
+    color: ${props => props.theme.colours.timber};
+`;
 
 const Home = () => {
     const location = useLocation();
+
     // use effect to update title
     useEffect(() => {
         document.title = "Home - osu!chan";
@@ -31,6 +37,26 @@ const Home = () => {
             <br />
 
             <h2>Changelog</h2>
+
+            <h3>22nd July 2020 - <UpdateTitle>Leaderboards Anniversary Update</UpdateTitle></h3>
+            <ul>
+                <li>Completely redesign leaderboard listing page with tabs for global/community and for gamemodes</li>
+                <li>Add private leaderboards visible to you back to main leaderboard listing</li>
+                <li>Add "Joined Leaderboards" section with leaderboard ranks to leaderboard listing</li>
+                <li>Add leaderboards ranks to global leaderboard listing</li>
+                <li>Add leaderboard rank to profile leaderboard listing, as well as global leaderboard ranks</li>
+                <li>Redesign leaderboard home pages</li>
+                <li>Add "Edit Leaderboard" button for leaderboard owners</li>
+                <li>Add "Kick Member" button for leaderboard owners</li>
+                <li>Add "Archive/Restore Leaderboard" buttons for leaderboard owners (archiving stops updates for the leaderboard so it doesn't contribute to your leaderboard limit)</li>
+                <li>Add custom icon support for community leaderboards</li>
+                <li>Add player country flags next to their name and avatar in rankings</li>
+                <li>Add tooltips for a bunch of things (mods, dates, rounded numbers, flags, etc...)</li>
+                <li>Change how dates are shown (past one year ago will show month and year)</li>
+                <li>Fix scores with unranked mods being treated as ranked (ie. ScoreV2)</li>
+                <li>Make lots of things look nicer</li>
+                <li>Misc bug fixes</li>
+            </ul>
 
             <h3>20th June 2020</h3>
             <ul>
