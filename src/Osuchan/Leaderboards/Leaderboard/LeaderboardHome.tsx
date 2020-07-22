@@ -70,12 +70,7 @@ const Description = styled.div`
 const LeaderboardScoreFilterContainer = styled.div`
     margin-left: 20px;
     margin-right: 20px;
-`;
-
-const ScoreFiltersHeading = styled.div`
-    font-size: 1.3em;
-    text-align: center;
-    margin-bottom: 10px;
+    max-width: 360px;
 `;
 
 const ScoreFilters = styled.div`
@@ -89,14 +84,15 @@ const ScoreFilters = styled.div`
 `;
 
 const ScoreFilterName = styled.div`
-    height: 20px;
+    display: flex;
+    align-items: center;
 `;
 
 const ScoreFilterValue = styled.div`
     color: ${props => props.theme.colours.timber};
     display: flex;
     justify-content: flex-end;
-    height: 20px;
+    flex-wrap: wrap;
 `;
 
 const LeaderboardButtonsContainer = styled.div`
@@ -107,128 +103,125 @@ const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
     const { scoreFilter, gamemode } = props;
 
     return (
-        <>
-            <ScoreFiltersHeading>Score Filters</ScoreFiltersHeading>
-            <ScoreFilters>
-                {/* Mods */}
-                {scoreFilter.requiredMods !== Mods.None && (
-                    <>
-                        <ScoreFilterName>Required Mods</ScoreFilterName>
-                        <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.requiredMods} small /></ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.disqualifiedMods !== Mods.None && (
-                    <>
-                        <ScoreFilterName>Disqualified Mods</ScoreFilterName>
-                        <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.disqualifiedMods} small /></ScoreFilterValue>
-                    </>
-                )}
-                {/* Beatmap status */}
-                {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
-                    <>
-                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
-                        <ScoreFilterValue>Ranked or Loved</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
-                    <>
-                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
-                        <ScoreFilterValue>Loved</ScoreFilterValue>
-                    </>
-                )}
-                {/* Beatmap date */}
-                {scoreFilter.oldestBeatmapDate !== null && (
-                    <>
-                        <ScoreFilterName>Oldest Beatmap Date</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.oldestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.newestBeatmapDate !== null && (
-                    <>
-                        <ScoreFilterName>Newest Beatmap Date</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.newestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
-                    </>
-                )}
-                {/* Score date */}
-                {scoreFilter.oldestScoreDate !== null && (
-                    <>
-                        <ScoreFilterName>Oldest Score Date</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.oldestScoreDate.toLocaleDateString()}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.newestScoreDate !== null && (
-                    <>
-                        <ScoreFilterName>Newest Score Date</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.newestScoreDate.toLocaleDateString()}</ScoreFilterValue>
-                    </>
-                )}
-                {/* Accuracy */}
-                {scoreFilter.lowestAccuracy !== null && (
-                    <>
-                        <ScoreFilterName>Min Accuracy</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.lowestAccuracy}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.highestAccuracy !== null && (
-                    <>
-                        <ScoreFilterName>Max Accuracy</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.highestAccuracy}</ScoreFilterValue>
-                    </>
-                )}
-                {/* Length */}
-                {scoreFilter.lowestLength !== null && (
-                    <>
-                        <ScoreFilterName>Min Length</ScoreFilterName>
-                        <ScoreFilterValue>{formatTime(scoreFilter.lowestLength)}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.highestLength !== null && (
-                    <>
-                        <ScoreFilterName>Max Length</ScoreFilterName>
-                        <ScoreFilterValue>{formatTime(scoreFilter.highestLength)}</ScoreFilterValue>
-                    </>
-                )}
-                {/* CS */}
-                {scoreFilter.lowestCs !== null && (
-                    <>
-                        <ScoreFilterName>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.lowestCs}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.highestCs !== null && (
-                    <>
-                        <ScoreFilterName>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.highestCs}</ScoreFilterValue>
-                    </>
-                )}
-                {/* AR */}
-                {scoreFilter.lowestAr !== null && (
-                    <>
-                        <ScoreFilterName>Min AR</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.lowestAr}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.highestAr !== null && (
-                    <>
-                        <ScoreFilterName>Max AR</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.highestAr}</ScoreFilterValue>
-                    </>
-                )}
-                {/* OD */}
-                {scoreFilter.lowestOd !== null && (
-                    <>
-                        <ScoreFilterName>Min OD</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.lowestOd}</ScoreFilterValue>
-                    </>
-                )}
-                {scoreFilter.highestOd !== null && (
-                    <>
-                        <ScoreFilterName>Max OD</ScoreFilterName>
-                        <ScoreFilterValue>{scoreFilter.highestOd}</ScoreFilterValue>
-                    </>
-                )}
-            </ScoreFilters>
-        </>
+        <ScoreFilters>
+            {/* Mods */}
+            {scoreFilter.requiredMods !== Mods.None && (
+                <>
+                    <ScoreFilterName>Required Mods</ScoreFilterName>
+                    <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.requiredMods} small /></ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.disqualifiedMods !== Mods.None && (
+                <>
+                    <ScoreFilterName>Disqualified Mods</ScoreFilterName>
+                    <ScoreFilterValue><ModIcons bitwiseMods={scoreFilter.disqualifiedMods} small /></ScoreFilterValue>
+                </>
+            )}
+            {/* Beatmap status */}
+            {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.Any && (
+                <>
+                    <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                    <ScoreFilterValue>Ranked or Loved</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
+                <>
+                    <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                    <ScoreFilterValue>Loved</ScoreFilterValue>
+                </>
+            )}
+            {/* Beatmap date */}
+            {scoreFilter.oldestBeatmapDate !== null && (
+                <>
+                    <ScoreFilterName>Oldest Beatmap Date</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.oldestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.newestBeatmapDate !== null && (
+                <>
+                    <ScoreFilterName>Newest Beatmap Date</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.newestBeatmapDate.toLocaleDateString()}</ScoreFilterValue>
+                </>
+            )}
+            {/* Score date */}
+            {scoreFilter.oldestScoreDate !== null && (
+                <>
+                    <ScoreFilterName>Oldest Score Date</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.oldestScoreDate.toLocaleDateString()}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.newestScoreDate !== null && (
+                <>
+                    <ScoreFilterName>Newest Score Date</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.newestScoreDate.toLocaleDateString()}</ScoreFilterValue>
+                </>
+            )}
+            {/* Accuracy */}
+            {scoreFilter.lowestAccuracy !== null && (
+                <>
+                    <ScoreFilterName>Min Accuracy</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.lowestAccuracy}%</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.highestAccuracy !== null && (
+                <>
+                    <ScoreFilterName>Max Accuracy</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.highestAccuracy}%</ScoreFilterValue>
+                </>
+            )}
+            {/* Length */}
+            {scoreFilter.lowestLength !== null && (
+                <>
+                    <ScoreFilterName>Min Length</ScoreFilterName>
+                    <ScoreFilterValue>{formatTime(scoreFilter.lowestLength)}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.highestLength !== null && (
+                <>
+                    <ScoreFilterName>Max Length</ScoreFilterName>
+                    <ScoreFilterValue>{formatTime(scoreFilter.highestLength)}</ScoreFilterValue>
+                </>
+            )}
+            {/* CS */}
+            {scoreFilter.lowestCs !== null && (
+                <>
+                    <ScoreFilterName>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.lowestCs}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.highestCs !== null && (
+                <>
+                    <ScoreFilterName>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.highestCs}</ScoreFilterValue>
+                </>
+            )}
+            {/* AR */}
+            {scoreFilter.lowestAr !== null && (
+                <>
+                    <ScoreFilterName>Min AR</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.lowestAr}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.highestAr !== null && (
+                <>
+                    <ScoreFilterName>Max AR</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.highestAr}</ScoreFilterValue>
+                </>
+            )}
+            {/* OD */}
+            {scoreFilter.lowestOd !== null && (
+                <>
+                    <ScoreFilterName>Min OD</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.lowestOd}</ScoreFilterValue>
+                </>
+            )}
+            {scoreFilter.highestOd !== null && (
+                <>
+                    <ScoreFilterName>Max OD</ScoreFilterName>
+                    <ScoreFilterValue>{scoreFilter.highestOd}</ScoreFilterValue>
+                </>
+            )}
+        </ScoreFilters>
     );
 }
 

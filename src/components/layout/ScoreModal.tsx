@@ -50,6 +50,10 @@ const BeatmapDate = styled.span`
     font-style: italic;
 `;
 
+const ModsContainer = styled.div`
+    display: flex;
+`;
+
 const BeatmapDataTable = styled(DataTable)`
     max-width: 200px;
     font-size: 1.1em;
@@ -111,7 +115,9 @@ export const ScoreModal = (props: ScoreModalProps) => {
                     <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     <Mapper>Mapset by {beatmap.creatorName}</Mapper>
                     <BeatmapDate>{beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"} <TimeAgo datetime={beatmap.approvalDate} /></BeatmapDate>
-                    <ModIcons small bitwiseMods={score.mods} />
+                    <ModsContainer>
+                        <ModIcons small bitwiseMods={score.mods} />
+                    </ModsContainer>
                     <BeatmapDataTable>
                         <tr>
                             <td>BPM</td>
