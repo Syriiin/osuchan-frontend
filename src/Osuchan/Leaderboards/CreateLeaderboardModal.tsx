@@ -18,16 +18,13 @@ const LeaderboardIcon = styled.img`
 const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
     const store = useContext(StoreContext);
     const listStore = store.leaderboardsStore.listStore;
-    const meStore = store.meStore;
-
-    const { user } = meStore;
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);
     const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
     const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [iconUrl, setIconUrl] = useState("");
+    const [iconUrl, setIconUrl] = useState(`${window.location.origin}/static/icon-64.png`);
     const [allowPastScores, setAllowPastScores] = useState(true);
     const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
 
@@ -40,10 +37,6 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
 
         return () => clearTimeout(timeout);
     }, [setDelayedIconUrl, iconUrl]);
-
-    useEffect(() => {
-        setIconUrl(`https://a.ppy.sh/${user?.osuUserId}` || "");
-    }, [user]);
 
     const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -98,7 +91,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
                 <FormLabel>Icon URL</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth placeholder={`https://a.ppy.sh/${user?.osuUserId}`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
+                    <TextInput fullWidth placeholder={`${window.location.origin}/static/icon-64.png`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
                     <LeaderboardIcon src={delayedIconUrl} />
                 </FormControl>
                 <FormLabel>Allow scores set prior to member joining</FormLabel>

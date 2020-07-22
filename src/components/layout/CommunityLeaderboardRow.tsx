@@ -6,14 +6,17 @@ import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
 
 const LeaderboardIconContainer = styled.div`
+    width: 86px;
     height: 86px;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 const LeaderboardIcon = styled.img`
     border-radius: 5px;
-    width: 86px;
+    max-width: 100%;
+    max-height: 100%;
 `;
 
 const LeaderboardTitleContainer = styled.div`
@@ -52,7 +55,7 @@ const MembershipPerformance = styled.div`
 export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => (
     <Row hoverable>
         <LeaderboardIconContainer>
-            <LeaderboardIcon src={props.leaderboard.iconUrl || `https://a.ppy.sh/${props.leaderboard.owner!.id}`} />
+            <LeaderboardIcon src={props.leaderboard.iconUrl} />
         </LeaderboardIconContainer>
         <LeaderboardTitleContainer>
             <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>

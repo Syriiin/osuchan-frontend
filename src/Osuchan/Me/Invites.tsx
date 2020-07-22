@@ -17,14 +17,17 @@ const InvitesSurface = styled(Surface)`
 `;
 
 const LeaderboardIconContainer = styled.div`
+    width: 86px;
     height: 86px;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 const LeaderboardIcon = styled.img`
     border-radius: 5px;
-    width: 86px;
+    max-width: 100%;
+    max-height: 100%;
     margin-right: 10px;
 `;
 
@@ -65,7 +68,7 @@ const InviteRow = observer((props: InviteRowProps) => {
     return (
         <Row>
             <LeaderboardIconContainer>
-                <LeaderboardIcon src={invite.leaderboard!.iconUrl || `https://a.ppy.sh/${invite.leaderboard!.owner!.id}`} />
+                <LeaderboardIcon src={invite.leaderboard!.iconUrl} />
             </LeaderboardIconContainer>
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{invite.leaderboard!.name}</LeaderboardTitle>

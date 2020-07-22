@@ -2,9 +2,7 @@ import React, { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { Surface, SurfaceTitle, UnstyledLink, Row, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection, NumberFormat } from "../../../components";
-import { Membership } from "../../../store/models/leaderboards/types";
-import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
+import { Surface, SurfaceTitle, UnstyledLink, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection, GlobalLeaderboardRow, CommunityLeaderboardRow } from "../../../components";
 import { StoreContext } from "../../../store";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { PaginatedResourceStatus } from "../../../store/status";
@@ -14,103 +12,6 @@ const LeaderboardsSurface = styled(Surface)`
     padding: 20px;
     grid-area: leaderboards;
 `;
-
-const LeaderboardIconContainer = styled.div`
-    height: 86px;
-    display: flex;
-    align-items: center;
-`;
-
-const LeaderboardIcon = styled.img`
-    border-radius: 5px;
-    width: 86px;
-`;
-
-const LeaderboardTitleContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin-left: 10px;
-`;
-
-const LeaderboardTitle = styled.span`
-    font-size: 1.5em;
-`;
-
-const LeaderboardType = styled.span`
-    font-size: 0.8em;
-    color: ${props => props.theme.colours.mango};
-`;
-
-const LeaderboardSubtitle = styled.span`
-    color: ${props => props.theme.colours.timber};
-`;
-
-const MembershipInfoContainer = styled.div`
-    margin-right: 10px;
-    text-align: right;
-`;
-
-const MembershipRank = styled.div`
-    font-size: 2em;
-`;
-
-const MembershipPerformance = styled.div`
-
-`;
-
-const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
-    <Row hoverable>
-        <LeaderboardIconContainer>
-            <LeaderboardIcon src={props.membership.leaderboard!.iconUrl} />
-        </LeaderboardIconContainer>
-        <LeaderboardTitleContainer>
-            <LeaderboardTitle>{props.membership.leaderboard!.name}</LeaderboardTitle>
-            <LeaderboardSubtitle>{props.membership.leaderboard!.description}</LeaderboardSubtitle>
-        </LeaderboardTitleContainer>
-        <MembershipInfoContainer>
-            <MembershipRank>
-                #{props.membership.rank.toLocaleString("en")}
-            </MembershipRank>
-            <MembershipPerformance>
-                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
-            </MembershipPerformance>
-        </MembershipInfoContainer>
-    </Row>
-);
-
-interface GlobalLeaderboardRowProps {
-    membership: Membership;
-}
-
-const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => (
-    <Row hoverable>
-        <LeaderboardIconContainer>
-            <LeaderboardIcon src={props.membership.leaderboard!.iconUrl || `https://a.ppy.sh/${props.membership.leaderboard!.owner!.id}`} />
-        </LeaderboardIconContainer>
-        <LeaderboardTitleContainer>
-            <LeaderboardTitle>{props.membership.leaderboard!.name}</LeaderboardTitle>
-            <LeaderboardType>
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.Public && "PUBLIC"}
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                {props.membership.leaderboard!.accessType === LeaderboardAccessType.Private && "PRIVATE"}
-            </LeaderboardType>
-            <LeaderboardSubtitle>{props.membership.leaderboard!.memberCount} members</LeaderboardSubtitle>
-        </LeaderboardTitleContainer>
-        <MembershipInfoContainer>
-            <MembershipRank>
-                #{props.membership.rank.toLocaleString("en")}
-            </MembershipRank>
-            <MembershipPerformance>
-                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
-            </MembershipPerformance>
-        </MembershipInfoContainer>
-    </Row>
-);
-
-interface CommunityLeaderboardRowProps {
-    membership: Membership;
-}
 
 const Leaderboards = observer(() => {
     const store = useContext(StoreContext);
@@ -140,7 +41,7 @@ const Leaderboards = observer(() => {
             </SurfaceHeaderContainer>
             {leaderboardType === "global" && globalMemberships.map((membership, i) => (
                 <UnstyledLink key={i} to={`/leaderboards/global/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
-                    <GlobalLeaderboardRow membership={membership} />
+                    <GlobalLeaderboardRow leaderboard={membership.leaderboard!} membership={membership} />
                 </UnstyledLink>
             ))}
             {leaderboardType === "community" && (
@@ -149,7 +50,7 @@ const Leaderboards = observer(() => {
                         <>
                             {communityMemberships.map((membership, i) => (
                                 <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
-                                    <CommunityLeaderboardRow membership={membership} />
+                                    <CommunityLeaderboardRow leaderboard={membership.leaderboard!} membership={membership} />
                                 </UnstyledLink>
                             ))}
                             {hasFlag(usersStore.communityMembershipsStatus, PaginatedResourceStatus.MoreToLoad) && (
