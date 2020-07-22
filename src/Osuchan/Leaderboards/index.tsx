@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, useRouteMatch } from "react-router";
+import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
 
 import LeaderboardList from "./LeaderboardList";
 import LeaderboardRoot from "./Leaderboard";

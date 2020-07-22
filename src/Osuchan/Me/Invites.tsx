@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
+import { useLocation } from "react-router-dom";
 
 import { StoreContext } from "../../store";
 import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
@@ -86,6 +87,7 @@ interface InviteRowProps {
 }
 
 const Invites = observer(() => {
+    const location = useLocation();
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 
@@ -103,7 +105,7 @@ const Invites = observer(() => {
         } else {
             document.title = "Invites - osu!chan";
         }
-    }, [loadingStatus]);
+    }, [location, loadingStatus]);
 
     const invites = meStore.invites;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { StoreContext } from "../../store";
@@ -25,6 +25,7 @@ const SwitcherButtonGroup = styled(ButtonGroup)`
 
 const LeaderboardList = observer(() => {
     const params = useParams<RouteParams>();
+    const location = useLocation();
     const leaderboardType = params.leaderboardType;
     const gamemode = gamemodeIdFromName(params.gamemode);
 
@@ -40,7 +41,7 @@ const LeaderboardList = observer(() => {
         return () => {
             unload();
         }
-    }, [unload]);
+    }, [location, unload]);
 
     useEffect(() => {
         unload();

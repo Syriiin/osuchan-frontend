@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
+import { useParams, Route, useRouteMatch, useHistory, Redirect, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
@@ -296,6 +296,7 @@ const LeaderboardButtons = observer(() => {
 const LeaderboardHome = observer(() => {
     const match = useRouteMatch();
     const history = useHistory();
+    const location = useLocation();
     const params = useParams<RouteParams>();
     const leaderboardType = params.leaderboardType;
     const gamemode = gamemodeIdFromName(params.gamemode);
@@ -331,7 +332,7 @@ const LeaderboardHome = observer(() => {
         } else {
             document.title = "Leaderboard not found - osu!chan";
         }
-    }, [loadingStatus, leaderboard]);
+    }, [location, loadingStatus, leaderboard]);
 
     return (
         <>

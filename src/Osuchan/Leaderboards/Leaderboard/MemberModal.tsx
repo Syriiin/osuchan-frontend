@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat, Flag } from "../../../components";
@@ -50,6 +50,7 @@ const ScoreCount = styled.span`
 
 const MemberInfo = observer(() => {
     const params = useParams<RouteParams>();
+    const location = useLocation();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
@@ -66,7 +67,7 @@ const MemberInfo = observer(() => {
         } else {
             document.title = `Member not found - osu!chan`;
         }
-    }, [loadingStatus, loadingMembershipStatus, leaderboard, membership]);
+    }, [location, loadingStatus, loadingMembershipStatus, leaderboard, membership]);
 
     useEffect(() => {
         if (leaderboard !== null && !isNaN(userId)) {

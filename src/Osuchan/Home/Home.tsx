@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
+    const location = useLocation();
     // use effect to update title
     useEffect(() => {
         document.title = "Home - osu!chan";
-    }, []);
+    }, [location]);
 
     return (
         <>

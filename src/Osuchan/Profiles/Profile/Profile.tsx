@@ -13,7 +13,7 @@ import ScoresChart from "./ScoresChart";
 import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router-dom";
 import { ResourceStatus } from "../../../store/status";
 
 const ProfileGrid = styled.div`
@@ -32,6 +32,7 @@ const ProfileGrid = styled.div`
 
 const Profile = observer(() => {
     const params = useParams<RouteParams>();
+    const location = useLocation();
 
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
@@ -59,7 +60,7 @@ const Profile = observer(() => {
         } else {
             document.title = "User not found - osu!chan";
         }
-    }, [loadingStatus, osuUser]);
+    }, [location, loadingStatus, osuUser]);
 
     const [sandboxMode, setSandboxMode] = useState(false);
 

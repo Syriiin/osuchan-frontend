@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 
 import { SimpleModal, SimpleModalTitle, Button, Row, FormLabel, FormControl, TextField, LoadingSection, Flag } from "../../../components";
 import { StoreContext } from "../../../store";
@@ -108,6 +109,7 @@ interface InvitePlayerModalProps {
 }
 
 const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
+    const location = useLocation();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
 
@@ -121,7 +123,7 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
         } else {
             document.title = `Leaderboard not found - osu!chan`;
         }
-    }, [loadingStatus, loadingInvitesStatus, leaderboard]);
+    }, [location, loadingStatus, loadingInvitesStatus, leaderboard]);
 
     const open = props.open;
     useEffect(() => {
