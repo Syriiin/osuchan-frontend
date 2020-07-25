@@ -11,7 +11,7 @@
     ```shell
     $ npm install
     ```
-3. Make a copy of `.env.development.template.local` named `.env.development.local` and modify with the host defined in the your hosts file when setting up the backend
+3. Make a copy of `.env.development.local.template` named `.env.development.local` and modify with the host defined in the your hosts file when setting up the backend
 4. Start development server
     ```shell
     $ npm start
