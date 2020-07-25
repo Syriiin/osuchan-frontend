@@ -129,12 +129,21 @@ const Home = () => (
         <h2>FAQ</h2>
 
         <h3>
+            <em>Why is my rank way higher than it should be on global leaderboards?</em>
+        </h3>
+        <p>
+            Custom leaderboard ranks can only be calculated based on the users in the osu!chan database, so your rank will appear much higher than it should be, if there are a lot of players ranked above you missing from the database.
+            <br />
+            Due to the nature of this problem, it is basically not an issue for most of the top 10,000 players, but will becomes an issue beyond that, but will get better over time as more players are loaded into the database.
+        </p>
+
+        <h3>
             <em>Where is feature X that classic osu!chan has?</em>
         </h3>
         <p>
             Most of classic osu!chan's features now exist in one form or another (eg. Global leaderboards have replaced Mod PP stats).
             <br />
-            If there are any other features which you think are missing, let me know in the discord server so I can work on maybe adding them.!
+            If there are any other features which you think are missing, let me know in the discord server so I can work on maybe adding them!
         </p>
 
         <h3>
