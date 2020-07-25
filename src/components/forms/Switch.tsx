@@ -15,7 +15,7 @@ export const Switch = (props: SwitchProps) => {
             offColor={theme.colours.currant}
             onColor={theme.colours.mystic}
         />
-    )
+    );
 }
 
 interface SwitchProps extends ReactSwitchProps {

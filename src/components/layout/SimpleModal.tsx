@@ -11,15 +11,13 @@ export const SimpleModalTitle = styled.h1`
     margin: 0 0 20px 0;
 `;
 
-export const SimpleModal = (props: SimpleModalProps) => {
-    return (
-        <BasicModal open={props.open} onClose={props.onClose}>
-            <SimpleModalWrapper>
-                {props.children}
-            </SimpleModalWrapper>
-        </BasicModal>
-    );
-}
+export const SimpleModal = (props: SimpleModalProps) => (
+    <BasicModal open={props.open} onClose={props.onClose}>
+        <SimpleModalWrapper>
+            {props.children}
+        </SimpleModalWrapper>
+    </BasicModal>
+);
 
 export interface SimpleModalProps {
     children: ReactNode;

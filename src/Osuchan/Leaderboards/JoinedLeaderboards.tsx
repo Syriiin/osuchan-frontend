@@ -12,7 +12,7 @@ const JoinedLeaderboards = (props: JoinedLeaderboardsProps) => (
             </UnstyledLink>
         ))}
     </>
-)
+);
 
 interface JoinedLeaderboardsProps {
     memberships: Membership[];

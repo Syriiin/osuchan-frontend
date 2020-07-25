@@ -139,7 +139,7 @@ const Navbar = observer(() => {
     // Use effect to initialse form values
     useEffect(() => {
         setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
-    }, [meStore.user])
+    }, [meStore.user]);
 
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {

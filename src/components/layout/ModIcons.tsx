@@ -22,7 +22,7 @@ export const ModIcons = (props: ModIconsProps) => {
                 </>
             ))}
         </>
-    )
+    );
 }
 
 interface ModIconsProps {

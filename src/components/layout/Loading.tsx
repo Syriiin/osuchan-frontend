@@ -137,7 +137,7 @@ export const LoadingSpinner = (props: LoadingSpinnerProps) => (
         <div></div>
         <div></div>
     </LoadingWrapper>
-)
+);
 
 interface LoadingSpinnerProps extends LoadingWrapperProps {}
 
@@ -146,7 +146,7 @@ export const LoadingPage = () => (
         <LoadingSpinner scale={2} />
         <LoadingText>Loading...</LoadingText>
     </LoadingPageWrapper>
-)
+);
 
 export const LoadingSection = () => (
     <LoadingContainer>

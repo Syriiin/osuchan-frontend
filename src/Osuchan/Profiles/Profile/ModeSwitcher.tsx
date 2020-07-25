@@ -37,26 +37,24 @@ interface ModeLinkProps {
     active?: boolean;
 }
 
-const ModeSwitcher = (props: ModeSwitcherProps) => {
-    return (
-        <ModeSwitcherSurface>
-            <ModeSwitcherContainer>
-                <ModeLink active={props.gamemodeId === Gamemode.Standard} to={`/users/${props.userString}/osu`}>
-                    <li>osu!</li>
-                </ModeLink>
-                <ModeLink active={props.gamemodeId === Gamemode.Taiko} to={`/users/${props.userString}/taiko`}>
-                    <li>osu!taiko</li>
-                </ModeLink>
-                <ModeLink active={props.gamemodeId === Gamemode.Catch} to={`/users/${props.userString}/catch`}>
-                    <li>osu!catch</li>
-                </ModeLink>
-                <ModeLink active={props.gamemodeId === Gamemode.Mania} to={`/users/${props.userString}/mania`}>
-                    <li>osu!mania</li>
-                </ModeLink>
-            </ModeSwitcherContainer>
-        </ModeSwitcherSurface>
-    );
-}
+const ModeSwitcher = (props: ModeSwitcherProps) => (
+    <ModeSwitcherSurface>
+        <ModeSwitcherContainer>
+            <ModeLink active={props.gamemodeId === Gamemode.Standard} to={`/users/${props.userString}/osu`}>
+                <li>osu!</li>
+            </ModeLink>
+            <ModeLink active={props.gamemodeId === Gamemode.Taiko} to={`/users/${props.userString}/taiko`}>
+                <li>osu!taiko</li>
+            </ModeLink>
+            <ModeLink active={props.gamemodeId === Gamemode.Catch} to={`/users/${props.userString}/catch`}>
+                <li>osu!catch</li>
+            </ModeLink>
+            <ModeLink active={props.gamemodeId === Gamemode.Mania} to={`/users/${props.userString}/mania`}>
+                <li>osu!mania</li>
+            </ModeLink>
+        </ModeSwitcherContainer>
+    </ModeSwitcherSurface>
+);
 
 interface ModeSwitcherProps {
     gamemodeId: Gamemode;

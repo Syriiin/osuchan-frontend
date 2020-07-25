@@ -41,7 +41,7 @@ export const Select = <T extends OptionValue = number>(props: SelectProps<T>) =>
             styles={styles}
             isSearchable={false}
         />
-    )
+    );
 }
 
 type OptionValue = string | number;

@@ -46,29 +46,27 @@ const MembershipPerformance = styled.div`
 
 `;
 
-export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => {
-    return (
-        <Row hoverable>
-            <LeaderboardIconContainer>
-                <LeaderboardIcon src={props.leaderboard.iconUrl} />
-            </LeaderboardIconContainer>
-            <LeaderboardTitleContainer>
-                <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
-                <LeaderboardSubtitle>{props.leaderboard.description}</LeaderboardSubtitle>
-            </LeaderboardTitleContainer>
-            {props.membership && (
-                <MembershipInfoContainer>
-                    <MembershipRank>
+export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
+    <Row hoverable>
+        <LeaderboardIconContainer>
+            <LeaderboardIcon src={props.leaderboard.iconUrl} />
+        </LeaderboardIconContainer>
+        <LeaderboardTitleContainer>
+            <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
+            <LeaderboardSubtitle>{props.leaderboard.description}</LeaderboardSubtitle>
+        </LeaderboardTitleContainer>
+        {props.membership && (
+            <MembershipInfoContainer>
+                <MembershipRank>
                         #{props.membership.rank.toLocaleString("en")}
-                    </MembershipRank>
-                    <MembershipPerformance>
-                        <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
-                    </MembershipPerformance>
-                </MembershipInfoContainer>
-            )}
-        </Row>
-    );
-}
+                </MembershipRank>
+                <MembershipPerformance>
+                    <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
+                </MembershipPerformance>
+            </MembershipInfoContainer>
+        )}
+    </Row>
+);
 
 interface GlobalLeaderboardRowProps {
     leaderboard: Leaderboard;
