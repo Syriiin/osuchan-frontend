@@ -36,7 +36,7 @@ const Home = () => {
 
             <h2>Changelog</h2>
 
-            <h3>22nd July 2020 - <UpdateTitle>Leaderboards Anniversary Update</UpdateTitle></h3>
+            <h3>24th July 2020 - <UpdateTitle>Leaderboards Anniversary Update</UpdateTitle></h3>
             <ul>
                 <li>Completely redesign leaderboard listing page with tabs for global/community and for gamemodes</li>
                 <li>Add private leaderboards visible to you back to main leaderboard listing</li>
@@ -130,14 +130,12 @@ const Home = () => {
             <h2>FAQ</h2>
             
             <h3>
-                <em>Where are all the features that classic osu!chan has?</em>
+                <em>Where is feature X that classic osu!chan has?</em>
             </h3>
             <p>
-                Some of classic osu!chan's features will be coming to this version in new and improved forms, and some will not.
+                Most of classic osu!chan's features now exist in one form or another (eg. Global leaderboards have replaced Mod PP stats).
                 <br />
-                For example, at the moment, I don't have any plans on implementing the Mod PP statistics from classic osu!chan as they are somewhat replaced by the global leaderboards.
-                <br />
-                But other features like no-choke statistics will be coming in the future in a much improved form.
+                If there are any other features which you think are missing, let me know in the discord server so I can work on maybe adding them.!
             </p>
             
             <h3>
@@ -170,18 +168,16 @@ const Home = () => {
                 <br />
                 osu!chan uses <a href="https://github.com/Francesco149/oppai-ng">oppai</a> to calculate pp for these scores, which can sometimes have slight differences to official pp values.
             </p>
-            
+
             <h3>
-                <em>I created a leaderboard, but it isn't showing up in the leaderboard list. Why?</em>
+                <em>Is there anything I can do to help with the project?</em>
             </h3>
             <p>
-                The Community Leaderboard list at the moment only displays the top 25 public leaderboards (by number of members).
+                The best thing you can do to help the project is to give us feedback! Let us know your suggestions and bug reports in the  <a href="https://discord.gg/z7c9tD6">discord server</a>!
                 <br />
-                You can view all the leaderboards a user has joined (except private ones you aren't a member of) in their profile.
+                If you have programming or web design experience and want to help out, you can check out the github repos and/or chat in the discord server about contributing.
                 <br />
-                You will be able to see any leaderboards you create in your profile too.
-                <br />
-                To view any private leaderboards you are a member of, you need to check the list in your profile.
+                On the other hand, if you prefer to support the project with a donation to help cover running costs, you can of course do that too at <a href="https://paypal.me/Syriiin">https://paypal.me/Syriiin</a>.
             </p>
         </>
     );
