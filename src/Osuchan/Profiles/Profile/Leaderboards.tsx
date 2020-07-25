@@ -40,7 +40,7 @@ const Leaderboards = observer(() => {
                 </ButtonGroup>
             </SurfaceHeaderContainer>
             {leaderboardType === "global" && globalMemberships.map((membership, i) => (
-                <UnstyledLink key={i} to={`/leaderboards/global/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
+                <UnstyledLink key={i} to={`/leaderboards/global/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}/members/${membership.osuUserId}`}>
                     <GlobalLeaderboardRow leaderboard={membership.leaderboard!} membership={membership} />
                 </UnstyledLink>
             ))}
@@ -49,7 +49,7 @@ const Leaderboards = observer(() => {
                     {hasFlag(usersStore.communityMembershipsStatus, PaginatedResourceStatus.ContentAvailable) && (
                         <>
                             {communityMemberships.map((membership, i) => (
-                                <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
+                                <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}/members/${membership.osuUserId}`}>
                                     <CommunityLeaderboardRow leaderboard={membership.leaderboard!} membership={membership} />
                                 </UnstyledLink>
                             ))}
