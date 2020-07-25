@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import { StoreContext } from "../../store";
 import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
@@ -90,30 +90,26 @@ interface InviteRowProps {
 }
 
 const Invites = observer(() => {
-    const location = useLocation();
     const store = useContext(StoreContext);
     const meStore = store.meStore;
 
     // use effect to fetch me data (already doing this in nav, but makes sense to refetch incase changes such as more invites)
-    const { loadMe } = meStore;
+    const { loadMe, loadingStatus, invites } = meStore;
     useEffect(() => {
         loadMe();
     }, [loadMe]);
 
-    // use effect to update title
-    const { loadingStatus } = meStore;
-    useEffect(() => {
-        if (loadingStatus === ResourceStatus.Loading) {
-            document.title = "Loading...";
-        } else {
-            document.title = "Invites - osu!chan";
-        }
-    }, [location, loadingStatus]);
-
-    const invites = meStore.invites;
-
     return (
         <>
+            <Helmet>
+                {loadingStatus === ResourceStatus.Loading && (
+                    <title>Loading...</title>
+                )}
+                {loadingStatus === ResourceStatus.Loaded && (
+                    <title>Invites - osu!chan</title>
+                )}
+            </Helmet>
+
             {loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}

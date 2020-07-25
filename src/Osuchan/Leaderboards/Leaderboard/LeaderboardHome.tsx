@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams, Route, useRouteMatch, useHistory, Redirect, useLocation } from "react-router-dom";
+import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 import { formatTime, formatGamemodeName } from "../../../utils/formatting";
 import { StoreContext } from "../../../store";
@@ -296,7 +297,6 @@ const LeaderboardButtons = observer(() => {
 const LeaderboardHome = observer(() => {
     const match = useRouteMatch();
     const history = useHistory();
-    const location = useLocation();
     const params = useParams<RouteParams>();
     const leaderboardType = params.leaderboardType;
     const gamemode = gamemodeIdFromName(params.gamemode);
@@ -307,7 +307,7 @@ const LeaderboardHome = observer(() => {
     const meStore = store.meStore;
 
     // use effect to fetch leaderboards data
-    const { loadLeaderboard } = detailStore;
+    const { loadLeaderboard, loadingStatus, leaderboard } = detailStore;
     useEffect(() => {
         loadLeaderboard(leaderboardType, gamemode, leaderboardId);
     }, [loadLeaderboard, leaderboardType, gamemode, leaderboardId]);
@@ -320,22 +320,20 @@ const LeaderboardHome = observer(() => {
         }
     }, [loadUserMembership, userId]);
 
-    const leaderboard = detailStore.leaderboard;
-
-    // use effect to update title
-    const { loadingStatus } = detailStore;
-    useEffect(() => {
-        if (loadingStatus === ResourceStatus.Loading) {
-            document.title = "Loading...";
-        } else if (leaderboard) {
-            document.title = `${leaderboard.name} - osu!chan`;
-        } else {
-            document.title = "Leaderboard not found - osu!chan";
-        }
-    }, [location, loadingStatus, leaderboard]);
-
     return (
         <>
+            <Helmet>
+                {loadingStatus === ResourceStatus.Loading && (
+                    <title>Loading...</title>
+                )}
+                {loadingStatus === ResourceStatus.Loaded && leaderboard && (
+                    <title>{leaderboard.name} - osu!chan</title>
+                )}
+                {loadingStatus === ResourceStatus.Error && (
+                    <title>Leaderboard not found - osu!chan</title>
+                )}
+            </Helmet>
+
             {detailStore.loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}

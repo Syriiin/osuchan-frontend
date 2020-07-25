@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
+import { useParams } from "react-router-dom";
 
 import { StoreContext } from "../../../store";
 import { gamemodeIdFromName } from "../../../utils/osu";
@@ -13,7 +15,6 @@ import ScoresChart from "./ScoresChart";
 import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
-import { useParams, useLocation } from "react-router-dom";
 import { ResourceStatus } from "../../../store/status";
 
 const ProfileGrid = styled.div`
@@ -32,7 +33,6 @@ const ProfileGrid = styled.div`
 
 const Profile = observer(() => {
     const params = useParams<RouteParams>();
-    const location = useLocation();
 
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
@@ -52,20 +52,23 @@ const Profile = observer(() => {
 
     // use effect to update title
     const { loadingStatus } = usersStore;
-    useEffect(() => {
-        if (loadingStatus === ResourceStatus.Loading) {
-            document.title = "Loading...";
-        } else if (osuUser) {
-            document.title = `${osuUser.username} - osu!chan`;
-        } else {
-            document.title = "User not found - osu!chan";
-        }
-    }, [location, loadingStatus, osuUser]);
 
     const [sandboxMode, setSandboxMode] = useState(false);
 
     return (
         <>
+            <Helmet>
+                {loadingStatus === ResourceStatus.Loading && (
+                    <title>Loading...</title>
+                )}
+                {loadingStatus === ResourceStatus.Loaded && osuUser && (
+                    <title>{osuUser.username} - osu!chan</title>
+                )}
+                {loadingStatus === ResourceStatus.Error && (
+                    <title>User not found - osu!chan</title>
+                )}
+            </Helmet>
+
             {usersStore.loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}

@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 const UpdateTitle = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
 const Home = () => {
-    const location = useLocation();
-
-    // use effect to update title
-    useEffect(() => {
-        document.title = "Home - osu!chan";
-    }, [location]);
-
     return (
         <>
-            <h1>Welcome to the osu!chan!</h1>
+            <Helmet>
+                <title>Home - osu!chan</title>
+                <meta name="description" content="osu!chan - osu! stats, custom leaderboards, and much more!" />
+            </Helmet>
+
+            <h1>Welcome to osu!chan!</h1>
 
             <p>
                 You can view a player's profile by searching their username in the top right.

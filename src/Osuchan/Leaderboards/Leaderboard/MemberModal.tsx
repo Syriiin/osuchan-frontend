@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat, Flag } from "../../../components";
 import { StoreContext } from "../../../store";
@@ -50,24 +51,13 @@ const ScoreCount = styled.span`
 
 const MemberInfo = observer(() => {
     const params = useParams<RouteParams>();
-    const location = useLocation();
     const store = useContext(StoreContext);
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
 
     const userId = parseInt(params.userId);
-    const { loadingStatus, loadingMembershipStatus, leaderboard, membership, membershipScores, loadMembership } = detailStore;
+    const { loadingMembershipStatus, leaderboard, membership, membershipScores, loadMembership } = detailStore;
     const { isAuthenticated, user } = meStore;
-
-    useEffect(() => {
-        if (loadingMembershipStatus === ResourceStatus.Loading) {
-            document.title = "Loading...";
-        } else if (leaderboard && membership) {
-            document.title = `${membership.osuUser!.username} - ${leaderboard.name} - osu!chan`;
-        } else {
-            document.title = `Member not found - osu!chan`;
-        }
-    }, [location, loadingStatus, loadingMembershipStatus, leaderboard, membership]);
 
     useEffect(() => {
         if (leaderboard !== null && !isNaN(userId)) {
@@ -79,6 +69,18 @@ const MemberInfo = observer(() => {
 
     return (
         <>
+            <Helmet>
+                {loadingMembershipStatus === ResourceStatus.Loading && (
+                    <title>Loading...</title>
+                )}
+                {loadingMembershipStatus === ResourceStatus.Loaded && leaderboard && membership && (
+                    <title>{membership.osuUser?.username} - {leaderboard.name} - osu!chan</title>
+                )}
+                {loadingMembershipStatus === ResourceStatus.Error && (
+                    <title>Member not found - osu!chan</title>
+                )}
+            </Helmet>
+
             {loadingMembershipStatus === ResourceStatus.Loaded && membership && (
                 <>
                     <UserInfo>
