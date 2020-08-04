@@ -316,12 +316,12 @@ export class UsersStore {
             n100: score.count100,
             n50: score.count50
         });
-        
-        score.starRating = stars.total;
-        score.pp = pp.total;
-        score.nochokePp = nochokePp.total;
 
         runInAction(() => {
+            score.starRating = stars.total;
+            score.pp = pp.total;
+            score.nochokePp = nochokePp.total;
+    
             // Sort observable array
             this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
         });
