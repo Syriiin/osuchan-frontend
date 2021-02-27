@@ -182,19 +182,45 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             {/* Dates */}
             <FormLabel>Oldest Beatmap Date</FormLabel>
             <FormControl>
-                <DatePicker selected={value.oldestBeatmapDate} onChange={date => setOldestBeatmapDate(date)} />
+                <DatePicker
+                    selectsStart
+                    startDate={value.oldestBeatmapDate}
+                    endDate={value.newestBeatmapDate}
+                    selected={value.oldestBeatmapDate}
+                    onChange={date => setOldestBeatmapDate(date as Date | null)}
+                />
             </FormControl>
             <FormLabel>Newest Beatmap Date</FormLabel>
             <FormControl>
-                <DatePicker selected={value.newestBeatmapDate} onChange={date => setNewestBeatmapDate(date)} />
+                <DatePicker
+                    selectsEnd
+                    startDate={value.oldestBeatmapDate}
+                    minDate={value.oldestBeatmapDate}
+                    endDate={value.newestBeatmapDate}
+                    selected={value.newestBeatmapDate}
+                    onChange={date => setNewestBeatmapDate(date as Date | null)}
+                />
             </FormControl>
             <FormLabel>Oldest Score Date</FormLabel>
             <FormControl>
-                <DatePicker selected={value.oldestScoreDate} onChange={date => setOldestScoreDate(date)} />
+                <DatePicker
+                    selectsStart
+                    startDate={value.oldestScoreDate}
+                    endDate={value.newestScoreDate}
+                    selected={value.oldestScoreDate}
+                    onChange={date => setOldestScoreDate(date as Date | null)}
+                />
             </FormControl>
             <FormLabel>Newest Score Date</FormLabel>
             <FormControl>
-                <DatePicker selected={value.newestScoreDate} onChange={date => setNewestScoreDate(date)} />
+                <DatePicker
+                    selectsEnd
+                    startDate={value.oldestScoreDate}
+                    minDate={value.oldestScoreDate}
+                    endDate={value.newestScoreDate}
+                    selected={value.newestScoreDate}
+                    onChange={date => setNewestScoreDate(date as Date | null)}
+                />
             </FormControl>
             
             {/* Mods */}

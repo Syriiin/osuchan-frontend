@@ -10,7 +10,7 @@ type OptionType = { label: string; value: Mods; }
 export const ModsSelect = (props: ModsSelectProps) => {
     const theme = useContext(ThemeContext);
     
-    const styles: StylesConfig = {
+    const styles: StylesConfig<OptionType, true> = {
         menu: (provided, state) => ({
             ...provided,
             backgroundColor: theme.colours.background
@@ -70,7 +70,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
         <Select
             value={mods.map(value => selectModOptions.find(option => option.value === value) as OptionType)}
             isMulti
-            onChange={(value: ValueType<OptionType>) => {
+            onChange={(value: ValueType<OptionType, true>) => {
                 if (value) {
                     props.onChange((value as OptionType[]).map(option => option.value).reduce((total, value) => total | value, 0));
                 }

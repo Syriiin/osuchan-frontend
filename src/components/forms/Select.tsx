@@ -5,7 +5,7 @@ import { ThemeContext } from "styled-components";
 export const Select = <T extends OptionValue = number>(props: SelectProps<T>) => {
     const theme = useContext(ThemeContext);
 
-    const styles: StylesConfig = {
+    const styles: StylesConfig<Option<T>, false> = {
         control: (provided, state) => ({
             ...provided,
             backgroundColor: state.isDisabled ? theme.colours.midground : theme.colours.background,
