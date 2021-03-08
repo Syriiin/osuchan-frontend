@@ -1,8 +1,9 @@
 import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { UnstyledLink, GlobalLeaderboardRow } from "../../components";
 import { formatGamemodeNameShort } from "../../utils/formatting";
+import { observer } from "mobx-react-lite";
 
-const GlobalLeaderboards = (props: GlobalLeaderboardsProps) => (
+const GlobalLeaderboards = observer((props: GlobalLeaderboardsProps) => (
     <>
         {props.leaderboards && props.leaderboards.map((leaderboard, i) => (
             <UnstyledLink key={i} to={`/leaderboards/global/${formatGamemodeNameShort(leaderboard.gamemode)}/${leaderboard.id}`}>
@@ -15,7 +16,7 @@ const GlobalLeaderboards = (props: GlobalLeaderboardsProps) => (
             </UnstyledLink>
         ))}
     </>
-);
+));
 
 interface GlobalLeaderboardsProps {
     leaderboards?: Leaderboard[];

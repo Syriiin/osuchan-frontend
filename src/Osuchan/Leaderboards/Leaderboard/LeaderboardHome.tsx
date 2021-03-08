@@ -19,6 +19,7 @@ import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
 import { ResourceStatus } from "../../../store/status";
 import EditLeaderboardModal from "./EditLeaderboardModal";
+import { useAutorun } from "../../../utils/hooks";
 
 const LeaderboardSurface = styled(Surface)`
     display: flex;
@@ -100,7 +101,7 @@ const LeaderboardButtonsContainer = styled.div`
 
 `;
 
-const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
+const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
     const { scoreFilter, gamemode } = props;
 
     return (
@@ -224,7 +225,7 @@ const LeaderboardFilters = (props: LeaderboardFiltersProps) => {
             )}
         </ScoreFilters>
     );
-}
+});
 
 interface LeaderboardFiltersProps {
     scoreFilter: ScoreFilter;
@@ -312,13 +313,12 @@ const LeaderboardHome = observer(() => {
         loadLeaderboard(leaderboardType, gamemode, leaderboardId);
     }, [loadLeaderboard, leaderboardType, gamemode, leaderboardId]);
     
-    const userId = meStore.user?.osuUserId;
     const { loadUserMembership } = detailStore;
-    useEffect(() => {
-        if (userId) {
-            loadUserMembership(userId);
+    useAutorun(() => {
+        if (meStore.user?.osuUserId) {
+            loadUserMembership(meStore.user?.osuUserId);
         }
-    }, [loadUserMembership, userId]);
+    });
 
     return (
         <>

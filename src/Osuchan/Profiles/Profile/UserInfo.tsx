@@ -4,6 +4,7 @@ import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Surface, TimeAgo, Flag } from "../../../components";
+import { observer } from "mobx-react-lite";
 
 const UserInfoSurface = styled(Surface)`
     padding: 20px;
@@ -40,7 +41,7 @@ const JoinIcon = styled(FontAwesomeIcon)`
     margin-right: 0.5em;
 `;
 
-const UserInfo = (props: UserInfoProps) => {
+const UserInfo = observer((props: UserInfoProps) => {
     const osuUser = props.osuUser;
 
     return (
@@ -62,7 +63,7 @@ const UserInfo = (props: UserInfoProps) => {
             </UserInfoContainer>
         </UserInfoSurface>
     );
-}
+});
 
 interface UserInfoProps {
     osuUser: OsuUser;

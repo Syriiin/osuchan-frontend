@@ -54,7 +54,7 @@ const ScoreCount = styled.span`
     font-size: 0.8em;
 `;
 
-const RankingRow = (props: RankingRowProps) => (
+const RankingRow = observer((props: RankingRowProps) => (
     <Row hoverable>
         <Rank>#{props.rank.toLocaleString("en")}</Rank>
         <PlayerInfo>
@@ -75,7 +75,7 @@ const RankingRow = (props: RankingRowProps) => (
             </ScoreCount>
         </PerformanceContainer>
     </Row>
-);
+));
 
 interface RankingRowProps {
     membership: Membership;

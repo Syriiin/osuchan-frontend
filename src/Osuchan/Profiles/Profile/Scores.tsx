@@ -12,7 +12,7 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-const ProfileScoreRow = (props: ProfileScoreRowProps) => {
+const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const score = props.score;
@@ -25,7 +25,7 @@ const ProfileScoreRow = (props: ProfileScoreRowProps) => {
             <ScoreEditModal score={score} gamemode={gamemode} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
         </>
     );
-}
+});
 
 interface ProfileScoreRowProps {
     score: Score;

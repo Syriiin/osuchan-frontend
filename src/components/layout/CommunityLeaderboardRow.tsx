@@ -3,6 +3,7 @@ import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Row } from "./Row";
 import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
+import { observer } from "mobx-react-lite";
 
 const LeaderboardIconContainer = styled.div`
     width: 86px;
@@ -51,7 +52,7 @@ const MembershipPerformance = styled.div`
 
 `;
 
-export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => (
+export const CommunityLeaderboardRow = observer((props: CommunityLeaderboardRowProps) => (
     <Row hoverable>
         <LeaderboardIconContainer>
             <LeaderboardIcon src={props.leaderboard.iconUrl} />
@@ -76,7 +77,7 @@ export const CommunityLeaderboardRow = (props: CommunityLeaderboardRowProps) => 
             </MembershipInfoContainer>
         )}
     </Row>
-);
+));
 
 interface CommunityLeaderboardRowProps {
     leaderboard: Leaderboard;

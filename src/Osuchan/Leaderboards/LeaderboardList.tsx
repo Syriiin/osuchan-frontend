@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState } from "react";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
@@ -13,6 +13,7 @@ import JoinedLeaderboards from "./JoinedLeaderboards";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
 import { PaginatedResourceStatus } from "../../store/status";
 import { hasFlag } from "../../utils/general";
+import { useAction, useAutorun } from "../../utils/hooks";
 
 const LeaderboardsSurface = styled(Surface)`
     margin: 20px auto;
@@ -36,29 +37,39 @@ const LeaderboardList = observer(() => {
     const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships, unload, loadGlobalLeaderboards, loadCommunityLeaderboards, loadCommunityMemberships } = listStore;
     const { user, isAuthenticated } = meStore;
 
+    const localStore = useLocalObservable(() => ({
+        leaderboardType,
+        gamemode
+    }));
+
+    useAction(() => {
+        localStore.leaderboardType = leaderboardType;
+        localStore.gamemode = gamemode;
+    }, [localStore, leaderboardType, gamemode]);
+
     useEffect(() => {
         return () => {
             unload();
         }
     }, [unload]);
 
-    useEffect(() => {
+    useAutorun(() => {
         unload();
 
         // Load community leaderboards
-        if (leaderboardType === "community") {
-            loadCommunityLeaderboards(gamemode);
+        if (localStore.leaderboardType === "community") {
+            loadCommunityLeaderboards(localStore.gamemode);
 
             if (isAuthenticated) {
-                loadCommunityMemberships(gamemode, user!.osuUserId);
+                loadCommunityMemberships(localStore.gamemode, user!.osuUserId);
             }
         }
 
         // Load global leaderboards
-        if (leaderboardType === "global") {
-            loadGlobalLeaderboards(gamemode, user?.osuUserId);
+        if (localStore.leaderboardType === "global") {
+            loadGlobalLeaderboards(localStore.gamemode, user?.osuUserId);
         }
-    }, [isAuthenticated, user, leaderboardType, gamemode, unload, loadCommunityMemberships, loadGlobalLeaderboards, loadCommunityLeaderboards]);
+    });
 
     const loadNextGlobalLeaderboardPage = () => {
         if (listStore.globalLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {

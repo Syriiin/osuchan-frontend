@@ -10,6 +10,7 @@ import { StoreContext } from "../store";
 import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 import { formatGamemodeNameShort } from "../utils/formatting";
 import { ResourceStatus } from "../store/status";
+import { autorun } from "mobx";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -138,8 +139,10 @@ const Navbar = observer(() => {
 
     // Use effect to initialse form values
     useEffect(() => {
-        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
-    }, [meStore.user]);
+        autorun(() => {
+            setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
+        });
+    });
 
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {

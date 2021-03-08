@@ -10,6 +10,7 @@ import { ClickPropagationSupressor } from "../helpers/ClickPropagationSupressor"
 import { TimeAgo } from "./TimeAgo";
 import { NumberFormat } from "./NumberFormat";
 import { Flag } from "./Flag";
+import { observer } from "mobx-react-lite";
 
 const ScoreRowWrapper = styled(Row)`
     padding: 0;
@@ -104,7 +105,7 @@ const ActionButton = styled(Button)`
     height: 100%;
 `;
 
-export const ScoreRow = (props: ScoreRowProps) => {
+export const ScoreRow = observer((props: ScoreRowProps) => {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
     const score = props.score;
@@ -168,7 +169,7 @@ export const ScoreRow = (props: ScoreRowProps) => {
             <ScoreModal score={score} open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} />
         </>
     );
-}
+});
 
 interface ScoreRowProps {
     score: Score;

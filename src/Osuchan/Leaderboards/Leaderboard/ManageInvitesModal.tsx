@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
+import React, { useContext, useState } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -8,6 +8,7 @@ import { StoreContext } from "../../../store";
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Invite } from "../../../store/models/leaderboards/types";
 import { ResourceStatus } from "../../../store/status";
+import { useAction, useAutorun } from "../../../utils/hooks";
 
 const InvitesList = styled.div`
     margin-top: 10px;
@@ -114,12 +115,19 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
 
     const { loadingInvitesStatus, leaderboard, invites, loadInvites } = detailStore;
 
-    const open = props.open;
-    useEffect(() => {
-        if (open && leaderboard !== null) {
+    const localStore = useLocalObservable(() => ({
+        open: props.open
+    }));
+
+    useAction(() => {
+        localStore.open = props.open
+    }, [localStore, props.open]);
+
+    useAutorun(() => {
+        if (localStore.open && leaderboard !== null) {
             loadInvites();
         }
-    }, [open, leaderboard, loadInvites]);
+    });
     
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
 

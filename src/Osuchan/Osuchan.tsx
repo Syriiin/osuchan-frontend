@@ -1,6 +1,5 @@
 import { useEffect, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
 import Navbar from "./Navbar";
@@ -22,7 +21,7 @@ const ContentWrapper = styled.main`
     margin: 20px 50px;
 `;
 
-const Osuchan = observer(() => {
+const Osuchan = () => {
     const store = useContext(StoreContext);
     const meStore = store.meStore;
     
@@ -55,6 +54,6 @@ const Osuchan = observer(() => {
             <Footer />
         </OsuchanWrapper>
     );
-});
+};
 
 export default Osuchan;

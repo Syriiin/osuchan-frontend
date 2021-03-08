@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -42,7 +43,7 @@ interface ControlsStatusProps {
     enabled: boolean;
 }
 
-const SandboxControls = (props: SandboxControlsProps) => {
+const SandboxControls = observer((props: SandboxControlsProps) => {
     const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] = useState(false);
 
     return (
@@ -65,7 +66,7 @@ const SandboxControls = (props: SandboxControlsProps) => {
             <SandboxSettingsModal gamemode={props.gamemode} open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
         </SandboxControlsSurface>
     );
-}
+});
 
 interface SandboxControlsProps {
     gamemode: Gamemode;

@@ -1,11 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 import { Score } from "../../../store/models/profiles/types";
 import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Button, ModsSelect } from "../../../components";
 import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
+import { observer } from "mobx-react-lite";
+import { useAutorun } from "../../../utils/hooks";
 
-const ScoreEditModal = (props: ScoreEditModalProps) => {
+const ScoreEditModal = observer((props: ScoreEditModalProps) => {
     const store = useContext(StoreContext);
     const usersStore = store.usersStore;
     
@@ -19,13 +21,13 @@ const ScoreEditModal = (props: ScoreEditModalProps) => {
     const [countMiss, setCountMiss] = useState(score.countMiss.toString());
 
     // use effect to initialise default state values
-    useEffect(() => {
+    useAutorun(() => {
         setMods(score.mods);
         setCombo(score.bestCombo.toString());
         setCount100(score.count100.toString());
         setCount50(score.count50.toString());
         setCountMiss(score.countMiss.toString());
-    }, [score]);
+    });
 
     const handleApply = (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,7 +75,7 @@ const ScoreEditModal = (props: ScoreEditModalProps) => {
             </form>
         </SimpleModal>
     );
-}
+});
 
 interface ScoreEditModalProps {
     score: Score;

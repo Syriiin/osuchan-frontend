@@ -19,7 +19,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 configure({
-    enforceActions: "always"
+    enforceActions: "always",
+    computedRequiresReaction: true,
+    reactionRequiresObservable: true,
+    observableRequiresReaction: true,
+    disableErrorBoundaries: true
 });
 
 const GlobalStyle = createGlobalStyle`

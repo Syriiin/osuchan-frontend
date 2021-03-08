@@ -9,6 +9,7 @@ import { ScoreResult } from "../../store/models/profiles/enums";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
 import { TimeAgo } from "./TimeAgo";
 import { NumberFormat } from "./NumberFormat";
+import { observer } from "mobx-react-lite";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -98,7 +99,7 @@ const NochokePerformance = styled.span`
     color: ${props => props.theme.colours.timber};
 `;
 
-export const ScoreModal = (props: ScoreModalProps) => {
+export const ScoreModal = observer((props: ScoreModalProps) => {
     const score = props.score;
     const beatmap = score.beatmap!;
 
@@ -180,7 +181,7 @@ export const ScoreModal = (props: ScoreModalProps) => {
             </InfoContainer>
         </BasicModal>
     );
-}
+});
 
 export interface ScoreModalProps {
     score: Score;

@@ -1,8 +1,9 @@
 import { Leaderboard } from "../../store/models/leaderboards/types";
 import { UnstyledLink, CommunityLeaderboardRow } from "../../components";
 import { formatGamemodeNameShort } from "../../utils/formatting";
+import { observer } from "mobx-react-lite";
 
-const CommunityLeaderboards = (props: CommunityLeaderboardsProps) => (
+const CommunityLeaderboards = observer((props: CommunityLeaderboardsProps) => (
     <>
         {props.leaderboards.map((leaderboard, i) => (
             <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(leaderboard.gamemode)}/${leaderboard.id}`}>
@@ -10,7 +11,7 @@ const CommunityLeaderboards = (props: CommunityLeaderboardsProps) => (
             </UnstyledLink>
         ))}
     </>
-);
+));
 
 interface CommunityLeaderboardsProps {
     leaderboards: Leaderboard[];
