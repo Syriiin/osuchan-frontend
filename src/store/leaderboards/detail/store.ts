@@ -76,10 +76,10 @@ export class DetailStore {
             const leaderboardResponse = await http.get(this.resourceUrl);
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
-            const membersResponse = await http.get(`${this.resourceUrl}/members`);
+            const membersResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/members`));
             const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
             
-            const scoresResponse = await http.get(`${this.resourceUrl}/scores`);
+            const scoresResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/scores`));
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             runInAction(() => {
@@ -340,7 +340,7 @@ export class DetailStore {
             const membershipResponse = await http.get(`${this.resourceUrl}/members/${userId}`);
             const membership: Membership = membershipFromJson(membershipResponse.data);
             
-            const scoresResponse = await http.get(`${this.resourceUrl}/members/${userId}/scores`);
+            const scoresResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/members/${userId}/scores`));
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             runInAction(() => {
