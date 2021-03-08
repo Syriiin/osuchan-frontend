@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeObservable, computed } from "mobx";
+import { observable, action, runInAction, makeAutoObservable } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -40,27 +40,7 @@ export class DetailStore {
     readonly membershipScores = observable<Score>([]);
 
     constructor() {
-        makeObservable(this, {
-            leaderboardType: observable,
-            gamemode: observable,
-            leaderboardId: observable,
-            leaderboard: observable,
-            userMembership: observable,
-            membership: observable,
-            loadingStatus: observable,
-            loadingUserMembershipStatus: observable,
-            isDeletingLeaderboard: observable,
-            isUpdatingLeaderboard: observable,
-            isArchivingLeaderboard: observable,
-            isRestoringLeaderboard: observable,
-            loadingInvitesStatus: observable,
-            isInviting: observable,
-            isCancellingInvite: observable,
-            loadingMembershipStatus: observable,
-            isJoiningLeaderboard: observable,
-            isLeavingLeaderboard: observable,
-            isKickingMember: observable,
-            resourceUrl: computed,
+        makeAutoObservable(this, {
             loadLeaderboard: action,
             loadUserMembership: action,
             reloadLeaderboard: action,

@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction, makeObservable } from "mobx";
+import { observable, action, runInAction, makeAutoObservable } from "mobx";
 
 import http from "../../http";
 import notify from "../../notifications";
@@ -24,15 +24,7 @@ export class MeStore {
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
 
     constructor() {
-        makeObservable(this, {
-            user: observable,
-            loadingStatus: observable,
-            isAddingScores: observable,
-            isDecliningInvite: observable,
-            isCreatingScoreFilterPreset: observable,
-            isUpdatingScoreFilterPreset: observable,
-            isDeletingScoreFilterPreset: observable,
-            isAuthenticated: computed,
+        makeAutoObservable(this, {
             loadMe: action,
             addScores: action,
             declineInvite: action,

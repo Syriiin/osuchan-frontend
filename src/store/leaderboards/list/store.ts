@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeObservable } from "mobx";
+import { observable, action, runInAction, makeAutoObservable } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -26,12 +26,7 @@ export class ListStore {
     readonly communityMemberships = observable<Membership>([]);
 
     constructor() {
-        makeObservable(this, {
-            gamemode: observable,
-            globalLeaderboardsStatus: observable,
-            communityLeaderboardsStatus: observable,
-            communityMembershipsStatus: observable,
-            isCreatingLeaderboard: observable,
+        makeAutoObservable(this, {
             unload: action,
             loadGlobalLeaderboards: action,
             loadNextGlobalLeaderboardsPage: action,

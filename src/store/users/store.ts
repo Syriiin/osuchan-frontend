@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction, makeObservable } from "mobx";
+import { observable, action, runInAction, makeAutoObservable } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
@@ -37,21 +37,7 @@ export class UsersStore {
     readonly sandboxScores = observable<Score>([]);
 
     constructor() {
-        makeObservable(this, {
-            gamemode: observable,
-            currentUserStats: observable,
-            loadingStatus: observable,
-            loadingSandboxScoresStatus: observable,
-            globalMembershipsStatus: observable,
-            communityMembershipsStatus: observable,
-            extraPerformance: computed,
-            sandboxPerformance: computed,
-            sandboxScoreStyleAccuracy: computed,
-            sandboxScoreStyleBpm: computed,
-            sandboxScoreStyleLength: computed,
-            sandboxScoreStyleCircleSize: computed,
-            sandboxScoreStyleApproachRate: computed,
-            sandboxScoreStyleOverallDifficulty: computed,
+        makeAutoObservable(this, {
             loadUser: action,
             loadNextGlobalMembershipsPage: action,
             loadCommunityMemberships: action,
