@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { UnstyledLink, GlobalLeaderboardRow } from "../../components";
 import { formatGamemodeNameShort } from "../../utils/formatting";

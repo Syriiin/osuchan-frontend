@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Row } from "./Row";
 import { Leaderboard, Membership } from "../../store/models/leaderboards/types";

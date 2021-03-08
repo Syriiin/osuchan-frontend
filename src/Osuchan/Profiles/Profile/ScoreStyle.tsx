@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 
 import { Surface, DataTable, DataCell, NumberFormat } from "../../../components";

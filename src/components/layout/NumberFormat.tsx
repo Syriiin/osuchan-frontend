@@ -1,4 +1,3 @@
-import React from "react";
 import { Tooltip } from "./Tooltip";
 
 export const NumberFormat = (props: NumberFormatProps) => {

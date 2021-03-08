@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { Mods, Gamemode } from "../../store/models/common/enums";
 import { ThemeContext } from "styled-components";

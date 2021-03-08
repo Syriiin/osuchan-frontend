@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import ReactSwitch, { ReactSwitchProps } from "react-switch";
 import { ThemeContext } from "styled-components";
 

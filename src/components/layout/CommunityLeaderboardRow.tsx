@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Row } from "./Row";

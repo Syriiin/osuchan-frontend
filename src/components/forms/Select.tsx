@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 import { ThemeContext } from "styled-components";
 

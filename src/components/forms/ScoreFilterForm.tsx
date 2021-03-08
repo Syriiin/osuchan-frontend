@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";

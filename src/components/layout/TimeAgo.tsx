@@ -1,4 +1,3 @@
-import React from "react";
 import TimeAgoReact, { TimeAgoProps as TimeAgoReactProps } from "timeago-react";
 import { Tooltip } from "./Tooltip";
 

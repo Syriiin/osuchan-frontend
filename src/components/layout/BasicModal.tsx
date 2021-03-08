@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import { RootPortal } from "../helpers/RootPortal";
@@ -72,7 +72,7 @@ export const BasicModal = (props: BasicModalProps) => {
 }
 
 export interface BasicModalProps {
-    children: ReactNode;
+    children: React.ReactNode;
     open: boolean;
     onClose: () => void;
 }

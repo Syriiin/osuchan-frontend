@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Score } from "../../store/models/profiles/types";
 import { Row } from "./Row";

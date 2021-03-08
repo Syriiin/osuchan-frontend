@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Router, useLocation } from "react-router-dom";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 import { configure } from "mobx";

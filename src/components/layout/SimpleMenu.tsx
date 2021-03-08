@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, ReactNodeArray } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Menu = styled.div<MenuProps>`
@@ -71,8 +71,8 @@ export const SimpleMenu = (props: SimpleMenuProps) => {
 }
 
 export interface SimpleMenuProps {
-    triggerElement: ReactNode;
-    children: ReactNodeArray;
+    triggerElement: React.ReactNode;
+    children: React.ReactNodeArray;
     emptyText?: string;
     width?: number;
 }

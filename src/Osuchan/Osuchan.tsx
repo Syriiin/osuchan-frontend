@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";

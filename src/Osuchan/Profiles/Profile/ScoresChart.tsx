@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { FlexibleWidthXYPlot, HorizontalGridLines, MarkSeries, YAxis, Crosshair, MarkSeriesPoint } from "react-vis";
 
