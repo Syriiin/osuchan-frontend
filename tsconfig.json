@@ -19,7 +19,7 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
-        "experimentalDecorators": true
+        "useDefineForClassFields": true
     },
     "include": [
         "src"

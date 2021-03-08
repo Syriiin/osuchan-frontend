@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Router, useLocation } from "react-router-dom";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 import { configure } from "mobx";
-import "mobx-react-lite/batchingForReactDom";
 import ReactGA from "react-ga";
 
 import "react-vis/dist/style.css";

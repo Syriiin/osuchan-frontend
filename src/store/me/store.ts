@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from "mobx";
+import { observable, action, computed, runInAction, makeObservable } from "mobx";
 
 import http from "../../http";
 import notify from "../../notifications";
@@ -12,22 +12,40 @@ import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deseria
 import { ResourceStatus } from "../status";
 
 export class MeStore {
-    @observable user: User | null = null;
-    @observable loadingStatus = ResourceStatus.NotLoaded;
-    @observable isAddingScores = false;
-    @observable isDecliningInvite = false;
-    @observable isCreatingScoreFilterPreset = false;
-    @observable isUpdatingScoreFilterPreset = false;
-    @observable isDeletingScoreFilterPreset = false;
+    user: User | null = null;
+    loadingStatus = ResourceStatus.NotLoaded;
+    isAddingScores = false;
+    isDecliningInvite = false;
+    isCreatingScoreFilterPreset = false;
+    isUpdatingScoreFilterPreset = false;
+    isDeletingScoreFilterPreset = false;
 
     readonly invites = observable<Invite>([]);
     readonly scoreFilterPresets = observable<ScoreFilterPreset>([]);
 
-    @computed get isAuthenticated() {
+    constructor() {
+        makeObservable(this, {
+            user: observable,
+            loadingStatus: observable,
+            isAddingScores: observable,
+            isDecliningInvite: observable,
+            isCreatingScoreFilterPreset: observable,
+            isUpdatingScoreFilterPreset: observable,
+            isDeletingScoreFilterPreset: observable,
+            isAuthenticated: computed,
+            loadMe: action,
+            addScores: action,
+            declineInvite: action,
+            createScoreFilterPreset: action,
+            updateScoreFilterPreset: action,
+            deleteScoreFilterPreset: action
+        });
+    }
+
+    get isAuthenticated() {
         return this.user !== null;
     }
 
-    @action
     loadMe = async () => {
         this.loadingStatus = ResourceStatus.Loading;
         this.user = null;
@@ -67,7 +85,6 @@ export class MeStore {
         }
     }
 
-    @action
     addScores = async (userId: number, beatmapIds: number[], gamemodeId: Gamemode) => {
         this.isAddingScores = true;
 
@@ -94,7 +111,6 @@ export class MeStore {
         });
     }
 
-    @action
     declineInvite = async (leaderboardId: number) => {
         this.isDecliningInvite = true;
 
@@ -123,7 +139,6 @@ export class MeStore {
         });
     }
 
-    @action
     createScoreFilterPreset = async (name: string, scoreFilter: ScoreFilter) => {
         this.isCreatingScoreFilterPreset = true;
 
@@ -175,7 +190,6 @@ export class MeStore {
         });
     }
 
-    @action
     updateScoreFilterPreset = async (scoreFilterPresetId: number, name: string, scoreFilter: ScoreFilter) => {
         this.isUpdatingScoreFilterPreset = true;
 
@@ -227,7 +241,6 @@ export class MeStore {
         });
     }
 
-    @action
     deleteScoreFilterPreset = async (scoreFilterPresetId: number) => {
         this.isDeletingScoreFilterPreset = true;
 

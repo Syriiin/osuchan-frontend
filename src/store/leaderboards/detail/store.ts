@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from "mobx";
+import { observable, action, runInAction, makeObservable, computed } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -14,36 +14,74 @@ import { ResourceStatus } from "../../status";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
 
 export class DetailStore {
-    @observable leaderboardType: string | null = null;
-    @observable gamemode: Gamemode | null = null;
-    @observable leaderboardId: number | null = null;
-    @observable leaderboard: Leaderboard | null = null;
-    @observable userMembership: Membership | null = null;
-    @observable membership: Membership | null = null;
-    @observable loadingStatus = ResourceStatus.NotLoaded;
-    @observable loadingUserMembershipStatus = ResourceStatus.NotLoaded;
-    @observable isDeletingLeaderboard = false;
-    @observable isUpdatingLeaderboard = false;
-    @observable isArchivingLeaderboard = false;
-    @observable isRestoringLeaderboard = false;
-    @observable loadingInvitesStatus = ResourceStatus.NotLoaded;
-    @observable isInviting = false;
-    @observable isCancellingInvite = false;
-    @observable loadingMembershipStatus = ResourceStatus.NotLoaded;
-    @observable isJoiningLeaderboard = false;
-    @observable isLeavingLeaderboard = false;
-    @observable isKickingMember = false;
+    leaderboardType: string | null = null;
+    gamemode: Gamemode | null = null;
+    leaderboardId: number | null = null;
+    leaderboard: Leaderboard | null = null;
+    userMembership: Membership | null = null;
+    membership: Membership | null = null;
+    loadingStatus = ResourceStatus.NotLoaded;
+    loadingUserMembershipStatus = ResourceStatus.NotLoaded;
+    isDeletingLeaderboard = false;
+    isUpdatingLeaderboard = false;
+    isArchivingLeaderboard = false;
+    isRestoringLeaderboard = false;
+    loadingInvitesStatus = ResourceStatus.NotLoaded;
+    isInviting = false;
+    isCancellingInvite = false;
+    loadingMembershipStatus = ResourceStatus.NotLoaded;
+    isJoiningLeaderboard = false;
+    isLeavingLeaderboard = false;
+    isKickingMember = false;
 
     readonly rankings = observable<Membership>([]);
     readonly leaderboardScores = observable<Score>([]);
     readonly invites = observable<Invite>([]);
     readonly membershipScores = observable<Score>([]);
 
+    constructor() {
+        makeObservable(this, {
+            leaderboardType: observable,
+            gamemode: observable,
+            leaderboardId: observable,
+            leaderboard: observable,
+            userMembership: observable,
+            membership: observable,
+            loadingStatus: observable,
+            loadingUserMembershipStatus: observable,
+            isDeletingLeaderboard: observable,
+            isUpdatingLeaderboard: observable,
+            isArchivingLeaderboard: observable,
+            isRestoringLeaderboard: observable,
+            loadingInvitesStatus: observable,
+            isInviting: observable,
+            isCancellingInvite: observable,
+            loadingMembershipStatus: observable,
+            isJoiningLeaderboard: observable,
+            isLeavingLeaderboard: observable,
+            isKickingMember: observable,
+            resourceUrl: computed,
+            loadLeaderboard: action,
+            loadUserMembership: action,
+            reloadLeaderboard: action,
+            updateLeaderboard: action,
+            archiveLeaderboard: action,
+            restoreLeaderboard: action,
+            deleteLeaderboard: action,
+            loadInvites: action,
+            invitePlayers: action,
+            cancelInvite: action,
+            loadMembership: action,
+            joinLeaderboard: action,
+            leaveLeaderboard: action,
+            kickMember: action
+        });
+    }
+
     get resourceUrl(): string {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    @action
     loadLeaderboard = async (leaderboardType: string, gamemode: Gamemode, leaderboardId: number) => {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;
@@ -81,7 +119,6 @@ export class DetailStore {
         }
     }
 
-    @action
     loadUserMembership = async (userId: number) => {
         this.loadingUserMembershipStatus = ResourceStatus.Loading;
         this.userMembership = null;
@@ -104,10 +141,8 @@ export class DetailStore {
         }
     }
 
-    @action
     reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
 
-    @action
     updateLeaderboard = async (leaderboardData: Partial<Leaderboard>) => {
         this.isUpdatingLeaderboard = true;
 
@@ -141,7 +176,6 @@ export class DetailStore {
         });
     }
 
-    @action
     archiveLeaderboard = async () => {
         this.isArchivingLeaderboard = true;
 
@@ -172,7 +206,6 @@ export class DetailStore {
         });
     }
 
-    @action
     restoreLeaderboard = async () => {
         this.isRestoringLeaderboard = true;
 
@@ -203,7 +236,6 @@ export class DetailStore {
         });
     }
 
-    @action
     deleteLeaderboard = async () => {
         this.isDeletingLeaderboard = true;
 
@@ -237,7 +269,6 @@ export class DetailStore {
         });
     }
 
-    @action
     loadInvites = async () => {
         this.loadingInvitesStatus = ResourceStatus.Loading;
         this.invites.clear();
@@ -260,7 +291,6 @@ export class DetailStore {
         }
     }
 
-    @action
     invitePlayers = async (userIds: number[], message: string) => {
         this.isInviting = true;
 
@@ -294,7 +324,6 @@ export class DetailStore {
         });
     }
 
-    @action
     cancelInvite = async (userId: number) => {
         this.isCancellingInvite = true;
 
@@ -323,7 +352,6 @@ export class DetailStore {
         });
     }
 
-    @action    
     loadMembership = async (userId: number) => {
         this.loadingMembershipStatus = ResourceStatus.Loading;
         this.membership = null;
@@ -351,7 +379,6 @@ export class DetailStore {
         }
     }
 
-    @action
     joinLeaderboard = async () => {
         this.isJoiningLeaderboard = true;
 
@@ -381,7 +408,6 @@ export class DetailStore {
         });
     }
 
-    @action
     leaveLeaderboard = async () => {
         this.isLeavingLeaderboard = true;
 
@@ -410,7 +436,6 @@ export class DetailStore {
         });
     }
 
-    @action
     kickMember = async () => {
         this.isKickingMember = true;
 

@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from "mobx";
+import { observable, action, runInAction, makeObservable } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -14,18 +14,35 @@ import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { PaginatedResourceStatus } from "../../status";
 
 export class ListStore {
-    @observable gamemode: Gamemode | null = null;
-    @observable globalLeaderboardsStatus = PaginatedResourceStatus.NotLoaded;
-    @observable communityLeaderboardsStatus = PaginatedResourceStatus.NotLoaded;
-    @observable communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
-    @observable isCreatingLeaderboard = false;
+    gamemode: Gamemode | null = null;
+    globalLeaderboardsStatus = PaginatedResourceStatus.NotLoaded;
+    communityLeaderboardsStatus = PaginatedResourceStatus.NotLoaded;
+    communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
+    isCreatingLeaderboard = false;
 
     readonly globalLeaderboards = observable<Leaderboard>([]);
     readonly globalMemberships = observable<Membership>([]);
     readonly communityLeaderboards = observable<Leaderboard>([]);
     readonly communityMemberships = observable<Membership>([]);
 
-    @action
+    constructor() {
+        makeObservable(this, {
+            gamemode: observable,
+            globalLeaderboardsStatus: observable,
+            communityLeaderboardsStatus: observable,
+            communityMembershipsStatus: observable,
+            isCreatingLeaderboard: observable,
+            unload: action,
+            loadGlobalLeaderboards: action,
+            loadNextGlobalLeaderboardsPage: action,
+            loadCommunityLeaderboards: action,
+            loadNextCommunityLeaderboardsPage: action,
+            loadCommunityMemberships: action,
+            loadNextCommunityMembershipsPage: action,
+            createLeaderboard: action
+        });
+    }
+
     unload = async () => {
         this.gamemode = null;
         this.globalLeaderboardsStatus = PaginatedResourceStatus.NotLoaded;
@@ -39,7 +56,6 @@ export class ListStore {
         this.communityMemberships.clear();
     }
 
-    @action
     loadGlobalLeaderboards = async (gamemode: Gamemode, userId?: number) => {
         this.globalLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
@@ -93,7 +109,6 @@ export class ListStore {
         }
     }
 
-    @action
     loadNextGlobalLeaderboardsPage = async (userId?: number) => {
         this.globalLeaderboardsStatus = PaginatedResourceStatus.LoadingMore;
 
@@ -144,7 +159,6 @@ export class ListStore {
         }
     }
 
-    @action
     loadCommunityLeaderboards = async (gamemode: Gamemode) => {
         this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
@@ -177,7 +191,6 @@ export class ListStore {
         }
     }
 
-    @action
     loadNextCommunityLeaderboardsPage = async () => {
         this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingMore;
 
@@ -208,7 +221,6 @@ export class ListStore {
         }
     }
 
-    @action
     loadCommunityMemberships = async (gamemode: Gamemode, userId: number) => {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
@@ -242,7 +254,6 @@ export class ListStore {
         }
     }
 
-    @action
     loadNextCommunityMembershipsPage = async (userId: number) => {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
@@ -273,7 +284,6 @@ export class ListStore {
         }
     }
 
-    @action
     createLeaderboard = async (gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, iconUrl: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
         this.isCreatingLeaderboard = true;
 

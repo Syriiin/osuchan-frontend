@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from "mobx";
+import { observable, action, computed, runInAction, makeObservable } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
@@ -24,51 +24,76 @@ function calculateScoreStyleValue(values: number[]) {
 }
 
 export class UsersStore {
-    @observable gamemode: Gamemode | null = null;
-    @observable currentUserStats: UserStats | null = null;
-    @observable loadingStatus = ResourceStatus.NotLoaded;
-    @observable loadingSandboxScoresStatus = ResourceStatus.NotLoaded;
-    @observable globalMembershipsStatus = PaginatedResourceStatus.NotLoaded;
-    @observable communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
+    gamemode: Gamemode | null = null;
+    currentUserStats: UserStats | null = null;
+    loadingStatus = ResourceStatus.NotLoaded;
+    loadingSandboxScoresStatus = ResourceStatus.NotLoaded;
+    globalMembershipsStatus = PaginatedResourceStatus.NotLoaded;
+    communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
 
     readonly scores = observable<Score>([]);
     readonly globalMemberships = observable<Membership>([]);
     readonly communityMemberships = observable<Membership>([]);
     readonly sandboxScores = observable<Score>([]);
 
-    @computed get extraPerformance() {
+    constructor() {
+        makeObservable(this, {
+            gamemode: observable,
+            currentUserStats: observable,
+            loadingStatus: observable,
+            loadingSandboxScoresStatus: observable,
+            globalMembershipsStatus: observable,
+            communityMembershipsStatus: observable,
+            extraPerformance: computed,
+            sandboxPerformance: computed,
+            sandboxScoreStyleAccuracy: computed,
+            sandboxScoreStyleBpm: computed,
+            sandboxScoreStyleLength: computed,
+            sandboxScoreStyleCircleSize: computed,
+            sandboxScoreStyleApproachRate: computed,
+            sandboxScoreStyleOverallDifficulty: computed,
+            loadUser: action,
+            loadNextGlobalMembershipsPage: action,
+            loadCommunityMemberships: action,
+            loadNextCommunityMembershipsPage: action,
+            loadSandboxScores: action,
+            updateSandboxScore: action,
+            fetchBeatmapFile: action
+        });
+    }
+
+    get extraPerformance() {
         return this.currentUserStats ? this.currentUserStats.pp - this.scores.reduce((total, score, i) => total + score.pp * 0.95 ** i, 0) : 0;
     }
 
-    @computed get sandboxPerformance() {
+    get sandboxPerformance() {
         return this.sandboxScores.reduce((total, score, i) => total + score.pp * 0.95 ** i, 0) + this.extraPerformance;
     }
 
-    @computed get sandboxScoreStyleAccuracy() {
+    get sandboxScoreStyleAccuracy() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.accuracy)) || 0;
     }
 
-    @computed get sandboxScoreStyleBpm() {
+    get sandboxScoreStyleBpm() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.bpm)) || 0;
     }
 
-    @computed get sandboxScoreStyleLength() {
+    get sandboxScoreStyleLength() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.length)) || 0;
     }
 
-    @computed get sandboxScoreStyleCircleSize() {
+    get sandboxScoreStyleCircleSize() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.circleSize)) || 0;
     }
 
-    @computed get sandboxScoreStyleApproachRate() {
+    get sandboxScoreStyleApproachRate() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.approachRate)) || 0;
     }
 
-    @computed get sandboxScoreStyleOverallDifficulty() {
+    get sandboxScoreStyleOverallDifficulty() {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.overallDifficulty)) || 0;
     }
 
-    @action
     loadUser = async (userString: string, gamemode: Gamemode) => {
         this.gamemode = gamemode;
         this.currentUserStats = null;
@@ -125,7 +150,6 @@ export class UsersStore {
         }
     }
 
-    @action
     loadNextGlobalMembershipsPage = async () => {
         this.globalMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
@@ -156,7 +180,6 @@ export class UsersStore {
         }
     }
 
-    @action
     loadCommunityMemberships = async () => {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
         
@@ -189,7 +212,6 @@ export class UsersStore {
         }
     }
 
-    @action
     loadNextCommunityMembershipsPage = async () => {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
@@ -220,7 +242,6 @@ export class UsersStore {
         }
     }
 
-    @action
     loadSandboxScores = async (scoreSet: ScoreSet, scoreFilter: ScoreFilter) => {
         this.loadingSandboxScoresStatus = ResourceStatus.Loading;
 
@@ -276,7 +297,6 @@ export class UsersStore {
         }
     }
 
-    @action
     updateSandboxScore = async (score: Score, mods: Mods, bestCombo: number, count100: number, count50: number, countMiss: number) => {
         const beatmap = score.beatmap!;
         const totalObjects = score.count300 + score.count100 + score.count50 + score.countMiss;
@@ -329,7 +349,6 @@ export class UsersStore {
         notify.neutral("Sandbox scores recalculated");
     }
 
-    @action
     fetchBeatmapFile = async (beatmapId: number) => {
         // Check idb cache for map and return if found
         const cachedBeatmapData = await getBeatmap(beatmapId);
