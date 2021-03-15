@@ -100,14 +100,14 @@ const LeaderboardList = observer(() => {
                 <SurfaceHeaderContainer>
                     <SurfaceTitle>Leaderboards</SurfaceTitle>
                     <SwitcherButtonGroup>
-                        <Button as={UnstyledLink} to={`../global/${params.gamemode}`} active={params.leaderboardType === "global"}>Global</Button>
-                        <Button as={UnstyledLink} to={`../community/${params.gamemode}`} active={params.leaderboardType === "community"}>Community</Button>
+                        <Button as={UnstyledLink} to={`../global/${params.gamemode}`} $active={params.leaderboardType === "global"}>Global</Button>
+                        <Button as={UnstyledLink} to={`../community/${params.gamemode}`} $active={params.leaderboardType === "community"}>Community</Button>
                     </SwitcherButtonGroup>
                     <SwitcherButtonGroup>
-                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/osu`} active={params.gamemode === "osu"}>osu!</Button>
-                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/taiko`} active={params.gamemode === "taiko"}>osu!taiko</Button>
-                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/catch`} active={params.gamemode === "catch"}>osu!catch</Button>
-                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/mania`} active={params.gamemode === "mania"}>osu!mania</Button>
+                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/osu`} $active={params.gamemode === "osu"}>osu!</Button>
+                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/taiko`} $active={params.gamemode === "taiko"}>osu!taiko</Button>
+                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/catch`} $active={params.gamemode === "catch"}>osu!catch</Button>
+                        <Button as={UnstyledLink} to={`../${params.leaderboardType}/mania`} $active={params.gamemode === "mania"}>osu!mania</Button>
                     </SwitcherButtonGroup>
                 </SurfaceHeaderContainer>
                 

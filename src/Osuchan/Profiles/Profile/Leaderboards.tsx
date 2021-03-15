@@ -35,8 +35,8 @@ const Leaderboards = observer(() => {
             <SurfaceHeaderContainer>
                 <SurfaceTitle>Leaderboards</SurfaceTitle>
                 <ButtonGroup>
-                    <Button active={leaderboardType === "global"} action={handleGlobalClick}>Global</Button>
-                    <Button active={leaderboardType === "community"} action={handleCommunityClick}>Community</Button>
+                    <Button $active={leaderboardType === "global"} action={handleGlobalClick}>Global</Button>
+                    <Button $active={leaderboardType === "community"} action={handleCommunityClick}>Community</Button>
                 </ButtonGroup>
             </SurfaceHeaderContainer>
             {leaderboardType === "global" && globalMemberships.map((membership, i) => (

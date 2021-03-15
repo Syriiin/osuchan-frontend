@@ -13,7 +13,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     background-color: ${props => 
         props.negative ? props.theme.colours.negative :
         props.positive ? props.theme.colours.positive :
-        props.active ? props.theme.colours.mystic :
+        props.$active ? props.theme.colours.mystic :
         props.theme.colours.currant
     };
     border: none;
@@ -36,7 +36,7 @@ interface StyledButtonProps {
     minWidth?: number;
     negative?: boolean;
     positive?: boolean;
-    active?: boolean;
+    $active?: boolean;
 }
 
 export const Button = (props: ButtonProps & ComponentProps<typeof StyledButton>) => {

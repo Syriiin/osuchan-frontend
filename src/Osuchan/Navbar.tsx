@@ -27,18 +27,18 @@ const LinksContainer = styled.div`
 const NavbarLink = styled(Link)<NavbarLinkProps>`
     margin: 10px;
     font-size: 1.5em;
-    font-weight: ${props => props.active ? "normal" : "lighter"};
-    color: ${props => props.active ? props.theme.colours.mango : "#fff"};
+    font-weight: ${props => props.$active ? "normal" : "lighter"};
+    color: ${props => props.$active ? props.theme.colours.mango : "#fff"};
     text-decoration: none;
 
     &:hover {
         text-decoration: none;
-        color: ${props => props.active ? props.theme.colours.mango : props.theme.colours.timber};
+        color: ${props => props.$active ? props.theme.colours.mango : props.theme.colours.timber};
     }
 `;
 
 interface NavbarLinkProps extends LinkProps {
-    active?: boolean;
+    $active?: boolean;
 }
 
 const TitleContainer = styled.div`
@@ -189,8 +189,8 @@ const Navbar = observer(() => {
         <NavbarWrapper>
             <LinksContainer>
                 {/* Links */}
-                <NavbarLink to="/" active={location.pathname === "/"}>Home</NavbarLink>
-                <NavbarLink to={leaderboardsMatch?.url ?? "/leaderboards/global/osu"} active={leaderboardsMatch !== null}>Leaderboards</NavbarLink>
+                <NavbarLink to="/" $active={location.pathname === "/"}>Home</NavbarLink>
+                <NavbarLink to={leaderboardsMatch?.url ?? "/leaderboards/global/osu"} $active={leaderboardsMatch !== null}>Leaderboards</NavbarLink>
             </LinksContainer>
 
             {/* osu!chan title */}
