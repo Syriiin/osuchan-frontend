@@ -1,6 +1,19 @@
+import React, { ComponentProps } from "react";
 import styled from "styled-components";
 
-export const DataTable = styled.table`
+export const DataTable = (props: DataTableProps & ComponentProps<typeof DataTableContainer>) => (
+    <DataTableContainer {...props}>
+        <tbody>
+            {props.children}
+        </tbody>
+    </DataTableContainer>
+);
+
+interface DataTableProps {
+    children: React.ReactNode;
+}
+
+const DataTableContainer = styled.table`
     width: 100%;
 `;
 
