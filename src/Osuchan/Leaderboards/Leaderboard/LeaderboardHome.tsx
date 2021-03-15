@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
-import { observer } from "mobx-react-lite";
+import { Observer, observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -407,12 +407,16 @@ const LeaderboardHome = observer(() => {
             )}
             <Route exact path={`${match.path}/invites`}>
                 {props => (
-                    <>
-                        <ManageInvitesModal open={props.match !== null && leaderboard !== null} onClose={() => history.push(match.url)} />
-                        {props.match !== null && leaderboard && leaderboard.ownerId !== meStore.user?.osuUserId && (
-                            <Redirect to={match.url} />
+                    <Observer>
+                        {() => (
+                            <>
+                                <ManageInvitesModal open={props.match !== null && leaderboard !== null} onClose={() => history.push(match.url)} />
+                                {props.match !== null && leaderboard && leaderboard.ownerId !== meStore.user?.osuUserId && (
+                                    <Redirect to={match.url} />
+                                )}
+                            </>
                         )}
-                    </>
+                    </Observer>
                 )}
             </Route>
             <Route exact path={`${match.path}/members/:userId`}>
