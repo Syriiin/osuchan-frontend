@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 import { modsAsArray } from "../../utils/osu";
@@ -14,11 +15,11 @@ export const ModIcons = (props: ModIconsProps) => {
 
     return (
         <>
-            {mods.map((mod, i) => (
-                <>
-                    <ModImage data-tip={formatModName(mod)} data-for={`mod-${mod}`} key={i} src={`/static/images/mods/mod_${formatModNameShort(mod)}${props.small ? "" : "@2x"}.png`} />
+            {mods.map(mod => (
+                <React.Fragment key={mod}>
+                    <ModImage data-tip={formatModName(mod)} data-for={`mod-${mod}`} src={`/static/images/mods/mod_${formatModNameShort(mod)}${props.small ? "" : "@2x"}.png`} />
                     <Tooltip id={`mod-${mod}`} />
-                </>
+                </React.Fragment>
             ))}
         </>
     );
