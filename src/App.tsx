@@ -23,8 +23,7 @@ configure({
     enforceActions: "always",
     computedRequiresReaction: true,
     reactionRequiresObservable: true,
-    observableRequiresReaction: true,
-    disableErrorBoundaries: true
+    observableRequiresReaction: true
 });
 
 const GlobalStyle = createGlobalStyle`
