@@ -38,12 +38,11 @@ const Profile = observer(() => {
     const usersStore = store.usersStore;
 
     // use effect to fetch profile data
-    const { loadUser } = usersStore;
     const { userString } = params;
     const gamemodeId = gamemodeIdFromName(params.gamemodeName);
     useEffect(() => {
-        loadUser(userString, gamemodeId);
-    }, [loadUser, userString, gamemodeId]);
+        usersStore.loadUser(userString, gamemodeId);
+    }, [usersStore, userString, gamemodeId]);
 
     const userStats = usersStore.currentUserStats;
     const osuUser = userStats?.osuUser;

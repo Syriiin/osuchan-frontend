@@ -94,10 +94,10 @@ const Invites = observer(() => {
     const meStore = store.meStore;
 
     // use effect to fetch me data (already doing this in nav, but makes sense to refetch incase changes such as more invites)
-    const { loadMe, loadingStatus, invites } = meStore;
+    const { loadingStatus, invites } = meStore;
     useEffect(() => {
-        loadMe();
-    }, [loadMe]);
+        meStore.loadMe();
+    }, [meStore]);
 
     return (
         <>

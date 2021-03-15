@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeAutoObservable } from "mobx";
+import { observable, makeAutoObservable, flow, flowResult } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
@@ -38,13 +38,13 @@ export class UsersStore {
 
     constructor() {
         makeAutoObservable(this, {
-            loadUser: action,
-            loadNextGlobalMembershipsPage: action,
-            loadCommunityMemberships: action,
-            loadNextCommunityMembershipsPage: action,
-            loadSandboxScores: action,
-            updateSandboxScore: action,
-            fetchBeatmapFile: action
+            loadUser: flow,
+            loadNextGlobalMembershipsPage: flow,
+            loadCommunityMemberships: flow,
+            loadNextCommunityMembershipsPage: flow,
+            loadSandboxScores: flow,
+            updateSandboxScore: flow,
+            fetchBeatmapFile: flow
         });
     }
 
@@ -80,7 +80,7 @@ export class UsersStore {
         return calculateScoreStyleValue(this.sandboxScores.map(score => score.overallDifficulty)) || 0;
     }
 
-    loadUser = async (userString: string, gamemode: Gamemode) => {
+    *loadUser(userString: string, gamemode: Gamemode): any {
         this.gamemode = gamemode;
         this.currentUserStats = null;
         this.scores.clear();
@@ -92,7 +92,7 @@ export class UsersStore {
         this.communityMembershipsStatus = PaginatedResourceStatus.NotLoaded;
 
         try {
-            const userStatsResponse = await http.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {
+            const userStatsResponse = yield http.get(`/api/profiles/users/${userString}/stats/${gamemode}`, {
                 params: {
                     "user_id_type": "username"
                 }
@@ -101,10 +101,10 @@ export class UsersStore {
 
             const userId = userStats.osuUserId;
 
-            const scoresResponse = await http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
+            const scoresResponse = yield http.get(`/api/profiles/users/${userId}/stats/${gamemode}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
-            
-            const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
+
+            const globalMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
                 params: {
                     "offset": 0,
                     "limit": 25
@@ -112,127 +112,111 @@ export class UsersStore {
             });
             const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
 
-            runInAction(() => {
-                this.currentUserStats = userStats;
-                this.scores.replace(scores);
-                this.globalMemberships.replace(globalMemberships);
-                this.sandboxScores.replace(scores);
+            this.currentUserStats = userStats;
+            this.scores.replace(scores);
+            this.globalMemberships.replace(globalMemberships);
+            this.sandboxScores.replace(scores);
 
-                this.loadingStatus = ResourceStatus.Loaded;
-                
-                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+            this.loadingStatus = ResourceStatus.Loaded;
+
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingStatus = ResourceStatus.Error;
-                this.globalMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.loadingStatus = ResourceStatus.Error;
+            this.globalMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadNextGlobalMembershipsPage = async () => {
+    *loadNextGlobalMembershipsPage(): any {
         this.globalMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const globalMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/global/${this.gamemode}`, {
+            const globalMembershipsResponse = yield http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/global/${this.gamemode}`, {
                 params: {
                     "offset": this.globalMemberships.length,
                     "limit": 25
                 }
             });
             const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-            
-            runInAction(() => {
-                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
-                
-                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.globalMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.globalMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadCommunityMemberships = async () => {
+    *loadCommunityMemberships(): any {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
-        
+
         this.communityMemberships.clear();
 
         try {
-            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
+            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
                 params: {
                     "offset": 0,
                     "limit": 5
                 }
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-            
-            runInAction(() => {
-                this.communityMemberships.replace(communityMemberships);
-                
-                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityMemberships.replace(communityMemberships);
+
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.communityMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadNextCommunityMembershipsPage = async () => {
+    *loadNextCommunityMembershipsPage(): any {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const communityMembershipsResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
+            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/memberships/community/${this.gamemode}`, {
                 params: {
                     "offset": this.communityMemberships.length,
                     "limit": 10
                 }
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-            
-            runInAction(() => {
-                this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
-                
-                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.communityMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadSandboxScores = async (scoreSet: ScoreSet, scoreFilter: ScoreFilter) => {
+    *loadSandboxScores(scoreSet: ScoreSet, scoreFilter: ScoreFilter): any {
         this.loadingSandboxScoresStatus = ResourceStatus.Loading;
 
         try {
-            const scoresResponse = await http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
+            const scoresResponse = yield http.get(`/api/profiles/users/${this.currentUserStats?.osuUserId}/stats/${this.currentUserStats?.gamemode}/scores`, {
                 params: {
                     "score_set": scoreSet,
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -259,19 +243,15 @@ export class UsersStore {
             // transform scores into their intended form for abnormal score sets
             scores = unchokeForScoreSet(scores, scoreSet);
 
-            runInAction(() => {
-                this.sandboxScores.replace(scores);
+            this.sandboxScores.replace(scores);
 
-                this.loadingSandboxScoresStatus = ResourceStatus.Loaded;
-            });
+            this.loadingSandboxScoresStatus = ResourceStatus.Loaded;
 
             notify.neutral("Sandbox scores loaded");
         } catch (error) {
             console.log(error);
-            
-            runInAction(() => {
-                this.loadingSandboxScoresStatus = ResourceStatus.Error;
-            });
+
+            this.loadingSandboxScoresStatus = ResourceStatus.Error;
 
             const errorMessage = error.response.data.detail;
 
@@ -283,7 +263,7 @@ export class UsersStore {
         }
     }
 
-    updateSandboxScore = async (score: Score, mods: Mods, bestCombo: number, count100: number, count50: number, countMiss: number) => {
+    *updateSandboxScore(score: Score, mods: Mods, bestCombo: number, count100: number, count50: number, countMiss: number): any {
         const beatmap = score.beatmap!;
         const totalObjects = score.count300 + score.count100 + score.count50 + score.countMiss;
 
@@ -293,7 +273,7 @@ export class UsersStore {
         score.count100 = count100;
         score.count50 = count50;
         score.countMiss = countMiss;
-        
+
         score.accuracy = calculateAccuracy(this.currentUserStats!.gamemode, score.count300, score.count100, score.count50, score.countMiss);
         score.bpm = calculateBpm(beatmap.bpm, score.mods);
         score.length = calculateLength(beatmap.drainTime, score.mods);
@@ -301,9 +281,9 @@ export class UsersStore {
         score.approachRate = calculateApproachRate(beatmap.approachRate, score.mods);
         score.overallDifficulty = calculateOverallDifficulty(beatmap.overallDifficulty, score.mods);
         score.result = getScoreResult(countMiss, bestCombo, beatmap.maxCombo);
-        
+
         // PP calc
-        const beatmapFile = await this.fetchBeatmapFile(beatmap.id);
+        const beatmapFile = yield flowResult(this.fetchBeatmapFile(beatmap.id));
         const parser = new ojsama.parser().feed(beatmapFile);
         const stars = new ojsama.diff().calc({
             map: parser.map,
@@ -323,27 +303,25 @@ export class UsersStore {
             n50: score.count50
         });
 
-        runInAction(() => {
-            score.starRating = stars.total;
-            score.pp = pp.total;
-            score.nochokePp = nochokePp.total;
-    
-            // Sort observable array
-            this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
-        });
+        score.starRating = stars.total;
+        score.pp = pp.total;
+        score.nochokePp = nochokePp.total;
+
+        // Sort observable array
+        this.sandboxScores.replace(this.sandboxScores.slice().sort((a, b) => b.pp - a.pp));
 
         notify.neutral("Sandbox scores recalculated");
     }
 
-    fetchBeatmapFile = async (beatmapId: number) => {
+    *fetchBeatmapFile(beatmapId: number): any {
         // Check idb cache for map and return if found
-        const cachedBeatmapData = await getBeatmap(beatmapId);
+        const cachedBeatmapData = yield getBeatmap(beatmapId);
         if (cachedBeatmapData) {
             return cachedBeatmapData;
         }
 
         // Fetch beatmap from server
-        const response = await http.get(`/beatmapfiles/${beatmapId}`);
+        const response = yield http.get(`/beatmapfiles/${beatmapId}`);
         const beatmapData = response.data;
 
         // Save to idb cache

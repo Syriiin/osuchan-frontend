@@ -33,7 +33,7 @@ const LeaderboardList = observer(() => {
     const listStore = store.leaderboardsStore.listStore;
     const meStore = store.meStore;
 
-    const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships, unload, loadGlobalLeaderboards, loadCommunityLeaderboards, loadCommunityMemberships } = listStore;
+    const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships } = listStore;
     const { user, isAuthenticated } = meStore;
 
     const localStore = useLocalObservable(() => ({
@@ -48,25 +48,25 @@ const LeaderboardList = observer(() => {
 
     useEffect(() => {
         return () => {
-            unload();
+            listStore.unload();
         }
-    }, [unload]);
+    }, [listStore]);
 
     useAutorun(() => {
-        unload();
+        listStore.unload();
 
         // Load community leaderboards
         if (localStore.leaderboardType === "community") {
-            loadCommunityLeaderboards(localStore.gamemode);
+            listStore.loadCommunityLeaderboards(localStore.gamemode);
 
             if (isAuthenticated) {
-                loadCommunityMemberships(localStore.gamemode, user!.osuUserId);
+                listStore.loadCommunityMemberships(localStore.gamemode, user!.osuUserId);
             }
         }
 
         // Load global leaderboards
         if (localStore.leaderboardType === "global") {
-            loadGlobalLeaderboards(localStore.gamemode, user?.osuUserId);
+            listStore.loadGlobalLeaderboards(localStore.gamemode, user?.osuUserId);
         }
     });
 

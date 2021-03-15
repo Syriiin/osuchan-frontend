@@ -26,10 +26,9 @@ const Osuchan = () => {
     const meStore = store.meStore;
     
     // call fetch me action on mount
-    const { loadMe } = meStore;
     useEffect(() => {
-        loadMe();
-    }, [loadMe]);
+        meStore.loadMe();
+    }, [meStore]);
 
     return (
         <OsuchanWrapper>

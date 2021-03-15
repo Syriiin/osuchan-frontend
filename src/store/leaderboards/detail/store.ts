@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeAutoObservable } from "mobx";
+import { observable, action, makeAutoObservable, flow } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -41,20 +41,20 @@ export class DetailStore {
 
     constructor() {
         makeAutoObservable(this, {
-            loadLeaderboard: action,
-            loadUserMembership: action,
+            loadLeaderboard: flow,
+            loadUserMembership: flow,
             reloadLeaderboard: action,
-            updateLeaderboard: action,
-            archiveLeaderboard: action,
-            restoreLeaderboard: action,
-            deleteLeaderboard: action,
-            loadInvites: action,
-            invitePlayers: action,
-            cancelInvite: action,
-            loadMembership: action,
-            joinLeaderboard: action,
-            leaveLeaderboard: action,
-            kickMember: action
+            updateLeaderboard: flow,
+            archiveLeaderboard: flow,
+            restoreLeaderboard: flow,
+            deleteLeaderboard: flow,
+            loadInvites: flow,
+            invitePlayers: flow,
+            cancelInvite: flow,
+            loadMembership: flow,
+            joinLeaderboard: flow,
+            leaveLeaderboard: flow,
+            kickMember: flow
         });
     }
 
@@ -62,7 +62,9 @@ export class DetailStore {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    loadLeaderboard = async (leaderboardType: string, gamemode: Gamemode, leaderboardId: number) => {
+    reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
+
+    *loadLeaderboard(leaderboardType: string, gamemode: Gamemode, leaderboardId: number): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;
         this.gamemode = gamemode;
@@ -73,70 +75,58 @@ export class DetailStore {
         this.leaderboardScores.clear();
 
         try {
-            const leaderboardResponse = await http.get(this.resourceUrl);
+            const leaderboardResponse = yield http.get(this.resourceUrl);
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
-            const membersResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/members`));
+            const membersResponse = yield http.get(`${this.resourceUrl}/members`);
             const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
-            
-            const scoresResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/scores`));
+
+            const scoresResponse = yield http.get(`${this.resourceUrl}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            runInAction(() => {
-                this.leaderboard = leaderboard;
-                this.rankings.replace(members);
-                // transform scores into their intended form for abnormal score sets
-                this.leaderboardScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
+            this.leaderboard = leaderboard;
+            this.rankings.replace(members);
+            // transform scores into their intended form for abnormal score sets
+            this.leaderboardScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
 
-                this.loadingStatus = ResourceStatus.Loaded;
-            });
+            this.loadingStatus = ResourceStatus.Loaded;
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingStatus = ResourceStatus.Error;
-            });
+            this.loadingStatus = ResourceStatus.Error;
         }
     }
 
-    loadUserMembership = async (userId: number) => {
+    *loadUserMembership(userId: number): any {
         this.loadingUserMembershipStatus = ResourceStatus.Loading;
         this.userMembership = null;
 
         try {
-            const membershipResponse = await http.get(`${this.resourceUrl}/members/${userId}`);
+            const membershipResponse = yield http.get(`${this.resourceUrl}/members/${userId}`);
             const membership = membershipFromJson(membershipResponse.data);
 
-            runInAction(() => {
-                this.userMembership = membership;
+            this.userMembership = membership;
 
-                this.loadingUserMembershipStatus = ResourceStatus.Loaded;
-            });
+            this.loadingUserMembershipStatus = ResourceStatus.Loaded;
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingUserMembershipStatus = ResourceStatus.Error;
-            });
+            this.loadingUserMembershipStatus = ResourceStatus.Error;
         }
     }
 
-    reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
-
-    updateLeaderboard = async (leaderboardData: Partial<Leaderboard>) => {
+    *updateLeaderboard(leaderboardData: Partial<Leaderboard>): any {
         this.isUpdatingLeaderboard = true;
 
         try {
-            const leaderboardResponse = await http.patch(this.resourceUrl, {
+            const leaderboardResponse = yield http.patch(this.resourceUrl, {
                 "access_type": leaderboardData.accessType,
                 "name": leaderboardData.name,
                 "description": leaderboardData.description,
                 "icon_url": leaderboardData.iconUrl
             });
 
-            runInAction(() => {
-                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
-            });
+            this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard updated");
         } catch (error) {
@@ -151,22 +141,18 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isUpdatingLeaderboard = false;
-        });
+        this.isUpdatingLeaderboard = false;
     }
 
-    archiveLeaderboard = async () => {
+    *archiveLeaderboard(): any {
         this.isArchivingLeaderboard = true;
 
         try {
-            const leaderboardResponse = await http.patch(this.resourceUrl, {
+            const leaderboardResponse = yield http.patch(this.resourceUrl, {
                 "archived": true
             });
 
-            runInAction(() => {
-                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
-            });
+            this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard archived");
         } catch (error) {
@@ -181,22 +167,18 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isArchivingLeaderboard = false;
-        });
+        this.isArchivingLeaderboard = false;
     }
 
-    restoreLeaderboard = async () => {
+    *restoreLeaderboard(): any {
         this.isRestoringLeaderboard = true;
 
         try {
-            const leaderboardResponse = await http.patch(this.resourceUrl, {
+            const leaderboardResponse = yield http.patch(this.resourceUrl, {
                 "archived": false
             });
 
-            runInAction(() => {
-                this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
-            });
+            this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard restored");
         } catch (error) {
@@ -211,25 +193,21 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isRestoringLeaderboard = false;
-        });
+        this.isRestoringLeaderboard = false;
     }
 
-    deleteLeaderboard = async () => {
+    *deleteLeaderboard() {
         this.isDeletingLeaderboard = true;
 
         try {
-            await http.delete(this.resourceUrl);
+            yield http.delete(this.resourceUrl);
 
             // Navigate to leaderboard list page after deletion
             history.push(`/leaderboards/community/${formatGamemodeNameShort(this.gamemode!)}`);
 
-            runInAction(() => {
-                this.leaderboard = null;
-                this.rankings.clear();
-                this.leaderboardScores.clear();
-            });
+            this.leaderboard = null;
+            this.rankings.clear();
+            this.leaderboardScores.clear();
 
             notify.positive("Leaderboard deleted");
         } catch (error) {
@@ -244,48 +222,40 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isDeletingLeaderboard = false;
-        });
+        this.isDeletingLeaderboard = false;
     }
 
-    loadInvites = async () => {
+    *loadInvites(): any {
         this.loadingInvitesStatus = ResourceStatus.Loading;
         this.invites.clear();
 
         try {
-            const invitesResponse = await http.get(`${this.resourceUrl}/invites`);
+            const invitesResponse = yield http.get(`${this.resourceUrl}/invites`);
             const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
-            
-            runInAction(() => {
-                this.invites.replace(invites);
 
-                this.loadingInvitesStatus = ResourceStatus.Loaded;
-            });
+            this.invites.replace(invites);
+
+            this.loadingInvitesStatus = ResourceStatus.Loaded;
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingInvitesStatus = ResourceStatus.Error;
-            });
+            this.loadingInvitesStatus = ResourceStatus.Error;
         }
     }
 
-    invitePlayers = async (userIds: number[], message: string) => {
+    *invitePlayers(userIds: number[], message: string): any {
         this.isInviting = true;
 
         try {
-            const invitesResponse = await http.post(`${this.resourceUrl}/invites`, {
+            const invitesResponse = yield http.post(`${this.resourceUrl}/invites`, {
                 "user_ids": userIds,
                 "message": message
             });
 
             const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
-            runInAction(() => {
-                this.invites.replace(this.invites.concat(invites));
-            });
-            
+            this.invites.replace(this.invites.concat(invites));
+
             notify.positive("Invitations sent");
         } catch (error) {
             console.log(error);
@@ -299,20 +269,16 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isInviting = false;
-        });
+        this.isInviting = false;
     }
 
-    cancelInvite = async (userId: number) => {
+    *cancelInvite(userId: number) {
         this.isCancellingInvite = true;
 
         try {
-            await http.delete(`${this.resourceUrl}/invites/${userId}`);
+            yield http.delete(`${this.resourceUrl}/invites/${userId}`);
 
-            runInAction(() => {
-                this.invites.replace(this.invites.filter(i => i.osuUserId !== userId));
-            });
+            this.invites.replace(this.invites.filter(i => i.osuUserId !== userId));
 
             notify.positive("Invite cancelled");
         } catch (error) {
@@ -327,48 +293,40 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isCancellingInvite = false;
-        });
+        this.isCancellingInvite = false;
     }
 
-    loadMembership = async (userId: number) => {
+    *loadMembership(userId: number): any {
         this.loadingMembershipStatus = ResourceStatus.Loading;
         this.membership = null;
-        
+
         try {
-            const membershipResponse = await http.get(`${this.resourceUrl}/members/${userId}`);
+            const membershipResponse = yield http.get(`${this.resourceUrl}/members/${userId}`);
             const membership: Membership = membershipFromJson(membershipResponse.data);
-            
-            const scoresResponse = await runInAction(async () => await http.get(`${this.resourceUrl}/members/${userId}/scores`));
+
+            const scoresResponse = yield http.get(`${this.resourceUrl}/members/${userId}/scores`);
             const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
-            runInAction(() => {
-                this.membership = membership;
-                // transform scores into their intended form for abnormal score sets
-                this.membershipScores.replace(unchokeForScoreSet(scores, this.leaderboard!.scoreSet));
+            this.membership = membership;
+            // transform scores into their intended form for abnormal score sets
+            this.membershipScores.replace(unchokeForScoreSet(scores, this.leaderboard!.scoreSet));
 
-                this.loadingMembershipStatus = ResourceStatus.Loaded;
-            });
+            this.loadingMembershipStatus = ResourceStatus.Loaded;
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingMembershipStatus = ResourceStatus.Error;
-            });
+            this.loadingMembershipStatus = ResourceStatus.Error;
         }
     }
 
-    joinLeaderboard = async () => {
+    *joinLeaderboard(): any {
         this.isJoiningLeaderboard = true;
 
         try {
-            const membershipResponse = await http.post(`${this.resourceUrl}/members`);
+            const membershipResponse = yield http.post(`${this.resourceUrl}/members`);
             const membership = membershipFromJson(membershipResponse.data);
 
-            runInAction(() => {
-                this.userMembership = membership;
-            });
+            this.userMembership = membership;
 
             notify.positive("Leaderboard joined");
         } catch (error) {
@@ -383,20 +341,16 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isJoiningLeaderboard = false;
-        });
+        this.isJoiningLeaderboard = false;
     }
 
-    leaveLeaderboard = async () => {
+    *leaveLeaderboard() {
         this.isLeavingLeaderboard = true;
 
         try {
-            await http.delete(`${this.resourceUrl}/members/${this.userMembership!.osuUserId}`);
+            yield http.delete(`${this.resourceUrl}/members/${this.userMembership!.osuUserId}`);
 
-            runInAction(() => {
-                this.userMembership = null;
-            });
+            this.userMembership = null;
 
             notify.positive("Leaderboard left");
         } catch (error) {
@@ -411,23 +365,19 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isLeavingLeaderboard = false;
-        });
+        this.isLeavingLeaderboard = false;
     }
 
-    kickMember = async () => {
+    *kickMember() {
         this.isKickingMember = true;
 
         try {
-            await http.delete(`${this.resourceUrl}/members/${this.membership!.osuUserId}`);
+            yield http.delete(`${this.resourceUrl}/members/${this.membership!.osuUserId}`);
 
             history.push(`/leaderboards/${this.leaderboardType}/${formatGamemodeNameShort(this.gamemode!)}/${this.leaderboardId}`);
-            runInAction(() => {
-                this.rankings.replace(this.rankings.filter(m => m.osuUserId !== this.membership!.osuUserId));
-                this.leaderboardScores.replace(this.leaderboardScores.filter(s => s.userStats!.osuUserId !== this.membership!.osuUserId));
-                this.membership = null;
-            });
+            this.rankings.replace(this.rankings.filter(m => m.osuUserId !== this.membership!.osuUserId));
+            this.leaderboardScores.replace(this.leaderboardScores.filter(s => s.userStats!.osuUserId !== this.membership!.osuUserId));
+            this.membership = null;
 
             notify.positive("Member kicked");
         } catch (error) {
@@ -442,8 +392,6 @@ export class DetailStore {
             }
         }
 
-        runInAction(() => {
-            this.isKickingMember = false;
-        });
+        this.isKickingMember = false;
     }
 }

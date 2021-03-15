@@ -307,15 +307,14 @@ const LeaderboardHome = observer(() => {
     const meStore = store.meStore;
 
     // use effect to fetch leaderboards data
-    const { loadLeaderboard, loadingStatus, leaderboard } = detailStore;
+    const { loadingStatus, leaderboard } = detailStore;
     useEffect(() => {
-        loadLeaderboard(leaderboardType, gamemode, leaderboardId);
-    }, [loadLeaderboard, leaderboardType, gamemode, leaderboardId]);
+        detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId);
+    }, [detailStore, leaderboardType, gamemode, leaderboardId]);
     
-    const { loadUserMembership } = detailStore;
     useAutorun(() => {
         if (meStore.user?.osuUserId) {
-            loadUserMembership(meStore.user?.osuUserId);
+            detailStore.loadUserMembership(meStore.user?.osuUserId);
         }
     });
 

@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeAutoObservable } from "mobx";
+import { observable, action, makeAutoObservable, flow } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
@@ -28,13 +28,13 @@ export class ListStore {
     constructor() {
         makeAutoObservable(this, {
             unload: action,
-            loadGlobalLeaderboards: action,
-            loadNextGlobalLeaderboardsPage: action,
-            loadCommunityLeaderboards: action,
-            loadNextCommunityLeaderboardsPage: action,
-            loadCommunityMemberships: action,
-            loadNextCommunityMembershipsPage: action,
-            createLeaderboard: action
+            loadGlobalLeaderboards: flow,
+            loadNextGlobalLeaderboardsPage: flow,
+            loadCommunityLeaderboards: flow,
+            loadNextCommunityLeaderboardsPage: flow,
+            loadCommunityMemberships: flow,
+            loadNextCommunityMembershipsPage: flow,
+            createLeaderboard: flow
         });
     }
 
@@ -51,7 +51,7 @@ export class ListStore {
         this.communityMemberships.clear();
     }
 
-    loadGlobalLeaderboards = async (gamemode: Gamemode, userId?: number) => {
+    *loadGlobalLeaderboards(gamemode: Gamemode, userId?: number): any {
         this.globalLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
         this.globalLeaderboards.clear();
@@ -59,231 +59,203 @@ export class ListStore {
 
         try {
             if (userId) {
-                const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
+                const globalMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
                     params: {
                         "offset": 0,
                         "limit": 25
                     }
                 });
                 const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-                
-                runInAction(() => {
-                    this.globalMemberships.replace(globalMemberships);
-                    
-                    if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                    } else {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                    }
-                });
+
+                this.globalMemberships.replace(globalMemberships);
+
+                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                }
             } else {
-                const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${gamemode}`, {
+                const globalLeaderboardsResponse = yield http.get(`/api/leaderboards/global/${gamemode}`, {
                     params: {
                         "offset": 0,
                         "limit": 25
                     }
                 });
                 const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
-                
-                runInAction(() => {
-                    this.globalLeaderboards.replace(globalLeaderboards);
-                    
-                    if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                    } else {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                    }
-                });
+
+                this.globalLeaderboards.replace(globalLeaderboards);
+
+                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                }
             }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
-            });
+            this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadNextGlobalLeaderboardsPage = async (userId?: number) => {
+    *loadNextGlobalLeaderboardsPage(userId?: number): any {
         this.globalLeaderboardsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
             if (userId) {
-                const globalMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/global/${this.gamemode}`, {
+                const globalMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/global/${this.gamemode}`, {
                     params: {
                         "offset": this.globalMemberships.length,
                         "limit": 25
                     }
                 });
                 const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-                
-                runInAction(() => {
-                    this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
-                    
-                    if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                    } else {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                    }
-                });
+
+                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+
+                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                }
             } else {
-                const globalLeaderboardsResponse = await http.get(`/api/leaderboards/global/${this.gamemode}`, {
+                const globalLeaderboardsResponse = yield http.get(`/api/leaderboards/global/${this.gamemode}`, {
                     params: {
                         "offset": this.globalLeaderboards.length,
                         "limit": 25
                     }
                 });
                 const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
-                
-                runInAction(() => {
-                    this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
-                    
-                    if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                    } else {
-                        this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                    }
-                });
+
+                this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
+
+                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                } else {
+                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                }
             }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
-            });
+            this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadCommunityLeaderboards = async (gamemode: Gamemode) => {
+    *loadCommunityLeaderboards(gamemode: Gamemode): any {
         this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
         this.communityLeaderboards.clear();
 
         try {
-            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/community/${gamemode}`, {
+            const communityLeaderboardsResponse = yield http.get(`/api/leaderboards/community/${gamemode}`, {
                 params: {
                     "offset": 0,
                     "limit": 10
                 }
             });
             const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
-            
-            runInAction(() => {
-                this.communityLeaderboards.replace(communityLeaderboards);
-                
-                if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                    this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityLeaderboards.replace(communityLeaderboards);
+
+            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
-            
-            runInAction(() => {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
-            });
+
+            this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadNextCommunityLeaderboardsPage = async () => {
+    *loadNextCommunityLeaderboardsPage(): any {
         this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const communityLeaderboardsResponse = await http.get(`/api/leaderboards/community/${this.gamemode}`, {
+            const communityLeaderboardsResponse = yield http.get(`/api/leaderboards/community/${this.gamemode}`, {
                 params: {
                     "offset": this.communityLeaderboards.length,
                     "limit": 25
                 }
             });
             const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
-            
-            runInAction(() => {
-                this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
-                
-                if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                    this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
+
+            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
+                this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
-            });
+            this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadCommunityMemberships = async (gamemode: Gamemode, userId: number) => {
+    *loadCommunityMemberships(gamemode: Gamemode, userId: number): any {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
         this.communityMemberships.clear();
 
         try {
-            const communityMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/community/${gamemode}`, {
+            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/community/${gamemode}`, {
                 params: {
                     "offset": 0,
                     "limit": 5
                 }
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-            
-            runInAction(() => {
-                this.communityMemberships.replace(communityMemberships);
-                
-                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    
-                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityMemberships.replace(communityMemberships);
+
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.communityMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    loadNextCommunityMembershipsPage = async (userId: number) => {
+    *loadNextCommunityMembershipsPage(userId: number): any {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const communityMembershipsResponse = await http.get(`/api/profiles/users/${userId}/memberships/community/${this.gamemode}`, {
+            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/community/${this.gamemode}`, {
                 params: {
                     "offset": this.communityMemberships.length,
                     "limit": 10
                 }
             });
             const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
-            
-            runInAction(() => {
-                this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
-                
-                if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
-                } else {
-                    this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
-                }
-            });
+
+            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            } else {
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+            }
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Error;
-            });
+            this.communityMembershipsStatus = PaginatedResourceStatus.Error;
         }
     }
 
-    createLeaderboard = async (gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, iconUrl: string, allowPastScores: boolean, scoreFilter: ScoreFilter) => {
+    *createLeaderboard(gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, iconUrl: string, allowPastScores: boolean, scoreFilter: ScoreFilter): any {
         this.isCreatingLeaderboard = true;
 
         try {
-            const leaderboardResponse = await http.post(`/api/leaderboards/community/${gamemode}`, {
+            const leaderboardResponse = yield http.post(`/api/leaderboards/community/${gamemode}`, {
                 "score_set": scoreSet,
                 "access_type": accessType,
                 "name": name,
@@ -312,9 +284,7 @@ export class ListStore {
             });
             const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
-            runInAction(() => {
-                this.communityLeaderboards.push(leaderboard);
-            });
+            this.communityLeaderboards.push(leaderboard);
 
             // Navigate to leaderboard page after creation
             history.push(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
@@ -332,8 +302,6 @@ export class ListStore {
             }
         }
 
-        runInAction(() => {
-            this.isCreatingLeaderboard = false;
-        });
+        this.isCreatingLeaderboard = false;
     }
 }

@@ -1,4 +1,4 @@
-import { observable, action, runInAction, makeAutoObservable } from "mobx";
+import { observable, makeAutoObservable, flow } from "mobx";
 
 import http from "../../http";
 import notify from "../../notifications";
@@ -25,12 +25,12 @@ export class MeStore {
 
     constructor() {
         makeAutoObservable(this, {
-            loadMe: action,
-            addScores: action,
-            declineInvite: action,
-            createScoreFilterPreset: action,
-            updateScoreFilterPreset: action,
-            deleteScoreFilterPreset: action
+            loadMe: flow,
+            addScores: flow,
+            declineInvite: flow,
+            createScoreFilterPreset: flow,
+            updateScoreFilterPreset: flow,
+            deleteScoreFilterPreset: flow
         });
     }
 
@@ -38,50 +38,44 @@ export class MeStore {
         return this.user !== null;
     }
 
-    loadMe = async () => {
+    *loadMe(): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.user = null;
         this.invites.clear();
         this.scoreFilterPresets.clear();
 
         try {
-            const meResponse = await http.get("/api/users/me");
+            const meResponse = yield http.get("/api/users/me");
             const user: User = userFromJson(meResponse.data);
 
-            runInAction(() => {
-                this.user = user;
-            });
+            this.user = user;
 
             if (user.osuUser !== null) {
-                const invitesResponse = await http.get(`/api/users/me/invites`);
+                const invitesResponse = yield http.get(`/api/users/me/invites`);
                 const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
 
-                const scoreFilterPresetsResponse = await http.get(`/api/users/me/scorefilterpresets`);
+                const scoreFilterPresetsResponse = yield http.get(`/api/users/me/scorefilterpresets`);
                 const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map((data: any) => scoreFilterPresetFromJson(data));
 
-                runInAction(() => {
-                    this.invites.replace(invites);
-                    this.scoreFilterPresets.replace(scoreFilterPresets);
+                this.invites.replace(invites);
+                this.scoreFilterPresets.replace(scoreFilterPresets);
 
-                    this.loadingStatus = ResourceStatus.Loaded;
-                });
+                this.loadingStatus = ResourceStatus.Loaded;
             }
 
 
         } catch (error) {
             console.log(error);
 
-            runInAction(() => {
-                this.loadingStatus = ResourceStatus.Error;
-            });
+            this.loadingStatus = ResourceStatus.Error;
         }
     }
 
-    addScores = async (userId: number, beatmapIds: number[], gamemodeId: Gamemode) => {
+    *addScores(userId: number, beatmapIds: number[], gamemodeId: Gamemode) {
         this.isAddingScores = true;
 
         try {
-            await http.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
+            yield http.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
                 "beatmap_ids": beatmapIds
             });
 
@@ -98,20 +92,16 @@ export class MeStore {
             }
         }
 
-        runInAction(() => {
-            this.isAddingScores = false;
-        });
+        this.isAddingScores = false;
     }
 
-    declineInvite = async (leaderboardId: number) => {
+    *declineInvite(leaderboardId: number) {
         this.isDecliningInvite = true;
 
         try {
-            await http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/invites/${this.user!.osuUserId}`);
+            yield http.delete(`/api/leaderboards/leaderboards/${leaderboardId}/invites/${this.user!.osuUserId}`);
 
-            runInAction(() => {
-                this.invites.replace(this.invites.filter(i => i.leaderboardId !== leaderboardId));
-            });
+            this.invites.replace(this.invites.filter(i => i.leaderboardId !== leaderboardId));
 
             notify.positive("Invite declined");
         } catch (error) {
@@ -126,16 +116,14 @@ export class MeStore {
             }
         }
 
-        runInAction(() => {
-            this.isDecliningInvite = false;
-        });
+        this.isDecliningInvite = false;
     }
 
-    createScoreFilterPreset = async (name: string, scoreFilter: ScoreFilter) => {
+    *createScoreFilterPreset(name: string, scoreFilter: ScoreFilter): any {
         this.isCreatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await http.post(`/api/users/me/scorefilterpresets`, {
+            const scoreFilterPresetResponse = yield http.post(`/api/users/me/scorefilterpresets`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -160,9 +148,7 @@ export class MeStore {
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
-            runInAction(() => {
-                this.scoreFilterPresets.push(scoreFilterPreset);
-            });
+            this.scoreFilterPresets.push(scoreFilterPreset);
 
             notify.positive("Score filter preset created");
         } catch (error) {
@@ -177,16 +163,14 @@ export class MeStore {
             }
         }
 
-        runInAction(() => {
-            this.isCreatingScoreFilterPreset = false;
-        });
+        this.isCreatingScoreFilterPreset = false;
     }
 
-    updateScoreFilterPreset = async (scoreFilterPresetId: number, name: string, scoreFilter: ScoreFilter) => {
+    *updateScoreFilterPreset(scoreFilterPresetId: number, name: string, scoreFilter: ScoreFilter): any {
         this.isUpdatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = await http.put(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`, {
+            const scoreFilterPresetResponse = yield http.put(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`, {
                 "name": name,
                 "score_filter": {
                     "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
@@ -211,9 +195,7 @@ export class MeStore {
 
             const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
-            runInAction(() => {
-                this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
-            });
+            this.scoreFilterPresets.replace(this.scoreFilterPresets.map(preset => preset.id === scoreFilterPresetId ? scoreFilterPreset : preset));
 
             notify.positive("Score filter preset updated");
         } catch (error) {
@@ -228,20 +210,16 @@ export class MeStore {
             }
         }
 
-        runInAction(() => {
-            this.isUpdatingScoreFilterPreset = false;
-        });
+        this.isUpdatingScoreFilterPreset = false;
     }
 
-    deleteScoreFilterPreset = async (scoreFilterPresetId: number) => {
+    *deleteScoreFilterPreset(scoreFilterPresetId: number) {
         this.isDeletingScoreFilterPreset = true;
 
         try {
-            await http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
+            yield http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
 
-            runInAction(() => {
-                this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
-            });
+            this.scoreFilterPresets.replace(this.scoreFilterPresets.filter(preset => preset.id !== scoreFilterPresetId));
 
             notify.positive("Score filter preset deleted");
         } catch (error) {
@@ -256,8 +234,6 @@ export class MeStore {
             }
         }
 
-        runInAction(() => {
-            this.isDeletingScoreFilterPreset = false;
-        });
+        this.isDeletingScoreFilterPreset = false;
     }
 }

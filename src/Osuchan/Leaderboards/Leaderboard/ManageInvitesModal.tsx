@@ -112,7 +112,7 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
-    const { loadingInvitesStatus, leaderboard, invites, loadInvites } = detailStore;
+    const { loadingInvitesStatus, leaderboard, invites } = detailStore;
 
     const localStore = useLocalObservable(() => ({
         open: props.open
@@ -124,7 +124,7 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
 
     useAutorun(() => {
         if (localStore.open && leaderboard !== null) {
-            loadInvites();
+            detailStore.loadInvites();
         }
     });
     

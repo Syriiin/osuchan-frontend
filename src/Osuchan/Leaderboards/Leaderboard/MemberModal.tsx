@@ -56,14 +56,14 @@ const MemberInfo = observer(() => {
     const meStore = store.meStore;
 
     const userId = parseInt(params.userId);
-    const { loadingMembershipStatus, leaderboard, membership, membershipScores, loadMembership } = detailStore;
+    const { loadingMembershipStatus, leaderboard, membership, membershipScores } = detailStore;
     const { isAuthenticated, user } = meStore;
 
     useEffect(() => {
         if (leaderboard !== null && !isNaN(userId)) {
-            loadMembership(userId);
+            detailStore.loadMembership(userId);
         }
-    }, [userId, leaderboard, loadMembership]);
+    }, [userId, leaderboard, detailStore]);
 
     const [showAllScores, setShowAllScores] = useState(false);
 
