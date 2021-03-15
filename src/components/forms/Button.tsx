@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { LoadingSpinner } from "../layout/Loading";
 import { SimpleModal, SimpleModalTitle } from "../layout/SimpleModal";
 
-const StyledButton = styled.button<StyledButtonProps>`
+const StyledButton = styled("button").withConfig({
+    shouldForwardProp: (prop, defaultValidatorFn) => !["action"].includes(prop) && defaultValidatorFn(prop)
+})<StyledButtonProps>`
     padding: 10px;
     border-radius: 10px;
     font-size: 14px;
