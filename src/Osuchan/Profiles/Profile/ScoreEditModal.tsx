@@ -1,14 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 import { Score } from "../../../store/models/profiles/types";
 import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Button, ModsSelect } from "../../../components";
-import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
 import { observer } from "mobx-react-lite";
-import { useAutorun } from "../../../utils/hooks";
+import { useAutorun, useStore } from "../../../utils/hooks";
 
 const ScoreEditModal = observer((props: ScoreEditModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
     
     const score = props.score;

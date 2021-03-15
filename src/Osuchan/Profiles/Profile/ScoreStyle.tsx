@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import styled from "styled-components";
 
 import { Surface, DataTable, DataCell, NumberFormat } from "../../../components";
 import { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
 import { observer } from "mobx-react-lite";
-import { StoreContext } from "../../../store";
 import { Gamemode } from "../../../store/models/common/enums";
+import { useStore } from "../../../utils/hooks";
 
 const ScoreStyleSurface = styled(Surface)`
     padding: 20px;
@@ -14,7 +13,7 @@ const ScoreStyleSurface = styled(Surface)`
 `;
 
 const ScoreStyle = observer((props: ScoreStyleProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
     const userStats = usersStore.currentUserStats!;
 

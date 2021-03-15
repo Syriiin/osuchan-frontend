@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, LinkProps, matchPath, useHistory, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { gamemodeIdFromName } from "../utils/osu";
-import { StoreContext } from "../store";
 import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 import { formatGamemodeNameShort } from "../utils/formatting";
 import { ResourceStatus } from "../store/status";
 import { autorun } from "mobx";
+import { useStore } from "../utils/hooks";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -128,7 +128,7 @@ const Navbar = observer(() => {
     const history = useHistory();
     const location = useLocation();
 
-    const store = useContext(StoreContext);
+    const store = useStore();
     const meStore = store.meStore;
     
     // State hooks

@@ -1,10 +1,9 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
-import { StoreContext } from "../../store";
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
 import { BottomScrollDetector, Surface, SurfaceHeaderContainer, SurfaceTitle, ButtonGroup, Button, UnstyledLink, Divider, SurfaceSubtitle, LoadingSection } from "../../components";
@@ -13,7 +12,7 @@ import JoinedLeaderboards from "./JoinedLeaderboards";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
 import { PaginatedResourceStatus } from "../../store/status";
 import { hasFlag } from "../../utils/general";
-import { useAction, useAutorun } from "../../utils/hooks";
+import { useAction, useAutorun, useStore } from "../../utils/hooks";
 
 const LeaderboardsSurface = styled(Surface)`
     margin: 20px auto;
@@ -30,7 +29,7 @@ const LeaderboardList = observer(() => {
     const leaderboardType = params.leaderboardType;
     const gamemode = gamemodeIdFromName(params.gamemode);
 
-    const store = useContext(StoreContext);
+    const store = useStore();
     const listStore = store.leaderboardsStore.listStore;
     const meStore = store.meStore;
 

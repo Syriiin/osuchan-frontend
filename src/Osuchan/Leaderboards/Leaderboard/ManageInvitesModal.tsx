@@ -1,14 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import { SimpleModal, SimpleModalTitle, Button, Row, FormLabel, FormControl, TextField, LoadingSection, Flag } from "../../../components";
-import { StoreContext } from "../../../store";
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Invite } from "../../../store/models/leaderboards/types";
 import { ResourceStatus } from "../../../store/status";
-import { useAction, useAutorun } from "../../../utils/hooks";
+import { useAction, useAutorun, useStore } from "../../../utils/hooks";
 
 const InvitesList = styled.div`
     margin-top: 10px;
@@ -36,7 +35,7 @@ const InviteMessage = styled.span`
 `;
 
 const InviteRow = observer((props: InviteRowProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
     const osuUser = props.invite.osuUser as OsuUser;
@@ -59,7 +58,7 @@ interface InviteRowProps {
 }
 
 const InvitePlayerModal = (props: InvitePlayerModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
     const [inviteUserUrl, setInviteUserUrl] = useState("");
@@ -110,7 +109,7 @@ interface InvitePlayerModalProps {
 }
 
 const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
     const { loadingInvitesStatus, leaderboard, invites, loadInvites } = detailStore;

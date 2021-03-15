@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import styled from "styled-components";
 
@@ -8,7 +8,7 @@ import Home from "./Home/Home";
 import Me from "./Me/Me";
 import Profiles from "./Profiles/Profiles";
 import LeaderboardsRoot from "./Leaderboards";
-import { StoreContext } from "../store";
+import { useStore } from "../utils/hooks";
 
 const OsuchanWrapper = styled.div`
     display: flex;
@@ -22,7 +22,7 @@ const ContentWrapper = styled.main`
 `;
 
 const Osuchan = () => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const meStore = store.meStore;
     
     // call fetch me action on mount

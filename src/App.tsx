@@ -13,6 +13,7 @@ import { osuchanTheme } from "./osuchanTheme";
 import { NotificationContainer } from "./notifications";
 
 import Osuchan from "./Osuchan/Osuchan";
+import { RootStore, StoreContext } from "./store";
 
 if (process.env.NODE_ENV === "production") {
     ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
@@ -64,13 +65,15 @@ const AppWithContext = () => {
 }
 
 const App = () => (
-    <StyledThemeProvider theme={osuchanTheme}>
-        <Router history={history}>
-            <GlobalStyle />
-            <NotificationContainer hideProgressBar />
-            <AppWithContext />
-        </Router>
-    </StyledThemeProvider>
+    <StoreContext.Provider value={new RootStore()}>
+        <StyledThemeProvider theme={osuchanTheme}>
+            <Router history={history}>
+                <GlobalStyle />
+                <NotificationContainer hideProgressBar />
+                <AppWithContext />
+            </Router>
+        </StyledThemeProvider>
+    </StoreContext.Provider>
 );
 
 export default App;

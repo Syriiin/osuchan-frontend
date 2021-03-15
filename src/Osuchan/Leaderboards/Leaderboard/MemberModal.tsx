@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat, Flag } from "../../../components";
-import { StoreContext } from "../../../store";
 import { ResourceStatus } from "../../../store/status";
+import { useStore } from "../../../utils/hooks";
 
 const UserInfo = styled.div`
     display: flex;
@@ -51,7 +51,7 @@ const ScoreCount = styled.span`
 
 const MemberInfo = observer(() => {
     const params = useParams<RouteParams>();
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
 

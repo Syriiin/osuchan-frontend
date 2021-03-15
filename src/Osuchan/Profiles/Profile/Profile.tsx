@@ -1,10 +1,9 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
-import { StoreContext } from "../../../store";
 import { gamemodeIdFromName } from "../../../utils/osu";
 import UserInfo from "./UserInfo";
 import ModeSwitcher from "./ModeSwitcher";
@@ -16,6 +15,7 @@ import Scores from "./Scores";
 import Leaderboards from "./Leaderboards";
 import { LoadingPage } from "../../../components";
 import { ResourceStatus } from "../../../store/status";
+import { useStore } from "../../../utils/hooks";
 
 const ProfileGrid = styled.div`
     margin: 20px auto;
@@ -34,7 +34,7 @@ const ProfileGrid = styled.div`
 const Profile = observer(() => {
     const params = useParams<RouteParams>();
 
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
 
     // use effect to fetch profile data

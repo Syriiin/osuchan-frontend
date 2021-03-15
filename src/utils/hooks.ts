@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { IReactionPublic, IAutorunOptions, autorun, runInAction } from "mobx";
+import { StoreContext } from "../store";
 
 export const useAction = (fn: () => void, deps: React.DependencyList) => {
     useEffect(() => {
@@ -13,4 +14,14 @@ export const useAutorun = (view: (r: IReactionPublic) => any, opts?: IAutorunOpt
         autorun(view, opts);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+}
+
+export const useStore = () => {
+    const store = useContext(StoreContext);
+    
+    if (store === null) {
+        throw new Error("useStore must be used within a context provider");
+    }
+
+    return store;
 }

@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
 import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Select, TextField, Button } from "../../../components";
-import { StoreContext } from "../../../store";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
+import { useStore } from "../../../utils/hooks";
 
 const LeaderboardIcon = styled.img`
     max-width: 128px;
@@ -13,7 +13,7 @@ const LeaderboardIcon = styled.img`
 `;
 
 const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
     const { leaderboard } = detailStore;

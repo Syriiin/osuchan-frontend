@@ -1,13 +1,13 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
 import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
-import { StoreContext } from "../../store";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
+import { useStore } from "../../utils/hooks";
 
 const LeaderboardIcon = styled.img`
     max-width: 128px;
@@ -16,7 +16,7 @@ const LeaderboardIcon = styled.img`
 `;
 
 const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const listStore = store.leaderboardsStore.listStore;
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);

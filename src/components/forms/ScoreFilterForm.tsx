@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
@@ -8,11 +8,11 @@ import { FormControl } from "./FormControl";
 import { TextInput } from "./TextInput";
 import { ModsSelect } from "./ModsSelect";
 import { ScoreFilter } from "../../store/models/profiles/types";
-import { StoreContext } from "../../store";
 import { ScoreFilterPreset } from "../../store/models/users/types";
 import { Button } from "./Button";
 import { Select } from "./Select";
 import { DatePicker } from "./DatePicker";
+import { useStore } from "../../utils/hooks";
 
 const SaveNewButton = styled(Button)`
 
@@ -27,7 +27,7 @@ const DeleteButton = styled(Button)`
 `;
 
 export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const meStore = store.meStore;
 
     const presets = meStore.scoreFilterPresets;

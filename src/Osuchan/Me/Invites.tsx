@@ -1,14 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
 
-import { StoreContext } from "../../store";
 import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
 import { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { formatGamemodeNameShort } from "../../utils/formatting";
 import { ResourceStatus } from "../../store/status";
+import { useStore } from "../../utils/hooks";
 
 const InvitesSurface = styled(Surface)`
     margin: 20px auto;
@@ -60,7 +60,7 @@ const DeclineButton = styled(Button)`
 `;
 
 const InviteRow = observer((props: InviteRowProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const meStore = store.meStore;
 
     const invite = props.invite;
@@ -90,7 +90,7 @@ interface InviteRowProps {
 }
 
 const Invites = observer(() => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const meStore = store.meStore;
 
     // use effect to fetch me data (already doing this in nav, but makes sense to refetch incase changes such as more invites)

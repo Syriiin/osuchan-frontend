@@ -1,13 +1,13 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 import { ScoreSet } from "../../../store/models/profiles/enums";
-import { StoreContext } from "../../../store";
 import { SimpleModal, SimpleModalTitle, FormLabel, FormControl, Button, ScoreFilterForm, Select } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
 import { ScoreFilter } from "../../../store/models/profiles/types";
+import { useStore } from "../../../utils/hooks";
 
 const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
 
     const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);

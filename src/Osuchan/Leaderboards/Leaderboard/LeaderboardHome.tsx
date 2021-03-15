@@ -1,11 +1,10 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Route, useRouteMatch, useHistory, Redirect } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import { formatTime, formatGamemodeName } from "../../../utils/formatting";
-import { StoreContext } from "../../../store";
 import { ScoreFilter } from "../../../store/models/profiles/types";
 import { Surface, Button, LoadingPage, UnstyledLink, Label, LabelGroup, VerticalButtonGroup, ModIcons } from "../../../components";
 import TopScores from "./TopScores";
@@ -19,7 +18,7 @@ import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
 import { ResourceStatus } from "../../../store/status";
 import EditLeaderboardModal from "./EditLeaderboardModal";
-import { useAutorun } from "../../../utils/hooks";
+import { useAutorun, useStore } from "../../../utils/hooks";
 
 const LeaderboardSurface = styled(Surface)`
     display: flex;
@@ -234,7 +233,7 @@ interface LeaderboardFiltersProps {
 
 const LeaderboardButtons = observer(() => {
     const match = useRouteMatch();
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
     
@@ -303,7 +302,7 @@ const LeaderboardHome = observer(() => {
     const gamemode = gamemodeIdFromName(params.gamemode);
     const leaderboardId = parseInt(params.leaderboardId);
 
-    const store = useContext(StoreContext);
+    const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
 

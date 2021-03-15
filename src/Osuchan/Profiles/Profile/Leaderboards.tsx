@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
 import { Surface, SurfaceTitle, UnstyledLink, Button, SurfaceHeaderContainer, ButtonGroup, LoadingSection, GlobalLeaderboardRow, CommunityLeaderboardRow } from "../../../components";
-import { StoreContext } from "../../../store";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { PaginatedResourceStatus } from "../../../store/status";
 import { hasFlag } from "../../../utils/general";
+import { useStore } from "../../../utils/hooks";
 
 const LeaderboardsSurface = styled(Surface)`
     padding: 20px;
@@ -14,7 +14,7 @@ const LeaderboardsSurface = styled(Surface)`
 `;
 
 const Leaderboards = observer(() => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
 
     const globalMemberships = usersStore.globalMemberships;

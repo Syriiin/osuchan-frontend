@@ -1,10 +1,9 @@
-import { useContext } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
 import { Surface, DataCell, DataTable, NumberFormat } from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
-import { StoreContext } from "../../../store";
+import { useStore } from "../../../utils/hooks";
 
 const RankInfoSurface = styled(Surface)`
     padding: 20px;
@@ -26,7 +25,7 @@ const InactiveStatus = styled.span`
 `;
 
 const RankInfo = observer((props: RankInfoProps) => {
-    const store = useContext(StoreContext);
+    const store = useStore();
     const usersStore = store.usersStore;
 
     return (
