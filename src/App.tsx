@@ -4,7 +4,6 @@ import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-
 import { configure } from "mobx";
 import ReactGA from "react-ga";
 
-import "react-vis/dist/style.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-toastify/dist/ReactToastify.css";
 
