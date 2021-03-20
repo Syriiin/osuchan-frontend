@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, LinkProps, matchPath, useHistory, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
@@ -9,8 +9,7 @@ import { gamemodeIdFromName } from "../utils/osu";
 import { SimpleMenu, SimpleMenuItem, SimpleMenuDivider, SimpleModal, SimpleModalTitle, TextInput, Button, UnstyledLink, TextField } from "../components";
 import { formatGamemodeNameShort } from "../utils/formatting";
 import { ResourceStatus } from "../store/status";
-import { autorun } from "mobx";
-import { useStore } from "../utils/hooks";
+import { useAutorun, useStore } from "../utils/hooks";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -138,10 +137,8 @@ const Navbar = observer(() => {
     const [addScoreBeatmapUrl, setAddScoreBeatmapUrl] = useState("");
 
     // Use effect to initialse form values
-    useEffect(() => {
-        autorun(() => {
-            setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
-        });
+    useAutorun(() => {
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
     });
 
     // Handlers
