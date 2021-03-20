@@ -171,9 +171,12 @@ const Navbar = observer(() => {
             handleAddScoreModalClose();
         }
     }
+
+    const osuUserId = meStore.user?.osuUserId;
+
     const handleAddScoreModalClose = () => {
         setAddScoreModalOpen(false);
-        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
+        setAddScoreUserUrl(osuUserId !== undefined ? `https://osu.ppy.sh/users/${osuUserId.toString()}` : "");
         setAddScoreBeatmapUrl("");
     }
 
