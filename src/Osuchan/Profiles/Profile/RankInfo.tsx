@@ -59,7 +59,7 @@ const RankInfo = observer((props: RankInfoProps) => {
                         {props.sandboxMode && (
                             <DataCell highlighted>-</DataCell>
                         )}
-                        <DataCell>#{props.userStats.countryRank} {props.osuUser.country}</DataCell>
+                        <DataCell>#{props.userStats.countryRank.toLocaleString("en")} {props.osuUser.country}</DataCell>
                     </tr>
                 </DataTable>
             )}
