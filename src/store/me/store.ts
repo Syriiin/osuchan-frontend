@@ -72,7 +72,7 @@ export class MeStore {
 
                 this.loadingStatus = ResourceStatus.Loaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingStatus = ResourceStatus.Error;
@@ -91,7 +91,7 @@ export class MeStore {
             );
 
             notify.positive("New scores added");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -121,7 +121,7 @@ export class MeStore {
             );
 
             notify.positive("Invite declined");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -174,7 +174,7 @@ export class MeStore {
             this.scoreFilterPresets.push(scoreFilterPreset);
 
             notify.positive("Score filter preset created");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -239,7 +239,7 @@ export class MeStore {
             );
 
             notify.positive("Score filter preset updated");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -271,7 +271,7 @@ export class MeStore {
             );
 
             notify.positive("Score filter preset deleted");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;

@@ -191,7 +191,7 @@ export class UsersStore {
                 this.globalMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingStatus = ResourceStatus.Error;
@@ -230,7 +230,7 @@ export class UsersStore {
                 this.globalMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.globalMembershipsStatus = PaginatedResourceStatus.Error;
@@ -270,7 +270,7 @@ export class UsersStore {
                 this.communityMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityMembershipsStatus = PaginatedResourceStatus.Error;
@@ -309,7 +309,7 @@ export class UsersStore {
                 this.communityMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityMembershipsStatus = PaginatedResourceStatus.Error;
@@ -358,7 +358,7 @@ export class UsersStore {
             this.loadingSandboxScoresStatus = ResourceStatus.Loaded;
 
             notify.neutral("Sandbox scores loaded");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingSandboxScoresStatus = ResourceStatus.Error;

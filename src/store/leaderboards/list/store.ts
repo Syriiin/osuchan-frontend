@@ -116,7 +116,7 @@ export class ListStore {
                         PaginatedResourceStatus.PartiallyLoaded;
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
@@ -186,7 +186,7 @@ export class ListStore {
                         PaginatedResourceStatus.PartiallyLoaded;
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.globalLeaderboardsStatus = PaginatedResourceStatus.Error;
@@ -226,7 +226,7 @@ export class ListStore {
                 this.communityLeaderboardsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
@@ -265,7 +265,7 @@ export class ListStore {
                 this.communityLeaderboardsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityLeaderboardsStatus = PaginatedResourceStatus.Error;
@@ -305,7 +305,7 @@ export class ListStore {
                 this.communityMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityMembershipsStatus = PaginatedResourceStatus.Error;
@@ -344,7 +344,7 @@ export class ListStore {
                 this.communityMembershipsStatus =
                     PaginatedResourceStatus.PartiallyLoaded;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.communityMembershipsStatus = PaginatedResourceStatus.Error;
@@ -409,7 +409,7 @@ export class ListStore {
             );
 
             notify.positive("Leaderboard created");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;

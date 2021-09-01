@@ -117,7 +117,7 @@ export class DetailStore {
             );
 
             this.loadingStatus = ResourceStatus.Loaded;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingStatus = ResourceStatus.Error;
@@ -137,7 +137,7 @@ export class DetailStore {
             this.userMembership = membership;
 
             this.loadingUserMembershipStatus = ResourceStatus.Loaded;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingUserMembershipStatus = ResourceStatus.Error;
@@ -158,7 +158,7 @@ export class DetailStore {
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard updated");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -186,7 +186,7 @@ export class DetailStore {
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard archived");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -214,7 +214,7 @@ export class DetailStore {
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             notify.positive("Leaderboard restored");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -249,7 +249,7 @@ export class DetailStore {
             this.leaderboardScores.clear();
 
             notify.positive("Leaderboard deleted");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -281,7 +281,7 @@ export class DetailStore {
             this.invites.replace(invites);
 
             this.loadingInvitesStatus = ResourceStatus.Loaded;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingInvitesStatus = ResourceStatus.Error;
@@ -307,7 +307,7 @@ export class DetailStore {
             this.invites.replace(this.invites.concat(invites));
 
             notify.positive("Invitations sent");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -333,7 +333,7 @@ export class DetailStore {
             );
 
             notify.positive("Invite cancelled");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -374,7 +374,7 @@ export class DetailStore {
             );
 
             this.loadingMembershipStatus = ResourceStatus.Loaded;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             this.loadingMembershipStatus = ResourceStatus.Error;
@@ -393,7 +393,7 @@ export class DetailStore {
             this.userMembership = membership;
 
             notify.positive("Leaderboard joined");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -419,7 +419,7 @@ export class DetailStore {
             this.userMembership = null;
 
             notify.positive("Leaderboard left");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;
@@ -462,7 +462,7 @@ export class DetailStore {
             this.membership = null;
 
             notify.positive("Member kicked");
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
 
             const errorMessage = error.response.data.detail;

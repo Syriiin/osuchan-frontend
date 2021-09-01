@@ -1,4 +1,4 @@
-import TimeAgoReact, { TimeAgoProps as TimeAgoReactProps } from "timeago-react";
+import TimeAgoReact from "timeago-react";
 import { Tooltip } from "./Tooltip";
 
 export const TimeAgo = (props: TimeAgoProps) => {
@@ -12,7 +12,6 @@ export const TimeAgo = (props: TimeAgoProps) => {
                 <time
                     data-for={`timeago-${datetime}`}
                     data-tip={props.datetime.toDateString()}
-                    className={props.className}
                     dateTime={datetime.toString()}
                 >
                     {props.datetime.toLocaleString("default", {
@@ -24,7 +23,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
                 <TimeAgoReact
                     data-for={`timeago-${datetime}`}
                     data-tip={props.datetime.toDateString()}
-                    {...props}
+                    datetime={props.datetime}
                 />
             )}
             <Tooltip id={`timeago-${datetime}`} />
@@ -32,6 +31,6 @@ export const TimeAgo = (props: TimeAgoProps) => {
     );
 };
 
-interface TimeAgoProps extends TimeAgoReactProps {
+interface TimeAgoProps {
     datetime: Date;
 }
