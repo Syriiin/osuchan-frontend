@@ -4,13 +4,13 @@ interface BeatmapCacheDB extends DBSchema {
     beatmaps: {
         key: number;
         value: string;
-    }
+    };
 }
 
 const dbPromise = openDB<BeatmapCacheDB>("beatmapcache", 1, {
     upgrade(db) {
         db.createObjectStore("beatmaps");
-    }
+    },
 });
 
 export async function getBeatmap(beatmapId: number) {

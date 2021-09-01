@@ -13,6 +13,6 @@ const LeaderboardRoot = () => {
             <Redirect to={match.url} />
         </Switch>
     );
-}
+};
 
 export default LeaderboardRoot;

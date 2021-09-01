@@ -2,7 +2,7 @@ export enum ResourceStatus {
     NotLoaded = 0,
     Loading = 1 << 0,
     Loaded = 1 << 1,
-    Error = 1 << 2
+    Error = 1 << 2,
 }
 
 export enum PaginatedResourceStatus {
@@ -15,5 +15,5 @@ export enum PaginatedResourceStatus {
 
     Loading = LoadingInitial | LoadingMore,
     ContentAvailable = PartiallyLoaded | LoadingMore | Loaded,
-    MoreToLoad = NotLoaded | Loading | PartiallyLoaded
+    MoreToLoad = NotLoaded | Loading | PartiallyLoaded,
 }

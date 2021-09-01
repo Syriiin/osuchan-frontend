@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
-import { Surface, DataCell, DataTable, NumberFormat } from "../../../components";
+import {
+    Surface,
+    DataCell,
+    DataTable,
+    NumberFormat,
+} from "../../../components";
 import { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { useStore } from "../../../utils/hooks";
 
@@ -18,7 +23,7 @@ const InactiveStatusContainer = styled.div`
 `;
 
 const InactiveStatus = styled.span`
-    color: ${props => props.theme.colours.currant};
+    color: ${(props) => props.theme.colours.currant};
     width: 100%;
     font-size: 2em;
     font-weight: bolder;
@@ -32,7 +37,11 @@ const RankInfo = observer((props: RankInfoProps) => {
         <RankInfoSurface>
             {props.userStats.pp === 0 ? (
                 <InactiveStatusContainer>
-                    <InactiveStatus>{usersStore.scores.length === 0 ? "UNPLAYED GAMEMODE" : "INACTIVE PLAYER"}</InactiveStatus>
+                    <InactiveStatus>
+                        {usersStore.scores.length === 0
+                            ? "UNPLAYED GAMEMODE"
+                            : "INACTIVE PLAYER"}
+                    </InactiveStatus>
                 </InactiveStatusContainer>
             ) : (
                 <DataTable>
@@ -40,11 +49,19 @@ const RankInfo = observer((props: RankInfoProps) => {
                         <td>Performance</td>
                         {props.sandboxMode && (
                             <DataCell highlighted>
-                                <NumberFormat value={usersStore.sandboxPerformance} decimalPlaces={0} />pp
+                                <NumberFormat
+                                    value={usersStore.sandboxPerformance}
+                                    decimalPlaces={0}
+                                />
+                                pp
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat value={props.userStats.pp} decimalPlaces={0} />pp
+                            <NumberFormat
+                                value={props.userStats.pp}
+                                decimalPlaces={0}
+                            />
+                            pp
                         </DataCell>
                     </tr>
                     <tr>
@@ -52,14 +69,19 @@ const RankInfo = observer((props: RankInfoProps) => {
                         {props.sandboxMode && (
                             <DataCell highlighted>-</DataCell>
                         )}
-                        <DataCell>#{props.userStats.rank.toLocaleString("en")}</DataCell>
+                        <DataCell>
+                            #{props.userStats.rank.toLocaleString("en")}
+                        </DataCell>
                     </tr>
                     <tr>
                         <td>Country Rank</td>
                         {props.sandboxMode && (
                             <DataCell highlighted>-</DataCell>
                         )}
-                        <DataCell>#{props.userStats.countryRank.toLocaleString("en")} {props.osuUser.country}</DataCell>
+                        <DataCell>
+                            #{props.userStats.countryRank.toLocaleString("en")}{" "}
+                            {props.osuUser.country}
+                        </DataCell>
                     </tr>
                 </DataTable>
             )}

@@ -5,11 +5,20 @@ export const NumberFormat = (props: NumberFormatProps) => {
 
     return (
         <>
-            <span data-tip={props.value.toLocaleString("en", { maximumFractionDigits: props.tooltipDecimalPlaces ?? 3 })} data-for={id}>{props.value.toLocaleString("en", { maximumFractionDigits: props.decimalPlaces ?? 0 })}</span>
+            <span
+                data-tip={props.value.toLocaleString("en", {
+                    maximumFractionDigits: props.tooltipDecimalPlaces ?? 3,
+                })}
+                data-for={id}
+            >
+                {props.value.toLocaleString("en", {
+                    maximumFractionDigits: props.decimalPlaces ?? 0,
+                })}
+            </span>
             <Tooltip id={id} />
         </>
     );
-}
+};
 
 interface NumberFormatProps {
     value: number;

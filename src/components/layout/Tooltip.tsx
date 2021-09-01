@@ -5,10 +5,10 @@ const StyledTooltip = styled(ReactTooltip)`
     font-style: normal;
 
     &.place-top.type-dark {
-        background-color: ${props => props.theme.colours.background};
-        
+        background-color: ${(props) => props.theme.colours.background};
+
         :after {
-            border-top-color: ${props => props.theme.colours.background};
+            border-top-color: ${(props) => props.theme.colours.background};
         }
     }
 `;

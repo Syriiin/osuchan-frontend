@@ -4,7 +4,7 @@ import { ThemeContext } from "styled-components";
 
 export const Switch = (props: SwitchProps) => {
     const theme = useContext(ThemeContext);
-    
+
     return (
         <ReactSwitch
             {...props}
@@ -16,7 +16,7 @@ export const Switch = (props: SwitchProps) => {
             onColor={theme.colours.mystic}
         />
     );
-}
+};
 
 interface SwitchProps extends ReactSwitchProps {
     mini?: boolean;

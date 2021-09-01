@@ -16,19 +16,21 @@ const Leaderboards = () => {
             </Route>
         </Switch>
     );
-}
+};
 
 const LeaderboardsRoot = () => {
     const match = useRouteMatch();
 
     return (
         <Switch>
-            <Route path={`${match.path}/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)`}>
+            <Route
+                path={`${match.path}/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)`}
+            >
                 <Leaderboards />
             </Route>
             <Redirect to={`${match.url}/global/osu`} />
         </Switch>
     );
-}
+};
 
 export default LeaderboardsRoot;

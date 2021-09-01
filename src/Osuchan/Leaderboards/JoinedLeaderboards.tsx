@@ -6,8 +6,16 @@ import { observer } from "mobx-react-lite";
 const JoinedLeaderboards = observer((props: JoinedLeaderboardsProps) => (
     <>
         {props.memberships.map((membership, i) => (
-            <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(membership.leaderboard!.gamemode)}/${membership.leaderboardId}`}>
-                <CommunityLeaderboardRow leaderboard={membership.leaderboard!} membership={membership} />
+            <UnstyledLink
+                key={i}
+                to={`/leaderboards/community/${formatGamemodeNameShort(
+                    membership.leaderboard!.gamemode
+                )}/${membership.leaderboardId}`}
+            >
+                <CommunityLeaderboardRow
+                    leaderboard={membership.leaderboard!}
+                    membership={membership}
+                />
             </UnstyledLink>
         ))}
     </>

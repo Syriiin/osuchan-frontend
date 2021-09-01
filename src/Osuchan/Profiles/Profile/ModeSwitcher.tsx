@@ -24,11 +24,11 @@ const ModeLink = styled(Link)<ModeLinkProps>`
     align-items: center;
     padding: 5px;
     border-radius: 5px;
-    color: ${props => props.$active ? props.theme.colours.mango : "#fff"};
+    color: ${(props) => (props.$active ? props.theme.colours.mango : "#fff")};
 
     &:hover {
         text-decoration: none;
-        background-color: ${props => props.theme.colours.currant};
+        background-color: ${(props) => props.theme.colours.currant};
     }
 `;
 
@@ -39,16 +39,28 @@ interface ModeLinkProps {
 const ModeSwitcher = (props: ModeSwitcherProps) => (
     <ModeSwitcherSurface>
         <ModeSwitcherContainer>
-            <ModeLink $active={props.gamemodeId === Gamemode.Standard} to={`/users/${props.userString}/osu`}>
+            <ModeLink
+                $active={props.gamemodeId === Gamemode.Standard}
+                to={`/users/${props.userString}/osu`}
+            >
                 <li>osu!</li>
             </ModeLink>
-            <ModeLink $active={props.gamemodeId === Gamemode.Taiko} to={`/users/${props.userString}/taiko`}>
+            <ModeLink
+                $active={props.gamemodeId === Gamemode.Taiko}
+                to={`/users/${props.userString}/taiko`}
+            >
                 <li>osu!taiko</li>
             </ModeLink>
-            <ModeLink $active={props.gamemodeId === Gamemode.Catch} to={`/users/${props.userString}/catch`}>
+            <ModeLink
+                $active={props.gamemodeId === Gamemode.Catch}
+                to={`/users/${props.userString}/catch`}
+            >
                 <li>osu!catch</li>
             </ModeLink>
-            <ModeLink $active={props.gamemodeId === Gamemode.Mania} to={`/users/${props.userString}/mania`}>
+            <ModeLink
+                $active={props.gamemodeId === Gamemode.Mania}
+                to={`/users/${props.userString}/mania`}
+            >
                 <li>osu!mania</li>
             </ModeLink>
         </ModeSwitcherContainer>

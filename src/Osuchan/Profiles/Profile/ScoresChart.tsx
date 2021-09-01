@@ -1,6 +1,14 @@
 import { useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
-import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import {
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    LineChart,
+    Line,
+} from "recharts";
 
 import { Surface } from "../../../components";
 import { Score } from "../../../store/models/profiles/types";
@@ -18,35 +26,63 @@ const ScoresChart = observer((props: ScoresChartProps) => {
     const scoresData = props.scores.map((score, i) => ({
         x: i + 1,
         pp: score.pp,
-        sandboxPp: props.sandboxScores[i]?.pp
+        sandboxPp: props.sandboxScores[i]?.pp,
     }));
 
     return (
         <ScoresChartSurface>
             <ResponsiveContainer>
                 <LineChart data={scoresData}>
-                    <XAxis type="number" dataKey="x" name="#" domain={[0, 100]} />
-                    <YAxis type="number" name="PP" unit="pp" domain={["auto", "auto"]} />
+                    <XAxis
+                        type="number"
+                        dataKey="x"
+                        name="#"
+                        domain={[0, 100]}
+                    />
+                    <YAxis
+                        type="number"
+                        name="PP"
+                        unit="pp"
+                        domain={["auto", "auto"]}
+                    />
                     <CartesianGrid vertical={false} />
                     <Tooltip
-                        labelFormatter={label => `# ${label}`}
-                        formatter={(value: number) => value.toLocaleString("en", { maximumFractionDigits: 0 })}
+                        labelFormatter={(label) => `# ${label}`}
+                        formatter={(value: number) =>
+                            value.toLocaleString("en", {
+                                maximumFractionDigits: 0,
+                            })
+                        }
                         cursor={{
-                            strokeDasharray: "3 3"
+                            strokeDasharray: "3 3",
                         }}
                         itemStyle={{
-                            color: "#fff"
+                            color: "#fff",
                         }}
                         contentStyle={{
                             color: "#fff",
                             backgroundColor: theme.colours.foreground,
                             borderRadius: "5px",
-                            border: "unset"
+                            border: "unset",
                         }}
                     />
-                    <Line name={props.sandboxMode ? "Real" : "PP"} dataKey="pp" unit="pp" fill={theme.colours.pillow} stroke={theme.colours.pillow} activeDot={{ r: 5 }} />
+                    <Line
+                        name={props.sandboxMode ? "Real" : "PP"}
+                        dataKey="pp"
+                        unit="pp"
+                        fill={theme.colours.pillow}
+                        stroke={theme.colours.pillow}
+                        activeDot={{ r: 5 }}
+                    />
                     {props.sandboxMode && (
-                        <Line name="Sandbox" dataKey="sandboxPp" unit="pp" fill={theme.colours.timber} stroke={theme.colours.timber} activeDot={{ r: 5 }} />
+                        <Line
+                            name="Sandbox"
+                            dataKey="sandboxPp"
+                            unit="pp"
+                            fill={theme.colours.timber}
+                            stroke={theme.colours.timber}
+                            activeDot={{ r: 5 }}
+                        />
                     )}
                 </LineChart>
             </ResponsiveContainer>

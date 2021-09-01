@@ -12,6 +12,6 @@ export const osuchanTheme: DefaultTheme = {
         negative: "#CC544E",
         foreground: "#363663",
         midground: "#29293D",
-        background: "#17171C"
-    }
-}
+        background: "#17171C",
+    },
+};

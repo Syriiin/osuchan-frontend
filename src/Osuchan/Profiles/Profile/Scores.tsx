@@ -21,8 +21,19 @@ const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
 
     return (
         <>
-            <ScoreRow actionButton={sandboxMode && gamemode === Gamemode.Standard} actionButtonText="Edit" actionButtonOnClick={() => setEditModalOpen(true)} score={score} hidePlayerInfo />
-            <ScoreEditModal score={score} gamemode={gamemode} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
+            <ScoreRow
+                actionButton={sandboxMode && gamemode === Gamemode.Standard}
+                actionButtonText="Edit"
+                actionButtonOnClick={() => setEditModalOpen(true)}
+                score={score}
+                hidePlayerInfo
+            />
+            <ScoreEditModal
+                score={score}
+                gamemode={gamemode}
+                open={editModalOpen}
+                onClose={() => setEditModalOpen(false)}
+            />
         </>
     );
 });
@@ -38,18 +49,27 @@ const Scores = observer((props: ScoresProps) => {
 
     return (
         <ScoresSurface>
-            <SurfaceTitle>
-                Scores
-            </SurfaceTitle>
-            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
-                <ProfileScoreRow key={i} score={score} gamemode={props.gamemode} sandboxMode={props.sandboxMode} />
-            ))}
+            <SurfaceTitle>Scores</SurfaceTitle>
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map(
+                (score, i) => (
+                    <ProfileScoreRow
+                        key={i}
+                        score={score}
+                        gamemode={props.gamemode}
+                        sandboxMode={props.sandboxMode}
+                    />
+                )
+            )}
             {props.scores.length <= 5 || showAllScores || (
-                <Button type="button" fullWidth action={() => setShowAllScores(true)}>Show More</Button>
+                <Button
+                    type="button"
+                    fullWidth
+                    action={() => setShowAllScores(true)}
+                >
+                    Show More
+                </Button>
             )}
-            {props.scores.length === 0 && (
-                <p>No scores found...</p>
-            )}
+            {props.scores.length === 0 && <p>No scores found...</p>}
         </ScoresSurface>
     );
 });

@@ -2,7 +2,18 @@ import React, { useState, useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { SimpleModal, SimpleModalTitle, TextInput, TextField, FormLabel, FormControl, Button, Switch, ScoreFilterForm, Select } from "../../components";
+import {
+    SimpleModal,
+    SimpleModalTitle,
+    TextInput,
+    TextField,
+    FormLabel,
+    FormControl,
+    Button,
+    Switch,
+    ScoreFilterForm,
+    Select,
+} from "../../components";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { ScoreFilter } from "../../store/models/profiles/types";
@@ -15,102 +26,175 @@ const LeaderboardIcon = styled.img`
     border-radius: 5px;
 `;
 
-const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
-    const store = useStore();
-    const listStore = store.leaderboardsStore.listStore;
+const CreateLeaderboardModal = observer(
+    (props: CreateLeaderboardModalProps) => {
+        const store = useStore();
+        const listStore = store.leaderboardsStore.listStore;
 
-    const [gamemode, setGamemode] = useState(Gamemode.Standard);
-    const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
-    const [accessType, setAccessType] = useState(LeaderboardAccessType.Public);
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [iconUrl, setIconUrl] = useState(`${window.location.origin}/static/icon-64.png`);
-    const [allowPastScores, setAllowPastScores] = useState(true);
-    const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>({});
+        const [gamemode, setGamemode] = useState(Gamemode.Standard);
+        const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
+        const [accessType, setAccessType] = useState(
+            LeaderboardAccessType.Public
+        );
+        const [name, setName] = useState("");
+        const [description, setDescription] = useState("");
+        const [iconUrl, setIconUrl] = useState(
+            `${window.location.origin}/static/icon-64.png`
+        );
+        const [allowPastScores, setAllowPastScores] = useState(true);
+        const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>(
+            {}
+        );
 
-    // Timeout updated icon url so we don't spam preview image requests on every character change
-    const [delayedIconUrl, setDelayedIconUrl] = useState(iconUrl);
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setDelayedIconUrl(iconUrl);
-        }, 1000);
+        // Timeout updated icon url so we don't spam preview image requests on every character change
+        const [delayedIconUrl, setDelayedIconUrl] = useState(iconUrl);
+        useEffect(() => {
+            const timeout = setTimeout(() => {
+                setDelayedIconUrl(iconUrl);
+            }, 1000);
 
-        return () => clearTimeout(timeout);
-    }, [setDelayedIconUrl, iconUrl]);
+            return () => clearTimeout(timeout);
+        }, [setDelayedIconUrl, iconUrl]);
 
-    const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+        const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
+            e.preventDefault();
 
-        listStore.createLeaderboard(gamemode, scoreSet, accessType, name, description, iconUrl, allowPastScores, scoreFilter as ScoreFilter);
-    }
+            listStore.createLeaderboard(
+                gamemode,
+                scoreSet,
+                accessType,
+                name,
+                description,
+                iconUrl,
+                allowPastScores,
+                scoreFilter as ScoreFilter
+            );
+        };
 
-    // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
-    const handleScoreFilterChange = useCallback((scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter), []);
+        // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
+        const handleScoreFilterChange = useCallback(
+            (scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter),
+            []
+        );
 
-    const handleGamemodeChange = (mode: Gamemode) => {
-        setGamemode(mode);
-        if (mode !== Gamemode.Standard) {
-            // Only normal score set is supported for non-standard gamemodes since other depend on choke support
-            setScoreSet(ScoreSet.Normal);
-        }
-    }
+        const handleGamemodeChange = (mode: Gamemode) => {
+            setGamemode(mode);
+            if (mode !== Gamemode.Standard) {
+                // Only normal score set is supported for non-standard gamemodes since other depend on choke support
+                setScoreSet(ScoreSet.Normal);
+            }
+        };
 
-    return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
-            <SimpleModalTitle>Create Leaderboard</SimpleModalTitle>
-            <form onSubmit={handleCreateLeaderboardSubmit}>
-                {/* Basic details */}
-                <FormLabel>Name</FormLabel>
-                <TextInput fullWidth required value={name} onChange={e => setName(e.currentTarget.value)} />
-                <FormLabel>Gamemode</FormLabel>
-                <FormControl>
-                    <Select value={gamemode} onChange={handleGamemodeChange} options={[
-                        { value: Gamemode.Standard, label: "osu!" },
-                        { value: Gamemode.Taiko, label: "osu!taiko" },
-                        { value: Gamemode.Catch, label: "osu!catch" },
-                        { value: Gamemode.Mania, label: "osu!mania" },
-                    ]} />
-                </FormControl>
-                <FormLabel>Score Set</FormLabel>
-                <FormControl>
-                    <Select value={scoreSet} onChange={value => setScoreSet(value)} disabled={gamemode !== Gamemode.Standard} options={[
-                        { value: ScoreSet.Normal, label: "Normal" },
-                        { value: ScoreSet.NeverChoke, label: "Never Choke" },
-                        // { value: ScoreSet.AlwaysFullCombo, label: "Always FC" }
-                    ]} />
-                </FormControl>
-                <FormLabel>Type</FormLabel>
-                <FormControl>
-                    <Select value={accessType} onChange={value => setAccessType(value)} options={[
-                        { value: LeaderboardAccessType.Public, label: "Public" },
-                        { value: LeaderboardAccessType.PublicInviteOnly, label: "Public (Invite-only)" },
-                        { value: LeaderboardAccessType.Private, label: "Private" }
-                    ]} />
-                </FormControl>
-                <FormLabel>Description</FormLabel>
-                <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
-                <FormLabel>Icon URL</FormLabel>
-                <FormControl>
-                    <TextInput fullWidth placeholder={`${window.location.origin}/static/icon-64.png`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
-                    <LeaderboardIcon src={delayedIconUrl} />
-                </FormControl>
-                <FormLabel>Allow scores set prior to member joining</FormLabel>
-                <FormControl>
-                    <Switch
-                        mini
-                        checked={allowPastScores}
-                        onChange={(checked, event, id) => setAllowPastScores(checked)}
+        return (
+            <SimpleModal open={props.open} onClose={props.onClose}>
+                <SimpleModalTitle>Create Leaderboard</SimpleModalTitle>
+                <form onSubmit={handleCreateLeaderboardSubmit}>
+                    {/* Basic details */}
+                    <FormLabel>Name</FormLabel>
+                    <TextInput
+                        fullWidth
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.currentTarget.value)}
                     />
-                </FormControl>
+                    <FormLabel>Gamemode</FormLabel>
+                    <FormControl>
+                        <Select
+                            value={gamemode}
+                            onChange={handleGamemodeChange}
+                            options={[
+                                { value: Gamemode.Standard, label: "osu!" },
+                                { value: Gamemode.Taiko, label: "osu!taiko" },
+                                { value: Gamemode.Catch, label: "osu!catch" },
+                                { value: Gamemode.Mania, label: "osu!mania" },
+                            ]}
+                        />
+                    </FormControl>
+                    <FormLabel>Score Set</FormLabel>
+                    <FormControl>
+                        <Select
+                            value={scoreSet}
+                            onChange={(value) => setScoreSet(value)}
+                            disabled={gamemode !== Gamemode.Standard}
+                            options={[
+                                { value: ScoreSet.Normal, label: "Normal" },
+                                {
+                                    value: ScoreSet.NeverChoke,
+                                    label: "Never Choke",
+                                },
+                                // { value: ScoreSet.AlwaysFullCombo, label: "Always FC" }
+                            ]}
+                        />
+                    </FormControl>
+                    <FormLabel>Type</FormLabel>
+                    <FormControl>
+                        <Select
+                            value={accessType}
+                            onChange={(value) => setAccessType(value)}
+                            options={[
+                                {
+                                    value: LeaderboardAccessType.Public,
+                                    label: "Public",
+                                },
+                                {
+                                    value: LeaderboardAccessType.PublicInviteOnly,
+                                    label: "Public (Invite-only)",
+                                },
+                                {
+                                    value: LeaderboardAccessType.Private,
+                                    label: "Private",
+                                },
+                            ]}
+                        />
+                    </FormControl>
+                    <FormLabel>Description</FormLabel>
+                    <TextField
+                        fullWidth
+                        value={description}
+                        onChange={(e) => setDescription(e.currentTarget.value)}
+                    />
+                    <FormLabel>Icon URL</FormLabel>
+                    <FormControl>
+                        <TextInput
+                            fullWidth
+                            placeholder={`${window.location.origin}/static/icon-64.png`}
+                            value={iconUrl}
+                            onChange={(e) => setIconUrl(e.currentTarget.value)}
+                        />
+                        <LeaderboardIcon src={delayedIconUrl} />
+                    </FormControl>
+                    <FormLabel>
+                        Allow scores set prior to member joining
+                    </FormLabel>
+                    <FormControl>
+                        <Switch
+                            mini
+                            checked={allowPastScores}
+                            onChange={(checked, event, id) =>
+                                setAllowPastScores(checked)
+                            }
+                        />
+                    </FormControl>
 
-                {/* Score filters */}
-                <ScoreFilterForm gamemode={gamemode} value={scoreFilter} onChange={handleScoreFilterChange} />
+                    {/* Score filters */}
+                    <ScoreFilterForm
+                        gamemode={gamemode}
+                        value={scoreFilter}
+                        onChange={handleScoreFilterChange}
+                    />
 
-                <Button isLoading={listStore.isCreatingLeaderboard} positive type="submit">Create</Button>
-            </form>
-        </SimpleModal>
-    );
-});
+                    <Button
+                        isLoading={listStore.isCreatingLeaderboard}
+                        positive
+                        type="submit"
+                    >
+                        Create
+                    </Button>
+                </form>
+            </SimpleModal>
+        );
+    }
+);
 
 interface CreateLeaderboardModalProps {
     open: boolean;

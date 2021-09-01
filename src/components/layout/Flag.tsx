@@ -23,10 +23,12 @@ export const Flag = (props: FlagProps) => {
 
     return (
         <FlagWrapper>
-            <FlagImage data-tip={name} data-for={`country-${props.countryCode}`} src={`https://osu.ppy.sh/images/flags/${props.countryCode}.png`} />
-            {props.showFullName && (
-                <CountryName>{name}</CountryName>
-            )}
+            <FlagImage
+                data-tip={name}
+                data-for={`country-${props.countryCode}`}
+                src={`https://osu.ppy.sh/images/flags/${props.countryCode}.png`}
+            />
+            {props.showFullName && <CountryName>{name}</CountryName>}
             <Tooltip id={`country-${props.countryCode}`} />
         </FlagWrapper>
     );

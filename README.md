@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node
+-   Node
 
 ## Setup
 

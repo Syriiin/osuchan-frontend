@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
-import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Select, TextField, Button } from "../../../components";
+import {
+    SimpleModal,
+    SimpleModalTitle,
+    FormLabel,
+    TextInput,
+    FormControl,
+    Select,
+    TextField,
+    Button,
+} from "../../../components";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { useStore } from "../../../utils/hooks";
 
@@ -17,10 +26,14 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
     const detailStore = store.leaderboardsStore.detailStore;
 
     const { leaderboard } = detailStore;
-    
-    const [accessType, setAccessType] = useState(leaderboard?.accessType ?? LeaderboardAccessType.Public);
+
+    const [accessType, setAccessType] = useState(
+        leaderboard?.accessType ?? LeaderboardAccessType.Public
+    );
     const [name, setName] = useState(leaderboard?.name ?? "");
-    const [description, setDescription] = useState(leaderboard?.description ?? "");
+    const [description, setDescription] = useState(
+        leaderboard?.description ?? ""
+    );
     const [iconUrl, setIconUrl] = useState(leaderboard?.iconUrl ?? "");
 
     // Timeout updated icon url so we don't spam preview image requests on every character change
@@ -40,9 +53,9 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
             accessType,
             name,
             description,
-            iconUrl
+            iconUrl,
         });
-    }
+    };
 
     return (
         <SimpleModal open={props.open} onClose={props.onClose}>
@@ -50,24 +63,56 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
             <form onSubmit={handleUpdateLeaderboardSubmit}>
                 {/* Basic details */}
                 <FormLabel>Name</FormLabel>
-                <TextInput fullWidth required value={name} onChange={e => setName(e.currentTarget.value)} />
+                <TextInput
+                    fullWidth
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.currentTarget.value)}
+                />
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                    <Select value={accessType} onChange={value => setAccessType(value)} options={[
-                        { value: LeaderboardAccessType.Public, label: "Public" },
-                        { value: LeaderboardAccessType.PublicInviteOnly, label: "Public (Invite-only)" },
-                        { value: LeaderboardAccessType.Private, label: "Private" }
-                    ]} />
+                    <Select
+                        value={accessType}
+                        onChange={(value) => setAccessType(value)}
+                        options={[
+                            {
+                                value: LeaderboardAccessType.Public,
+                                label: "Public",
+                            },
+                            {
+                                value: LeaderboardAccessType.PublicInviteOnly,
+                                label: "Public (Invite-only)",
+                            },
+                            {
+                                value: LeaderboardAccessType.Private,
+                                label: "Private",
+                            },
+                        ]}
+                    />
                 </FormControl>
                 <FormLabel>Description</FormLabel>
-                <TextField fullWidth value={description} onChange={e => setDescription(e.currentTarget.value)} />
+                <TextField
+                    fullWidth
+                    value={description}
+                    onChange={(e) => setDescription(e.currentTarget.value)}
+                />
                 <FormLabel>Icon URL</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth placeholder={`${window.location.origin}/static/icon-64.png`} value={iconUrl} onChange={e => setIconUrl(e.currentTarget.value)} />
+                    <TextInput
+                        fullWidth
+                        placeholder={`${window.location.origin}/static/icon-64.png`}
+                        value={iconUrl}
+                        onChange={(e) => setIconUrl(e.currentTarget.value)}
+                    />
                     <LeaderboardIcon src={delayedIconUrl} />
                 </FormControl>
 
-                <Button isLoading={detailStore.isUpdatingLeaderboard} type="submit">Update</Button>
+                <Button
+                    isLoading={detailStore.isUpdatingLeaderboard}
+                    type="submit"
+                >
+                    Update
+                </Button>
             </form>
         </SimpleModal>
     );

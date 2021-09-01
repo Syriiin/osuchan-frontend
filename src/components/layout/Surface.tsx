@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Surface = styled.div`
-    background-color: ${props => props.theme.colours.midground};
+    background-color: ${(props) => props.theme.colours.midground};
     border-radius: 5px;
 `;
 

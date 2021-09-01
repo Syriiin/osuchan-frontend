@@ -5,31 +5,31 @@ import { ThemeContext } from "styled-components";
 
 // TODO: replace this ugly mess... custom select needed
 
-type OptionType = { label: string; value: Mods; }
+type OptionType = { label: string; value: Mods };
 
 export const ModsSelect = (props: ModsSelectProps) => {
     const theme = useContext(ThemeContext);
-    
+
     const styles: StylesConfig<OptionType, true> = {
         menu: (provided, state) => ({
             ...provided,
-            backgroundColor: theme.colours.background
+            backgroundColor: theme.colours.background,
         }),
         control: (provided, state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
-            border: "none"
+            border: "none",
         }),
         input: (provided, state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
-            color: "#fff"
+            color: "#fff",
         }),
         option: (provided, state) => ({
             ...provided,
-            color: state.isFocused ? theme.colours.background : "#fff"
-        })
-    }
+            color: state.isFocused ? theme.colours.background : "#fff",
+        }),
+    };
 
     const selectModOptions = [
         { value: 8, label: "HD" },
@@ -40,7 +40,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
         { value: 256, label: "HT" },
         { value: 1, label: "NF" },
         { value: 32, label: "SD" },
-        { value: 16384, label: "PF" }
+        { value: 16384, label: "PF" },
     ];
 
     if (props.gamemode === Gamemode.Standard) {
@@ -59,7 +59,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
     }
 
     // convert bit mods to mods array
-    const mods = []
+    const mods = [];
     for (const option of selectModOptions) {
         if (props.value & option.value) {
             mods.push(option.value);
@@ -68,11 +68,20 @@ export const ModsSelect = (props: ModsSelectProps) => {
 
     return (
         <Select
-            value={mods.map(value => selectModOptions.find(option => option.value === value) as OptionType)}
+            value={mods.map(
+                (value) =>
+                    selectModOptions.find(
+                        (option) => option.value === value
+                    ) as OptionType
+            )}
             isMulti
             onChange={(value: ValueType<OptionType, true>) => {
                 if (value) {
-                    props.onChange((value as OptionType[]).map(option => option.value).reduce((total, value) => total | value, 0));
+                    props.onChange(
+                        (value as OptionType[])
+                            .map((option) => option.value)
+                            .reduce((total, value) => total | value, 0)
+                    );
                 }
             }}
             options={selectModOptions}
@@ -80,7 +89,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
             isSearchable={false}
         />
     );
-}
+};
 
 interface ModsSelectProps {
     gamemode: Gamemode;

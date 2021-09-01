@@ -45,9 +45,7 @@ const BeatmapInfo = styled.div`
     margin: 5px;
 `;
 
-const Title = styled.span`
-
-`;
+const Title = styled.span``;
 
 const Artist = styled.span`
     font-size: 0.8em;
@@ -55,7 +53,7 @@ const Artist = styled.span`
 
 const DifficultyName = styled.span`
     font-size: 0.8em;
-    color: ${props => props.theme.colours.mango};
+    color: ${(props) => props.theme.colours.mango};
 `;
 
 const ModsContainer = styled.div`
@@ -78,9 +76,7 @@ const AccuracyContainer = styled.div`
     flex-grow: 1;
 `;
 
-const Accuracy = styled.span`
-
-`;
+const Accuracy = styled.span``;
 
 const ScoreDate = styled.span`
     font-size: 0.8em;
@@ -114,23 +110,26 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
 
     return (
         <>
-            <ScoreRowWrapper hoverable onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}>
+            <ScoreRowWrapper
+                hoverable
+                onClick={
+                    props.onClickOverride || (() => setDetailsModalOpen(true))
+                }
+            >
                 {!props.hidePlayerInfo && (
                     <PlayerInfo>
-                        <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
+                        <Avatar
+                            src={`https://a.ppy.sh/${userStats.osuUserId}`}
+                        />
                         <FlagContainer>
                             <Flag countryCode={userStats.osuUser!.country} />
                         </FlagContainer>
-                        <Username>
-                            {userStats.osuUser!.username}
-                        </Username>
+                        <Username>{userStats.osuUser!.username}</Username>
                     </PlayerInfo>
                 )}
                 {!props.hideBeatmapInfo && (
                     <BeatmapInfo>
-                        <Title>
-                            {beatmap.title}
-                        </Title>
+                        <Title>{beatmap.title}</Title>
                         <Artist>
                             <small>by</small> {beatmap.artist}
                         </Artist>
@@ -145,7 +144,11 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 <ScoreInfo>
                     <AccuracyContainer>
                         <Accuracy>
-                            <NumberFormat value={score.accuracy} decimalPlaces={2} />%
+                            <NumberFormat
+                                value={score.accuracy}
+                                decimalPlaces={2}
+                            />
+                            %
                         </Accuracy>
                         <ScoreDate>
                             <TimeAgo datetime={score.date} />
@@ -153,20 +156,28 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                     </AccuracyContainer>
                     <PerformanceContainer>
                         <Performance>
-                            <NumberFormat value={score.pp} decimalPlaces={0} />pp
+                            <NumberFormat value={score.pp} decimalPlaces={0} />
+                            pp
                         </Performance>
-                        <Result>
-                            {formatScoreResult(score.result)}
-                        </Result>
+                        <Result>{formatScoreResult(score.result)}</Result>
                     </PerformanceContainer>
                 </ScoreInfo>
                 {props.actionButton && (
                     <ClickPropagationSupressor>
-                        <ActionButton minWidth={0} action={props.actionButtonOnClick}>{props.actionButtonText}</ActionButton>
+                        <ActionButton
+                            minWidth={0}
+                            action={props.actionButtonOnClick}
+                        >
+                            {props.actionButtonText}
+                        </ActionButton>
                     </ClickPropagationSupressor>
                 )}
             </ScoreRowWrapper>
-            <ScoreModal score={score} open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} />
+            <ScoreModal
+                score={score}
+                open={detailsModalOpen}
+                onClose={() => setDetailsModalOpen(false)}
+            />
         </>
     );
 });

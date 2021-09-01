@@ -13,9 +13,7 @@ export const SimpleModalTitle = styled.h1`
 
 export const SimpleModal = (props: SimpleModalProps) => (
     <BasicModal open={props.open} onClose={props.onClose}>
-        <SimpleModalWrapper>
-            {props.children}
-        </SimpleModalWrapper>
+        <SimpleModalWrapper>{props.children}</SimpleModalWrapper>
     </BasicModal>
 );
 

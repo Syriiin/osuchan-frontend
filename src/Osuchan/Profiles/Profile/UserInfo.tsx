@@ -49,9 +49,7 @@ const UserInfo = observer((props: UserInfoProps) => {
             <Avatar src={`https://a.ppy.sh/${osuUser.id}`} />
             <UserInfoContainer>
                 <UserInfoRow>
-                    <Username>
-                        {osuUser.username}
-                    </Username>
+                    <Username>{osuUser.username}</Username>
                 </UserInfoRow>
                 <UserInfoRow>
                     <Flag countryCode={osuUser.country} showFullName />

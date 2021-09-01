@@ -7,8 +7,8 @@ export const TextInput = styled.input<TextInputProps>`
     border-radius: 5px;
     border-width: 0;
     color: #fff;
-    background-color: ${props => props.theme.colours.background};
-    width: ${props => props.fullWidth ? "100%" : "auto"};
+    background-color: ${(props) => props.theme.colours.background};
+    width: ${(props) => (props.fullWidth ? "100%" : "auto")};
 `;
 
 export interface TextInputProps {

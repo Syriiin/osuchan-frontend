@@ -14,6 +14,6 @@ declare module "styled-components" {
             foreground: string;
             midground: string;
             background: string;
-        }
+        };
     }
 }

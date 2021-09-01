@@ -24,7 +24,7 @@ const ContentWrapper = styled.main`
 const Osuchan = () => {
     const store = useStore();
     const meStore = store.meStore;
-    
+
     // call fetch me action on mount
     useEffect(() => {
         meStore.loadMe();

@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { Router, useLocation } from "react-router-dom";
-import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
+import {
+    ThemeProvider as StyledThemeProvider,
+    createGlobalStyle,
+} from "styled-components";
 import { configure } from "mobx";
 import ReactGA from "react-ga";
 
@@ -22,7 +25,7 @@ configure({
     enforceActions: "always",
     computedRequiresReaction: true,
     reactionRequiresObservable: true,
-    observableRequiresReaction: true
+    observableRequiresReaction: true,
 });
 
 const GlobalStyle = createGlobalStyle`
@@ -32,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     a {
-        color: ${props => props.theme.colours.mango};
+        color: ${(props) => props.theme.colours.mango};
         text-decoration: none;
 
         &:hover {
@@ -42,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
 
     body {
         margin: 0;
-        background-color: ${props => props.theme.colours.background};
+        background-color: ${(props) => props.theme.colours.background};
         color: #fff;
         line-height: 1.3;
     }
@@ -57,10 +60,8 @@ const AppWithContext = () => {
         }
     }, [location]);
 
-    return (
-        <Osuchan />
-    );
-}
+    return <Osuchan />;
+};
 
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>

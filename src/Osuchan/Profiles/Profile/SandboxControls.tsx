@@ -32,7 +32,10 @@ const ControlsStatusContainer = styled.div`
 `;
 
 const ControlsStatus = styled.span<ControlsStatusProps>`
-    color: ${props => props.enabled ? props.theme.colours.timber : props.theme.colours.currant};
+    color: ${(props) =>
+        props.enabled
+            ? props.theme.colours.timber
+            : props.theme.colours.currant};
     width: 100%;
     font-size: 2em;
     font-weight: bolder;
@@ -44,14 +47,15 @@ interface ControlsStatusProps {
 }
 
 const SandboxControls = observer((props: SandboxControlsProps) => {
-    const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] = useState(false);
+    const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] =
+        useState(false);
 
     return (
         <SandboxControlsSurface>
             <SandboxModeSwitchContainer>
                 <SandboxModeHeader>Sandbox Mode</SandboxModeHeader>
                 <Switch
-                    onChange={checked => props.setSandboxMode(checked)}
+                    onChange={(checked) => props.setSandboxMode(checked)}
                     checked={props.sandboxMode}
                 />
             </SandboxModeSwitchContainer>
@@ -61,9 +65,18 @@ const SandboxControls = observer((props: SandboxControlsProps) => {
                 </ControlsStatus>
             </ControlsStatusContainer>
             {props.sandboxMode && (
-                <Button type="button" action={() => setSandboxSettingsModalOpen(true)}>Settings</Button>
+                <Button
+                    type="button"
+                    action={() => setSandboxSettingsModalOpen(true)}
+                >
+                    Settings
+                </Button>
             )}
-            <SandboxSettingsModal gamemode={props.gamemode} open={sandboxSettingsModalOpen} onClose={() => setSandboxSettingsModalOpen(false)} />
+            <SandboxSettingsModal
+                gamemode={props.gamemode}
+                open={sandboxSettingsModalOpen}
+                onClose={() => setSandboxSettingsModalOpen(false)}
+            />
         </SandboxControlsSurface>
     );
 });

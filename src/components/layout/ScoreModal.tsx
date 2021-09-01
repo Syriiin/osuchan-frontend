@@ -33,16 +33,14 @@ const Title = styled.a`
     color: #fff;
 `;
 
-const Artist = styled.span`
-
-`;
+const Artist = styled.span``;
 
 const DifficultyName = styled.span`
-    color: ${props => props.theme.colours.mango};
+    color: ${(props) => props.theme.colours.mango};
 `;
 
 const Mapper = styled.span`
-    color: ${props => props.theme.colours.mango};
+    color: ${(props) => props.theme.colours.mango};
 `;
 
 const BeatmapDate = styled.span`
@@ -91,12 +89,10 @@ const Performance = styled.span`
     font-size: 2em;
 `;
 
-const Result = styled.span`
-
-`;
+const Result = styled.span``;
 
 const NochokePerformance = styled.span`
-    color: ${props => props.theme.colours.timber};
+    color: ${(props) => props.theme.colours.timber};
 `;
 
 export const ScoreModal = observer((props: ScoreModalProps) => {
@@ -105,53 +101,102 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
 
     return (
         <BasicModal open={props.open} onClose={props.onClose}>
-            <BannerImage src={`https://assets.ppy.sh/beatmaps/${beatmap.setId}/covers/cover.jpg`} />
+            <BannerImage
+                src={`https://assets.ppy.sh/beatmaps/${beatmap.setId}/covers/cover.jpg`}
+            />
             <InfoContainer>
                 {/* Beatmap info: ranked date, title, artist, diffname, mapper, mods, cs, ar, od, bpm, length, stars */}
                 <BeatmapInfo>
                     {/* TODO: make url to gamemode specific (accounting for converts) */}
-                    <Title href={`https://osu.ppy.sh/beatmapsets/${beatmap.setId}#osu/${beatmap.id}`}>{beatmap.title}</Title>
+                    <Title
+                        href={`https://osu.ppy.sh/beatmapsets/${beatmap.setId}#osu/${beatmap.id}`}
+                    >
+                        {beatmap.title}
+                    </Title>
                     <Artist>by {beatmap.artist}</Artist>
                     <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     <Mapper>Mapset by {beatmap.creatorName}</Mapper>
-                    <BeatmapDate>{beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"} <TimeAgo datetime={beatmap.approvalDate} /></BeatmapDate>
+                    <BeatmapDate>
+                        {beatmap.status === BeatmapStatus.Loved
+                            ? "Loved"
+                            : "Ranked"}{" "}
+                        <TimeAgo datetime={beatmap.approvalDate} />
+                    </BeatmapDate>
                     <ModsContainer>
                         <ModIcons small bitwiseMods={score.mods} />
                     </ModsContainer>
                     <BeatmapDataTable>
                         <tr>
                             <td>BPM</td>
-                            <DataCell><NumberFormat value={score.bpm} decimalPlaces={0} /></DataCell>
+                            <DataCell>
+                                <NumberFormat
+                                    value={score.bpm}
+                                    decimalPlaces={0}
+                                />
+                            </DataCell>
                         </tr>
                         <tr>
                             <td>Length</td>
                             <DataCell>{formatTime(score.length)}</DataCell>
                         </tr>
-                        {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(score.gamemode) && (
+                        {[
+                            Gamemode.Standard,
+                            Gamemode.Catch,
+                            Gamemode.Mania,
+                        ].includes(score.gamemode) && (
                             <tr>
-                                <td>{score.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
-                                <DataCell><NumberFormat value={score.circleSize} decimalPlaces={1} /></DataCell>
+                                <td>
+                                    {score.gamemode === Gamemode.Mania
+                                        ? "Keys"
+                                        : "Circle Size"}
+                                </td>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.circleSize}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
                             </tr>
                         )}
-                        {[Gamemode.Standard, Gamemode.Catch].includes(score.gamemode) && (
+                        {[Gamemode.Standard, Gamemode.Catch].includes(
+                            score.gamemode
+                        ) && (
                             <tr>
                                 <td>Approach Rate</td>
-                                <DataCell><NumberFormat value={score.approachRate} decimalPlaces={1} /></DataCell>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.approachRate}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
                             </tr>
                         )}
                         <tr>
                             <td>Overall Difficulty</td>
-                            <DataCell><NumberFormat value={score.overallDifficulty} decimalPlaces={1} /></DataCell>
+                            <DataCell>
+                                <NumberFormat
+                                    value={score.overallDifficulty}
+                                    decimalPlaces={1}
+                                />
+                            </DataCell>
                         </tr>
                     </BeatmapDataTable>
                     {score.gamemode === Gamemode.Standard && (
-                        <StarRating><NumberFormat value={score.starRating} decimalPlaces={2} /> stars</StarRating>
+                        <StarRating>
+                            <NumberFormat
+                                value={score.starRating}
+                                decimalPlaces={2}
+                            />{" "}
+                            stars
+                        </StarRating>
                     )}
                 </BeatmapInfo>
 
                 {/* Score info: date, 300s, 100s, 50s, misses, combo, acc, pp, result */}
                 <ScoreInfo>
-                    <ScoreDate>Played <TimeAgo datetime={score.date} /></ScoreDate>
+                    <ScoreDate>
+                        Played <TimeAgo datetime={score.date} />
+                    </ScoreDate>
                     <ScoreDataTable>
                         <tr>
                             <td>300</td>
@@ -170,12 +215,30 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             <DataCell>{score.countMiss}</DataCell>
                         </tr>
                     </ScoreDataTable>
-                    <Accuracy><NumberFormat value={score.accuracy} decimalPlaces={2} />%</Accuracy>
-                    <Combo>{score.bestCombo}x / {beatmap.maxCombo}x</Combo>
-                    <Performance><NumberFormat value={score.pp} decimalPlaces={0} />pp</Performance>
+                    <Accuracy>
+                        <NumberFormat
+                            value={score.accuracy}
+                            decimalPlaces={2}
+                        />
+                        %
+                    </Accuracy>
+                    <Combo>
+                        {score.bestCombo}x / {beatmap.maxCombo}x
+                    </Combo>
+                    <Performance>
+                        <NumberFormat value={score.pp} decimalPlaces={0} />
+                        pp
+                    </Performance>
                     <Result>{formatScoreResult(score.result)}</Result>
                     {Boolean(score.result & ScoreResult.Choke) && (
-                        <NochokePerformance>No-choke <NumberFormat value={score.nochokePp} decimalPlaces={0} />pp</NochokePerformance>
+                        <NochokePerformance>
+                            No-choke{" "}
+                            <NumberFormat
+                                value={score.nochokePp}
+                                decimalPlaces={0}
+                            />
+                            pp
+                        </NochokePerformance>
                     )}
                 </ScoreInfo>
             </InfoContainer>

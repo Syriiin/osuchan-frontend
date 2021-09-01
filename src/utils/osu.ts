@@ -16,40 +16,40 @@ export function gamemodeIdFromName(gamemodeName: string | undefined) {
 }
 
 export function modsShortFromBitwise(bitwiseMods: Mods) {
-    const allMods: {[name: string]: Mods} = {
-        "NONE": Mods.None,
-        "NF": Mods.NoFail,
-        "EZ": Mods.Easy,
-        "TD": Mods.TouchDevice,
-        "HD": Mods.Hidden,
-        "HR": Mods.HardRock,
-        "SD": Mods.SuddenDeath,
-        "DT": Mods.DoubleTime,
-        "RX": Mods.Relax,
-        "HT": Mods.HalfTime,
-        "NC": Mods.Nightcore,
-        "FL": Mods.Flashlight,
-        "AUTO": Mods.Auto,
-        "SO": Mods.SpunOut,
-        "AP": Mods.Autopilot,
-        "PF": Mods.Perfect,
+    const allMods: { [name: string]: Mods } = {
+        NONE: Mods.None,
+        NF: Mods.NoFail,
+        EZ: Mods.Easy,
+        TD: Mods.TouchDevice,
+        HD: Mods.Hidden,
+        HR: Mods.HardRock,
+        SD: Mods.SuddenDeath,
+        DT: Mods.DoubleTime,
+        RX: Mods.Relax,
+        HT: Mods.HalfTime,
+        NC: Mods.Nightcore,
+        FL: Mods.Flashlight,
+        AUTO: Mods.Auto,
+        SO: Mods.SpunOut,
+        AP: Mods.Autopilot,
+        PF: Mods.Perfect,
         "4K": Mods.Key4,
         "5K": Mods.Key5,
         "6K": Mods.Key6,
         "7K": Mods.Key7,
         "8K": Mods.Key8,
-        "FI": Mods.FadeIn,
-        "RN": Mods.Random,
-        "CN": Mods.Cinema,
-        "TP": Mods.TargetPractice,
+        FI: Mods.FadeIn,
+        RN: Mods.Random,
+        CN: Mods.Cinema,
+        TP: Mods.TargetPractice,
         "9K": Mods.Key9,
-        "COOP": Mods.KeyCoop,
+        COOP: Mods.KeyCoop,
         "1K": Mods.Key1,
         "2K": Mods.Key2,
         "3K": Mods.Key3,
-        "V2": Mods.ScoreV2,
-        "MI": Mods.Mirror
-    }
+        V2: Mods.ScoreV2,
+        MI: Mods.Mirror,
+    };
 
     const mods = [];
 
@@ -103,7 +103,7 @@ export function modsAsArray(bitwiseMods: Mods) {
         Mods.Key2,
         Mods.Key3,
         Mods.ScoreV2,
-        Mods.Mirror
+        Mods.Mirror,
     ];
 
     const mods: Mods[] = [];
@@ -124,29 +124,44 @@ export function modsAsArray(bitwiseMods: Mods) {
     return mods;
 }
 
-export function calculateAccuracy(gamemode: Gamemode, count300: number, count100: number, count50: number, countMiss: number, countKatu?: number, countGeki?: number) {
+export function calculateAccuracy(
+    gamemode: Gamemode,
+    count300: number,
+    count100: number,
+    count50: number,
+    countMiss: number,
+    countKatu?: number,
+    countGeki?: number
+) {
     let totalHits;
     let points;
 
     switch (gamemode) {
         case Gamemode.Standard:
             totalHits = count300 + count100 + count50 + countMiss;
-            points = (count50 * 50) + (count100 * 100) + (count300 * 300);
+            points = count50 * 50 + count100 * 100 + count300 * 300;
             return (points / (totalHits * 300)) * 100;
         case Gamemode.Taiko:
             totalHits = count300 + count100 + countMiss;
-            points = ((count100 * 0.5) + (count300 * 1)) * 300;
+            points = (count100 * 0.5 + count300 * 1) * 300;
             return (points / (totalHits * 300)) * 100;
         case Gamemode.Catch:
             let countDropMiss = countKatu as number;
-            totalHits = count300 + count100 + count50 + countMiss + countDropMiss;
+            totalHits =
+                count300 + count100 + count50 + countMiss + countDropMiss;
             let caught = count300 + count100 + count50;
             return (caught / totalHits) * 100;
         case Gamemode.Mania:
             let countMax = countGeki as number;
             let count200 = countKatu as number;
-            totalHits = count50 + count100 + count200 + count300 + countMax + countMiss;
-            points = (count50 * 50) + (count100 * 100) + (count200 * 200) + (count300 * 300) + (countMax * 300);
+            totalHits =
+                count50 + count100 + count200 + count300 + countMax + countMiss;
+            points =
+                count50 * 50 +
+                count100 * 100 +
+                count200 * 200 +
+                count300 * 300 +
+                countMax * 300;
             return (points / (totalHits * 300)) * 100;
     }
 }
@@ -171,7 +186,11 @@ export function calculateLength(length: number, mods: Mods) {
     return length;
 }
 
-export function calculateCircleSize(circleSize: number, mods: Mods, gamemode: Gamemode) {
+export function calculateCircleSize(
+    circleSize: number,
+    mods: Mods,
+    gamemode: Gamemode
+) {
     if (gamemode & Gamemode.Mania) {
         if (mods & Mods.KeyMod) {
             switch (mods) {
@@ -207,8 +226,10 @@ export function calculateCircleSize(circleSize: number, mods: Mods, gamemode: Ga
 }
 
 export function calculateApproachRate(approachRate: number, mods: Mods) {
-    const arToMs = (ar: number) => ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950;
-    const msToAr = (ms: number) => ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150;
+    const arToMs = (ar: number) =>
+        ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950;
+    const msToAr = (ms: number) =>
+        ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150;
 
     if (mods & Mods.HardRock) {
         approachRate *= 1.4;
@@ -228,10 +249,13 @@ export function calculateApproachRate(approachRate: number, mods: Mods) {
         approachRate = msToAr(ms);
     }
 
-    return approachRate
+    return approachRate;
 }
 
-export function calculateOverallDifficulty(overallDifficulty: number, mods: Mods) {
+export function calculateOverallDifficulty(
+    overallDifficulty: number,
+    mods: Mods
+) {
     const odToMs = (od: number) => -6 * od + 79.5;
     const msToOd = (ms: number) => (ms - 79.5) / -6;
 
@@ -244,7 +268,7 @@ export function calculateOverallDifficulty(overallDifficulty: number, mods: Mods
     if (overallDifficulty > 10) {
         overallDifficulty = 10;
     }
-    
+
     if (mods & Mods.DoubleTime) {
         let ms = odToMs(overallDifficulty) / 1.5;
         overallDifficulty = msToOd(ms);

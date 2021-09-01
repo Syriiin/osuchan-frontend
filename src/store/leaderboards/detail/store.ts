@@ -4,9 +4,17 @@ import history from "../../../history";
 import http from "../../../http";
 import notify from "../../../notifications";
 
-import { Leaderboard, Membership, Invite } from "../../models/leaderboards/types";
+import {
+    Leaderboard,
+    Membership,
+    Invite,
+} from "../../models/leaderboards/types";
 import { Score } from "../../models/profiles/types";
-import { leaderboardFromJson, membershipFromJson, inviteFromJson } from "../../models/leaderboards/deserialisers";
+import {
+    leaderboardFromJson,
+    membershipFromJson,
+    inviteFromJson,
+} from "../../models/leaderboards/deserialisers";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
 import { unchokeForScoreSet } from "../../../utils/osuchan";
 import { Gamemode } from "../../models/common/enums";
@@ -54,7 +62,7 @@ export class DetailStore {
             loadMembership: flow,
             joinLeaderboard: flow,
             leaveLeaderboard: flow,
-            kickMember: flow
+            kickMember: flow,
         });
     }
 
@@ -62,9 +70,18 @@ export class DetailStore {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    reloadLeaderboard = async () => this.loadLeaderboard(this.leaderboardType!, this.gamemode!, this.leaderboardId!);
+    reloadLeaderboard = async () =>
+        this.loadLeaderboard(
+            this.leaderboardType!,
+            this.gamemode!,
+            this.leaderboardId!
+        );
 
-    *loadLeaderboard(leaderboardType: string, gamemode: Gamemode, leaderboardId: number): any {
+    *loadLeaderboard(
+        leaderboardType: string,
+        gamemode: Gamemode,
+        leaderboardId: number
+    ): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;
         this.gamemode = gamemode;
@@ -76,18 +93,28 @@ export class DetailStore {
 
         try {
             const leaderboardResponse = yield http.get(this.resourceUrl);
-            const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            const leaderboard: Leaderboard = leaderboardFromJson(
+                leaderboardResponse.data
+            );
 
-            const membersResponse = yield http.get(`${this.resourceUrl}/members`);
-            const members: Membership[] = membersResponse.data.map((data: any) => membershipFromJson(data));
+            const membersResponse = yield http.get(
+                `${this.resourceUrl}/members`
+            );
+            const members: Membership[] = membersResponse.data.map(
+                (data: any) => membershipFromJson(data)
+            );
 
             const scoresResponse = yield http.get(`${this.resourceUrl}/scores`);
-            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
+            const scores: Score[] = scoresResponse.data.map((data: any) =>
+                scoreFromJson(data)
+            );
 
             this.leaderboard = leaderboard;
             this.rankings.replace(members);
             // transform scores into their intended form for abnormal score sets
-            this.leaderboardScores.replace(unchokeForScoreSet(scores, leaderboard.scoreSet));
+            this.leaderboardScores.replace(
+                unchokeForScoreSet(scores, leaderboard.scoreSet)
+            );
 
             this.loadingStatus = ResourceStatus.Loaded;
         } catch (error) {
@@ -102,7 +129,9 @@ export class DetailStore {
         this.userMembership = null;
 
         try {
-            const membershipResponse = yield http.get(`${this.resourceUrl}/members/${userId}`);
+            const membershipResponse = yield http.get(
+                `${this.resourceUrl}/members/${userId}`
+            );
             const membership = membershipFromJson(membershipResponse.data);
 
             this.userMembership = membership;
@@ -120,10 +149,10 @@ export class DetailStore {
 
         try {
             const leaderboardResponse = yield http.patch(this.resourceUrl, {
-                "access_type": leaderboardData.accessType,
-                "name": leaderboardData.name,
-                "description": leaderboardData.description,
-                "icon_url": leaderboardData.iconUrl
+                access_type: leaderboardData.accessType,
+                name: leaderboardData.name,
+                description: leaderboardData.description,
+                icon_url: leaderboardData.iconUrl,
             });
 
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
@@ -135,7 +164,9 @@ export class DetailStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(`Failed to update leaderboard: ${errorMessage}`);
+                notify.negative(
+                    `Failed to update leaderboard: ${errorMessage}`
+                );
             } else {
                 notify.negative("Failed to update leaderboard");
             }
@@ -149,7 +180,7 @@ export class DetailStore {
 
         try {
             const leaderboardResponse = yield http.patch(this.resourceUrl, {
-                "archived": true
+                archived: true,
             });
 
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
@@ -161,7 +192,9 @@ export class DetailStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(`Failed to archive leaderboard: ${errorMessage}`);
+                notify.negative(
+                    `Failed to archive leaderboard: ${errorMessage}`
+                );
             } else {
                 notify.negative("Failed to archive leaderboard");
             }
@@ -175,7 +208,7 @@ export class DetailStore {
 
         try {
             const leaderboardResponse = yield http.patch(this.resourceUrl, {
-                "archived": false
+                archived: false,
             });
 
             this.leaderboard = leaderboardFromJson(leaderboardResponse.data);
@@ -187,7 +220,9 @@ export class DetailStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(`Failed to restore leaderboard: ${errorMessage}`);
+                notify.negative(
+                    `Failed to restore leaderboard: ${errorMessage}`
+                );
             } else {
                 notify.negative("Failed to restore leaderboard");
             }
@@ -203,7 +238,11 @@ export class DetailStore {
             yield http.delete(this.resourceUrl);
 
             // Navigate to leaderboard list page after deletion
-            history.push(`/leaderboards/community/${formatGamemodeNameShort(this.gamemode!)}`);
+            history.push(
+                `/leaderboards/community/${formatGamemodeNameShort(
+                    this.gamemode!
+                )}`
+            );
 
             this.leaderboard = null;
             this.rankings.clear();
@@ -216,7 +255,9 @@ export class DetailStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(`Failed to delete leaderboard: ${errorMessage}`);
+                notify.negative(
+                    `Failed to delete leaderboard: ${errorMessage}`
+                );
             } else {
                 notify.negative("Failed to delete leaderboard");
             }
@@ -230,8 +271,12 @@ export class DetailStore {
         this.invites.clear();
 
         try {
-            const invitesResponse = yield http.get(`${this.resourceUrl}/invites`);
-            const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
+            const invitesResponse = yield http.get(
+                `${this.resourceUrl}/invites`
+            );
+            const invites: Invite[] = invitesResponse.data.map((data: any) =>
+                inviteFromJson(data)
+            );
 
             this.invites.replace(invites);
 
@@ -247,12 +292,17 @@ export class DetailStore {
         this.isInviting = true;
 
         try {
-            const invitesResponse = yield http.post(`${this.resourceUrl}/invites`, {
-                "user_ids": userIds,
-                "message": message
-            });
+            const invitesResponse = yield http.post(
+                `${this.resourceUrl}/invites`,
+                {
+                    user_ids: userIds,
+                    message: message,
+                }
+            );
 
-            const invites: Invite[] = invitesResponse.data.map((data: any) => inviteFromJson(data));
+            const invites: Invite[] = invitesResponse.data.map((data: any) =>
+                inviteFromJson(data)
+            );
 
             this.invites.replace(this.invites.concat(invites));
 
@@ -278,7 +328,9 @@ export class DetailStore {
         try {
             yield http.delete(`${this.resourceUrl}/invites/${userId}`);
 
-            this.invites.replace(this.invites.filter(i => i.osuUserId !== userId));
+            this.invites.replace(
+                this.invites.filter((i) => i.osuUserId !== userId)
+            );
 
             notify.positive("Invite cancelled");
         } catch (error) {
@@ -301,15 +353,25 @@ export class DetailStore {
         this.membership = null;
 
         try {
-            const membershipResponse = yield http.get(`${this.resourceUrl}/members/${userId}`);
-            const membership: Membership = membershipFromJson(membershipResponse.data);
+            const membershipResponse = yield http.get(
+                `${this.resourceUrl}/members/${userId}`
+            );
+            const membership: Membership = membershipFromJson(
+                membershipResponse.data
+            );
 
-            const scoresResponse = yield http.get(`${this.resourceUrl}/members/${userId}/scores`);
-            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
+            const scoresResponse = yield http.get(
+                `${this.resourceUrl}/members/${userId}/scores`
+            );
+            const scores: Score[] = scoresResponse.data.map((data: any) =>
+                scoreFromJson(data)
+            );
 
             this.membership = membership;
             // transform scores into their intended form for abnormal score sets
-            this.membershipScores.replace(unchokeForScoreSet(scores, this.leaderboard!.scoreSet));
+            this.membershipScores.replace(
+                unchokeForScoreSet(scores, this.leaderboard!.scoreSet)
+            );
 
             this.loadingMembershipStatus = ResourceStatus.Loaded;
         } catch (error) {
@@ -323,7 +385,9 @@ export class DetailStore {
         this.isJoiningLeaderboard = true;
 
         try {
-            const membershipResponse = yield http.post(`${this.resourceUrl}/members`);
+            const membershipResponse = yield http.post(
+                `${this.resourceUrl}/members`
+            );
             const membership = membershipFromJson(membershipResponse.data);
 
             this.userMembership = membership;
@@ -348,7 +412,9 @@ export class DetailStore {
         this.isLeavingLeaderboard = true;
 
         try {
-            yield http.delete(`${this.resourceUrl}/members/${this.userMembership!.osuUserId}`);
+            yield http.delete(
+                `${this.resourceUrl}/members/${this.userMembership!.osuUserId}`
+            );
 
             this.userMembership = null;
 
@@ -372,11 +438,27 @@ export class DetailStore {
         this.isKickingMember = true;
 
         try {
-            yield http.delete(`${this.resourceUrl}/members/${this.membership!.osuUserId}`);
+            yield http.delete(
+                `${this.resourceUrl}/members/${this.membership!.osuUserId}`
+            );
 
-            history.push(`/leaderboards/${this.leaderboardType}/${formatGamemodeNameShort(this.gamemode!)}/${this.leaderboardId}`);
-            this.rankings.replace(this.rankings.filter(m => m.osuUserId !== this.membership!.osuUserId));
-            this.leaderboardScores.replace(this.leaderboardScores.filter(s => s.userStats!.osuUserId !== this.membership!.osuUserId));
+            history.push(
+                `/leaderboards/${
+                    this.leaderboardType
+                }/${formatGamemodeNameShort(this.gamemode!)}/${
+                    this.leaderboardId
+                }`
+            );
+            this.rankings.replace(
+                this.rankings.filter(
+                    (m) => m.osuUserId !== this.membership!.osuUserId
+                )
+            );
+            this.leaderboardScores.replace(
+                this.leaderboardScores.filter(
+                    (s) => s.userStats!.osuUserId !== this.membership!.osuUserId
+                )
+            );
             this.membership = null;
 
             notify.positive("Member kicked");

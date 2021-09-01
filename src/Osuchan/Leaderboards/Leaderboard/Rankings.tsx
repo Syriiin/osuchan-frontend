@@ -2,7 +2,14 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { useRouteMatch } from "react-router-dom";
 
-import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat, Flag } from "../../../components";
+import {
+    Surface,
+    Row,
+    SurfaceTitle,
+    UnstyledLink,
+    NumberFormat,
+    Flag,
+} from "../../../components";
 import { Membership } from "../../../store/models/leaderboards/types";
 
 const RankingsSurface = styled(Surface)`
@@ -62,17 +69,14 @@ const RankingRow = observer((props: RankingRowProps) => (
             <FlagContainer>
                 <Flag countryCode={props.membership.osuUser!.country} />
             </FlagContainer>
-            <Username>
-                {props.membership.osuUser!.username}
-            </Username>
+            <Username>{props.membership.osuUser!.username}</Username>
         </PlayerInfo>
         <PerformanceContainer>
             <Performance>
-                <NumberFormat value={props.membership.pp} decimalPlaces={0} />pp
+                <NumberFormat value={props.membership.pp} decimalPlaces={0} />
+                pp
             </Performance>
-            <ScoreCount>
-                {props.membership.scoreCount} scores
-            </ScoreCount>
+            <ScoreCount>{props.membership.scoreCount} scores</ScoreCount>
         </PerformanceContainer>
     </Row>
 ));
@@ -89,7 +93,10 @@ const Rankings = observer((props: TopScoresProps) => {
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
-                <UnstyledLink key={i} to={`${match.url}/members/${membership.osuUserId}`}>
+                <UnstyledLink
+                    key={i}
+                    to={`${match.url}/members/${membership.osuUserId}`}
+                >
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>
             ))}

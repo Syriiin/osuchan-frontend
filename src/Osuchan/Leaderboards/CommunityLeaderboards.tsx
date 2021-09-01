@@ -6,7 +6,12 @@ import { observer } from "mobx-react-lite";
 const CommunityLeaderboards = observer((props: CommunityLeaderboardsProps) => (
     <>
         {props.leaderboards.map((leaderboard, i) => (
-            <UnstyledLink key={i} to={`/leaderboards/community/${formatGamemodeNameShort(leaderboard.gamemode)}/${leaderboard.id}`}>
+            <UnstyledLink
+                key={i}
+                to={`/leaderboards/community/${formatGamemodeNameShort(
+                    leaderboard.gamemode
+                )}/${leaderboard.id}`}
+            >
                 <CommunityLeaderboardRow leaderboard={leaderboard} />
             </UnstyledLink>
         ))}

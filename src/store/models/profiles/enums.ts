@@ -7,17 +7,17 @@ export enum ScoreResult {
     Clear = 32,
 
     FullCombo = Perfect | NoBreak,
-    Choke = SliderBreak | OneMiss | EndChoke
+    Choke = SliderBreak | OneMiss | EndChoke,
 }
 
 export enum ScoreSet {
     Normal = 0,
     NeverChoke = 1,
-    AlwaysFullCombo = 2
+    AlwaysFullCombo = 2,
 }
 
 export enum AllowedBeatmapStatus {
     Any = 0,
     RankedOnly = 1, // ranked + approved
-    LovedOnly = 2
+    LovedOnly = 2,
 }

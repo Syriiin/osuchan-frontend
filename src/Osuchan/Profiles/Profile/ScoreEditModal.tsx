@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 
 import { Score } from "../../../store/models/profiles/types";
-import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, FormControl, Button, ModsSelect } from "../../../components";
+import {
+    SimpleModal,
+    SimpleModalTitle,
+    FormLabel,
+    TextInput,
+    FormControl,
+    Button,
+    ModsSelect,
+} from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
 import { observer } from "mobx-react-lite";
 import { useAutorun, useStore } from "../../../utils/hooks";
@@ -9,7 +17,7 @@ import { useAutorun, useStore } from "../../../utils/hooks";
 const ScoreEditModal = observer((props: ScoreEditModalProps) => {
     const store = useStore();
     const usersStore = store.usersStore;
-    
+
     const score = props.score;
     const beatmap = score.beatmap!;
 
@@ -41,36 +49,78 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
         );
 
         props.onClose();
-    }
+    };
 
     return (
         <SimpleModal open={props.open} onClose={props.onClose}>
             <SimpleModalTitle>Edit Score</SimpleModalTitle>
             <p>
-                Edit you score to see how your profile stats would look if you played differently!
+                Edit you score to see how your profile stats would look if you
+                played differently!
             </p>
             <form onSubmit={handleApply}>
                 <FormLabel>Mods</FormLabel>
                 <FormControl>
-                    <ModsSelect gamemode={props.gamemode} value={mods} onChange={enabledMods => setMods(enabledMods)} />
+                    <ModsSelect
+                        gamemode={props.gamemode}
+                        value={mods}
+                        onChange={(enabledMods) => setMods(enabledMods)}
+                    />
                 </FormControl>
-                <FormLabel>Best Combo <small>(max {beatmap.maxCombo}x)</small></FormLabel>
+                <FormLabel>
+                    Best Combo <small>(max {beatmap.maxCombo}x)</small>
+                </FormLabel>
                 <FormControl>
-                    <TextInput fullWidth type="number" required placeholder={score.bestCombo.toString()} value={combo} onChange={e => setCombo(e.currentTarget.value)} min={0} max={beatmap.maxCombo} />
+                    <TextInput
+                        fullWidth
+                        type="number"
+                        required
+                        placeholder={score.bestCombo.toString()}
+                        value={combo}
+                        onChange={(e) => setCombo(e.currentTarget.value)}
+                        min={0}
+                        max={beatmap.maxCombo}
+                    />
                 </FormControl>
                 <FormLabel>100s</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth type="number" required placeholder={score.count100.toString()} value={count100} onChange={e => setCount100(e.currentTarget.value)} min={0} />
+                    <TextInput
+                        fullWidth
+                        type="number"
+                        required
+                        placeholder={score.count100.toString()}
+                        value={count100}
+                        onChange={(e) => setCount100(e.currentTarget.value)}
+                        min={0}
+                    />
                 </FormControl>
                 <FormLabel>50s</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth type="number" required placeholder={score.count50.toString()} value={count50} onChange={e => setCount50(e.currentTarget.value)} min={0} />
+                    <TextInput
+                        fullWidth
+                        type="number"
+                        required
+                        placeholder={score.count50.toString()}
+                        value={count50}
+                        onChange={(e) => setCount50(e.currentTarget.value)}
+                        min={0}
+                    />
                 </FormControl>
                 <FormLabel>Misses</FormLabel>
                 <FormControl>
-                    <TextInput fullWidth type="number" required placeholder={score.countMiss.toString()} value={countMiss} onChange={e => setCountMiss(e.currentTarget.value)} min={0} />
+                    <TextInput
+                        fullWidth
+                        type="number"
+                        required
+                        placeholder={score.countMiss.toString()}
+                        value={countMiss}
+                        onChange={(e) => setCountMiss(e.currentTarget.value)}
+                        min={0}
+                    />
                 </FormControl>
-                <Button positive type="submit">Apply</Button>
+                <Button positive type="submit">
+                    Apply
+                </Button>
             </form>
         </SimpleModal>
     );

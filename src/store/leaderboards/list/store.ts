@@ -5,7 +5,10 @@ import http from "../../../http";
 import notify from "../../../notifications";
 
 import { Leaderboard, Membership } from "../../models/leaderboards/types";
-import { leaderboardFromJson, membershipFromJson } from "../../models/leaderboards/deserialisers";
+import {
+    leaderboardFromJson,
+    membershipFromJson,
+} from "../../models/leaderboards/deserialisers";
 import { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
@@ -34,7 +37,7 @@ export class ListStore {
             loadNextCommunityLeaderboardsPage: flow,
             loadCommunityMemberships: flow,
             loadNextCommunityMembershipsPage: flow,
-            createLeaderboard: flow
+            createLeaderboard: flow,
         });
     }
 
@@ -49,7 +52,7 @@ export class ListStore {
         this.globalMemberships.clear();
         this.communityLeaderboards.clear();
         this.communityMemberships.clear();
-    }
+    };
 
     *loadGlobalLeaderboards(gamemode: Gamemode, userId?: number): any {
         this.globalLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
@@ -59,36 +62,58 @@ export class ListStore {
 
         try {
             if (userId) {
-                const globalMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/global/${gamemode}`, {
-                    params: {
-                        "offset": 0,
-                        "limit": 25
+                const globalMembershipsResponse = yield http.get(
+                    `/api/profiles/users/${userId}/memberships/global/${gamemode}`,
+                    {
+                        params: {
+                            offset: 0,
+                            limit: 25,
+                        },
                     }
-                });
-                const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+                );
+                const globalMemberships: Membership[] =
+                    globalMembershipsResponse.data["results"].map((data: any) =>
+                        membershipFromJson(data)
+                    );
 
                 this.globalMemberships.replace(globalMemberships);
 
-                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                if (
+                    this.globalMemberships.length ===
+                    globalMembershipsResponse.data["count"]
+                ) {
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.Loaded;
                 } else {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.PartiallyLoaded;
                 }
             } else {
-                const globalLeaderboardsResponse = yield http.get(`/api/leaderboards/global/${gamemode}`, {
-                    params: {
-                        "offset": 0,
-                        "limit": 25
+                const globalLeaderboardsResponse = yield http.get(
+                    `/api/leaderboards/global/${gamemode}`,
+                    {
+                        params: {
+                            offset: 0,
+                            limit: 25,
+                        },
                     }
-                });
-                const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+                );
+                const globalLeaderboards: Leaderboard[] =
+                    globalLeaderboardsResponse.data["results"].map(
+                        (data: any) => leaderboardFromJson(data)
+                    );
 
                 this.globalLeaderboards.replace(globalLeaderboards);
 
-                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                if (
+                    this.globalLeaderboards.length ===
+                    globalLeaderboardsResponse.data["count"]
+                ) {
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.Loaded;
                 } else {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.PartiallyLoaded;
                 }
             }
         } catch (error) {
@@ -103,36 +128,62 @@ export class ListStore {
 
         try {
             if (userId) {
-                const globalMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/global/${this.gamemode}`, {
-                    params: {
-                        "offset": this.globalMemberships.length,
-                        "limit": 25
+                const globalMembershipsResponse = yield http.get(
+                    `/api/profiles/users/${userId}/memberships/global/${this.gamemode}`,
+                    {
+                        params: {
+                            offset: this.globalMemberships.length,
+                            limit: 25,
+                        },
                     }
-                });
-                const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+                );
+                const globalMemberships: Membership[] =
+                    globalMembershipsResponse.data["results"].map((data: any) =>
+                        membershipFromJson(data)
+                    );
 
-                this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+                this.globalMemberships.replace(
+                    this.globalMemberships.concat(globalMemberships)
+                );
 
-                if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                if (
+                    this.globalMemberships.length ===
+                    globalMembershipsResponse.data["count"]
+                ) {
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.Loaded;
                 } else {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.PartiallyLoaded;
                 }
             } else {
-                const globalLeaderboardsResponse = yield http.get(`/api/leaderboards/global/${this.gamemode}`, {
-                    params: {
-                        "offset": this.globalLeaderboards.length,
-                        "limit": 25
+                const globalLeaderboardsResponse = yield http.get(
+                    `/api/leaderboards/global/${this.gamemode}`,
+                    {
+                        params: {
+                            offset: this.globalLeaderboards.length,
+                            limit: 25,
+                        },
                     }
-                });
-                const globalLeaderboards: Leaderboard[] = globalLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+                );
+                const globalLeaderboards: Leaderboard[] =
+                    globalLeaderboardsResponse.data["results"].map(
+                        (data: any) => leaderboardFromJson(data)
+                    );
 
-                this.globalLeaderboards.replace(this.globalLeaderboards.concat(globalLeaderboards));
+                this.globalLeaderboards.replace(
+                    this.globalLeaderboards.concat(globalLeaderboards)
+                );
 
-                if (this.globalLeaderboards.length === globalLeaderboardsResponse.data["count"]) {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+                if (
+                    this.globalLeaderboards.length ===
+                    globalLeaderboardsResponse.data["count"]
+                ) {
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.Loaded;
                 } else {
-                    this.globalLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                    this.globalLeaderboardsStatus =
+                        PaginatedResourceStatus.PartiallyLoaded;
                 }
             }
         } catch (error) {
@@ -143,25 +194,37 @@ export class ListStore {
     }
 
     *loadCommunityLeaderboards(gamemode: Gamemode): any {
-        this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingInitial;
+        this.communityLeaderboardsStatus =
+            PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
         this.communityLeaderboards.clear();
 
         try {
-            const communityLeaderboardsResponse = yield http.get(`/api/leaderboards/community/${gamemode}`, {
-                params: {
-                    "offset": 0,
-                    "limit": 10
+            const communityLeaderboardsResponse = yield http.get(
+                `/api/leaderboards/community/${gamemode}`,
+                {
+                    params: {
+                        offset: 0,
+                        limit: 10,
+                    },
                 }
-            });
-            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+            );
+            const communityLeaderboards: Leaderboard[] =
+                communityLeaderboardsResponse.data["results"].map((data: any) =>
+                    leaderboardFromJson(data)
+                );
 
             this.communityLeaderboards.replace(communityLeaderboards);
 
-            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+            if (
+                this.communityLeaderboards.length ===
+                communityLeaderboardsResponse.data["count"]
+            ) {
+                this.communityLeaderboardsStatus =
+                    PaginatedResourceStatus.Loaded;
             } else {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                this.communityLeaderboardsStatus =
+                    PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error) {
             console.log(error);
@@ -174,20 +237,33 @@ export class ListStore {
         this.communityLeaderboardsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const communityLeaderboardsResponse = yield http.get(`/api/leaderboards/community/${this.gamemode}`, {
-                params: {
-                    "offset": this.communityLeaderboards.length,
-                    "limit": 25
+            const communityLeaderboardsResponse = yield http.get(
+                `/api/leaderboards/community/${this.gamemode}`,
+                {
+                    params: {
+                        offset: this.communityLeaderboards.length,
+                        limit: 25,
+                    },
                 }
-            });
-            const communityLeaderboards: Leaderboard[] = communityLeaderboardsResponse.data["results"].map((data: any) => leaderboardFromJson(data));
+            );
+            const communityLeaderboards: Leaderboard[] =
+                communityLeaderboardsResponse.data["results"].map((data: any) =>
+                    leaderboardFromJson(data)
+                );
 
-            this.communityLeaderboards.replace(this.communityLeaderboards.concat(communityLeaderboards));
+            this.communityLeaderboards.replace(
+                this.communityLeaderboards.concat(communityLeaderboards)
+            );
 
-            if (this.communityLeaderboards.length === communityLeaderboardsResponse.data["count"]) {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.Loaded;
+            if (
+                this.communityLeaderboards.length ===
+                communityLeaderboardsResponse.data["count"]
+            ) {
+                this.communityLeaderboardsStatus =
+                    PaginatedResourceStatus.Loaded;
             } else {
-                this.communityLeaderboardsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                this.communityLeaderboardsStatus =
+                    PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error) {
             console.log(error);
@@ -197,26 +273,37 @@ export class ListStore {
     }
 
     *loadCommunityMemberships(gamemode: Gamemode, userId: number): any {
-        this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
+        this.communityMembershipsStatus =
+            PaginatedResourceStatus.LoadingInitial;
         this.gamemode = gamemode;
         this.communityMemberships.clear();
 
         try {
-            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/community/${gamemode}`, {
-                params: {
-                    "offset": 0,
-                    "limit": 5
+            const communityMembershipsResponse = yield http.get(
+                `/api/profiles/users/${userId}/memberships/community/${gamemode}`,
+                {
+                    params: {
+                        offset: 0,
+                        limit: 5,
+                    },
                 }
-            });
-            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            );
+            const communityMemberships: Membership[] =
+                communityMembershipsResponse.data["results"].map((data: any) =>
+                    membershipFromJson(data)
+                );
 
             this.communityMemberships.replace(communityMemberships);
 
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            if (
+                this.communityMemberships.length ===
+                communityMembershipsResponse.data["count"]
+            ) {
+                this.communityMembershipsStatus =
+                    PaginatedResourceStatus.Loaded;
             } else {
-
-                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                this.communityMembershipsStatus =
+                    PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error) {
             console.log(error);
@@ -229,20 +316,33 @@ export class ListStore {
         this.communityMembershipsStatus = PaginatedResourceStatus.LoadingMore;
 
         try {
-            const communityMembershipsResponse = yield http.get(`/api/profiles/users/${userId}/memberships/community/${this.gamemode}`, {
-                params: {
-                    "offset": this.communityMemberships.length,
-                    "limit": 10
+            const communityMembershipsResponse = yield http.get(
+                `/api/profiles/users/${userId}/memberships/community/${this.gamemode}`,
+                {
+                    params: {
+                        offset: this.communityMemberships.length,
+                        limit: 10,
+                    },
                 }
-            });
-            const communityMemberships: Membership[] = communityMembershipsResponse.data["results"].map((data: any) => membershipFromJson(data));
+            );
+            const communityMemberships: Membership[] =
+                communityMembershipsResponse.data["results"].map((data: any) =>
+                    membershipFromJson(data)
+                );
 
-            this.communityMemberships.replace(this.communityMemberships.concat(communityMemberships));
+            this.communityMemberships.replace(
+                this.communityMemberships.concat(communityMemberships)
+            );
 
-            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
-                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
+            if (
+                this.communityMemberships.length ===
+                communityMembershipsResponse.data["count"]
+            ) {
+                this.communityMembershipsStatus =
+                    PaginatedResourceStatus.Loaded;
             } else {
-                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
+                this.communityMembershipsStatus =
+                    PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error) {
             console.log(error);
@@ -251,43 +351,62 @@ export class ListStore {
         }
     }
 
-    *createLeaderboard(gamemode: Gamemode, scoreSet: ScoreSet, accessType: LeaderboardAccessType, name: string, description: string, iconUrl: string, allowPastScores: boolean, scoreFilter: ScoreFilter): any {
+    *createLeaderboard(
+        gamemode: Gamemode,
+        scoreSet: ScoreSet,
+        accessType: LeaderboardAccessType,
+        name: string,
+        description: string,
+        iconUrl: string,
+        allowPastScores: boolean,
+        scoreFilter: ScoreFilter
+    ): any {
         this.isCreatingLeaderboard = true;
 
         try {
-            const leaderboardResponse = yield http.post(`/api/leaderboards/community/${gamemode}`, {
-                "score_set": scoreSet,
-                "access_type": accessType,
-                "name": name,
-                "description": description,
-                "icon_url": iconUrl,
-                "allow_past_scores": allowPastScores,
-                "score_filter": {
-                    "allowed_beatmap_status": scoreFilter.allowedBeatmapStatus,
-                    "oldest_beatmap_date": scoreFilter.oldestBeatmapDate,
-                    "newest_beatmap_date": scoreFilter.newestBeatmapDate,
-                    "oldest_score_date": scoreFilter.oldestScoreDate,
-                    "newest_score_date": scoreFilter.newestScoreDate,
-                    "lowest_ar": scoreFilter.lowestAr,
-                    "highest_ar": scoreFilter.highestAr,
-                    "lowest_od": scoreFilter.lowestOd,
-                    "highest_od": scoreFilter.highestOd,
-                    "lowest_cs": scoreFilter.lowestCs,
-                    "highest_cs": scoreFilter.highestCs,
-                    "required_mods": scoreFilter.requiredMods,
-                    "disqualified_mods": scoreFilter.disqualifiedMods,
-                    "lowest_accuracy": scoreFilter.lowestAccuracy,
-                    "highest_accuracy": scoreFilter.highestAccuracy,
-                    "lowest_length": scoreFilter.lowestLength,
-                    "highest_length": scoreFilter.highestLength
+            const leaderboardResponse = yield http.post(
+                `/api/leaderboards/community/${gamemode}`,
+                {
+                    score_set: scoreSet,
+                    access_type: accessType,
+                    name: name,
+                    description: description,
+                    icon_url: iconUrl,
+                    allow_past_scores: allowPastScores,
+                    score_filter: {
+                        allowed_beatmap_status:
+                            scoreFilter.allowedBeatmapStatus,
+                        oldest_beatmap_date: scoreFilter.oldestBeatmapDate,
+                        newest_beatmap_date: scoreFilter.newestBeatmapDate,
+                        oldest_score_date: scoreFilter.oldestScoreDate,
+                        newest_score_date: scoreFilter.newestScoreDate,
+                        lowest_ar: scoreFilter.lowestAr,
+                        highest_ar: scoreFilter.highestAr,
+                        lowest_od: scoreFilter.lowestOd,
+                        highest_od: scoreFilter.highestOd,
+                        lowest_cs: scoreFilter.lowestCs,
+                        highest_cs: scoreFilter.highestCs,
+                        required_mods: scoreFilter.requiredMods,
+                        disqualified_mods: scoreFilter.disqualifiedMods,
+                        lowest_accuracy: scoreFilter.lowestAccuracy,
+                        highest_accuracy: scoreFilter.highestAccuracy,
+                        lowest_length: scoreFilter.lowestLength,
+                        highest_length: scoreFilter.highestLength,
+                    },
                 }
-            });
-            const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            );
+            const leaderboard: Leaderboard = leaderboardFromJson(
+                leaderboardResponse.data
+            );
 
             this.communityLeaderboards.push(leaderboard);
 
             // Navigate to leaderboard page after creation
-            history.push(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
+            history.push(
+                `/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${
+                    leaderboard.id
+                }`
+            );
 
             notify.positive("Leaderboard created");
         } catch (error) {
@@ -296,7 +415,9 @@ export class ListStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(`Failed to create leaderboard: ${errorMessage}`);
+                notify.negative(
+                    `Failed to create leaderboard: ${errorMessage}`
+                );
             } else {
                 notify.negative("Failed to create leaderboard");
             }

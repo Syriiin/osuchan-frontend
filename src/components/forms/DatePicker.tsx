@@ -3,12 +3,11 @@ import styled from "styled-components";
 
 const DatePickerWrapper = styled.div`
     .react-datepicker__input {
-        background-color: ${props => props.theme.colours.background};
+        background-color: ${(props) => props.theme.colours.background};
         border-radius: 5px;
         padding: 10px;
         color: #fff;
         border-width: 0;
-
     }
 
     .react-datepicker__close-icon {
@@ -18,20 +17,21 @@ const DatePickerWrapper = styled.div`
         }
 
         &:hover::after {
-            background-color: ${props => props.theme.colours.currant};
+            background-color: ${(props) => props.theme.colours.currant};
         }
     }
 
     .react-datepicker__header {
-        background-color: ${props => props.theme.colours.foreground};
+        background-color: ${(props) => props.theme.colours.foreground};
 
-        .react-datepicker__day-name, .react-datepicker__current-month {
+        .react-datepicker__day-name,
+        .react-datepicker__current-month {
             color: #fff;
         }
     }
 
     .react-datepicker__month-container {
-        background-color: ${props => props.theme.colours.background};
+        background-color: ${(props) => props.theme.colours.background};
         border-radius: 5px;
 
         .react-datepicker__day {
@@ -43,12 +43,12 @@ const DatePickerWrapper = styled.div`
             }
 
             &.react-datepicker__day--selected {
-                background-color: ${props => props.theme.colours.mystic};
+                background-color: ${(props) => props.theme.colours.mystic};
                 color: #fff;
             }
 
             &.react-datepicker__day--keyboard-selected {
-                background-color: ${props => props.theme.colours.currant};
+                background-color: ${(props) => props.theme.colours.currant};
                 color: #fff;
 
                 &:hover {

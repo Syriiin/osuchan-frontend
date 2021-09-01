@@ -32,20 +32,44 @@ export enum Mods {
     ScoreV2 = 536870912,
     Mirror = 1073741824,
 
-    KeyMod = Key1 | Key2 | Key3 | Key4 | Key5 | Key6 | Key7 | Key8 | Key9 | KeyCoop,
-    FreemodAllowed = NoFail | Easy | Hidden | HardRock | SuddenDeath | Flashlight | FadeIn | Relax | Autopilot | SpunOut | KeyMod,
-    ScoreIncreasing = Hidden | HardRock | DoubleTime | Flashlight | Autopilot | FadeIn,
+    KeyMod = Key1 |
+        Key2 |
+        Key3 |
+        Key4 |
+        Key5 |
+        Key6 |
+        Key7 |
+        Key8 |
+        Key9 |
+        KeyCoop,
+    FreemodAllowed = NoFail |
+        Easy |
+        Hidden |
+        HardRock |
+        SuddenDeath |
+        Flashlight |
+        FadeIn |
+        Relax |
+        Autopilot |
+        SpunOut |
+        KeyMod,
+    ScoreIncreasing = Hidden |
+        HardRock |
+        DoubleTime |
+        Flashlight |
+        Autopilot |
+        FadeIn,
 
     SpeedChanging = DoubleTime | HalfTime | Nightcore,
     MapChanging = DoubleTime | HardRock | Easy,
-    Unranked = Relax | Auto | Autopilot
+    Unranked = Relax | Auto | Autopilot,
 }
 
 export enum Gamemode {
     Standard = 0,
     Taiko = 1,
     Catch = 2,
-    Mania = 3
+    Mania = 3,
 }
 
 export enum BeatmapStatus {
@@ -55,5 +79,5 @@ export enum BeatmapStatus {
     Ranked = 1,
     Approved = 2,
     Qualified = 3,
-    Loved = 4
+    Loved = 4,
 }

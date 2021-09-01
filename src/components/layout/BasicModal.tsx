@@ -23,11 +23,11 @@ const ModalBase = styled.div`
     &.modal-base-enter-active {
         opacity: 1;
     }
-    
+
     &.modal-base-exit {
         opacity: 1;
     }
-    
+
     &.modal-base-exit-active {
         opacity: 0;
     }
@@ -40,7 +40,7 @@ const ModalBody = styled.div`
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 5px;
-    background-color: ${props => props.theme.colours.midground};
+    background-color: ${(props) => props.theme.colours.midground};
 `;
 
 export const BasicModal = (props: BasicModalProps) => {
@@ -50,7 +50,7 @@ export const BasicModal = (props: BasicModalProps) => {
         if (e.target === modalBaseEl.current) {
             props.onClose();
         }
-    }
+    };
 
     return (
         <RootPortal>
@@ -62,14 +62,12 @@ export const BasicModal = (props: BasicModalProps) => {
                 unmountOnExit
             >
                 <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
-                    <ModalBody>
-                        {props.children}
-                    </ModalBody>
+                    <ModalBody>{props.children}</ModalBody>
                 </ModalBase>
             </CSSTransition>
         </RootPortal>
     );
-}
+};
 
 export interface BasicModalProps {
     children: React.ReactNode;

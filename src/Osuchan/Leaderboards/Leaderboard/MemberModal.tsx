@@ -4,7 +4,15 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
-import { SimpleModal, LoadingSection, Divider, ScoreRow, Button, NumberFormat, Flag } from "../../../components";
+import {
+    SimpleModal,
+    LoadingSection,
+    Divider,
+    ScoreRow,
+    Button,
+    NumberFormat,
+    Flag,
+} from "../../../components";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
 
@@ -56,7 +64,12 @@ const MemberInfo = observer(() => {
     const meStore = store.meStore;
 
     const userId = parseInt(params.userId);
-    const { loadingMembershipStatus, leaderboard, membership, membershipScores } = detailStore;
+    const {
+        loadingMembershipStatus,
+        leaderboard,
+        membership,
+        membershipScores,
+    } = detailStore;
     const { isAuthenticated, user } = meStore;
 
     useEffect(() => {
@@ -73,9 +86,14 @@ const MemberInfo = observer(() => {
                 {loadingMembershipStatus === ResourceStatus.Loading && (
                     <title>Loading...</title>
                 )}
-                {loadingMembershipStatus === ResourceStatus.Loaded && leaderboard && membership && (
-                    <title>{membership.osuUser?.username} - {leaderboard.name} - osu!chan</title>
-                )}
+                {loadingMembershipStatus === ResourceStatus.Loaded &&
+                    leaderboard &&
+                    membership && (
+                        <title>
+                            {membership.osuUser?.username} - {leaderboard.name}{" "}
+                            - osu!chan
+                        </title>
+                    )}
                 {loadingMembershipStatus === ResourceStatus.Error && (
                     <title>Member not found - osu!chan</title>
                 )}
@@ -84,7 +102,9 @@ const MemberInfo = observer(() => {
             {loadingMembershipStatus === ResourceStatus.Loaded && membership && (
                 <>
                     <UserInfo>
-                        <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
+                        <Avatar
+                            src={`https://a.ppy.sh/${membership.osuUserId}`}
+                        />
                         <UserInfoContainer>
                             <UserInfoRow>
                                 <Username>
@@ -92,41 +112,73 @@ const MemberInfo = observer(() => {
                                 </Username>
                             </UserInfoRow>
                             <UserInfoRow>
-                                <Flag countryCode={membership.osuUser!.country} showFullName />
+                                <Flag
+                                    countryCode={membership.osuUser!.country}
+                                    showFullName
+                                />
                             </UserInfoRow>
                             <UserInfoRow>
-                                <ScoreCount>{membership.scoreCount} scores</ScoreCount>
+                                <ScoreCount>
+                                    {membership.scoreCount} scores
+                                </ScoreCount>
                             </UserInfoRow>
                         </UserInfoContainer>
                         <UserInfoContainer>
                             <UserInfoRow>
-                                <Rank>#{membership.rank.toLocaleString("en")}</Rank>
+                                <Rank>
+                                    #{membership.rank.toLocaleString("en")}
+                                </Rank>
                             </UserInfoRow>
                             <UserInfoRow>
                                 <Performance>
-                                    <NumberFormat value={membership.pp} decimalPlaces={0} />pp
+                                    <NumberFormat
+                                        value={membership.pp}
+                                        decimalPlaces={0}
+                                    />
+                                    pp
                                 </Performance>
                             </UserInfoRow>
                         </UserInfoContainer>
                     </UserInfo>
 
-                    {isAuthenticated && leaderboard!.ownerId === user!.osuUserId && membership?.osuUserId !== user!.osuUserId && (
-                        <>
-                            <Divider spacingScale={5} />
-                            <Button negative isLoading={detailStore.isKickingMember} action={() => detailStore.kickMember()} confirmationMessage="Are you sure you want to kick this member from the leaderboard?">Kick Member</Button>
-                        </>
-                    )}
+                    {isAuthenticated &&
+                        leaderboard!.ownerId === user!.osuUserId &&
+                        membership?.osuUserId !== user!.osuUserId && (
+                            <>
+                                <Divider spacingScale={5} />
+                                <Button
+                                    negative
+                                    isLoading={detailStore.isKickingMember}
+                                    action={() => detailStore.kickMember()}
+                                    confirmationMessage="Are you sure you want to kick this member from the leaderboard?"
+                                >
+                                    Kick Member
+                                </Button>
+                            </>
+                        )}
 
                     <Divider spacingScale={5} />
 
-                    {(showAllScores ? membershipScores : membershipScores.slice(0, 5)).map((score, i) => (
+                    {(showAllScores
+                        ? membershipScores
+                        : membershipScores.slice(0, 5)
+                    ).map((score, i) => (
                         <ScoreRow key={i} score={score} hidePlayerInfo />
                     ))}
                     {membershipScores.length <= 5 || showAllScores || (
-                        <Button type="button" fullWidth action={() => setShowAllScores(true)}>Show More</Button>
+                        <Button
+                            type="button"
+                            fullWidth
+                            action={() => setShowAllScores(true)}
+                        >
+                            Show More
+                        </Button>
                     )}
                     {membershipScores.length === 0 && (
-                        <p>This member has no eligible scores for this leaderboard yet...</p>
+                        <p>
+                            This member has no eligible scores for this
+                            leaderboard yet...
+                        </p>
                     )}
                 </>
             )}

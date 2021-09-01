@@ -77,25 +77,47 @@ const Profile = observer(() => {
                     <UserInfo osuUser={osuUser} />
 
                     {/* Mode switcher */}
-                    <ModeSwitcher gamemodeId={gamemodeId} userString={params.userString} />
+                    <ModeSwitcher
+                        gamemodeId={gamemodeId}
+                        userString={params.userString}
+                    />
 
                     {/* Sandbox controls */}
-                    <SandboxControls gamemode={userStats.gamemode} sandboxMode={sandboxMode} setSandboxMode={setSandboxMode} />
+                    <SandboxControls
+                        gamemode={userStats.gamemode}
+                        sandboxMode={sandboxMode}
+                        setSandboxMode={setSandboxMode}
+                    />
 
                     {/* PP/rank info */}
-                    <RankInfo osuUser={osuUser} userStats={userStats} sandboxMode={sandboxMode} />
+                    <RankInfo
+                        osuUser={osuUser}
+                        userStats={userStats}
+                        sandboxMode={sandboxMode}
+                    />
 
                     {/* Score style */}
-                    <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
+                    <ScoreStyle
+                        userStats={userStats}
+                        sandboxMode={sandboxMode}
+                    />
 
                     {scores.length > 0 && (
                         <>
                             {/* Scores */}
-                            <ScoresChart scores={scores} sandboxScores={sandboxScores} sandboxMode={sandboxMode} />
+                            <ScoresChart
+                                scores={scores}
+                                sandboxScores={sandboxScores}
+                                sandboxMode={sandboxMode}
+                            />
 
                             {/* Scores */}
-                            <Scores scores={sandboxMode ? sandboxScores : scores} gamemode={userStats.gamemode} sandboxMode={sandboxMode} />
-                            
+                            <Scores
+                                scores={sandboxMode ? sandboxScores : scores}
+                                gamemode={userStats.gamemode}
+                                sandboxMode={sandboxMode}
+                            />
+
                             {sandboxMode || (
                                 <>
                                     {/* Leaderboards */}
@@ -104,12 +126,9 @@ const Profile = observer(() => {
                             )}
                         </>
                     )}
-                    
                 </ProfileGrid>
             )}
-            {loadingStatus === ResourceStatus.Error && (
-                <h3>User not found!</h3>
-            )}
+            {loadingStatus === ResourceStatus.Error && <h3>User not found!</h3>}
         </>
     );
 });
