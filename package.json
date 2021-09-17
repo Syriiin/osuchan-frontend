@@ -18,6 +18,7 @@
         "@types/react-transition-group": "^4.4.1",
         "@types/styled-components": "^5.1.9",
         "axios": "^0.21.1",
+        "http-proxy-middleware": "^2.0.1",
         "i18n-iso-countries": "^6.5.0",
         "idb": "^6.0.0",
         "js-cookie": "^3.0.1",
@@ -65,6 +66,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "proxy": "http://local.syrin.me:8000"
+    }
 }
