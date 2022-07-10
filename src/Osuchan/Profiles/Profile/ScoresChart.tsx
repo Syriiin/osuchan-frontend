@@ -25,8 +25,8 @@ const ScoresChart = observer((props: ScoresChartProps) => {
 
     const scoresData = props.scores.map((score, i) => ({
         x: i + 1,
-        pp: score.pp,
-        sandboxPp: props.sandboxScores[i]?.pp,
+        pp: score.performanceTotal,
+        sandboxPp: props.sandboxScores[i]?.performanceTotal,
     }));
 
     return (

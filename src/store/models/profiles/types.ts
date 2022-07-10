@@ -48,10 +48,10 @@ export interface Beatmap {
     overallDifficulty: number;
     approachRate: number;
     healthDrain: number;
-    starRating: number;
     submissionDate: Date;
     approvalDate: Date;
     lastUpdated: Date;
+    difficultyTotal: number;
 }
 
 export interface Score {
@@ -70,7 +70,6 @@ export interface Score {
     bestCombo: number;
     mods: Mods;
     rank: string;
-    pp: number;
     date: Date;
     gamemode: Gamemode;
     accuracy: number;
@@ -79,9 +78,10 @@ export interface Score {
     circleSize: number;
     approachRate: number;
     overallDifficulty: number;
-    nochokePp: number;
-    starRating: number;
     result: ScoreResult;
+    performanceTotal: number;
+    nochokePerformanceTotal: number;
+    difficultyTotal: number;
 }
 
 export interface ScoreFilter {

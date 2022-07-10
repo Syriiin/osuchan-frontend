@@ -156,7 +156,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                     </AccuracyContainer>
                     <PerformanceContainer>
                         <Performance>
-                            <NumberFormat value={score.pp} decimalPlaces={0} />
+                            <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                             pp
                         </Performance>
                         <Result>{formatScoreResult(score.result)}</Result>

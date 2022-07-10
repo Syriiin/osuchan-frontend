@@ -43,7 +43,7 @@ export function unchokeScore(score: Score) {
         score.count50,
         score.countMiss
     );
-    score.pp = score.nochokePp;
+    score.performanceTotal = score.nochokePerformanceTotal;
     score.result = ScoreResult.Perfect;
 
     return score;

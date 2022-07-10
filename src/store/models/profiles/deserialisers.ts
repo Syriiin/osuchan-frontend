@@ -64,10 +64,10 @@ export function beatmapFromJson(data: any): Beatmap {
         overallDifficulty: data["overall_difficulty"],
         approachRate: data["approach_rate"],
         healthDrain: data["health_drain"],
-        starRating: data["star_rating"],
         submissionDate: new Date(data["submission_date"]),
         approvalDate: new Date(data["approval_date"]),
         lastUpdated: new Date(data["last_updated"]),
+        difficultyTotal: data["difficulty_total"],
     };
 }
 
@@ -100,7 +100,6 @@ export function scoreFromJson(data: any): Score {
         bestCombo: data["best_combo"],
         mods: data["mods"],
         rank: data["rank"],
-        pp: data["pp"],
         date: new Date(data["date"]),
         gamemode: data["gamemode"],
         accuracy: data["accuracy"],
@@ -109,9 +108,10 @@ export function scoreFromJson(data: any): Score {
         circleSize: data["circle_size"],
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
-        nochokePp: data["nochoke_pp"],
-        starRating: data["star_rating"],
         result: data["result"],
+        performanceTotal: data["performance_total"],
+        nochokePerformanceTotal: data["nochoke_performance_total"],
+        difficultyTotal: data["difficulty_total"],
     };
 }
 

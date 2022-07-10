@@ -64,17 +64,17 @@ export class UsersStore {
     get extraPerformance() {
         return this.currentUserStats
             ? this.currentUserStats.pp -
-                  this.scores.reduce(
-                      (total, score, i) => total + score.pp * 0.95 ** i,
-                      0
-                  )
+            this.scores.reduce(
+                (total, score, i) => total + score.performanceTotal * 0.95 ** i,
+                0
+            )
             : 0;
     }
 
     get sandboxPerformance() {
         return (
             this.sandboxScores.reduce(
-                (total, score, i) => total + score.pp * 0.95 ** i,
+                (total, score, i) => total + score.performanceTotal * 0.95 ** i,
                 0
             ) + this.extraPerformance
         );
@@ -439,13 +439,13 @@ export class UsersStore {
             n50: score.count50,
         });
 
-        score.starRating = stars.total;
-        score.pp = pp.total;
-        score.nochokePp = nochokePp.total;
+        score.difficultyTotal = stars.total;
+        score.performanceTotal = pp.total;
+        score.nochokePerformanceTotal = nochokePp.total;
 
         // Sort observable array
         this.sandboxScores.replace(
-            this.sandboxScores.slice().sort((a, b) => b.pp - a.pp)
+            this.sandboxScores.slice().sort((a, b) => b.performanceTotal - a.performanceTotal)
         );
 
         notify.neutral("Sandbox scores recalculated");
