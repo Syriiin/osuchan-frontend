@@ -21,6 +21,7 @@ import {
     LabelGroup,
     VerticalButtonGroup,
     ModIcons,
+    AbsoluteDate,
 } from "../../../components";
 import TopScores from "./TopScores";
 import Rankings from "./Rankings";
@@ -161,7 +162,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                 <>
                     <ScoreFilterName>Oldest Beatmap Date</ScoreFilterName>
                     <ScoreFilterValue>
-                        {scoreFilter.oldestBeatmapDate.toLocaleDateString()}
+                        <AbsoluteDate date={scoreFilter.oldestBeatmapDate} />
                     </ScoreFilterValue>
                 </>
             )}
@@ -169,7 +170,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                 <>
                     <ScoreFilterName>Newest Beatmap Date</ScoreFilterName>
                     <ScoreFilterValue>
-                        {scoreFilter.newestBeatmapDate.toLocaleDateString()}
+                        <AbsoluteDate date={scoreFilter.newestBeatmapDate} />
                     </ScoreFilterValue>
                 </>
             )}
@@ -178,7 +179,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                 <>
                     <ScoreFilterName>Oldest Score Date</ScoreFilterName>
                     <ScoreFilterValue>
-                        {scoreFilter.oldestScoreDate.toLocaleDateString()}
+                        <AbsoluteDate date={scoreFilter.oldestScoreDate} />
                     </ScoreFilterValue>
                 </>
             )}
@@ -186,7 +187,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                 <>
                     <ScoreFilterName>Newest Score Date</ScoreFilterName>
                     <ScoreFilterValue>
-                        {scoreFilter.newestScoreDate.toLocaleDateString()}
+                        <AbsoluteDate date={scoreFilter.newestScoreDate} />
                     </ScoreFilterValue>
                 </>
             )}
