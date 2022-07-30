@@ -64,10 +64,11 @@ export class UsersStore {
     get extraPerformance() {
         return this.currentUserStats
             ? this.currentUserStats.pp -
-            this.scores.reduce(
-                (total, score, i) => total + score.performanceTotal * 0.95 ** i,
-                0
-            )
+                  this.scores.reduce(
+                      (total, score, i) =>
+                          total + score.performanceTotal * 0.95 ** i,
+                      0
+                  )
             : 0;
     }
 
@@ -445,7 +446,9 @@ export class UsersStore {
 
         // Sort observable array
         this.sandboxScores.replace(
-            this.sandboxScores.slice().sort((a, b) => b.performanceTotal - a.performanceTotal)
+            this.sandboxScores
+                .slice()
+                .sort((a, b) => b.performanceTotal - a.performanceTotal)
         );
 
         notify.neutral("Sandbox scores recalculated");

@@ -144,33 +144,33 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             Gamemode.Catch,
                             Gamemode.Mania,
                         ].includes(score.gamemode) && (
-                                <tr>
-                                    <td>
-                                        {score.gamemode === Gamemode.Mania
-                                            ? "Keys"
-                                            : "Circle Size"}
-                                    </td>
-                                    <DataCell>
-                                        <NumberFormat
-                                            value={score.circleSize}
-                                            decimalPlaces={1}
-                                        />
-                                    </DataCell>
-                                </tr>
-                            )}
+                            <tr>
+                                <td>
+                                    {score.gamemode === Gamemode.Mania
+                                        ? "Keys"
+                                        : "Circle Size"}
+                                </td>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.circleSize}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
+                            </tr>
+                        )}
                         {[Gamemode.Standard, Gamemode.Catch].includes(
                             score.gamemode
                         ) && (
-                                <tr>
-                                    <td>Approach Rate</td>
-                                    <DataCell>
-                                        <NumberFormat
-                                            value={score.approachRate}
-                                            decimalPlaces={1}
-                                        />
-                                    </DataCell>
-                                </tr>
-                            )}
+                            <tr>
+                                <td>Approach Rate</td>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.approachRate}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
+                            </tr>
+                        )}
                         <tr>
                             <td>Overall Difficulty</td>
                             <DataCell>
@@ -226,7 +226,10 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                         {score.bestCombo}x / {beatmap.maxCombo}x
                     </Combo>
                     <Performance>
-                        <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
+                        <NumberFormat
+                            value={score.performanceTotal}
+                            decimalPlaces={0}
+                        />
                         pp
                     </Performance>
                     <Result>{formatScoreResult(score.result)}</Result>

@@ -5,10 +5,7 @@ export const AbsoluteDate = (props: AbsoluteDateProps) => {
 
     return (
         <>
-            <span
-                data-tip={props.date.toLocaleString()}
-                data-for={id}
-            >
+            <span data-tip={props.date.toLocaleString()} data-for={id}>
                 {props.date.toLocaleDateString()}
             </span>
             <Tooltip id={id} />
