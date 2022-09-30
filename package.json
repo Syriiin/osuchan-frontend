@@ -38,7 +38,7 @@
         "react-toastify": "^7.0.3",
         "react-tooltip": "^4.2.15",
         "react-transition-group": "^4.4.1",
-        "recharts": "^2.0.8",
+        "recharts": "^2.1.14",
         "source-map-explorer": "^2.5.2",
         "styled-components": "^5.2.1",
         "timeago-react": "^3.0.2",
