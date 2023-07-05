@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import countries from "i18n-iso-countries";
+import styled from "styled-components";
 import { Tooltip } from "./Tooltip";
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -11,7 +11,7 @@ const FlagWrapper = styled.div`
 `;
 
 const FlagImage = styled.img`
-    width: 30px;
+    width: 2em;
 `;
 
 const CountryName = styled.span`

@@ -1,20 +1,21 @@
+import { configure } from "mobx";
 import { useEffect } from "react";
-import { Router, useLocation } from "react-router-dom";
+import ReactGA from "react-ga";
+import { Route, Router, Switch, useLocation } from "react-router-dom";
 import {
     ThemeProvider as StyledThemeProvider,
     createGlobalStyle,
 } from "styled-components";
-import { configure } from "mobx";
-import ReactGA from "react-ga";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import history from "./history";
-import { osuchanTheme } from "./osuchanTheme";
 import { NotificationContainer } from "./notifications";
+import { osuchanTheme } from "./osuchanTheme";
 
 import Osuchan from "./Osuchan/Osuchan";
+import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
 
 if (process.env.NODE_ENV === "production") {
@@ -60,7 +61,16 @@ const AppWithContext = () => {
         }
     }, [location]);
 
-    return <Osuchan />;
+    return (
+        <Switch>
+            <Route exact path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard">
+                <LeaderboardDashboard />
+            </Route>
+            <Route>
+                <Osuchan />
+            </Route>
+        </Switch>
+    );
 };
 
 const App = () => (
