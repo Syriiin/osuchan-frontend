@@ -66,9 +66,17 @@ const LeaderboardDashboard = observer(() => {
     const detailStore = store.leaderboardsStore.detailStore;
 
     const { loadingStatus, leaderboard, rankings, leaderboardScores } = detailStore;
+
     useEffect(() => {
         detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            detailStore.reloadLeaderboard();
+        }, 5 * 60 * 1000);
+        return () => clearInterval(interval);
+      }, [detailStore]);
 
     return (
         <>
