@@ -15,6 +15,7 @@ const DashboardWrapper = styled.div`
     flex-direction: column;
     height: 100vh;
     font-size: 4rem;
+    overflow: hidden;
 `;
 
 const Header = styled.h1`
