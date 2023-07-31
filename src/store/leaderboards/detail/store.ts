@@ -70,11 +70,12 @@ export class DetailStore {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    reloadLeaderboard = async () =>
+    reloadLeaderboard = async (moreScores: boolean = false) =>
         this.loadLeaderboard(
             this.leaderboardType!,
             this.gamemode!,
-            this.leaderboardId!
+            this.leaderboardId!,
+            moreScores
         );
 
     *loadLeaderboard(
