@@ -165,7 +165,7 @@ interface ScoreRowProps {
 
 const ScoreRankings = observer((props: ScoreRankingProps) => (
     <>
-        {props.scores.slice(0, 5).map((score, i) => (
+        {props.scores.map((score, i) => (
             <ScoreRow key={i} score={score}  />
         ))}
     </>

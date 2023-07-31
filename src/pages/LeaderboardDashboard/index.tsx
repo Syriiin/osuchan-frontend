@@ -68,7 +68,7 @@ const LeaderboardDashboard = observer(() => {
     const { loadingStatus, leaderboard, rankings, leaderboardScores } = detailStore;
 
     useEffect(() => {
-        detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId);
+        detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId, true);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
     useEffect(() => {

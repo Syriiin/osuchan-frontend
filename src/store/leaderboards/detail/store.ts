@@ -80,7 +80,8 @@ export class DetailStore {
     *loadLeaderboard(
         leaderboardType: string,
         gamemode: Gamemode,
-        leaderboardId: number
+        leaderboardId: number,
+        moreScores: boolean = false
     ): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;
@@ -104,7 +105,11 @@ export class DetailStore {
                 (data: any) => membershipFromJson(data)
             );
 
-            const scoresResponse = yield http.get(`${this.resourceUrl}/scores`);
+            const scoresResponse = yield http.get(`${this.resourceUrl}/scores`, {
+                params: {
+                    limit: moreScores ? 100 : 5
+                }
+            });
             const scores: Score[] = scoresResponse.data.map((data: any) =>
                 scoreFromJson(data)
             );
