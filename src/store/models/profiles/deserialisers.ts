@@ -1,4 +1,4 @@
-import { OsuUser, UserStats, Beatmap, Score, ScoreFilter } from "./types";
+import { Beatmap, DifficultyCalculation, DifficultyValue, OsuUser, PerformanceCalculation, PerformanceValue, Score, ScoreFilter, UserStats } from "./types";
 
 export function osuUserFromJson(data: any): OsuUser {
     return {
@@ -111,6 +111,7 @@ export function scoreFromJson(data: any): Score {
         result: data["result"],
         performanceTotal: data["performance_total"],
         difficultyTotal: data["difficulty_total"],
+        performanceCalculations: data["performance_calculations"].map(performanceCalculationFromJson),
     };
 }
 
@@ -141,5 +142,37 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
         highestAccuracy: data["highest_accuracy"],
         lowestLength: data["lowest_length"],
         highestLength: data["highest_length"],
+    };
+}
+
+export function difficultyCalculationFromJson(data: any): DifficultyCalculation {
+    return {
+        calculatorEngine: data["calculator_engine"],
+        calculatorVersion: data["calculator_version"],
+        mods: data["mods"],
+        difficultyValues: data["difficulty_values"].map(difficultyValueFromJson),
+    };
+}
+
+export function difficultyValueFromJson(data: any): DifficultyValue {
+    return {
+        name: data["name"],
+        value: data["value"],
+    };
+}
+
+export function performanceCalculationFromJson(data: any): PerformanceCalculation {
+    return {
+        calculatorEngine: data["calculator_engine"],
+        calculatorVersion: data["calculator_version"],
+        performanceValues: data["performance_values"].map(performanceValueFromJson),
+        difficultyCalculation: difficultyCalculationFromJson(data["difficulty_calculation"]),
+    };
+}
+
+export function performanceValueFromJson(data: any): PerformanceValue {
+    return {
+        name: data["name"],
+        value: data["value"],
     };
 }
