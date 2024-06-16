@@ -106,11 +106,14 @@ export class DetailStore {
                 (data: any) => membershipFromJson(data)
             );
 
-            const scoresResponse = yield http.get(`${this.resourceUrl}/scores`, {
-                params: {
-                    limit: moreScores ? 100 : 5
+            const scoresResponse = yield http.get(
+                `${this.resourceUrl}/scores`,
+                {
+                    params: {
+                        limit: moreScores ? 100 : 5,
+                    },
                 }
-            });
+            );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
                 scoreFromJson(data)
             );

@@ -7,7 +7,9 @@ import { formatScoreResult } from "../../utils/formatting";
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     padding: 0;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), ${props => `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        ${(props) =>
+            `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     font-size: 0.3em;
@@ -110,9 +112,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
         <ScoreRowWrapper beatmapSetId={beatmap.setId}>
             <LeftContainer>
                 <PlayerInfo>
-                    <Avatar
-                        src={`https://a.ppy.sh/${userStats.osuUserId}`}
-                    />
+                    <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
                     <FlagContainer>
                         <Flag countryCode={userStats.osuUser!.country} />
                     </FlagContainer>
@@ -123,9 +123,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                     <Artist>
                         <small>by</small> {beatmap.artist}
                     </Artist>
-                    <DifficultyName>
-                        {beatmap.difficultyName}
-                    </DifficultyName>
+                    <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                 </BeatmapInfo>
             </LeftContainer>
             <ModsContainer>
@@ -166,7 +164,7 @@ interface ScoreRowProps {
 const ScoreRankings = observer((props: ScoreRankingProps) => (
     <>
         {props.scores.map((score, i) => (
-            <ScoreRow key={i} score={score}  />
+            <ScoreRow key={i} score={score} />
         ))}
     </>
 ));

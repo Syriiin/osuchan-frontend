@@ -1,5 +1,5 @@
-import { ScoreResult, AllowedBeatmapStatus } from "./enums";
 import { BeatmapStatus, Gamemode, Mods } from "../common/enums";
+import { AllowedBeatmapStatus, ScoreResult } from "./enums";
 
 export interface OsuUser {
     id: number;
@@ -82,6 +82,7 @@ export interface Score {
     performanceTotal: number;
     nochokePerformanceTotal: number;
     difficultyTotal: number;
+    performanceCalculations: PerformanceCalculation[];
 }
 
 export interface ScoreFilter {
@@ -102,4 +103,28 @@ export interface ScoreFilter {
     highestAccuracy: number | null;
     lowestLength: number | null;
     highestLength: number | null;
+}
+
+export interface DifficultyCalculation {
+    calculatorEngine: string;
+    calculatorVersion: string;
+    mods: Mods;
+    difficultyValues: DifficultyValue[];
+}
+
+export interface DifficultyValue {
+    name: string;
+    value: number;
+}
+
+export interface PerformanceCalculation {
+    calculatorEngine: string;
+    calculatorVersion: string;
+    performanceValues: PerformanceValue[];
+    difficultyCalculation: DifficultyCalculation;
+}
+
+export interface PerformanceValue {
+    name: string;
+    value: number;
 }

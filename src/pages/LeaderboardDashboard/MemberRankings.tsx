@@ -69,7 +69,7 @@ interface RankingRowProps {
 const MemberRankings = observer((props: MemberRankingProps) => (
     <>
         {props.memberships.map((membership, i) => (
-            <MemberRow key={i} rank={i+1} membership={membership} />
+            <MemberRow key={i} rank={i + 1} membership={membership} />
         ))}
     </>
 ));

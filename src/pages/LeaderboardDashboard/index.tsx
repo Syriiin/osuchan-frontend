@@ -66,10 +66,16 @@ const LeaderboardDashboard = observer(() => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
-    const { loadingStatus, leaderboard, rankings, leaderboardScores } = detailStore;
+    const { loadingStatus, leaderboard, rankings, leaderboardScores } =
+        detailStore;
 
     useEffect(() => {
-        detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId, true);
+        detailStore.loadLeaderboard(
+            leaderboardType,
+            gamemode,
+            leaderboardId,
+            true
+        );
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
     useEffect(() => {
@@ -77,7 +83,7 @@ const LeaderboardDashboard = observer(() => {
             detailStore.reloadLeaderboard(true);
         }, 5 * 60 * 1000);
         return () => clearInterval(interval);
-      }, [detailStore]);
+    }, [detailStore]);
 
     return (
         <>
@@ -97,7 +103,6 @@ const LeaderboardDashboard = observer(() => {
                 <LoadingPage />
             )}
 
-            
             {detailStore.loadingStatus === ResourceStatus.Error && (
                 <h3>Leaderboard not found!</h3>
             )}
