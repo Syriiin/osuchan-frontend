@@ -176,15 +176,13 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             </DataCell>
                         </tr>
                     </BeatmapDataTable>
-                    {score.gamemode === Gamemode.Standard && (
-                        <StarRating>
-                            <NumberFormat
-                                value={score.difficultyTotal}
-                                decimalPlaces={2}
-                            />{" "}
-                            stars
-                        </StarRating>
-                    )}
+                    <StarRating>
+                        <NumberFormat
+                            value={score.difficultyTotal}
+                            decimalPlaces={2}
+                        />{" "}
+                        stars
+                    </StarRating>
                 </BeatmapInfo>
 
                 {/* Score info: date, 300s, 100s, 50s, misses, combo, acc, pp, result */}
