@@ -1,11 +1,9 @@
-import {
-    ScoreResult,
-    ScoreSet,
-    AllowedBeatmapStatus,
-} from "../store/models/profiles/enums";
-import { Score, ScoreFilter } from "../store/models/profiles/types";
-import { calculateAccuracy } from "./osu";
 import { Mods } from "../store/models/common/enums";
+import {
+    AllowedBeatmapStatus,
+    ScoreResult,
+} from "../store/models/profiles/enums";
+import { ScoreFilter } from "../store/models/profiles/types";
 
 export function getScoreResult(
     countMiss: number,
@@ -29,39 +27,6 @@ export function getScoreResult(
     } else {
         return ScoreResult.Clear;
     }
-}
-
-export function unchokeScore(score: Score) {
-    // some slight assumptions here about combo but its close enough
-    score.count300 += score.countMiss;
-    score.countMiss = 0;
-    score.bestCombo = score.beatmap!.maxCombo;
-    score.accuracy = calculateAccuracy(
-        score.gamemode,
-        score.count300,
-        score.count100,
-        score.count50,
-        score.countMiss
-    );
-    score.performanceTotal = score.nochokePerformanceTotal;
-    score.result = ScoreResult.Perfect;
-
-    return score;
-}
-
-export function unchokeForScoreSet(scores: Score[], scoreSet: ScoreSet) {
-    switch (scoreSet) {
-        case ScoreSet.AlwaysFullCombo:
-            scores = scores.map((score) => unchokeScore(score));
-            break;
-        case ScoreSet.NeverChoke:
-            scores = scores.map((score) =>
-                score.result & ScoreResult.Choke ? unchokeScore(score) : score
-            );
-            break;
-    }
-
-    return scores;
 }
 
 export function scoreFilterIsDefault(scoreFilter: ScoreFilter) {

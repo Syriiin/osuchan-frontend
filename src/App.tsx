@@ -63,7 +63,10 @@ const AppWithContext = () => {
 
     return (
         <Switch>
-            <Route exact path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard">
+            <Route
+                exact
+                path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard"
+            >
                 <LeaderboardDashboard />
             </Route>
             <Route>

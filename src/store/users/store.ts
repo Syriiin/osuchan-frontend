@@ -1,29 +1,29 @@
-import { observable, makeAutoObservable, flow, flowResult } from "mobx";
+import { flow, flowResult, makeAutoObservable, observable } from "mobx";
 import ojsama from "ojsama";
 
 import http from "../../http";
 import notify from "../../notifications";
 
-import { UserStats, Score, ScoreFilter } from "../models/profiles/types";
-import { Membership } from "../models/leaderboards/types";
-import {
-    userStatsFromJson,
-    scoreFromJson,
-} from "../models/profiles/deserialisers";
-import { membershipFromJson } from "../models/leaderboards/deserialisers";
+import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import {
     calculateAccuracy,
-    calculateBpm,
-    calculateLength,
-    calculateCircleSize,
     calculateApproachRate,
+    calculateBpm,
+    calculateCircleSize,
+    calculateLength,
     calculateOverallDifficulty,
 } from "../../utils/osu";
-import { getBeatmap, setBeatmap } from "../../beatmapCache";
+import { getScoreResult } from "../../utils/osuchan";
 import { Gamemode, Mods } from "../models/common/enums";
+import { membershipFromJson } from "../models/leaderboards/deserialisers";
+import { Membership } from "../models/leaderboards/types";
+import {
+    scoreFromJson,
+    userStatsFromJson,
+} from "../models/profiles/deserialisers";
 import { ScoreSet } from "../models/profiles/enums";
-import { unchokeForScoreSet, getScoreResult } from "../../utils/osuchan";
-import { ResourceStatus, PaginatedResourceStatus } from "../status";
+import { Score, ScoreFilter, UserStats } from "../models/profiles/types";
+import { PaginatedResourceStatus, ResourceStatus } from "../status";
 
 function calculateScoreStyleValue(values: number[]) {
     let weighting_value = 0;
@@ -64,11 +64,11 @@ export class UsersStore {
     get extraPerformance() {
         return this.currentUserStats
             ? this.currentUserStats.pp -
-                  this.scores.reduce(
-                      (total, score, i) =>
-                          total + score.performanceTotal * 0.95 ** i,
-                      0
-                  )
+            this.scores.reduce(
+                (total, score, i) =>
+                    total + score.performanceTotal * 0.95 ** i,
+                0
+            )
             : 0;
     }
 
@@ -351,9 +351,6 @@ export class UsersStore {
                 scoreFromJson(data)
             );
 
-            // transform scores into their intended form for abnormal score sets
-            scores = unchokeForScoreSet(scores, scoreSet);
-
             this.sandboxScores.replace(scores);
 
             this.loadingSandboxScoresStatus = ResourceStatus.Loaded;
@@ -434,15 +431,9 @@ export class UsersStore {
             n50: score.count50,
             nmiss: score.countMiss,
         });
-        const nochokePp = ojsama.ppv2({
-            stars,
-            n100: score.count100,
-            n50: score.count50,
-        });
 
         score.difficultyTotal = stars.total;
         score.performanceTotal = pp.total;
-        score.nochokePerformanceTotal = nochokePp.total;
 
         // Sort observable array
         this.sandboxScores.replace(
