@@ -431,15 +431,9 @@ export class UsersStore {
             n50: score.count50,
             nmiss: score.countMiss,
         });
-        const nochokePp = ojsama.ppv2({
-            stars,
-            n100: score.count100,
-            n50: score.count50,
-        });
 
         score.difficultyTotal = stars.total;
         score.performanceTotal = pp.total;
-        score.nochokePerformanceTotal = nochokePp.total;
 
         // Sort observable array
         this.sandboxScores.replace(

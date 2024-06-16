@@ -110,7 +110,6 @@ export function scoreFromJson(data: any): Score {
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
         performanceTotal: data["performance_total"],
-        nochokePerformanceTotal: data["nochoke_performance_total"],
         difficultyTotal: data["difficulty_total"],
     };
 }

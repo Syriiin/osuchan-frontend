@@ -1,15 +1,14 @@
 import styled from "styled-components";
 
-import { Score } from "../../store/models/profiles/types";
-import { BasicModal } from "./BasicModal";
-import { formatScoreResult, formatTime } from "../../utils/formatting";
-import { DataTable, DataCell } from "./DataTable";
-import { ModIcons } from "./ModIcons";
-import { ScoreResult } from "../../store/models/profiles/enums";
-import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
-import { TimeAgo } from "./TimeAgo";
-import { NumberFormat } from "./NumberFormat";
 import { observer } from "mobx-react-lite";
+import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
+import { Score } from "../../store/models/profiles/types";
+import { formatScoreResult, formatTime } from "../../utils/formatting";
+import { BasicModal } from "./BasicModal";
+import { DataCell, DataTable } from "./DataTable";
+import { ModIcons } from "./ModIcons";
+import { NumberFormat } from "./NumberFormat";
+import { TimeAgo } from "./TimeAgo";
 
 const BannerImage = styled.img`
     width: 100%;
@@ -91,10 +90,6 @@ const Performance = styled.span`
 
 const Result = styled.span``;
 
-const NochokePerformance = styled.span`
-    color: ${(props) => props.theme.colours.timber};
-`;
-
 export const ScoreModal = observer((props: ScoreModalProps) => {
     const score = props.score;
     const beatmap = score.beatmap!;
@@ -144,33 +139,33 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             Gamemode.Catch,
                             Gamemode.Mania,
                         ].includes(score.gamemode) && (
-                            <tr>
-                                <td>
-                                    {score.gamemode === Gamemode.Mania
-                                        ? "Keys"
-                                        : "Circle Size"}
-                                </td>
-                                <DataCell>
-                                    <NumberFormat
-                                        value={score.circleSize}
-                                        decimalPlaces={1}
-                                    />
-                                </DataCell>
-                            </tr>
-                        )}
+                                <tr>
+                                    <td>
+                                        {score.gamemode === Gamemode.Mania
+                                            ? "Keys"
+                                            : "Circle Size"}
+                                    </td>
+                                    <DataCell>
+                                        <NumberFormat
+                                            value={score.circleSize}
+                                            decimalPlaces={1}
+                                        />
+                                    </DataCell>
+                                </tr>
+                            )}
                         {[Gamemode.Standard, Gamemode.Catch].includes(
                             score.gamemode
                         ) && (
-                            <tr>
-                                <td>Approach Rate</td>
-                                <DataCell>
-                                    <NumberFormat
-                                        value={score.approachRate}
-                                        decimalPlaces={1}
-                                    />
-                                </DataCell>
-                            </tr>
-                        )}
+                                <tr>
+                                    <td>Approach Rate</td>
+                                    <DataCell>
+                                        <NumberFormat
+                                            value={score.approachRate}
+                                            decimalPlaces={1}
+                                        />
+                                    </DataCell>
+                                </tr>
+                            )}
                         <tr>
                             <td>Overall Difficulty</td>
                             <DataCell>
@@ -233,16 +228,6 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                         pp
                     </Performance>
                     <Result>{formatScoreResult(score.result)}</Result>
-                    {Boolean(score.result & ScoreResult.Choke) && (
-                        <NochokePerformance>
-                            No-choke{" "}
-                            <NumberFormat
-                                value={score.nochokePerformanceTotal}
-                                decimalPlaces={0}
-                            />
-                            pp
-                        </NochokePerformance>
-                    )}
                 </ScoreInfo>
             </InfoContainer>
         </BasicModal>

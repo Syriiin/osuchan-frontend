@@ -80,7 +80,6 @@ export interface Score {
     overallDifficulty: number;
     result: ScoreResult;
     performanceTotal: number;
-    nochokePerformanceTotal: number;
     difficultyTotal: number;
     performanceCalculations: PerformanceCalculation[];
 }
