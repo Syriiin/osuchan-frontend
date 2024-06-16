@@ -72,6 +72,7 @@ export function beatmapFromJson(data: any): Beatmap {
 }
 
 export function scoreFromJson(data: any): Score {
+    const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
     return {
         id: data["id"],
         beatmap:
@@ -109,8 +110,8 @@ export function scoreFromJson(data: any): Score {
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: data["performance_total"],
-        difficultyTotal: data["difficulty_total"],
+        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
+        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
         performanceCalculations: data["performance_calculations"].map(performanceCalculationFromJson),
     };
 }
