@@ -1,25 +1,24 @@
-import { observable, action, makeAutoObservable, flow } from "mobx";
+import { action, flow, makeAutoObservable, observable } from "mobx";
 
 import history from "../../../history";
 import http from "../../../http";
 import notify from "../../../notifications";
 
+import { formatGamemodeNameShort } from "../../../utils/formatting";
+import { Gamemode } from "../../models/common/enums";
 import {
-    Leaderboard,
-    Membership,
-    Invite,
-} from "../../models/leaderboards/types";
-import { Score } from "../../models/profiles/types";
-import {
+    inviteFromJson,
     leaderboardFromJson,
     membershipFromJson,
-    inviteFromJson,
 } from "../../models/leaderboards/deserialisers";
+import {
+    Invite,
+    Leaderboard,
+    Membership,
+} from "../../models/leaderboards/types";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
-import { unchokeForScoreSet } from "../../../utils/osuchan";
-import { Gamemode } from "../../models/common/enums";
+import { Score } from "../../models/profiles/types";
 import { ResourceStatus } from "../../status";
-import { formatGamemodeNameShort } from "../../../utils/formatting";
 
 export class DetailStore {
     leaderboardType: string | null = null;
@@ -120,10 +119,7 @@ export class DetailStore {
 
             this.leaderboard = leaderboard;
             this.rankings.replace(members);
-            // transform scores into their intended form for abnormal score sets
-            this.leaderboardScores.replace(
-                unchokeForScoreSet(scores, leaderboard.scoreSet)
-            );
+            this.leaderboardScores.replace(scores);
 
             this.loadingStatus = ResourceStatus.Loaded;
         } catch (error: any) {
@@ -377,10 +373,7 @@ export class DetailStore {
             );
 
             this.membership = membership;
-            // transform scores into their intended form for abnormal score sets
-            this.membershipScores.replace(
-                unchokeForScoreSet(scores, this.leaderboard!.scoreSet)
-            );
+            this.membershipScores.replace(scores);
 
             this.loadingMembershipStatus = ResourceStatus.Loaded;
         } catch (error: any) {
@@ -452,10 +445,8 @@ export class DetailStore {
             );
 
             history.push(
-                `/leaderboards/${
-                    this.leaderboardType
-                }/${formatGamemodeNameShort(this.gamemode!)}/${
-                    this.leaderboardId
+                `/leaderboards/${this.leaderboardType
+                }/${formatGamemodeNameShort(this.gamemode!)}/${this.leaderboardId
                 }`
             );
             this.rankings.replace(
