@@ -67,7 +67,6 @@ export function beatmapFromJson(data: any): Beatmap {
         submissionDate: new Date(data["submission_date"]),
         approvalDate: new Date(data["approval_date"]),
         lastUpdated: new Date(data["last_updated"]),
-        difficultyTotal: data["difficulty_total"],
     };
 }
 

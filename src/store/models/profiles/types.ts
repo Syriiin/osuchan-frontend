@@ -51,7 +51,6 @@ export interface Beatmap {
     submissionDate: Date;
     approvalDate: Date;
     lastUpdated: Date;
-    difficultyTotal: number;
 }
 
 export interface Score {
