@@ -72,6 +72,12 @@ export function beatmapFromJson(data: any): Beatmap {
 
 export function scoreFromJson(data: any): Score {
     const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
+    const defaultPerformanceCalculation = performanceCalculations.find(calc => [
+        "rosu-pp-py",
+        "osu.Game.Rulesets.Taiko",
+        "osu.Game.Rulesets.Catch",
+        "osu.Game.Rulesets.Mania"
+    ].includes(calc["calculatorEngine"])) ?? performanceCalculations.at(0);
     return {
         id: data["id"],
         beatmap:
@@ -109,8 +115,8 @@ export function scoreFromJson(data: any): Score {
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
-        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
+        performanceTotal: defaultPerformanceCalculation?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
+        difficultyTotal: defaultPerformanceCalculation?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
         performanceCalculations: data["performance_calculations"].map(performanceCalculationFromJson),
     };
 }
