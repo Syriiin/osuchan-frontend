@@ -1,7 +1,7 @@
-import { OsuUser, ScoreFilter } from "../profiles/types";
-import { LeaderboardAccessType } from "./enums";
 import { Gamemode } from "../common/enums";
 import { ScoreSet } from "../profiles/enums";
+import { OsuUser, ScoreFilter } from "../profiles/types";
+import { LeaderboardAccessType } from "./enums";
 
 export interface Leaderboard {
     id: number;
@@ -14,6 +14,8 @@ export interface Leaderboard {
     allowPastScores: boolean;
     memberCount: number | null;
     archived: boolean;
+    calculatorEngine: string;
+    primaryPerformanceValue: string;
     scoreFilter: ScoreFilter | null;
     scoreFilterId: number;
     owner: OsuUser | null;

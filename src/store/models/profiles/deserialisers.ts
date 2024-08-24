@@ -72,12 +72,25 @@ export function beatmapFromJson(data: any): Beatmap {
 
 export function scoreFromJson(data: any): Score {
     const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
-    const defaultPerformanceCalculation = performanceCalculations.find(calc => [
-        "osu.Game.Rulesets.Osu",
-        "osu.Game.Rulesets.Taiko",
-        "osu.Game.Rulesets.Catch",
-        "osu.Game.Rulesets.Mania"
-    ].includes(calc["calculatorEngine"])) ?? performanceCalculations.at(0);
+    const defaultEngines = ["osu.Game.Rulesets.Osu", "osu.Game.Rulesets.Taiko", "osu.Game.Rulesets.Catch", "osu.Game.Rulesets.Mania"];
+    performanceCalculations.sort((a, b) => {
+        const aIndex = defaultEngines.indexOf(a.calculatorEngine);
+        const bIndex = defaultEngines.indexOf(b.calculatorEngine);
+        if (aIndex === -1 && bIndex === -1) {
+            // If both are not in the default engines, sort by name
+            return a.calculatorEngine.localeCompare(b.calculatorEngine);
+        } else if (aIndex === -1) {
+            // If a is not in the default engines, sort it after b
+            return 1;
+        } else if (bIndex === -1) {
+            // If b is not in the default engines, sort it after a
+            return -1;
+        } else {
+            // If both are in the default engines (should be impossible), sort by index
+            return aIndex - bIndex;
+        }
+    });
+
     return {
         id: data["id"],
         beatmap:
@@ -115,9 +128,9 @@ export function scoreFromJson(data: any): Score {
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: defaultPerformanceCalculation?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
-        difficultyTotal: defaultPerformanceCalculation?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
-        performanceCalculations: data["performance_calculations"].map(performanceCalculationFromJson),
+        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
+        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
+        performanceCalculations: performanceCalculations,
     };
 }
 

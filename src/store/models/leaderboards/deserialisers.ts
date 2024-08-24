@@ -1,8 +1,8 @@
-import { Leaderboard, Membership, Invite } from "./types";
 import {
     osuUserFromJson,
     scoreFilterFromJson,
 } from "../profiles/deserialisers";
+import { Invite, Leaderboard, Membership } from "./types";
 
 export function leaderboardFromJson(data: any): Leaderboard {
     return {
@@ -16,30 +16,32 @@ export function leaderboardFromJson(data: any): Leaderboard {
         allowPastScores: data["allow_past_scores"],
         memberCount: data["member_count"],
         archived: data["archived"],
+        calculatorEngine: data["calculator_engine"],
+        primaryPerformanceValue: data["primary_performance_value"],
         scoreFilter:
             data["score_filter"] === null
                 ? null
                 : typeof data["score_filter"] === "object"
-                ? scoreFilterFromJson(data["score_filter"])
-                : null,
+                    ? scoreFilterFromJson(data["score_filter"])
+                    : null,
         scoreFilterId:
             data["score_filter"] === null
                 ? null
                 : typeof data["score_filter"] === "object"
-                ? data["score_filter"]["id"]
-                : data["score_filter"],
+                    ? data["score_filter"]["id"]
+                    : data["score_filter"],
         owner:
             data["owner"] === null
                 ? null
                 : typeof data["owner"] === "object"
-                ? osuUserFromJson(data["owner"])
-                : null,
+                    ? osuUserFromJson(data["owner"])
+                    : null,
         ownerId:
             data["owner"] === null
                 ? null
                 : typeof data["owner"] === "object"
-                ? data["owner"]["id"]
-                : data["owner"],
+                    ? data["owner"]["id"]
+                    : data["owner"],
         creationTime: new Date(data["creation_time"]),
     };
 }
