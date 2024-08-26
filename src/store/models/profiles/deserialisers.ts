@@ -73,7 +73,7 @@ export function beatmapFromJson(data: any): Beatmap {
 export function scoreFromJson(data: any): Score {
     const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
     const defaultPerformanceCalculation = performanceCalculations.find(calc => [
-        "rosu-pp-py",
+        "osu.Game.Rulesets.Osu",
         "osu.Game.Rulesets.Taiko",
         "osu.Game.Rulesets.Catch",
         "osu.Game.Rulesets.Mania"
