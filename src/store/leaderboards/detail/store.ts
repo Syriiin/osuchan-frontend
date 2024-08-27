@@ -114,7 +114,7 @@ export class DetailStore {
                 }
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data)
+                scoreFromJson(data, leaderboard.calculatorEngine, leaderboard.primaryPerformanceValue)
             );
 
             this.leaderboard = leaderboard;
@@ -369,7 +369,7 @@ export class DetailStore {
                 `${this.resourceUrl}/members/${userId}/scores`
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data)
+                scoreFromJson(data, this.leaderboard?.calculatorEngine, this.leaderboard?.primaryPerformanceValue)
             );
 
             this.membership = membership;

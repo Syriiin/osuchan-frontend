@@ -1,6 +1,6 @@
-import { modsAsArray } from "./osu";
-import { ScoreResult } from "../store/models/profiles/enums";
 import { Gamemode, Mods } from "../store/models/common/enums";
+import { ScoreResult } from "../store/models/profiles/enums";
+import { modsAsArray } from "./osu";
 
 export function formatTime(seconds: number) {
     // convert seconds to MM:SS format
@@ -200,4 +200,25 @@ export function formatGamemodeNameShort(gamemodeId: Gamemode) {
         default:
             return "Unknown";
     }
+}
+
+export function formatCalculatorEngine(calculatorEngine: string) {
+    switch (calculatorEngine) {
+        case "osu.Game.Rulesets.Osu":
+        case "osu.Game.Rulesets.Taiko":
+        case "osu.Game.Rulesets.Catch":
+        case "osu.Game.Rulesets.Mania":
+            return "ppv2";
+        case "https://github.com/Syriiin/osu":
+            return "PP+";
+        default:
+            return calculatorEngine;
+    }
+}
+
+export function formatDiffcalcValueName(name: string) {
+    // convert `camelCase` diffcalc value names to `Title Case With Spaces`
+    return name // flowAim
+        .replace(/([A-Z])/g, " $1") // flow Aim
+        .replace(/^./, (str) => str.toUpperCase()); // Flow Aim
 }

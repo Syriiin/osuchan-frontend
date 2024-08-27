@@ -1,9 +1,13 @@
 import styled from "styled-components";
 
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
+import { Fragment, useState } from "react";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
 import { Score } from "../../store/models/profiles/types";
-import { formatScoreResult, formatTime } from "../../utils/formatting";
+import { formatCalculatorEngine, formatDiffcalcValueName, formatScoreResult, formatTime } from "../../utils/formatting";
+import { Button } from "../forms/Button";
 import { BasicModal } from "./BasicModal";
 import { DataCell, DataTable } from "./DataTable";
 import { ModIcons } from "./ModIcons";
@@ -90,9 +94,59 @@ const Performance = styled.span`
 
 const Result = styled.span``;
 
+const DetailsBar = styled(Button)`
+    display: block;
+    width: 100%;
+    border-radius: 0;
+`;
+
+const Chevron = styled(FontAwesomeIcon)`
+    transform: scaleY(${(props: ChevronProps) => (props.open ? "1" : "-1")});
+    transition: transform 0.2s linear;
+`;
+
+interface ChevronProps {
+    open?: boolean;
+}
+
+const DetailsCollapser = styled.div<DetailsCollapserProps>`
+    overflow: hidden;
+    max-height: ${(props) => (props.open ? "500px" : "0px")};
+    transition: max-height 0.3s linear;
+`;
+
+interface DetailsCollapserProps {
+    open?: boolean;
+}
+
+const DetailsContainer = styled.div`
+    padding: 10px;
+`;
+
+const DiffcalcHeader = styled.h3`
+    text-align: center;
+`;
+
+const DiffcalcDetailsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const DifficultyDataTable = styled(DataTable)`
+    max-width: 300px;
+    font-size: 1.1em;
+`;
+
+const PerformanceDataTable = styled(DataTable)`
+    max-width: 300px;
+    font-size: 1.1em;
+`;
+
 export const ScoreModal = observer((props: ScoreModalProps) => {
     const score = props.score;
     const beatmap = score.beatmap!;
+
+    const [detailsOpen, setDetailsOpen] = useState(false);
 
     return (
         <BasicModal open={props.open} onClose={props.onClose}>
@@ -228,6 +282,60 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                     <Result>{formatScoreResult(score.result)}</Result>
                 </ScoreInfo>
             </InfoContainer>
+            <DetailsBar action={() => setDetailsOpen(!detailsOpen)}>
+                <Chevron
+                    open={detailsOpen}
+                    icon={faChevronDown}
+                    size="sm"
+                />
+                {detailsOpen ? (
+                    " Hide difficulty and performance details "
+                ) : (
+                    " Show difficulty and performance details "
+                )}
+                <Chevron
+                    open={detailsOpen}
+                    icon={faChevronDown}
+                    size="sm"
+                />
+            </DetailsBar>
+            <DetailsCollapser open={detailsOpen}>
+                <DetailsContainer>
+                    {score.performanceCalculations.map(performanceCalculation => (
+                        <Fragment key={performanceCalculation.calculatorEngine}>
+                            <DiffcalcHeader>{formatCalculatorEngine(performanceCalculation.calculatorEngine)}</DiffcalcHeader>
+                            <DiffcalcDetailsContainer>
+                                <DifficultyDataTable>
+                                    {performanceCalculation.difficultyCalculation.difficultyValues.map((value) => (
+                                        <tr key={value.name}>
+                                            <td>{formatDiffcalcValueName(value.name)}</td>
+                                            <DataCell>
+                                                <NumberFormat
+                                                    value={value.value}
+                                                    decimalPlaces={2}
+                                                /> stars
+                                            </DataCell>
+                                        </tr>
+                                    ))}
+                                </DifficultyDataTable>
+                                <PerformanceDataTable>
+                                    {performanceCalculation.performanceValues.map((value) => (
+                                        <tr key={value.name}>
+                                            <td>{formatDiffcalcValueName(value.name)}</td>
+                                            <DataCell>
+                                                <NumberFormat
+                                                    value={value.value}
+                                                    decimalPlaces={0}
+                                                />pp
+                                            </DataCell>
+                                        </tr>
+                                    ))}
+                                </PerformanceDataTable>
+                            </DiffcalcDetailsContainer>
+                        </Fragment>
+                    ))}
+                </DetailsContainer>
+            </DetailsCollapser>
         </BasicModal>
     );
 });

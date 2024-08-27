@@ -1,3 +1,4 @@
+import { Gamemode } from "../common/enums";
 import { Beatmap, DifficultyCalculation, DifficultyValue, OsuUser, PerformanceCalculation, PerformanceValue, Score, ScoreFilter, UserStats } from "./types";
 
 export function osuUserFromJson(data: any): OsuUser {
@@ -70,14 +71,37 @@ export function beatmapFromJson(data: any): Beatmap {
     };
 }
 
-export function scoreFromJson(data: any): Score {
+export function scoreFromJson(data: any, defaultEngine: string | null = null, primaryPerformanceValue: string = "total"): Score {
+    if (defaultEngine === null) {
+        switch (data["gamemode"]) {
+            case Gamemode.Standard:
+                defaultEngine = "osu.Game.Rulesets.Osu";
+                break;
+            case Gamemode.Taiko:
+                defaultEngine = "osu.Game.Rulesets.Taiko";
+                break;
+            case Gamemode.Catch:
+                defaultEngine = "osu.Game.Rulesets.Catch";
+                break;
+            case Gamemode.Mania:
+                defaultEngine = "osu.Game.Rulesets.Mania";
+                break;
+        }
+    }
     const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
-    const defaultPerformanceCalculation = performanceCalculations.find(calc => [
-        "osu.Game.Rulesets.Osu",
-        "osu.Game.Rulesets.Taiko",
-        "osu.Game.Rulesets.Catch",
-        "osu.Game.Rulesets.Mania"
-    ].includes(calc["calculatorEngine"])) ?? performanceCalculations.at(0);
+    performanceCalculations.sort((a, b) => {
+        if (a.calculatorEngine === defaultEngine) {
+            // If a is the default engine, sort it before b
+            return -1;
+        } else if (a.calculatorEngine !== defaultEngine) {
+            // If b is the default engine, sort it before a
+            return 1;
+        } else {
+            // Otherwise, sort by alphabetical order
+            return a.calculatorEngine.localeCompare(b.calculatorEngine);
+        }
+    });
+
     return {
         id: data["id"],
         beatmap:
@@ -115,9 +139,9 @@ export function scoreFromJson(data: any): Score {
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: defaultPerformanceCalculation?.performanceValues.find((value) => value["name"] === "total")?.value ?? 0,
-        difficultyTotal: defaultPerformanceCalculation?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
-        performanceCalculations: data["performance_calculations"].map(performanceCalculationFromJson),
+        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === primaryPerformanceValue)?.value ?? 0,
+        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
+        performanceCalculations: performanceCalculations,
     };
 }
 

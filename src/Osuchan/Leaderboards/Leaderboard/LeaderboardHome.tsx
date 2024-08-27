@@ -1,43 +1,43 @@
-import { useEffect, useState } from "react";
-import {
-    useParams,
-    Route,
-    useRouteMatch,
-    useHistory,
-    Redirect,
-} from "react-router-dom";
 import { Observer, observer } from "mobx-react-lite";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-
-import { formatTime, formatGamemodeName } from "../../../utils/formatting";
-import { ScoreFilter } from "../../../store/models/profiles/types";
 import {
-    Surface,
+    Redirect,
+    Route,
+    useHistory,
+    useParams,
+    useRouteMatch,
+} from "react-router-dom";
+import styled from "styled-components";
+
+import {
+    AbsoluteDate,
     Button,
-    LoadingPage,
-    UnstyledLink,
     Label,
     LabelGroup,
-    VerticalButtonGroup,
+    LoadingPage,
     ModIcons,
-    AbsoluteDate,
+    Surface,
+    UnstyledLink,
+    VerticalButtonGroup,
 } from "../../../components";
-import TopScores from "./TopScores";
-import Rankings from "./Rankings";
-import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import { Gamemode, Mods } from "../../../store/models/common/enums";
+import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import {
     AllowedBeatmapStatus,
     ScoreSet,
 } from "../../../store/models/profiles/enums";
-import { scoreFilterIsDefault } from "../../../utils/osuchan";
+import { ScoreFilter } from "../../../store/models/profiles/types";
+import { ResourceStatus } from "../../../store/status";
+import { formatCalculatorEngine, formatDiffcalcValueName, formatGamemodeName, formatTime } from "../../../utils/formatting";
+import { useAutorun, useStore } from "../../../utils/hooks";
 import { gamemodeIdFromName } from "../../../utils/osu";
+import { scoreFilterIsDefault } from "../../../utils/osuchan";
+import EditLeaderboardModal from "./EditLeaderboardModal";
 import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
-import { ResourceStatus } from "../../../store/status";
-import EditLeaderboardModal from "./EditLeaderboardModal";
-import { useAutorun, useStore } from "../../../utils/hooks";
+import Rankings from "./Rankings";
+import TopScores from "./TopScores";
 
 const LeaderboardSurface = styled(Surface)`
     display: flex;
@@ -152,11 +152,11 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
             )}
             {scoreFilter.allowedBeatmapStatus ===
                 AllowedBeatmapStatus.LovedOnly && (
-                <>
-                    <ScoreFilterName>Beatmap Status</ScoreFilterName>
-                    <ScoreFilterValue>Loved</ScoreFilterValue>
-                </>
-            )}
+                    <>
+                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                        <ScoreFilterValue>Loved</ScoreFilterValue>
+                    </>
+                )}
             {/* Beatmap date */}
             {scoreFilter.oldestBeatmapDate !== null && (
                 <>
@@ -357,15 +357,15 @@ const LeaderboardButtons = observer(() => {
                                 {(leaderboard!.accessType ===
                                     LeaderboardAccessType.PublicInviteOnly ||
                                     leaderboard!.accessType ===
-                                        LeaderboardAccessType.Private) && (
-                                    <Button
-                                        as={UnstyledLink}
-                                        to={`${match.url}/invites`}
-                                        type="button"
-                                    >
-                                        Manage Invites
-                                    </Button>
-                                )}
+                                    LeaderboardAccessType.Private) && (
+                                        <Button
+                                            as={UnstyledLink}
+                                            to={`${match.url}/invites`}
+                                            type="button"
+                                        >
+                                            Manage Invites
+                                        </Button>
+                                    )}
 
                                 <Button
                                     negative
@@ -491,20 +491,23 @@ const LeaderboardHome = observer(() => {
                                             </Label>
                                             {leaderboard.scoreSet !==
                                                 ScoreSet.Normal && (
-                                                <Label special>
-                                                    {leaderboard.scoreSet ===
-                                                        ScoreSet.NeverChoke &&
-                                                        "Never Choke"}
-                                                    {leaderboard.scoreSet ===
-                                                        ScoreSet.AlwaysFullCombo &&
-                                                        "Always Full Combo"}
-                                                </Label>
-                                            )}
+                                                    <Label special>
+                                                        {leaderboard.scoreSet ===
+                                                            ScoreSet.NeverChoke &&
+                                                            "Never Choke"}
+                                                        {leaderboard.scoreSet ===
+                                                            ScoreSet.AlwaysFullCombo &&
+                                                            "Always Full Combo"}
+                                                    </Label>
+                                                )}
                                             {!leaderboard.allowPastScores && (
                                                 <Label special>
                                                     Only scores after joining
                                                 </Label>
                                             )}
+                                            <Label>
+                                                {formatCalculatorEngine(leaderboard.calculatorEngine)} ({formatDiffcalcValueName(leaderboard.primaryPerformanceValue)})
+                                            </Label>
                                         </LabelGroup>
                                     </LeaderboardInfoRow>
                                     {leaderboard.owner && (
@@ -562,7 +565,7 @@ const LeaderboardHome = observer(() => {
                                 {props.match !== null &&
                                     leaderboard &&
                                     leaderboard.ownerId !==
-                                        meStore.user?.osuUserId && (
+                                    meStore.user?.osuUserId && (
                                         <Redirect to={match.url} />
                                     )}
                             </>
