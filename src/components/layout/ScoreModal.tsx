@@ -101,7 +101,7 @@ const DetailsBar = styled(Button)`
 `;
 
 const Chevron = styled(FontAwesomeIcon)`
-    transform: scaleY(${(props: ChevronProps) => (props.open ? "1" : "-1")});
+    transform: scaleY(${(props: ChevronProps) => (props.open ? "-1" : "1")});
     transition: transform 0.2s linear;
 `;
 
