@@ -20,6 +20,8 @@ const OsuchanWrapper = styled.div`
 const ContentWrapper = styled.main`
     flex-grow: 1;
     margin: 20px 50px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Osuchan = () => {

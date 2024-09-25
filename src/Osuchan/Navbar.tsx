@@ -236,7 +236,7 @@ const Navbar = observer(() => {
             <TitleContainer>
                 <UnstyledLink to="/">
                     <Title>
-                        <Logo src="/static/icon-64.png" />
+                        <Logo src="/static/icon.svg" />
                         <span>osu!chan</span>
                     </Title>
                 </UnstyledLink>
