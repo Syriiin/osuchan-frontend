@@ -1,14 +1,15 @@
 import { useEffect } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
-import Navbar from "./Navbar";
+import { useStore } from "../utils/hooks";
+import About from "./About/About";
 import Footer from "./Footer";
 import Home from "./Home/Home";
-import Me from "./Me/Me";
-import Profiles from "./Profiles/Profiles";
 import LeaderboardsRoot from "./Leaderboards";
-import { useStore } from "../utils/hooks";
+import Me from "./Me/Me";
+import Navbar from "./Navbar";
+import Profiles from "./Profiles/Profiles";
 
 const OsuchanWrapper = styled.div`
     display: flex;
@@ -19,6 +20,8 @@ const OsuchanWrapper = styled.div`
 const ContentWrapper = styled.main`
     flex-grow: 1;
     margin: 20px 50px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Osuchan = () => {
@@ -46,6 +49,9 @@ const Osuchan = () => {
                     </Route>
                     <Route path="/leaderboards">
                         <LeaderboardsRoot />
+                    </Route>
+                    <Route path="/about">
+                        <About />
                     </Route>
                     <Redirect to="/" />
                 </Switch>

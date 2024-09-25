@@ -1,3 +1,6 @@
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import {
     Link,
@@ -6,26 +9,23 @@ import {
     useHistory,
     useLocation,
 } from "react-router-dom";
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
-import { gamemodeIdFromName } from "../utils/osu";
 import {
+    Button,
     SimpleMenu,
-    SimpleMenuItem,
     SimpleMenuDivider,
+    SimpleMenuItem,
     SimpleModal,
     SimpleModalTitle,
-    TextInput,
-    Button,
-    UnstyledLink,
     TextField,
+    TextInput,
+    UnstyledLink,
 } from "../components";
-import { formatGamemodeNameShort } from "../utils/formatting";
 import { ResourceStatus } from "../store/status";
+import { formatGamemodeNameShort } from "../utils/formatting";
 import { useAutorun, useStore } from "../utils/hooks";
+import { gamemodeIdFromName } from "../utils/osu";
 
 const NavbarWrapper = styled.nav`
     display: flex;
@@ -39,7 +39,7 @@ const LinksContainer = styled.div`
     flex: 1;
 `;
 
-const NavbarLink = styled(Link)<NavbarLinkProps>`
+const NavbarLink = styled(Link) <NavbarLinkProps>`
     margin: 10px;
     font-size: 1.5em;
     font-weight: ${(props) => (props.$active ? "normal" : "lighter")};
@@ -49,9 +49,9 @@ const NavbarLink = styled(Link)<NavbarLinkProps>`
     &:hover {
         text-decoration: none;
         color: ${(props) =>
-            props.$active
-                ? props.theme.colours.mango
-                : props.theme.colours.timber};
+        props.$active
+            ? props.theme.colours.mango
+            : props.theme.colours.timber};
     }
 `;
 
@@ -157,7 +157,7 @@ const Navbar = observer(() => {
     useAutorun(() => {
         setAddScoreUserUrl(
             `https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` ||
-                ""
+            ""
         );
     });
 
@@ -227,13 +227,16 @@ const Navbar = observer(() => {
                 >
                     Leaderboards
                 </NavbarLink>
+                <NavbarLink to="/about" $active={location.pathname === "/about"}>
+                    About
+                </NavbarLink>
             </LinksContainer>
 
             {/* osu!chan title */}
             <TitleContainer>
                 <UnstyledLink to="/">
                     <Title>
-                        <Logo src="/static/icon-64.png" />
+                        <Logo src="/static/icon.svg" />
                         <span>osu!chan</span>
                     </Title>
                 </UnstyledLink>
@@ -243,6 +246,7 @@ const Navbar = observer(() => {
                 {/* User search */}
                 <form onSubmit={handleSearchSubmit}>
                     <SearchInput
+                        id="home-search"
                         placeholder="osu! username"
                         onChange={(e) => setSearchValue(e.currentTarget.value)}
                         value={searchValue}
@@ -310,9 +314,8 @@ const Navbar = observer(() => {
                             triggerElement={
                                 <UserAvatarWrapper>
                                     <UserAvatar
-                                        src={`https://a.ppy.sh/${
-                                            user!.osuUserId
-                                        }`}
+                                        src={`https://a.ppy.sh/${user!.osuUserId
+                                            }`}
                                     />
                                 </UserAvatarWrapper>
                             }
