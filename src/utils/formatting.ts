@@ -209,7 +209,7 @@ export function formatCalculatorEngine(calculatorEngine: string) {
         case "osu.Game.Rulesets.Catch":
         case "osu.Game.Rulesets.Mania":
             return "ppv2";
-        case "https://github.com/Syriiin/osu":
+        case "https://github.com/Syriiin/osu/tree/performanceplus":
             return "PP+";
         default:
             return calculatorEngine;
