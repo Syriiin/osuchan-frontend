@@ -6,12 +6,12 @@ import notify from "../../notifications";
 
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import {
-    calculateAccuracy,
     calculateApproachRate,
     calculateBpm,
     calculateCircleSize,
+    calculateClassicAccuracy,
     calculateLength,
-    calculateOverallDifficulty,
+    calculateOverallDifficulty
 } from "../../utils/osu";
 import { getScoreResult } from "../../utils/osuchan";
 import { Gamemode, Mods } from "../models/common/enums";
@@ -377,27 +377,24 @@ export class UsersStore {
         score: Score,
         mods: Mods,
         bestCombo: number,
-        count100: number,
-        count50: number,
+        countOk: number,
+        countMeh: number,
         countMiss: number
     ): any {
         const beatmap = score.beatmap!;
         const totalObjects =
-            score.count300 + score.count100 + score.count50 + score.countMiss;
+            score.statistics["great"] ?? 0 + score.statistics["ok"] ?? 0 + score.statistics["meh"] ?? 0 + score.statistics["miss"] ?? 0;
 
         score.mods = mods;
         score.bestCombo = bestCombo;
-        score.count300 = totalObjects - count100 - count50 - countMiss;
-        score.count100 = count100;
-        score.count50 = count50;
-        score.countMiss = countMiss;
+        score.statistics["great"] = totalObjects - countOk - countMeh - countMiss;
+        score.statistics["ok"] = countOk;
+        score.statistics["meh"] = countMeh;
+        score.statistics["miss"] = countMiss;
 
-        score.accuracy = calculateAccuracy(
-            this.currentUserStats!.gamemode,
-            score.count300,
-            score.count100,
-            score.count50,
-            score.countMiss
+        score.accuracy = calculateClassicAccuracy(
+            score.statistics,
+            this.currentUserStats!.gamemode
         );
         score.bpm = calculateBpm(beatmap.bpm, score.mods);
         score.length = calculateLength(beatmap.drainTime, score.mods);
@@ -426,10 +423,10 @@ export class UsersStore {
         const pp = ojsama.ppv2({
             stars,
             combo: score.bestCombo,
-            n300: score.count300,
-            n100: score.count100,
-            n50: score.count50,
-            nmiss: score.countMiss,
+            n300: score.statistics["great"],
+            n100: score.statistics["ok"],
+            n50: score.statistics["meh"],
+            nmiss: score.statistics["miss"],
         });
 
         score.difficultyTotal = stars.total;

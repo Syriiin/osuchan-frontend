@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-import { Score } from "../../../store/models/profiles/types";
+import { observer } from "mobx-react-lite";
 import {
+    Button,
+    FormControl,
+    FormLabel,
+    ModsSelect,
     SimpleModal,
     SimpleModalTitle,
-    FormLabel,
     TextInput,
-    FormControl,
-    Button,
-    ModsSelect,
 } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
-import { observer } from "mobx-react-lite";
+import { Score } from "../../../store/models/profiles/types";
 import { useAutorun, useStore } from "../../../utils/hooks";
 
 const ScoreEditModal = observer((props: ScoreEditModalProps) => {
@@ -22,18 +22,18 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
     const beatmap = score.beatmap!;
 
     const [mods, setMods] = useState(score.mods);
-    const [combo, setCombo] = useState(score.bestCombo.toString());
-    const [count100, setCount100] = useState(score.count100.toString());
-    const [count50, setCount50] = useState(score.count50.toString());
-    const [countMiss, setCountMiss] = useState(score.countMiss.toString());
+    const [combo, setCombo] = useState(score.bestCombo);
+    const [countOk, setCountOk] = useState(score.statistics["ok"] ?? 0);
+    const [countMeh, setCountMeh] = useState(score.statistics["meh"] ?? 0);
+    const [countMiss, setCountMiss] = useState(score.statistics["miss"] ?? 0);
 
     // use effect to initialise default state values
     useAutorun(() => {
         setMods(score.mods);
-        setCombo(score.bestCombo.toString());
-        setCount100(score.count100.toString());
-        setCount50(score.count50.toString());
-        setCountMiss(score.countMiss.toString());
+        setCombo(score.bestCombo);
+        setCountOk(score.statistics["ok"] ?? 0);
+        setCountMeh(score.statistics["meh"] ?? 0);
+        setCountMiss(score.statistics["miss"] ?? 0);
     });
 
     const handleApply = (e: React.FormEvent) => {
@@ -42,10 +42,10 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
         usersStore.updateSandboxScore(
             score,
             mods,
-            parseInt(combo),
-            parseInt(count100),
-            parseInt(count50),
-            parseInt(countMiss)
+            combo,
+            countOk,
+            countMeh,
+            countMiss
         );
 
         props.onClose();
@@ -77,7 +77,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={score.bestCombo.toString()}
                         value={combo}
-                        onChange={(e) => setCombo(e.currentTarget.value)}
+                        onChange={(e) => setCombo(parseInt(e.currentTarget.value))}
                         min={0}
                         max={beatmap.maxCombo}
                     />
@@ -88,9 +88,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         fullWidth
                         type="number"
                         required
-                        placeholder={score.count100.toString()}
-                        value={count100}
-                        onChange={(e) => setCount100(e.currentTarget.value)}
+                        placeholder={(score.statistics["ok"] ?? 0).toString()}
+                        value={countOk}
+                        onChange={(e) => setCountOk(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>
@@ -100,9 +100,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         fullWidth
                         type="number"
                         required
-                        placeholder={score.count50.toString()}
-                        value={count50}
-                        onChange={(e) => setCount50(e.currentTarget.value)}
+                        placeholder={(score.statistics["meh"] ?? 0).toString()}
+                        value={countMeh}
+                        onChange={(e) => setCountMeh(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>
@@ -112,9 +112,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         fullWidth
                         type="number"
                         required
-                        placeholder={score.countMiss.toString()}
+                        placeholder={(score.statistics["miss"] ?? 0).toString()}
                         value={countMiss}
-                        onChange={(e) => setCountMiss(e.currentTarget.value)}
+                        onChange={(e) => setCountMiss(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>

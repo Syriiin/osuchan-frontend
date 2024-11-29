@@ -245,22 +245,94 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                         Played <TimeAgo datetime={score.date} />
                     </ScoreDate>
                     <ScoreDataTable>
-                        <tr>
-                            <td>300</td>
-                            <DataCell>{score.count300}</DataCell>
-                        </tr>
-                        <tr>
-                            <td>100</td>
-                            <DataCell>{score.count100}</DataCell>
-                        </tr>
-                        <tr>
-                            <td>50</td>
-                            <DataCell>{score.count50}</DataCell>
-                        </tr>
-                        <tr>
-                            <td>Miss</td>
-                            <DataCell>{score.countMiss}</DataCell>
-                        </tr>
+                        {score.gamemode === Gamemode.Standard && (
+                            <>
+                                <tr>
+                                    <td>300</td>
+                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>100</td>
+                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>50</td>
+                                    <DataCell>{score.statistics["meh"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Miss</td>
+                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                </tr>
+                            </>
+                        )}
+                        {score.gamemode === Gamemode.Taiko && (
+                            <>
+                                <tr>
+                                    <td>Great</td>
+                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Good</td>
+                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Miss</td>
+                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                </tr>
+                            </>
+                        )}
+                        {score.gamemode === Gamemode.Catch && (
+                            <>
+                                <tr>
+                                    <td>Fruits</td>
+                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Ticks</td>
+                                    <DataCell>{score.statistics["large_tick_hit"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Droplets</td>
+                                    <DataCell>{score.statistics["small_tick_hit"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Droplet Miss</td>
+                                    <DataCell>{score.statistics["small_tick_miss"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Miss</td>
+                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                </tr>
+                            </>
+                        )}
+                        {score.gamemode === Gamemode.Mania && (
+                            <>
+                                <tr>
+                                    <td>MAX</td>
+                                    <DataCell>{score.statistics["perfect"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>300</td>
+                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <DataCell>{score.statistics["good"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>100</td>
+                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>50</td>
+                                    <DataCell>{score.statistics["meh"] ?? 0}</DataCell>
+                                </tr>
+                                <tr>
+                                    <td>Miss</td>
+                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                </tr>
+                            </>
+                        )}
                     </ScoreDataTable>
                     <Accuracy>
                         <NumberFormat

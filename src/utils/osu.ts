@@ -124,46 +124,46 @@ export function modsAsArray(bitwiseMods: Mods) {
     return mods;
 }
 
-export function calculateAccuracy(
-    gamemode: Gamemode,
-    count300: number,
-    count100: number,
-    count50: number,
-    countMiss: number,
-    countKatu?: number,
-    countGeki?: number
-) {
-    let totalHits;
-    let points;
+export function calculateClassicAccuracy(statistics: Record<string, number>, gamemode: Gamemode): number {
+    let maxPoints: number;
+    let points: number;
+
+    const great = statistics["great"] ?? 0;
+    const ok = statistics["ok"] ?? 0;
+    const meh = statistics["meh"] ?? 0;
+    const miss = statistics["miss"] ?? 0;
+    const largeTickHit = statistics["large_tick_hit"] ?? 0;
+    const smallTickHit = statistics["small_tick_hit"] ?? 0;
+    const smallTickMiss = statistics["small_tick_miss"] ?? 0;
+    const perfect = statistics["perfect"] ?? 0;
+    const good = statistics["good"] ?? 0;
 
     switch (gamemode) {
         case Gamemode.Standard:
-            totalHits = count300 + count100 + count50 + countMiss;
-            points = count50 * 50 + count100 * 100 + count300 * 300;
-            return (points / (totalHits * 300)) * 100;
+            maxPoints = 300 * (great + ok + meh + miss);
+            points = (50 * meh) + (100 * ok) + (300 * great);
+            break;
+
         case Gamemode.Taiko:
-            totalHits = count300 + count100 + countMiss;
-            points = (count100 * 0.5 + count300 * 1) * 300;
-            return (points / (totalHits * 300)) * 100;
+            maxPoints = 300 * (great + ok + miss);
+            points = 300 * ((0.5 * ok) + great);
+            break;
+
         case Gamemode.Catch:
-            let countDropMiss = countKatu as number;
-            totalHits =
-                count300 + count100 + count50 + countMiss + countDropMiss;
-            let caught = count300 + count100 + count50;
-            return (caught / totalHits) * 100;
+            maxPoints = great + largeTickHit + smallTickHit + miss + smallTickMiss;
+            points = great + largeTickHit + smallTickHit;
+            break;
+
         case Gamemode.Mania:
-            let countMax = countGeki as number;
-            let count200 = countKatu as number;
-            totalHits =
-                count50 + count100 + count200 + count300 + countMax + countMiss;
-            points =
-                count50 * 50 +
-                count100 * 100 +
-                count200 * 200 +
-                count300 * 300 +
-                countMax * 300;
-            return (points / (totalHits * 300)) * 100;
+            maxPoints = 300 * (meh + ok + good + great + perfect + miss);
+            points = (50 * meh) + (100 * ok) + (200 * good) + (300 * great) + (300 * perfect);
+            break;
+
+        default:
+            throw new Error(`${gamemode} is not a valid gamemode`);
     }
+
+    return 100 * (points / maxPoints);
 }
 
 export function calculateBpm(bpm: number, mods: Mods) {

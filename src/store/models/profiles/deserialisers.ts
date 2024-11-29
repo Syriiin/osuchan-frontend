@@ -121,12 +121,7 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
                 ? data["user_stats"]["id"]
                 : data["user_stats"],
         score: data["score"],
-        count300: data["count_300"],
-        count100: data["count_100"],
-        count50: data["count_50"],
-        countMiss: data["count_miss"],
-        countGeki: data["count_geki"],
-        countKatu: data["count_katu"],
+        statistics: data["statistics"],
         bestCombo: data["best_combo"],
         mods: data["mods"],
         rank: data["rank"],

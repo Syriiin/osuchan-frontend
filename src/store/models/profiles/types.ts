@@ -60,12 +60,7 @@ export interface Score {
     userStats: UserStats | null;
     userStatsId: number;
     score: number;
-    count300: number;
-    count100: number;
-    count50: number;
-    countMiss: number;
-    countGeki: number;
-    countKatu: number;
+    statistics: Record<string, number>;
     bestCombo: number;
     mods: Mods;
     rank: string;
