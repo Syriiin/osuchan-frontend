@@ -1,4 +1,5 @@
-import { Gamemode, Mods } from "../store/models/common/enums";
+import { Gamemode, ModAcronym, Mods } from "../store/models/common/enums";
+import { ModsJson } from "../store/models/profiles/types";
 
 export function gamemodeIdFromName(gamemodeName: string | undefined) {
     switch (gamemodeName) {
@@ -15,46 +16,46 @@ export function gamemodeIdFromName(gamemodeName: string | undefined) {
     }
 }
 
-export function modsShortFromBitwise(bitwiseMods: Mods) {
-    const allMods: { [name: string]: Mods } = {
-        NONE: Mods.None,
-        NF: Mods.NoFail,
-        EZ: Mods.Easy,
-        TD: Mods.TouchDevice,
-        HD: Mods.Hidden,
-        HR: Mods.HardRock,
-        SD: Mods.SuddenDeath,
-        DT: Mods.DoubleTime,
-        RX: Mods.Relax,
-        HT: Mods.HalfTime,
-        NC: Mods.Nightcore,
-        FL: Mods.Flashlight,
-        AUTO: Mods.Auto,
-        SO: Mods.SpunOut,
-        AP: Mods.Autopilot,
-        PF: Mods.Perfect,
-        "4K": Mods.Key4,
-        "5K": Mods.Key5,
-        "6K": Mods.Key6,
-        "7K": Mods.Key7,
-        "8K": Mods.Key8,
-        FI: Mods.FadeIn,
-        RN: Mods.Random,
-        CN: Mods.Cinema,
-        TP: Mods.TargetPractice,
-        "9K": Mods.Key9,
-        COOP: Mods.KeyCoop,
-        "1K": Mods.Key1,
-        "2K": Mods.Key2,
-        "3K": Mods.Key3,
-        V2: Mods.ScoreV2,
-        MI: Mods.Mirror,
-    };
+const modBitValues: { [name: string]: Mods } = {
+    NONE: Mods.None,
+    NF: Mods.NoFail,
+    EZ: Mods.Easy,
+    TD: Mods.TouchDevice,
+    HD: Mods.Hidden,
+    HR: Mods.HardRock,
+    SD: Mods.SuddenDeath,
+    DT: Mods.DoubleTime,
+    RX: Mods.Relax,
+    HT: Mods.HalfTime,
+    NC: Mods.Nightcore,
+    FL: Mods.Flashlight,
+    AUTO: Mods.Auto,
+    SO: Mods.SpunOut,
+    AP: Mods.Autopilot,
+    PF: Mods.Perfect,
+    "4K": Mods.Key4,
+    "5K": Mods.Key5,
+    "6K": Mods.Key6,
+    "7K": Mods.Key7,
+    "8K": Mods.Key8,
+    FI: Mods.FadeIn,
+    RN: Mods.Random,
+    CN: Mods.Cinema,
+    TP: Mods.TargetPractice,
+    "9K": Mods.Key9,
+    COOP: Mods.KeyCoop,
+    "1K": Mods.Key1,
+    "2K": Mods.Key2,
+    "3K": Mods.Key3,
+    V2: Mods.ScoreV2,
+    MI: Mods.Mirror,
+};
 
+export function modsShortFromBitwise(bitwiseMods: Mods) {
     const mods = [];
 
-    for (const mod in allMods) {
-        if (allMods[mod] & bitwiseMods) {
+    for (const mod in modBitValues) {
+        if (modBitValues[mod] & bitwiseMods) {
             mods.push(mod);
         }
     }
@@ -66,7 +67,7 @@ export function modsShortFromBitwise(bitwiseMods: Mods) {
         mods.splice(mods.indexOf("SD"), 1);
     }
 
-    mods.sort((a: string, b: string) => allMods[a] - allMods[b]);
+    mods.sort((a: string, b: string) => modBitValues[a] - modBitValues[b]);
 
     return mods;
 }
@@ -124,6 +125,17 @@ export function modsAsArray(bitwiseMods: Mods) {
     return mods;
 }
 
+export function bitmodsFromModAcronyms(modAcronym: string[]): number {
+    return modAcronym.map((modAcronym) => modBitValues[modAcronym]).reduce((acc, mod) => acc | mod, 0);
+}
+
+export function modsJsonFromModAcronyms(modAcronym: string[]): ModsJson {
+    return modAcronym.reduce<ModsJson>((acc, mod) => {
+        acc[mod] = {};
+        return acc;
+    }, {});
+}
+
 export function calculateClassicAccuracy(statistics: Record<string, number>, gamemode: Gamemode): number {
     let maxPoints: number;
     let points: number;
@@ -166,20 +178,20 @@ export function calculateClassicAccuracy(statistics: Record<string, number>, gam
     return 100 * (points / maxPoints);
 }
 
-export function calculateBpm(bpm: number, mods: Mods) {
-    if (mods & Mods.DoubleTime) {
+export function calculateBpm(bpm: number, mods: ModsJson) {
+    if (ModAcronym.DoubleTime in mods) {
         return bpm * 1.5;
-    } else if (mods & Mods.HalfTime) {
+    } else if (ModAcronym.HalfTime in mods) {
         return bpm * (3 / 4);
     }
 
     return bpm;
 }
 
-export function calculateLength(length: number, mods: Mods) {
-    if (mods & Mods.DoubleTime) {
+export function calculateLength(length: number, mods: ModsJson) {
+    if (ModAcronym.DoubleTime in mods) {
         return length / 1.5;
-    } else if (mods & Mods.HalfTime) {
+    } else if (ModAcronym.HalfTime in mods) {
         return length / (3 / 4);
     }
 
@@ -188,52 +200,57 @@ export function calculateLength(length: number, mods: Mods) {
 
 export function calculateCircleSize(
     circleSize: number,
-    mods: Mods,
+    mods: ModsJson,
     gamemode: Gamemode
 ) {
     if (gamemode & Gamemode.Mania) {
-        if (mods & Mods.KeyMod) {
-            switch (mods) {
-                case Mods.Key1:
-                    return 1;
-                case Mods.Key2:
-                    return 2;
-                case Mods.Key3:
-                    return 3;
-                case Mods.Key4:
-                    return 4;
-                case Mods.Key5:
-                    return 5;
-                case Mods.Key6:
-                    return 6;
-                case Mods.Key7:
-                    return 7;
-                case Mods.Key8:
-                    return 8;
-                case Mods.Key9:
-                    return 9;
-            }
+        if (ModAcronym.Key1 in mods) {
+            return 1;
+        }
+        if (ModAcronym.Key2 in mods) {
+            return 2;
+        }
+        if (ModAcronym.Key3 in mods) {
+            return 3;
+        }
+        if (ModAcronym.Key4 in mods) {
+            return 4;
+        }
+        if (ModAcronym.Key5 in mods) {
+            return 5;
+        }
+        if (ModAcronym.Key6 in mods) {
+            return 6;
+        }
+        if (ModAcronym.Key7 in mods) {
+            return 7;
+        }
+        if (ModAcronym.Key8 in mods) {
+            return 8;
+        }
+        if (ModAcronym.Key9 in mods) {
+            return 9;
         }
         return circleSize;
     }
 
-    if (mods & Mods.HardRock) {
+    if (ModAcronym.HardRock in mods) {
         return circleSize * 1.3;
-    } else if (mods & Mods.Easy) {
+    } else if (ModAcronym.Easy in mods) {
         return circleSize * 0.5;
     }
     return circleSize;
 }
 
-export function calculateApproachRate(approachRate: number, mods: Mods) {
+export function calculateApproachRate(approachRate: number, mods: ModsJson) {
     const arToMs = (ar: number) =>
         ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950;
     const msToAr = (ms: number) =>
         ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150;
 
-    if (mods & Mods.HardRock) {
+    if (ModAcronym.HardRock in mods) {
         approachRate *= 1.4;
-    } else if (mods & Mods.Easy) {
+    } else if (ModAcronym.Easy in mods) {
         approachRate *= 0.5;
     }
 
@@ -241,10 +258,10 @@ export function calculateApproachRate(approachRate: number, mods: Mods) {
         approachRate = 10;
     }
 
-    if (mods & Mods.DoubleTime) {
+    if (ModAcronym.DoubleTime in mods) {
         let ms = arToMs(approachRate) / 1.5;
         approachRate = msToAr(ms);
-    } else if (mods & Mods.HalfTime) {
+    } else if (ModAcronym.HalfTime in mods) {
         let ms = arToMs(approachRate) / (3 / 4);
         approachRate = msToAr(ms);
     }
@@ -254,14 +271,14 @@ export function calculateApproachRate(approachRate: number, mods: Mods) {
 
 export function calculateOverallDifficulty(
     overallDifficulty: number,
-    mods: Mods
+    mods: ModsJson
 ) {
     const odToMs = (od: number) => -6 * od + 79.5;
     const msToOd = (ms: number) => (ms - 79.5) / -6;
 
-    if (mods & Mods.HardRock) {
+    if (ModAcronym.HardRock in mods) {
         overallDifficulty *= 1.4;
-    } else if (mods & Mods.Easy) {
+    } else if (ModAcronym.Easy in mods) {
         overallDifficulty *= 0.5;
     }
 
@@ -269,10 +286,10 @@ export function calculateOverallDifficulty(
         overallDifficulty = 10;
     }
 
-    if (mods & Mods.DoubleTime) {
+    if (ModAcronym.DoubleTime in mods) {
         let ms = odToMs(overallDifficulty) / 1.5;
         overallDifficulty = msToOd(ms);
-    } else if (mods & Mods.HalfTime) {
+    } else if (ModAcronym.HalfTime in mods) {
         let ms = odToMs(overallDifficulty) / (3 / 4);
         overallDifficulty = msToOd(ms);
     }

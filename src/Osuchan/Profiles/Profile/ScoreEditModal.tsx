@@ -21,7 +21,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
     const score = props.score;
     const beatmap = score.beatmap!;
 
-    const [mods, setMods] = useState(score.mods);
+    const [mods, setMods] = useState(score.modsJson);
     const [combo, setCombo] = useState(score.bestCombo);
     const [countOk, setCountOk] = useState(score.statistics["ok"] ?? 0);
     const [countMeh, setCountMeh] = useState(score.statistics["meh"] ?? 0);
@@ -29,7 +29,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
 
     // use effect to initialise default state values
     useAutorun(() => {
-        setMods(score.mods);
+        setMods(score.modsJson);
         setCombo(score.bestCombo);
         setCountOk(score.statistics["ok"] ?? 0);
         setCountMeh(score.statistics["meh"] ?? 0);

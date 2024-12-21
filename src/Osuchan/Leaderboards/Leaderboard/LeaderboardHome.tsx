@@ -21,7 +21,7 @@ import {
     UnstyledLink,
     VerticalButtonGroup,
 } from "../../../components";
-import { Gamemode, Mods } from "../../../store/models/common/enums";
+import { Gamemode } from "../../../store/models/common/enums";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
 import {
     AllowedBeatmapStatus,
@@ -121,23 +121,23 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
     return (
         <ScoreFilters>
             {/* Mods */}
-            {scoreFilter.requiredMods !== Mods.None && (
+            {scoreFilter.requiredModsJson.length !== 0 && (
                 <>
                     <ScoreFilterName>Required Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            bitwiseMods={scoreFilter.requiredMods}
+                            modAcronyms={scoreFilter.requiredModsJson}
                             small
                         />
                     </ScoreFilterValue>
                 </>
             )}
-            {scoreFilter.disqualifiedMods !== Mods.None && (
+            {scoreFilter.disqualifiedModsJson.length !== 0 && (
                 <>
                     <ScoreFilterName>Disqualified Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            bitwiseMods={scoreFilter.disqualifiedMods}
+                            modAcronyms={scoreFilter.disqualifiedModsJson}
                             small
                         />
                     </ScoreFilterValue>

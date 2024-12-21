@@ -53,6 +53,8 @@ export interface Beatmap {
     lastUpdated: Date;
 }
 
+export type ModsJson = Record<string, Record<string, any>>;
+
 export interface Score {
     id: number;
     beatmap: Beatmap | null;
@@ -62,7 +64,7 @@ export interface Score {
     score: number;
     statistics: Record<string, number>;
     bestCombo: number;
-    mods: Mods;
+    modsJson: ModsJson;
     rank: string;
     date: Date;
     gamemode: Gamemode;
@@ -90,8 +92,8 @@ export interface ScoreFilter {
     highestOd: number | null;
     lowestCs: number | null;
     highestCs: number | null;
-    requiredMods: Mods;
-    disqualifiedMods: Mods;
+    requiredModsJson: string[];
+    disqualifiedModsJson: string[];
     lowestAccuracy: number | null;
     highestAccuracy: number | null;
     lowestLength: number | null;
