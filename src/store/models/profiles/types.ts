@@ -1,4 +1,4 @@
-import { BeatmapStatus, Gamemode, Mods } from "../common/enums";
+import { BeatmapStatus, Gamemode, BitMods } from "../common/enums";
 import { AllowedBeatmapStatus, ScoreResult } from "./enums";
 
 export interface OsuUser {
@@ -103,7 +103,7 @@ export interface ScoreFilter {
 export interface DifficultyCalculation {
     calculatorEngine: string;
     calculatorVersion: string;
-    mods: Mods;
+    mods: BitMods;
     difficultyValues: DifficultyValue[];
 }
 

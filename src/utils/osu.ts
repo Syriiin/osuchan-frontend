@@ -1,4 +1,4 @@
-import { Gamemode, ModAcronym, Mods } from "../store/models/common/enums";
+import { Gamemode, ModAcronym, BitMods } from "../store/models/common/enums";
 import { ModsJson } from "../store/models/profiles/types";
 
 export function gamemodeIdFromName(gamemodeName: string | undefined) {
@@ -16,114 +16,40 @@ export function gamemodeIdFromName(gamemodeName: string | undefined) {
     }
 }
 
-const modBitValues: { [name: string]: Mods } = {
-    NONE: Mods.None,
-    NF: Mods.NoFail,
-    EZ: Mods.Easy,
-    TD: Mods.TouchDevice,
-    HD: Mods.Hidden,
-    HR: Mods.HardRock,
-    SD: Mods.SuddenDeath,
-    DT: Mods.DoubleTime,
-    RX: Mods.Relax,
-    HT: Mods.HalfTime,
-    NC: Mods.Nightcore,
-    FL: Mods.Flashlight,
-    AUTO: Mods.Auto,
-    SO: Mods.SpunOut,
-    AP: Mods.Autopilot,
-    PF: Mods.Perfect,
-    "4K": Mods.Key4,
-    "5K": Mods.Key5,
-    "6K": Mods.Key6,
-    "7K": Mods.Key7,
-    "8K": Mods.Key8,
-    FI: Mods.FadeIn,
-    RN: Mods.Random,
-    CN: Mods.Cinema,
-    TP: Mods.TargetPractice,
-    "9K": Mods.Key9,
-    COOP: Mods.KeyCoop,
-    "1K": Mods.Key1,
-    "2K": Mods.Key2,
-    "3K": Mods.Key3,
-    V2: Mods.ScoreV2,
-    MI: Mods.Mirror,
+const modBitValues: { [name: string]: BitMods } = {
+    NONE: BitMods.None,
+    NF: BitMods.NoFail,
+    EZ: BitMods.Easy,
+    TD: BitMods.TouchDevice,
+    HD: BitMods.Hidden,
+    HR: BitMods.HardRock,
+    SD: BitMods.SuddenDeath,
+    DT: BitMods.DoubleTime,
+    RX: BitMods.Relax,
+    HT: BitMods.HalfTime,
+    NC: BitMods.Nightcore,
+    FL: BitMods.Flashlight,
+    AUTO: BitMods.Auto,
+    SO: BitMods.SpunOut,
+    AP: BitMods.Autopilot,
+    PF: BitMods.Perfect,
+    "4K": BitMods.Key4,
+    "5K": BitMods.Key5,
+    "6K": BitMods.Key6,
+    "7K": BitMods.Key7,
+    "8K": BitMods.Key8,
+    FI: BitMods.FadeIn,
+    RN: BitMods.Random,
+    CN: BitMods.Cinema,
+    TP: BitMods.TargetPractice,
+    "9K": BitMods.Key9,
+    COOP: BitMods.KeyCoop,
+    "1K": BitMods.Key1,
+    "2K": BitMods.Key2,
+    "3K": BitMods.Key3,
+    V2: BitMods.ScoreV2,
+    MI: BitMods.Mirror,
 };
-
-export function modsShortFromBitwise(bitwiseMods: Mods) {
-    const mods = [];
-
-    for (const mod in modBitValues) {
-        if (modBitValues[mod] & bitwiseMods) {
-            mods.push(mod);
-        }
-    }
-
-    if (mods.includes("NC") && mods.includes("DT")) {
-        mods.splice(mods.indexOf("DT"), 1);
-    }
-    if (mods.includes("PF") && mods.includes("SD")) {
-        mods.splice(mods.indexOf("SD"), 1);
-    }
-
-    mods.sort((a: string, b: string) => modBitValues[a] - modBitValues[b]);
-
-    return mods;
-}
-
-export function modsAsArray(bitwiseMods: Mods) {
-    const allMods: Mods[] = [
-        Mods.NoFail,
-        Mods.Easy,
-        Mods.TouchDevice,
-        Mods.Hidden,
-        Mods.HardRock,
-        Mods.SuddenDeath,
-        Mods.DoubleTime,
-        Mods.Relax,
-        Mods.HalfTime,
-        Mods.Nightcore,
-        Mods.Flashlight,
-        Mods.Auto,
-        Mods.SpunOut,
-        Mods.Autopilot,
-        Mods.Perfect,
-        Mods.Key4,
-        Mods.Key5,
-        Mods.Key6,
-        Mods.Key7,
-        Mods.Key8,
-        Mods.FadeIn,
-        Mods.Random,
-        Mods.Cinema,
-        Mods.TargetPractice,
-        Mods.Key9,
-        Mods.KeyCoop,
-        Mods.Key1,
-        Mods.Key2,
-        Mods.Key3,
-        Mods.ScoreV2,
-        Mods.Mirror,
-    ];
-
-    const mods: Mods[] = [];
-
-    for (const mod of allMods) {
-        if (mod & bitwiseMods) {
-            mods.push(mod);
-        }
-    }
-
-    if (mods.includes(Mods.Nightcore) && mods.includes(Mods.DoubleTime)) {
-        mods.splice(mods.indexOf(Mods.DoubleTime), 1);
-    }
-    if (mods.includes(Mods.Perfect) && mods.includes(Mods.SuddenDeath)) {
-        mods.splice(mods.indexOf(Mods.SuddenDeath), 1);
-    }
-
-    return mods;
-}
 
 export function bitmodsFromModAcronyms(modAcronym: string[]): number {
     return modAcronym.map((modAcronym) => modBitValues[modAcronym]).reduce((acc, mod) => acc | mod, 0);
