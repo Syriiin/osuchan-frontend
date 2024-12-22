@@ -1,6 +1,5 @@
-import { Gamemode, Mods } from "../store/models/common/enums";
+import { Gamemode, ModAcronym } from "../store/models/common/enums";
 import { ScoreResult } from "../store/models/profiles/enums";
-import { modsAsArray } from "./osu";
 
 export function formatTime(seconds: number) {
     // convert seconds to MM:SS format
@@ -12,148 +11,72 @@ export function formatTime(seconds: number) {
     )}`;
 }
 
-export function formatMods(bitwiseMods: Mods) {
-    // convert bitwise mods to mod string (eg. 72 -> "HD, DT")
-    const mods = modsAsArray(bitwiseMods).map((mod) => formatModNameShort(mod));
-
-    return mods.length > 0 ? mods.join(", ") : "";
-}
-
-export function formatModName(bitwiseMods: Mods) {
-    switch (bitwiseMods) {
-        case Mods.None:
-            return "None";
-        case Mods.NoFail:
+export function formatModName(modAcronym: string) {
+    switch (modAcronym) {
+        case ModAcronym.NoFail:
             return "No Fail";
-        case Mods.Easy:
+        case ModAcronym.Easy:
             return "Easy";
-        case Mods.TouchDevice:
+        case ModAcronym.TouchDevice:
             return "Touch Device";
-        case Mods.Hidden:
+        case ModAcronym.Hidden:
             return "Hidden";
-        case Mods.HardRock:
+        case ModAcronym.HardRock:
             return "Hard Rock";
-        case Mods.SuddenDeath:
+        case ModAcronym.SuddenDeath:
             return "Sudden Death";
-        case Mods.DoubleTime:
+        case ModAcronym.DoubleTime:
             return "Double Time";
-        case Mods.Relax:
+        case ModAcronym.Relax:
             return "Relax";
-        case Mods.HalfTime:
+        case ModAcronym.HalfTime:
             return "Half Time";
-        case Mods.Nightcore:
+        case ModAcronym.Nightcore:
             return "Nightcore";
-        case Mods.Flashlight:
+        case ModAcronym.Flashlight:
             return "Flashlight";
-        case Mods.Auto:
+        case ModAcronym.Auto:
             return "Auto";
-        case Mods.SpunOut:
+        case ModAcronym.SpunOut:
             return "Spun Out";
-        case Mods.Autopilot:
+        case ModAcronym.Autopilot:
             return "Autopilot";
-        case Mods.Perfect:
+        case ModAcronym.Perfect:
             return "Perfect";
-        case Mods.Key4:
+        case ModAcronym.Key4:
             return "4 Key";
-        case Mods.Key5:
+        case ModAcronym.Key5:
             return "5 Key";
-        case Mods.Key6:
+        case ModAcronym.Key6:
             return "6 Key";
-        case Mods.Key7:
+        case ModAcronym.Key7:
             return "7 Key";
-        case Mods.Key8:
+        case ModAcronym.Key8:
             return "8 Key";
-        case Mods.FadeIn:
+        case ModAcronym.FadeIn:
             return "Fade In";
-        case Mods.Random:
+        case ModAcronym.Random:
             return "Random";
-        case Mods.Cinema:
+        case ModAcronym.Cinema:
             return "Cinema";
-        case Mods.TargetPractice:
+        case ModAcronym.TargetPractice:
             return "Target Practice";
-        case Mods.Key9:
+        case ModAcronym.Key9:
             return "9 Key";
-        case Mods.KeyCoop:
+        case ModAcronym.KeyCoop:
             return "Coop Key";
-        case Mods.Key1:
+        case ModAcronym.Key1:
             return "1 Key";
-        case Mods.Key2:
+        case ModAcronym.Key2:
             return "2 Key";
-        case Mods.Key3:
+        case ModAcronym.Key3:
             return "3 Key";
-        case Mods.ScoreV2:
+        case ModAcronym.ScoreV2:
             return "Score V2";
-        case Mods.Mirror:
+        case ModAcronym.Mirror:
             return "Mirror";
-    }
-}
-
-export function formatModNameShort(bitwiseMods: Mods) {
-    switch (bitwiseMods) {
-        case Mods.None:
-            return "NONE";
-        case Mods.NoFail:
-            return "NF";
-        case Mods.Easy:
-            return "EZ";
-        case Mods.TouchDevice:
-            return "TD";
-        case Mods.Hidden:
-            return "HD";
-        case Mods.HardRock:
-            return "HR";
-        case Mods.SuddenDeath:
-            return "SD";
-        case Mods.DoubleTime:
-            return "DT";
-        case Mods.Relax:
-            return "RX";
-        case Mods.HalfTime:
-            return "HT";
-        case Mods.Nightcore:
-            return "NC";
-        case Mods.Flashlight:
-            return "FL";
-        case Mods.Auto:
-            return "AUTO";
-        case Mods.SpunOut:
-            return "SO";
-        case Mods.Autopilot:
-            return "AP";
-        case Mods.Perfect:
-            return "PF";
-        case Mods.Key4:
-            return "4K";
-        case Mods.Key5:
-            return "5K";
-        case Mods.Key6:
-            return "6K";
-        case Mods.Key7:
-            return "7K";
-        case Mods.Key8:
-            return "8K";
-        case Mods.FadeIn:
-            return "FI";
-        case Mods.Random:
-            return "RN";
-        case Mods.Cinema:
-            return "CN";
-        case Mods.TargetPractice:
-            return "TP";
-        case Mods.Key9:
-            return "9K";
-        case Mods.KeyCoop:
-            return "COOP";
-        case Mods.Key1:
-            return "1K";
-        case Mods.Key2:
-            return "2K";
-        case Mods.Key3:
-            return "3K";
-        case Mods.ScoreV2:
-            return "V2";
-        case Mods.Mirror:
-            return "MI";
+        case ModAcronym.Classic:
+            return "Classic";
     }
 }
 

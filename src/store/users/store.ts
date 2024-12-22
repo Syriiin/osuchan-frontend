@@ -6,6 +6,7 @@ import notify from "../../notifications";
 
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import {
+    bitmodsFromModAcronyms,
     calculateApproachRate,
     calculateBpm,
     calculateCircleSize,
@@ -14,7 +15,7 @@ import {
     calculateOverallDifficulty
 } from "../../utils/osu";
 import { getScoreResult } from "../../utils/osuchan";
-import { Gamemode, Mods } from "../models/common/enums";
+import { Gamemode } from "../models/common/enums";
 import { membershipFromJson } from "../models/leaderboards/deserialisers";
 import { Membership } from "../models/leaderboards/types";
 import {
@@ -22,7 +23,7 @@ import {
     userStatsFromJson,
 } from "../models/profiles/deserialisers";
 import { ScoreSet } from "../models/profiles/enums";
-import { Score, ScoreFilter, UserStats } from "../models/profiles/types";
+import { ModsJson, Score, ScoreFilter, UserStats } from "../models/profiles/types";
 import { PaginatedResourceStatus, ResourceStatus } from "../status";
 
 function calculateScoreStyleValue(values: number[]) {
@@ -338,8 +339,8 @@ export class UsersStore {
                         highest_od: scoreFilter.highestOd,
                         lowest_cs: scoreFilter.lowestCs,
                         highest_cs: scoreFilter.highestCs,
-                        required_mods: scoreFilter.requiredMods,
-                        disqualified_mods: scoreFilter.disqualifiedMods,
+                        required_mods_json: scoreFilter.requiredModsJson,
+                        disqualified_mods_json: scoreFilter.disqualifiedModsJson,
                         lowest_accuracy: scoreFilter.lowestAccuracy,
                         highest_accuracy: scoreFilter.highestAccuracy,
                         lowest_length: scoreFilter.lowestLength,
@@ -375,7 +376,7 @@ export class UsersStore {
 
     *updateSandboxScore(
         score: Score,
-        mods: Mods,
+        mods: ModsJson,
         bestCombo: number,
         countOk: number,
         countMeh: number,
@@ -385,7 +386,7 @@ export class UsersStore {
         const totalObjects =
             score.statistics["great"] ?? 0 + score.statistics["ok"] ?? 0 + score.statistics["meh"] ?? 0 + score.statistics["miss"] ?? 0;
 
-        score.mods = mods;
+        score.modsJson = mods;
         score.bestCombo = bestCombo;
         score.statistics["great"] = totalObjects - countOk - countMeh - countMiss;
         score.statistics["ok"] = countOk;
@@ -396,20 +397,20 @@ export class UsersStore {
             score.statistics,
             this.currentUserStats!.gamemode
         );
-        score.bpm = calculateBpm(beatmap.bpm, score.mods);
-        score.length = calculateLength(beatmap.drainTime, score.mods);
+        score.bpm = calculateBpm(beatmap.bpm, score.modsJson);
+        score.length = calculateLength(beatmap.drainTime, score.modsJson);
         score.circleSize = calculateCircleSize(
             beatmap.circleSize,
-            score.mods,
+            score.modsJson,
             score.gamemode
         );
         score.approachRate = calculateApproachRate(
             beatmap.approachRate,
-            score.mods
+            score.modsJson
         );
         score.overallDifficulty = calculateOverallDifficulty(
             beatmap.overallDifficulty,
-            score.mods
+            score.modsJson
         );
         score.result = getScoreResult(countMiss, bestCombo, beatmap.maxCombo);
 
@@ -418,7 +419,7 @@ export class UsersStore {
         const parser = new ojsama.parser().feed(beatmapFile);
         const stars = new ojsama.diff().calc({
             map: parser.map,
-            mods: mods as number,
+            mods: bitmodsFromModAcronyms(Object.keys(score.modsJson)),
         });
         const pp = ojsama.ppv2({
             stars,

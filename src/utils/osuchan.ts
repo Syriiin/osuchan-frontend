@@ -1,4 +1,3 @@
-import { Mods } from "../store/models/common/enums";
 import {
     AllowedBeatmapStatus,
     ScoreResult,
@@ -42,8 +41,8 @@ export function scoreFilterIsDefault(scoreFilter: ScoreFilter) {
         scoreFilter.highestOd === null &&
         scoreFilter.lowestCs === null &&
         scoreFilter.highestCs === null &&
-        scoreFilter.requiredMods === Mods.None &&
-        scoreFilter.disqualifiedMods === Mods.None &&
+        scoreFilter.requiredModsJson.length === 0 &&
+        scoreFilter.disqualifiedModsJson.length === 0 &&
         scoreFilter.lowestAccuracy === null &&
         scoreFilter.highestAccuracy === null &&
         scoreFilter.lowestLength === null &&

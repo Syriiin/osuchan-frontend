@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import Select, { ValueType, StylesConfig } from "react-select";
-import { Mods, Gamemode } from "../../store/models/common/enums";
+import { Gamemode, ModAcronym } from "../../store/models/common/enums";
 import { ThemeContext } from "styled-components";
+import { ModsJson } from "../../store/models/profiles/types";
 
 // TODO: replace this ugly mess... custom select needed
 
-type OptionType = { label: string; value: Mods };
+type OptionType = { label: string; value: string };
 
 export const ModsSelect = (props: ModsSelectProps) => {
     const theme = useContext(ThemeContext);
@@ -32,39 +33,33 @@ export const ModsSelect = (props: ModsSelectProps) => {
     };
 
     const selectModOptions = [
-        { value: 8, label: "HD" },
-        { value: 64, label: "DT" },
-        { value: 512, label: "NC" },
-        { value: 1024, label: "FL" },
-        { value: 2, label: "EZ" },
-        { value: 256, label: "HT" },
-        { value: 1, label: "NF" },
-        { value: 32, label: "SD" },
-        { value: 16384, label: "PF" },
+        { value: ModAcronym.Hidden, label: ModAcronym.Hidden },
+        { value: ModAcronym.DoubleTime, label: ModAcronym.DoubleTime },
+        { value: ModAcronym.Nightcore, label: ModAcronym.Nightcore },
+        { value: ModAcronym.Flashlight, label: ModAcronym.Flashlight },
+        { value: ModAcronym.Easy, label: ModAcronym.Easy },
+        { value: ModAcronym.HalfTime, label: ModAcronym.HalfTime },
+        { value: ModAcronym.NoFail, label: ModAcronym.NoFail },
+        { value: ModAcronym.SuddenDeath, label: ModAcronym.SuddenDeath },
+        { value: ModAcronym.Perfect, label: ModAcronym.Perfect },
     ];
 
     if (props.gamemode === Gamemode.Standard) {
         selectModOptions.push(
-            { value: 4096, label: "SO" },
-            { value: 4, label: "TD" }
+            { value: ModAcronym.SpunOut, label: ModAcronym.SpunOut },
+            { value: ModAcronym.TouchDevice, label: ModAcronym.TouchDevice }
         );
     }
 
     if (props.gamemode !== Gamemode.Mania) {
-        selectModOptions.push({ value: 16, label: "HR" });
+        selectModOptions.push({ value: ModAcronym.HardRock, label: ModAcronym.HardRock });
     }
 
     if (props.gamemode === Gamemode.Mania) {
-        selectModOptions.push({ value: 1048576, label: "FI" });
+        selectModOptions.push({ value: ModAcronym.FadeIn, label: ModAcronym.FadeIn });
     }
 
-    // convert bit mods to mods array
-    const mods = [];
-    for (const option of selectModOptions) {
-        if (props.value & option.value) {
-            mods.push(option.value);
-        }
-    }
+    const mods = Object.keys(props.value);
 
     return (
         <Select
@@ -77,11 +72,17 @@ export const ModsSelect = (props: ModsSelectProps) => {
             isMulti
             onChange={(value: ValueType<OptionType, true>) => {
                 if (value) {
-                    props.onChange(
-                        (value as OptionType[])
-                            .map((option) => option.value)
-                            .reduce((total, value) => total | value, 0)
+                    const modAcronyms = (value as OptionType[]).map(
+                        (option) => option.value
                     );
+                    const selectedMods = modAcronyms.reduce(
+                        (jsonMods, modAcronym) => ({
+                            ...jsonMods,
+                            [modAcronym]: {},
+                        }),
+                        {}
+                    );
+                    props.onChange(selectedMods);
                 }
             }}
             options={selectModOptions}
@@ -93,6 +94,6 @@ export const ModsSelect = (props: ModsSelectProps) => {
 
 interface ModsSelectProps {
     gamemode: Gamemode;
-    value: Mods;
-    onChange: (mods: Mods) => void;
+    value: ModsJson;
+    onChange: (mods: ModsJson) => void;
 }

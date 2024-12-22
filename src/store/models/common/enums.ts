@@ -1,4 +1,4 @@
-export enum Mods {
+export enum BitMods {
     None = 0,
     NoFail = 1,
     Easy = 2,
@@ -31,38 +31,41 @@ export enum Mods {
     Key3 = 268435456,
     ScoreV2 = 536870912,
     Mirror = 1073741824,
+}
 
-    KeyMod = Key1 |
-        Key2 |
-        Key3 |
-        Key4 |
-        Key5 |
-        Key6 |
-        Key7 |
-        Key8 |
-        Key9 |
-        KeyCoop,
-    FreemodAllowed = NoFail |
-        Easy |
-        Hidden |
-        HardRock |
-        SuddenDeath |
-        Flashlight |
-        FadeIn |
-        Relax |
-        Autopilot |
-        SpunOut |
-        KeyMod,
-    ScoreIncreasing = Hidden |
-        HardRock |
-        DoubleTime |
-        Flashlight |
-        Autopilot |
-        FadeIn,
-
-    SpeedChanging = DoubleTime | HalfTime | Nightcore,
-    MapChanging = DoubleTime | HardRock | Easy,
-    Unranked = Relax | Auto | Autopilot,
+export enum ModAcronym {
+    NoFail = "NF",
+    Easy = "EZ",
+    TouchDevice = "TD",
+    Hidden = "HD",
+    HardRock = "HR",
+    SuddenDeath = "SD",
+    DoubleTime = "DT",
+    Relax = "RX",
+    HalfTime = "HT",
+    Nightcore = "NC",
+    Flashlight = "FL",
+    Auto = "AUTO",
+    SpunOut = "SO",
+    Autopilot = "AP",
+    Perfect = "PF",
+    Key4 = "4K",
+    Key5 = "5K",
+    Key6 = "6K",
+    Key7 = "7K",
+    Key8 = "8K",
+    FadeIn = "FI",
+    Random = "RN",
+    Cinema = "CN",
+    TargetPractice = "TP",
+    Key9 = "9K",
+    KeyCoop = "COOP",
+    Key1 = "1K",
+    Key2 = "2K",
+    Key3 = "3K",
+    ScoreV2 = "V2",
+    Mirror = "MR",
+    Classic = "CL",
 }
 
 export enum Gamemode {

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
-import { Gamemode, Mods } from "../../store/models/common/enums";
+import { Gamemode } from "../../store/models/common/enums";
 import { FormLabel } from "./FormLabel";
 import { FormControl } from "./FormControl";
 import { TextInput } from "./TextInput";
@@ -13,6 +13,7 @@ import { Button } from "./Button";
 import { Select } from "./Select";
 import { DatePicker } from "./DatePicker";
 import { useStore } from "../../utils/hooks";
+import { modsJsonFromModAcronyms } from "../../utils/osu";
 
 const SaveNewButton = styled(Button)``;
 
@@ -53,14 +54,14 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const [highestOd, setHighestOd] = useState("");
     const [lowestCs, setLowestCs] = useState("");
     const [highestCs, setHighestCs] = useState("");
-    const [requiredMods, setRequiredMods] = useState(Mods.None);
-    const [disqualifiedMods, setDisqualifiedMods] = useState(Mods.None);
+    const [requiredMods, setRequiredMods] = useState<string[]>([]);
+    const [disqualifiedMods, setDisqualifiedMods] = useState<string[]>([]);
     const [lowestAccuracy, setLowestAccuracy] = useState("");
     const [highestAccuracy, setHighestAccuracy] = useState("");
     const [lowestLength, setLowestLength] = useState("");
     const [highestLength, setHighestLength] = useState("");
 
-    const getScoreFilter = useCallback(
+    const getScoreFilter = useCallback<() => ScoreFilter>(
         () => ({
             allowedBeatmapStatus,
             oldestBeatmapDate: oldestBeatmapDate,
@@ -73,8 +74,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             highestOd: parseFloat(highestOd) || null,
             lowestCs: parseFloat(lowestCs) || null,
             highestCs: parseFloat(highestCs) || null,
-            requiredMods,
-            disqualifiedMods,
+            requiredModsJson: requiredMods,
+            disqualifiedModsJson: disqualifiedMods,
             lowestAccuracy: parseFloat(lowestAccuracy) || null,
             highestAccuracy: parseFloat(highestAccuracy) || null,
             lowestLength: parseInt(lowestLength) || null,
@@ -136,8 +137,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setHighestOd(preset?.scoreFilter?.highestOd?.toString() ?? "");
         setLowestCs(preset?.scoreFilter?.lowestCs?.toString() ?? "");
         setHighestCs(preset?.scoreFilter?.highestCs?.toString() ?? "");
-        setRequiredMods(preset?.scoreFilter?.requiredMods ?? Mods.None);
-        setDisqualifiedMods(preset?.scoreFilter?.disqualifiedMods ?? Mods.None);
+        setRequiredMods(preset?.scoreFilter?.requiredModsJson ?? []);
+        setDisqualifiedMods(preset?.scoreFilter?.disqualifiedModsJson ?? []);
         setLowestAccuracy(
             preset?.scoreFilter?.lowestAccuracy?.toString() ?? ""
         );
@@ -301,16 +302,16 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <ModsSelect
                     gamemode={gamemode}
-                    value={value.requiredMods || Mods.None}
-                    onChange={(mods) => setRequiredMods(mods)}
+                    value={modsJsonFromModAcronyms(value.requiredModsJson || [])}
+                    onChange={(mods) => setRequiredMods(Object.keys(mods))}
                 />
             </FormControl>
             <FormLabel>Disqualified mods</FormLabel>
             <FormControl>
                 <ModsSelect
                     gamemode={gamemode}
-                    value={value.disqualifiedMods || Mods.None}
-                    onChange={(mods) => setDisqualifiedMods(mods)}
+                    value={modsJsonFromModAcronyms(value.disqualifiedModsJson || [])}
+                    onChange={(mods) => setDisqualifiedMods(Object.keys(mods))}
                 />
             </FormControl>
 
