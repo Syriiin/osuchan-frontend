@@ -13,7 +13,7 @@ import { Button } from "./Button";
 import { Select } from "./Select";
 import { DatePicker } from "./DatePicker";
 import { useStore } from "../../utils/hooks";
-import { modsJsonFromModAcronyms } from "../../utils/osu";
+import { modAcronymsFromJsonMods, modsJsonFromModAcronyms } from "../../utils/osu";
 
 const SaveNewButton = styled(Button)``;
 
@@ -303,7 +303,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <ModsSelect
                     gamemode={gamemode}
                     value={modsJsonFromModAcronyms(value.requiredModsJson || [])}
-                    onChange={(mods) => setRequiredMods(Object.keys(mods))}
+                    onChange={(mods) => setRequiredMods(modAcronymsFromJsonMods(mods))}
                 />
             </FormControl>
             <FormLabel>Disqualified mods</FormLabel>
@@ -311,7 +311,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <ModsSelect
                     gamemode={gamemode}
                     value={modsJsonFromModAcronyms(value.disqualifiedModsJson || [])}
-                    onChange={(mods) => setDisqualifiedMods(Object.keys(mods))}
+                    onChange={(mods) => setDisqualifiedMods(modAcronymsFromJsonMods(mods))}
                 />
             </FormControl>
 

@@ -172,7 +172,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                         <TimeAgo datetime={beatmap.approvalDate} />
                     </BeatmapDate>
                     <ModsContainer>
-                        <ModIcons small modAcronyms={Object.keys(score.modsJson)} />
+                        <ModIcons small mods={score.modsJson} />
                     </ModsContainer>
                     <BeatmapDataTable>
                         <tr>

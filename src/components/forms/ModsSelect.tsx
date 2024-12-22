@@ -3,6 +3,7 @@ import Select, { ValueType, StylesConfig } from "react-select";
 import { Gamemode, ModAcronym } from "../../store/models/common/enums";
 import { ThemeContext } from "styled-components";
 import { ModsJson } from "../../store/models/profiles/types";
+import { modAcronymsFromJsonMods } from "../../utils/osu";
 
 // TODO: replace this ugly mess... custom select needed
 
@@ -59,7 +60,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
         selectModOptions.push({ value: ModAcronym.FadeIn, label: ModAcronym.FadeIn });
     }
 
-    const mods = Object.keys(props.value);
+    const mods = modAcronymsFromJsonMods(props.value);
 
     return (
         <Select

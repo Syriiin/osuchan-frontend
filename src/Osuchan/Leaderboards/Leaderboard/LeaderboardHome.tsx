@@ -31,7 +31,7 @@ import { ScoreFilter } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
 import { formatCalculatorEngine, formatDiffcalcValueName, formatGamemodeName, formatTime } from "../../../utils/formatting";
 import { useAutorun, useStore } from "../../../utils/hooks";
-import { gamemodeIdFromName } from "../../../utils/osu";
+import { gamemodeIdFromName, modsJsonFromModAcronyms } from "../../../utils/osu";
 import { scoreFilterIsDefault } from "../../../utils/osuchan";
 import EditLeaderboardModal from "./EditLeaderboardModal";
 import ManageInvitesModal from "./ManageInvitesModal";
@@ -126,7 +126,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterName>Required Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            modAcronyms={scoreFilter.requiredModsJson}
+                            mods={modsJsonFromModAcronyms(scoreFilter.requiredModsJson)}
                             small
                         />
                     </ScoreFilterValue>
@@ -137,7 +137,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterName>Disqualified Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            modAcronyms={scoreFilter.disqualifiedModsJson}
+                            mods={modsJsonFromModAcronyms(scoreFilter.disqualifiedModsJson)}
                             small
                         />
                     </ScoreFilterValue>
