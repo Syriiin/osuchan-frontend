@@ -127,7 +127,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 </BeatmapInfo>
             </LeftContainer>
             <ModsContainer>
-                <ModIcons small modAcronyms={Object.keys(score.modsJson)} />
+                <ModIcons small mods={score.modsJson} />
             </ModsContainer>
             <ScoreInfo>
                 <AccuracyContainer>

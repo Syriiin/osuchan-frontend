@@ -6,7 +6,7 @@ import notify from "../../notifications";
 
 import { getBeatmap, setBeatmap } from "../../beatmapCache";
 import {
-    bitmodsFromModAcronyms,
+    bitmodsFromJsonMods,
     calculateApproachRate,
     calculateBpm,
     calculateCircleSize,
@@ -419,7 +419,7 @@ export class UsersStore {
         const parser = new ojsama.parser().feed(beatmapFile);
         const stars = new ojsama.diff().calc({
             map: parser.map,
-            mods: bitmodsFromModAcronyms(Object.keys(score.modsJson)),
+            mods: bitmodsFromJsonMods(score.modsJson),
         });
         const pp = ojsama.ppv2({
             stars,
