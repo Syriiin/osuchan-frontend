@@ -16,6 +16,7 @@ export interface Leaderboard {
     archived: boolean;
     calculatorEngine: string;
     primaryPerformanceValue: string;
+    customColours: Record<string, string>;
     scoreFilter: ScoreFilter | null;
     scoreFilterId: number;
     owner: OsuUser | null;
