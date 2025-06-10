@@ -56,6 +56,10 @@ const DifficultyName = styled.span`
     color: ${(props) => props.theme.colours.mango};
 `;
 
+const CreatorName = styled.span`
+    color: ${(props) => props.theme.colours.timber};
+`;
+
 const ModsContainer = styled.div`
     display: flex;
     align-items: center;
@@ -134,7 +138,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                             <small>by</small> {beatmap.artist}
                         </Artist>
                         <DifficultyName>
-                            {beatmap.difficultyName}
+                            {beatmap.difficultyName} <CreatorName> - {beatmap.creatorName}</CreatorName>
                         </DifficultyName>
                     </BeatmapInfo>
                 )}
