@@ -43,7 +43,7 @@ const DifficultyName = styled.span`
 `;
 
 const Mapper = styled.span`
-    color: ${(props) => props.theme.colours.mango};
+    color: ${(props) => props.theme.colours.timber};
 `;
 
 const BeatmapDate = styled.span`

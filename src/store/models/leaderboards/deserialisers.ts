@@ -18,6 +18,7 @@ export function leaderboardFromJson(data: any): Leaderboard {
         archived: data["archived"],
         calculatorEngine: data["calculator_engine"],
         primaryPerformanceValue: data["primary_performance_value"],
+        customColours: data["custom_colours"],
         scoreFilter:
             data["score_filter"] === null
                 ? null

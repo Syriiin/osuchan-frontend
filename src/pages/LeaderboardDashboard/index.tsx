@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { LoadingPage } from "../../components";
 import { ResourceStatus } from "../../store/status";
 import { useStore } from "../../utils/hooks";
@@ -11,6 +11,7 @@ import MemberRankings from "./MemberRankings";
 import ScoreRankings from "./ScoreRankings";
 
 const DashboardWrapper = styled.div`
+    background-color: ${(props) => props.theme.colours.background};
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -108,22 +109,30 @@ const LeaderboardDashboard = observer(() => {
             )}
 
             {leaderboard && (
-                <DashboardWrapper>
-                    <Header>
-                        <LeaderboardIcon src={leaderboard.iconUrl} />
-                        {leaderboard.name}
-                    </Header>
-                    <RankingsContainer>
-                        <MemberRankingsContainer>
-                            <RankingTitle>Player Ranking</RankingTitle>
-                            <MemberRankings memberships={rankings} />
-                        </MemberRankingsContainer>
-                        <ScoreRankingsContainer>
-                            <RankingTitle>Score Ranking</RankingTitle>
-                            <ScoreRankings scores={leaderboardScores} />
-                        </ScoreRankingsContainer>
-                    </RankingsContainer>
-                </DashboardWrapper>
+                <ThemeProvider theme={(theme) => ({
+                    ...theme,
+                    colours: {
+                        ...theme.colours,
+                        ...leaderboard.customColours,
+                    },
+                })}>
+                    <DashboardWrapper>
+                        <Header>
+                            <LeaderboardIcon src={leaderboard.iconUrl} />
+                            {leaderboard.name}
+                        </Header>
+                        <RankingsContainer>
+                            <MemberRankingsContainer>
+                                <RankingTitle>Player Ranking</RankingTitle>
+                                <MemberRankings memberships={rankings} />
+                            </MemberRankingsContainer>
+                            <ScoreRankingsContainer>
+                                <RankingTitle>Score Ranking</RankingTitle>
+                                <ScoreRankings scores={leaderboardScores} />
+                            </ScoreRankingsContainer>
+                        </RankingsContainer>
+                    </DashboardWrapper>
+                </ThemeProvider>
             )}
         </>
     );
