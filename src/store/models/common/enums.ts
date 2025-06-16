@@ -66,6 +66,13 @@ export enum ModAcronym {
     ScoreV2 = "V2",
     Mirror = "MR",
     Classic = "CL",
+    // lazer mods
+    Blinds = "BL",
+    AccuracyChallenge = "AC",
+    Daycore = "DC",
+    Tracing = "TC",
+    Muted = "MU",
+    NoScope = "NS",
 }
 
 export enum Gamemode {
