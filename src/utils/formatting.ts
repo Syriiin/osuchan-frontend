@@ -77,6 +77,19 @@ export function formatModName(modAcronym: string) {
             return "Mirror";
         case ModAcronym.Classic:
             return "Classic";
+        // lazer mods
+        case ModAcronym.Blinds:
+            return "Blinds";
+        case ModAcronym.AccuracyChallenge:
+            return "Accuracy Challenge";
+        case ModAcronym.Daycore:
+            return "Daycore";
+        case ModAcronym.Tracing:
+            return "Tracing";
+        case ModAcronym.Muted:
+            return "Muted";
+        case ModAcronym.NoScope:
+            return "No Scope";
     }
 }
 
