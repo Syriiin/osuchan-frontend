@@ -3,6 +3,7 @@ import ReactTooltip, { TooltipProps as ReactTooltipProps } from "react-tooltip";
 
 const StyledTooltip = styled(ReactTooltip)`
     font-style: normal;
+    min-height: 35px;
 
     &.place-top.type-dark {
         background-color: ${(props) => props.theme.colours.background};
