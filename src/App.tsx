@@ -17,6 +17,7 @@ import { osuchanTheme } from "./osuchanTheme";
 import Osuchan from "./Osuchan/Osuchan";
 import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
+import PPRaceDashboard from "./pages/PPRaceDashboard";
 
 if (process.env.NODE_ENV === "production") {
     ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
@@ -32,7 +33,6 @@ configure({
 const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
-        font-family: "Exo 2", sans-serif;
     }
 
     a {
@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${(props) => props.theme.colours.background};
         color: #fff;
         line-height: 1.3;
+        font-family: "Exo 2", sans-serif;
     }
 `;
 
@@ -68,6 +69,9 @@ const AppWithContext = () => {
                 path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard"
             >
                 <LeaderboardDashboard />
+            </Route>
+            <Route exact path="/ppraces/:ppraceId(\d+)/dashboard">
+                <PPRaceDashboard />
             </Route>
             <Route>
                 <Osuchan />
