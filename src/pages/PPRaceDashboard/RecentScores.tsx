@@ -3,7 +3,16 @@ import styled from "styled-components";
 import { Score } from "../../store/models/profiles/types";
 
 import { observer } from "mobx-react-lite";
-import { Row, NumberFormat, ScoreModal, ShortTimeAgo } from "../../components";
+import {
+    Row,
+    NumberFormat,
+    ScoreModal,
+    ShortTimeAgo,
+    Surface,
+} from "../../components";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { TeamColours } from ".";
+import { PPRaceTeam } from "../../store/models/ppraces/types";
 
 const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     background-color: ${(props) => props.teamColour};
@@ -80,4 +89,44 @@ interface RecentScoreRowProps {
     onClickOverride?: () => void;
 }
 
-export default RecentScoreRow;
+const RecentScoresSurface = styled(Surface)`
+    padding: 10px;
+    flex: 1;
+`;
+
+const RecentScores = observer((props: RecentScoresProps) => {
+    return (
+        <RecentScoresSurface>
+            <TransitionGroup>
+                {props.recentScores.slice(0, 20).map((score) => {
+                    const team = props.teams.find((t) =>
+                        t.players.some(
+                            (p) => p.user.id === score.userStats!.osuUserId
+                        )
+                    );
+                    return (
+                        <CSSTransition
+                            key={score.id}
+                            timeout={300}
+                            classNames="slide"
+                        >
+                            <RecentScoreRow
+                                score={score}
+                                teamColour={
+                                    TeamColours[props.teams.indexOf(team!)]
+                                }
+                            />
+                        </CSSTransition>
+                    );
+                })}
+            </TransitionGroup>
+        </RecentScoresSurface>
+    );
+});
+
+interface RecentScoresProps {
+    recentScores: Score[];
+    teams: PPRaceTeam[];
+}
+
+export default RecentScores;
