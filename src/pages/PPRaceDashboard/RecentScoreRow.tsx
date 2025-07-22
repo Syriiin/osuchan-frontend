@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Score } from "../../store/models/profiles/types";
 
 import { observer } from "mobx-react-lite";
-import { Row, NumberFormat, ScoreModal } from "../../components";
+import { Row, NumberFormat, ScoreModal, ShortTimeAgo } from "../../components";
 
 const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     background-color: ${(props) => props.teamColour};
@@ -33,6 +33,12 @@ const Performance = styled.div`
     text-align: right;
 `;
 
+const ScoreTimeAgo = styled.div`
+    min-width: 3em;
+    text-align: right;
+    font-size: 0.8em;
+`;
+
 const RecentScoreRow = observer((props: RecentScoreRowProps) => {
     const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
@@ -55,6 +61,9 @@ const RecentScoreRow = observer((props: RecentScoreRowProps) => {
                     />
                     pp
                 </Performance>
+                <ScoreTimeAgo>
+                    <ShortTimeAgo date={score.date} />
+                </ScoreTimeAgo>
             </ScoreRowWrapper>
             <ScoreModal
                 score={score}
