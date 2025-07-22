@@ -7,6 +7,20 @@ import { Row, NumberFormat, ScoreModal } from "../../components";
 
 const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     background-color: ${(props) => props.teamColour};
+
+    &.slide-enter {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    &.slide-enter-active {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 300ms, transform 300ms;
+    }
+    &.slide-enter-done {
+        opacity: 1;
+        transform: translateX(0);
+    }
 `;
 
 const Player = styled.div`

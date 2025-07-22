@@ -10,6 +10,7 @@ import RecentScoreRow from "./RecentScoreRow";
 import PPChart from "./PPChart";
 import Countdown from "./Countdown";
 import TeamDetails from "./TeamDetails";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 export const TeamColours = [
     "#a34c4c", // Red
@@ -135,26 +136,35 @@ const PPRaceDashboard = observer(() => {
                             <Countdown endTime={pprace.endTime ?? undefined} />
                         </CountdownSurface>
                         <RecentScoresSurface>
-                            {recentScores.slice(0, 20).map((score) => {
-                                const team = pprace.teams.find((t) =>
-                                    t.players.some(
-                                        (p) =>
-                                            p.user.id ===
-                                            score.userStats!.osuUserId
-                                    )
-                                );
-                                return (
-                                    <RecentScoreRow
-                                        key={score.id}
-                                        score={score}
-                                        teamColour={
-                                            TeamColours[
-                                                pprace.teams.indexOf(team!)
-                                            ]
-                                        }
-                                    />
-                                );
-                            })}
+                            <TransitionGroup>
+                                {recentScores.slice(0, 20).map((score) => {
+                                    const team = pprace.teams.find((t) =>
+                                        t.players.some(
+                                            (p) =>
+                                                p.user.id ===
+                                                score.userStats!.osuUserId
+                                        )
+                                    );
+                                    return (
+                                        <CSSTransition
+                                            key={score.id}
+                                            timeout={300}
+                                            classNames="slide"
+                                        >
+                                            <RecentScoreRow
+                                                score={score}
+                                                teamColour={
+                                                    TeamColours[
+                                                        pprace.teams.indexOf(
+                                                            team!
+                                                        )
+                                                    ]
+                                                }
+                                            />
+                                        </CSSTransition>
+                                    );
+                                })}
+                            </TransitionGroup>
                         </RecentScoresSurface>
                     </RightContainer>
                 </DashboardWrapper>
