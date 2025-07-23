@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -84,6 +84,10 @@ const PPRaceDashboard = observer(() => {
         return () => clearInterval(interval);
     }, [detailStore]);
 
+    const [teamDetailsMode, setTeamDetailsMode] = useState<
+        "players" | "scores"
+    >("scores");
+
     return (
         <>
             <Helmet>
@@ -111,7 +115,15 @@ const PPRaceDashboard = observer(() => {
                     <ChartSurface>
                         <PPChart teams={pprace.teams} />
                     </ChartSurface>
-                    <TeamDetailsContainer>
+                    <TeamDetailsContainer
+                        onClick={() => {
+                            setTeamDetailsMode(
+                                teamDetailsMode === "players"
+                                    ? "scores"
+                                    : "players"
+                            );
+                        }}
+                    >
                         {pprace.teams.map((team, index) => (
                             <TeamSurface
                                 teamColour={TeamColours[index]}
@@ -121,6 +133,7 @@ const PPRaceDashboard = observer(() => {
                                     team={team}
                                     scores={teamScores[team.id]}
                                     teamColour={TeamColours[index]}
+                                    mode={teamDetailsMode}
                                 ></TeamDetails>
                             </TeamSurface>
                         ))}
