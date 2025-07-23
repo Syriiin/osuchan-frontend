@@ -82,7 +82,7 @@ const LeaderboardDashboard = observer(() => {
     useEffect(() => {
         const interval = setInterval(() => {
             detailStore.reloadLeaderboard(true);
-        }, 5 * 60 * 1000);
+        }, 60 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
 
