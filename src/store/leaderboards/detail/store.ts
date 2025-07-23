@@ -87,10 +87,6 @@ export class DetailStore {
         this.leaderboardType = leaderboardType;
         this.gamemode = gamemode;
         this.leaderboardId = leaderboardId;
-        this.leaderboard = null;
-        this.userMembership = null;
-        this.rankings.clear();
-        this.leaderboardScores.clear();
 
         try {
             const leaderboardResponse = yield http.get(this.resourceUrl);
@@ -114,7 +110,11 @@ export class DetailStore {
                 }
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data, leaderboard.calculatorEngine, leaderboard.primaryPerformanceValue)
+                scoreFromJson(
+                    data,
+                    leaderboard.calculatorEngine,
+                    leaderboard.primaryPerformanceValue
+                )
             );
 
             this.leaderboard = leaderboard;
@@ -369,7 +369,11 @@ export class DetailStore {
                 `${this.resourceUrl}/members/${userId}/scores`
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data, this.leaderboard?.calculatorEngine, this.leaderboard?.primaryPerformanceValue)
+                scoreFromJson(
+                    data,
+                    this.leaderboard?.calculatorEngine,
+                    this.leaderboard?.primaryPerformanceValue
+                )
             );
 
             this.membership = membership;
@@ -445,8 +449,10 @@ export class DetailStore {
             );
 
             history.push(
-                `/leaderboards/${this.leaderboardType
-                }/${formatGamemodeNameShort(this.gamemode!)}/${this.leaderboardId
+                `/leaderboards/${
+                    this.leaderboardType
+                }/${formatGamemodeNameShort(this.gamemode!)}/${
+                    this.leaderboardId
                 }`
             );
             this.rankings.replace(
