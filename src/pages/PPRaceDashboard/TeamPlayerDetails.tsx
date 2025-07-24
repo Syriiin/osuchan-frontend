@@ -187,20 +187,18 @@ interface PlayerChartProps {
 
 const TeamPlayerDetails = observer((props: TeamPlayerDetailsProps) => {
     const players = props.players;
+    players.sort((a, b) => b.ppContribution - a.ppContribution);
 
     return (
         <>
             <TeamPlayers>
-                {players
-                    .toSorted((a, b) => b.ppContribution - a.ppContribution)
-                    .slice(0, 3)
-                    .map((player) => (
-                        <PlayerRow
-                            key={player.id}
-                            player={player}
-                            teamColour={props.teamColour}
-                        />
-                    ))}
+                {players.slice(0, 3).map((player) => (
+                    <PlayerRow
+                        key={player.id}
+                        player={player}
+                        teamColour={props.teamColour}
+                    />
+                ))}
                 {players.length > 3 && (
                     <PlayerCount>
                         ...and {players.length - 3} more players
