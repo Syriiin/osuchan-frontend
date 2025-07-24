@@ -143,6 +143,7 @@ const PPRaceDashboard = observer(() => {
                                     scores={teamScores[team.id]}
                                     teamColour={TeamColours[index]}
                                     mode={teamDetailsMode}
+                                    ppDecayBase={pprace.ppDecayBase}
                                 ></TeamDetails>
                             </TeamSurface>
                         ))}
