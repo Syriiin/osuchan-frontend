@@ -186,8 +186,9 @@ interface PlayerChartProps {
 }
 
 const TeamPlayerDetails = observer((props: TeamPlayerDetailsProps) => {
-    const players = props.players;
-    players.sort((a, b) => b.ppContribution - a.ppContribution);
+    const players = props.players
+        .slice()
+        .sort((a, b) => b.ppContribution - a.ppContribution);
 
     return (
         <>
