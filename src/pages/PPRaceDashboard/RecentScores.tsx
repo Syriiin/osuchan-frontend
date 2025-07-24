@@ -35,6 +35,9 @@ const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
 const Player = styled.div`
     flex: 1;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Performance = styled.div`
