@@ -95,7 +95,7 @@ const PPRaceDashboard = observer(() => {
 
     const [teamDetailsMode, setTeamDetailsMode] = useState<
         "players" | "scores"
-    >("scores");
+    >("players");
 
     return (
         <>
