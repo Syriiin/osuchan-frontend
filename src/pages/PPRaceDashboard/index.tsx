@@ -80,7 +80,7 @@ const PPRaceDashboard = observer(() => {
     useEffect(() => {
         const interval = setInterval(() => {
             detailStore.reloadPPRace();
-        }, 30 * 1000);
+        }, 15 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
 
