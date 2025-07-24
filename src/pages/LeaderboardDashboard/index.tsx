@@ -82,7 +82,7 @@ const LeaderboardDashboard = observer(() => {
     useEffect(() => {
         const interval = setInterval(() => {
             detailStore.reloadLeaderboard(true);
-        }, 5 * 60 * 1000);
+        }, 60 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
 
@@ -100,22 +100,25 @@ const LeaderboardDashboard = observer(() => {
                 )}
             </Helmet>
 
-            {detailStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
+            {leaderboard === null &&
+                detailStore.loadingStatus === ResourceStatus.Loading && (
+                    <LoadingPage />
+                )}
 
             {detailStore.loadingStatus === ResourceStatus.Error && (
                 <h3>Leaderboard not found!</h3>
             )}
 
             {leaderboard && (
-                <ThemeProvider theme={(theme) => ({
-                    ...theme,
-                    colours: {
-                        ...theme.colours,
-                        ...leaderboard.customColours,
-                    },
-                })}>
+                <ThemeProvider
+                    theme={(theme) => ({
+                        ...theme,
+                        colours: {
+                            ...theme.colours,
+                            ...leaderboard.customColours,
+                        },
+                    })}
+                >
                     <DashboardWrapper>
                         <Header>
                             <LeaderboardIcon src={leaderboard.iconUrl} />

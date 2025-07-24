@@ -1,15 +1,15 @@
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { LoadingPage, Surface } from "../../components";
 import { ResourceStatus } from "../../store/status";
 import { useStore } from "../../utils/hooks";
-import RecentScoreRow from "./RecentScoreRow";
 import PPChart from "./PPChart";
 import Countdown from "./Countdown";
 import TeamDetails from "./TeamDetails";
+import RecentScores from "./RecentScores";
 
 export const TeamColours = [
     "#a34c4c", // Red
@@ -64,11 +64,6 @@ const CountdownSurface = styled(Surface)`
     font-weight: bold;
 `;
 
-const RecentScoresSurface = styled(Surface)`
-    padding: 10px;
-    flex: 1;
-`;
-
 const PPRaceDashboard = observer(() => {
     const params = useParams<RouteParams>();
     const ppraceId = parseInt(params.ppraceId);
@@ -85,9 +80,13 @@ const PPRaceDashboard = observer(() => {
     useEffect(() => {
         const interval = setInterval(() => {
             detailStore.reloadPPRace();
-        }, 30 * 1000);
+        }, 15 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
+
+    const [teamDetailsMode, setTeamDetailsMode] = useState<
+        "players" | "scores"
+    >("scores");
 
     return (
         <>
@@ -116,7 +115,15 @@ const PPRaceDashboard = observer(() => {
                     <ChartSurface>
                         <PPChart teams={pprace.teams} />
                     </ChartSurface>
-                    <TeamDetailsContainer>
+                    <TeamDetailsContainer
+                        onClick={() => {
+                            setTeamDetailsMode(
+                                teamDetailsMode === "players"
+                                    ? "scores"
+                                    : "players"
+                            );
+                        }}
+                    >
                         {pprace.teams.map((team, index) => (
                             <TeamSurface
                                 teamColour={TeamColours[index]}
@@ -126,6 +133,7 @@ const PPRaceDashboard = observer(() => {
                                     team={team}
                                     scores={teamScores[team.id]}
                                     teamColour={TeamColours[index]}
+                                    mode={teamDetailsMode}
                                 ></TeamDetails>
                             </TeamSurface>
                         ))}
@@ -134,28 +142,10 @@ const PPRaceDashboard = observer(() => {
                         <CountdownSurface>
                             <Countdown endTime={pprace.endTime ?? undefined} />
                         </CountdownSurface>
-                        <RecentScoresSurface>
-                            {recentScores.slice(0, 20).map((score) => {
-                                const team = pprace.teams.find((t) =>
-                                    t.players.some(
-                                        (p) =>
-                                            p.user.id ===
-                                            score.userStats!.osuUserId
-                                    )
-                                );
-                                return (
-                                    <RecentScoreRow
-                                        key={score.id}
-                                        score={score}
-                                        teamColour={
-                                            TeamColours[
-                                                pprace.teams.indexOf(team!)
-                                            ]
-                                        }
-                                    />
-                                );
-                            })}
-                        </RecentScoresSurface>
+                        <RecentScores
+                            recentScores={recentScores}
+                            teams={pprace.teams}
+                        />
                     </RightContainer>
                 </DashboardWrapper>
             )}
