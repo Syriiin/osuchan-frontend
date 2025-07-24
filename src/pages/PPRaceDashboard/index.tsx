@@ -10,6 +10,7 @@ import PPChart from "./PPChart";
 import Countdown from "./Countdown";
 import TeamDetails from "./TeamDetails";
 import RecentScores from "./RecentScores";
+import { PPRaceStatus } from "../../store/models/ppraces/enums";
 
 export const TeamColours = [
     "#a34c4c", // Red
@@ -62,6 +63,14 @@ const CountdownSurface = styled(Surface)`
     font-size: 3em;
     font-family: "Courier New", Courier, monospace;
     font-weight: bold;
+    height: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Finalising = styled.span`
+    font-size: 0.6em;
 `;
 
 const PPRaceDashboard = observer(() => {
@@ -140,7 +149,24 @@ const PPRaceDashboard = observer(() => {
                     </TeamDetailsContainer>
                     <RightContainer>
                         <CountdownSurface>
-                            <Countdown endTime={pprace.endTime ?? undefined} />
+                            {pprace.status === PPRaceStatus.InProgress && (
+                                <Countdown
+                                    endTime={pprace.endTime ?? undefined}
+                                />
+                            )}
+                            {pprace.status === PPRaceStatus.WaitingToStart && (
+                                <Countdown
+                                    endTime={pprace.startTime ?? undefined}
+                                />
+                            )}
+                            {pprace.status === PPRaceStatus.Finalising && (
+                                <Finalising>Finalising scores...</Finalising>
+                            )}
+                            {pprace.status === PPRaceStatus.Finished && (
+                                <Countdown
+                                    endTime={pprace.endTime ?? undefined}
+                                />
+                            )}
                         </CountdownSurface>
                         <RecentScores
                             recentScores={recentScores}
