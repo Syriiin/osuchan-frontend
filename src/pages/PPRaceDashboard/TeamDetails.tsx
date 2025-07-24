@@ -53,6 +53,7 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
                     topScores={scores}
                     scoresCount={team.scoreCount}
                     teamPpTotal={team.totalPp}
+                    ppDecayBase={props.ppDecayBase}
                 />
             )}
             <TeamTotal teamColour={props.teamColour}>
@@ -68,6 +69,7 @@ interface TeamDetailsProps {
     scores: Score[];
     teamColour: string;
     mode: "players" | "scores";
+    ppDecayBase: number;
 }
 
 export default TeamDetails;

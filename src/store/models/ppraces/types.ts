@@ -10,6 +10,7 @@ export interface PPRace {
     duration: number;
     startTime: Date | null;
     endTime: Date | null;
+    ppDecayBase: number;
     teams: PPRaceTeam[];
 }
 

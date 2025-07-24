@@ -212,7 +212,7 @@ interface ScoreRowProps {
 const ScoreChart = observer((props: ScoreChartProps) => {
     const scoreValues = props.topScores.map((score) => score.performanceTotal);
     const weightedScores = scoreValues.map(
-        (value, index) => value * 0.95 ** index
+        (value, index) => value * props.ppDecayBase ** index
     );
     const topScoreTotal = weightedScores.reduce((acc, value) => acc + value, 0);
     const missingPp = props.teamPpTotal - topScoreTotal;
@@ -268,6 +268,7 @@ interface ScoreChartProps {
     teamColour: string;
     topScores: Score[];
     teamPpTotal: number;
+    ppDecayBase: number;
 }
 
 const TeamScoreDetails = observer((props: TeamScoreDetailsProps) => {
@@ -290,6 +291,7 @@ const TeamScoreDetails = observer((props: TeamScoreDetailsProps) => {
                     teamColour={props.teamColour}
                     topScores={topScores}
                     teamPpTotal={props.teamPpTotal}
+                    ppDecayBase={props.ppDecayBase}
                 />
             </ScoreChartContainer>
         </>
@@ -301,6 +303,7 @@ interface TeamScoreDetailsProps {
     topScores: Score[];
     teamPpTotal: number;
     scoresCount: number;
+    ppDecayBase: number;
 }
 
 export default TeamScoreDetails;
