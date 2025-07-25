@@ -29,6 +29,13 @@ const DashboardWrapper = styled.div`
     padding: 10px;
     height: 100vh;
     overflow: hidden;
+
+    @font-face {
+        font-family: "Sui Generis";
+        src: url("/static/fonts/Sui Generis Rg.otf") format("opentype");
+    }
+
+    font-family: "Sui Generis", sans-serif;
 `;
 
 const ChartSurface = styled(Surface)`
