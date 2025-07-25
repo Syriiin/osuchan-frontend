@@ -32,7 +32,9 @@ const DashboardWrapper = styled.div`
 
     @font-face {
         font-family: "Sui Generis";
-        src: url("/static/fonts/Sui Generis Rg.otf") format("opentype");
+        src: url("/static/fonts/Sui Generis Regular.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
     }
 
     font-family: "Sui Generis", sans-serif;
@@ -68,8 +70,7 @@ const CountdownSurface = styled(Surface)`
     padding: 10px;
     text-align: center;
     font-size: 3em;
-    font-family: "Courier New", Courier, monospace;
-    font-weight: bold;
+    font-variant-numeric: tabular-nums;
     height: 2em;
     display: flex;
     align-items: center;
