@@ -1,48 +1,57 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, Row, TimeAgo } from "../../components";
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
 
+const TeamScoreDetailsWrapper = styled.div`
+    display: grid;
+    grid-template-rows: 1fr 500px;
+    grid-template-areas:
+        "scores"
+        "chart";
+    grid-gap: 10px;
+    height: 100%;
+`;
+
 const TeamScores = styled.div`
+    grid-area: scores;
     display: flex;
     flex-direction: column;
-    height: 26em;
+    overflow: hidden;
 `;
 
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
-    padding: 0;
+    display: grid;
+    grid-template-columns: 70px 150px 1fr 100px 100px;
+    grid-template-areas: "rank player beatmap details performance";
+    grid-gap: 10px;
+    padding: 10px;
     align-items: unset;
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
             `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
-    font-size: 0.9em;
 `;
 
 interface ScoreRowWrapperProps {
     beatmapSetId: number;
 }
 
-const LeftContainer = styled.div`
+const Rank = styled.div`
+    grid-area: rank;
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 0.5em;
-    margin: 0.5em;
+    align-items: center;
+    font-size: 1.8em;
 `;
 
 const PlayerInfo = styled.div`
+    grid-area: player;
     display: flex;
     align-items: center;
-`;
-
-const Avatar = styled.img`
-    width: 3em;
-    border-radius: 1em;
-    margin-right: 1em;
+    font-size: 0.7em;
 `;
 
 const FlagContainer = styled.div`
@@ -58,58 +67,63 @@ const Username = styled.span`
 `;
 
 const BeatmapInfo = styled.div`
-    display: flex;
-`;
-
-const MetadataContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const ModsContainer = styled.div`
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
+    grid-area: beatmap;
+    display: grid;
+    grid-template-columns: 10em 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "title title"
+        "artist mods"
+        "diffname mods";
     align-items: center;
+    font-size: 0.8em;
+    overflow: hidden;
 `;
 
 const Title = styled.span`
+    grid-area: title;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 15em;
 `;
 
 const Artist = styled.span`
+    grid-area: artist;
     font-size: 0.8em;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 15em;
 `;
 
-const DifficultyName = styled.span`
+const DifficultyName = styled.div`
+    grid-area: diffname;
     font-size: 0.8em;
     color: ${(props) => props.theme.colours.mango};
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 15em;
 `;
 
-const ScoreInfo = styled.div`
+const ModsContainer = styled.div`
+    grid-area: mods;
     display: flex;
-    margin: 0.5em;
-    font-size: 1.3em;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+
+    img {
+        width: 30px;
+        margin-left: -15px;
+    }
 `;
 
 const AccuracyContainer = styled.div`
+    grid-area: details;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin-left: 1em;
     text-align: right;
-    flex-grow: 1;
 `;
 
 const Accuracy = styled.span``;
@@ -119,28 +133,23 @@ const ScoreDate = styled.span`
 `;
 
 const PerformanceContainer = styled.div`
+    grid-area: performance;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin-left: 1em;
 `;
 
 const Performance = styled.span`
-    font-size: 1.5em;
+    font-size: 1.2em;
 `;
 
 const Result = styled.span`
     font-size: 0.8em;
 `;
 
-const ScoreCount = styled.div`
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.25);
-    padding: 10px;
-    border-radius: 5px;
-`;
-
 const ScoreChartContainer = styled.div`
+    grid-area: chart;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -154,59 +163,48 @@ const ScoreRow = observer((props: ScoreRowProps) => {
 
     return (
         <ScoreRowWrapper beatmapSetId={beatmap.setId}>
-            <LeftContainer>
-                <PlayerInfo>
-                    <Avatar src={`https://a.ppy.sh/${user.id}`} />
-                    <FlagContainer>
-                        <Flag countryCode={user.country} large />
-                    </FlagContainer>
-                    <Username>{user.username}</Username>
-                </PlayerInfo>
-                <BeatmapInfo>
-                    <MetadataContainer>
-                        <Title>{beatmap.title}</Title>
-                        <Artist>
-                            <small>by</small> {beatmap.artist}
-                        </Artist>
-                        <DifficultyName>
-                            {beatmap.difficultyName}
-                        </DifficultyName>
-                    </MetadataContainer>
-                    <ModsContainer>
-                        <ModIcons small mods={score.modsJson} />
-                    </ModsContainer>
-                </BeatmapInfo>
-            </LeftContainer>
-            <ScoreInfo>
-                <AccuracyContainer>
-                    <Accuracy>
-                        <NumberFormat
-                            value={score.accuracy}
-                            decimalPlaces={2}
-                        />
-                        %
-                    </Accuracy>
-                    <ScoreDate>
-                        <TimeAgo datetime={score.date} />
-                    </ScoreDate>
-                </AccuracyContainer>
-                <PerformanceContainer>
-                    <Performance>
-                        <NumberFormat
-                            value={score.performanceTotal}
-                            decimalPlaces={0}
-                        />
-                        pp
-                    </Performance>
-                    <Result>{formatScoreResult(score.result)}</Result>
-                </PerformanceContainer>
-            </ScoreInfo>
+            <Rank>#{props.rank}</Rank>
+            <PlayerInfo>
+                <FlagContainer>
+                    <Flag countryCode={user.country} large />
+                </FlagContainer>
+                <Username>{user.username}</Username>
+            </PlayerInfo>
+            <BeatmapInfo>
+                <Title>{beatmap.title}</Title>
+                <Artist>
+                    <small>by</small> {beatmap.artist}
+                </Artist>
+                <DifficultyName>{beatmap.difficultyName}</DifficultyName>
+                <ModsContainer>
+                    <ModIcons small mods={score.modsJson} />
+                </ModsContainer>
+            </BeatmapInfo>
+            <AccuracyContainer>
+                <Accuracy>
+                    <NumberFormat value={score.accuracy} decimalPlaces={2} />%
+                </Accuracy>
+                <ScoreDate>
+                    <TimeAgo datetime={score.date} />
+                </ScoreDate>
+            </AccuracyContainer>
+            <PerformanceContainer>
+                <Performance>
+                    <NumberFormat
+                        value={score.performanceTotal}
+                        decimalPlaces={0}
+                    />
+                    pp
+                </Performance>
+                <Result>{formatScoreResult(score.result)}</Result>
+            </PerformanceContainer>
         </ScoreRowWrapper>
     );
 });
 
 interface ScoreRowProps {
     score: Score;
+    rank: number;
 }
 
 const ScoreChart = observer((props: ScoreChartProps) => {
@@ -258,7 +256,18 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                             }
                         )}%`;
                     }}
-                />
+                >
+                    {data.map((entry, index) => (
+                        <Cell
+                            key={`cell-${index}`}
+                            fill={
+                                index % 2 == 0
+                                    ? props.teamColour
+                                    : props.teamColour + "bb"
+                            }
+                        />
+                    ))}
+                </Pie>
             </PieChart>
         </ResponsiveContainer>
     );
@@ -275,16 +284,11 @@ const TeamScoreDetails = observer((props: TeamScoreDetailsProps) => {
     const topScores = props.topScores;
 
     return (
-        <>
+        <TeamScoreDetailsWrapper>
             <TeamScores>
-                {topScores.slice(0, 3).map((score) => (
-                    <ScoreRow key={score.id} score={score} />
+                {topScores.slice(0, 20).map((score, i) => (
+                    <ScoreRow key={score.id} score={score} rank={i + 1} />
                 ))}
-                {props.scoresCount > 3 && (
-                    <ScoreCount>
-                        ...and {props.scoresCount - 3} more scores
-                    </ScoreCount>
-                )}
             </TeamScores>
             <ScoreChartContainer>
                 <ScoreChart
@@ -294,7 +298,7 @@ const TeamScoreDetails = observer((props: TeamScoreDetailsProps) => {
                     ppDecayBase={props.ppDecayBase}
                 />
             </ScoreChartContainer>
-        </>
+        </TeamScoreDetailsWrapper>
     );
 });
 

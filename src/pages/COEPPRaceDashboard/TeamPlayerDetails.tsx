@@ -2,43 +2,51 @@ import { observer } from "mobx-react-lite";
 import { PPRacePlayer } from "../../store/models/ppraces/types";
 import styled from "styled-components";
 import { Flag, NumberFormat, Row } from "../../components";
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+
+const TeamPlayerDetailsWrapper = styled.div`
+    display: grid;
+    grid-template-rows: 1fr 500px;
+    grid-template-areas:
+        "players"
+        "chart";
+    grid-gap: 10px;
+    height: 100%;
+`;
 
 const TeamPlayers = styled.div`
+    grid-area: players;
     display: flex;
     flex-direction: column;
-    height: 26em;
+    overflow: hidden;
 `;
 
 const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
-    padding: 0;
+    display: grid;
+    grid-template-columns: 70px 1fr 200px;
+    grid-template-areas: "rank player performance";
+    grid-gap: 10px;
+    padding: 10px;
     align-items: unset;
     background-color: ${(props) => props.teamColour + "77"};
     font-size: 0.9em;
 `;
 
-const PlayerCount = styled.div`
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.25);
-    padding: 10px;
-    border-radius: 5px;
-`;
-
-const LeftContainer = styled.div`
+const Rank = styled.div`
+    grid-area: rank;
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 0.5em;
-    margin: 0.5em;
+    align-items: center;
+    font-size: 1.8em;
 `;
 
 const PlayerInfo = styled.div`
+    grid-area: player;
     display: flex;
     align-items: center;
 `;
 
 const Avatar = styled.img`
-    width: 7em;
+    width: 3em;
     border-radius: 1em;
     margin-right: 1em;
 `;
@@ -56,17 +64,18 @@ const Username = styled.span`
 `;
 
 const PerformanceContainer = styled.div`
+    grid-area: performance;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 1em;
     align-text: right;
-    font-size: 1.2em;
+    font-size: 0.8em;
 `;
 
 const PerformanceContribution = styled.span`
     font-size: 1.6em;
     margin-bottom: 0.3em;
+    text-align: right;
 `;
 
 const ContributionText = styled.span`
@@ -79,6 +88,7 @@ const ScoreCount = styled.span`
 `;
 
 const PlayerChartContainer = styled.div`
+    grid-area: chart;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,32 +101,29 @@ const PlayerRow = observer((props: PlayerRowProps) => {
 
     return (
         <PlayerRowWrapper teamColour={props.teamColour}>
-            <LeftContainer>
-                <PlayerInfo>
-                    <Avatar src={`https://a.ppy.sh/${user.id}`} />
-                    <FlagContainer>
-                        <Flag countryCode={user.country} large />
-                    </FlagContainer>
-                    <Username>{user.username}</Username>
-                </PlayerInfo>
-            </LeftContainer>
+            <Rank>#{props.rank}</Rank>
             <PlayerInfo>
-                <PerformanceContainer>
-                    <PerformanceContribution>
-                        <NumberFormat
-                            value={player.ppContribution}
-                            decimalPlaces={0}
-                        />
-                        pp <ContributionText>contributed</ContributionText>
-                    </PerformanceContribution>
-                    <ScoreCount>
-                        {player.scoreCount}{" "}
-                        {player.scoreCount === 1 ? "score" : "scores"} /{" "}
-                        <NumberFormat value={player.pp} decimalPlaces={0} />
-                        pp total
-                    </ScoreCount>
-                </PerformanceContainer>
+                <Avatar src={`https://a.ppy.sh/${user.id}`} />
+                <FlagContainer>
+                    <Flag countryCode={user.country} large />
+                </FlagContainer>
+                <Username>{user.username}</Username>
             </PlayerInfo>
+            <PerformanceContainer>
+                <PerformanceContribution>
+                    <NumberFormat
+                        value={player.ppContribution}
+                        decimalPlaces={0}
+                    />
+                    pp <ContributionText>contributed</ContributionText>
+                </PerformanceContribution>
+                <ScoreCount>
+                    {player.scoreCount}{" "}
+                    {player.scoreCount === 1 ? "score" : "scores"} /{" "}
+                    <NumberFormat value={player.pp} decimalPlaces={0} />
+                    pp total
+                </ScoreCount>
+            </PerformanceContainer>
         </PlayerRowWrapper>
     );
 });
@@ -124,6 +131,7 @@ const PlayerRow = observer((props: PlayerRowProps) => {
 interface PlayerRowProps {
     teamColour: string;
     player: PPRacePlayer;
+    rank: number;
 }
 
 const PlayerChart = observer((props: PlayerChartProps) => {
@@ -174,7 +182,18 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                             }
                         )}%`;
                     }}
-                />
+                >
+                    {data.map((entry, index) => (
+                        <Cell
+                            key={`cell-${index}`}
+                            fill={
+                                index % 2 == 0
+                                    ? props.teamColour
+                                    : props.teamColour + "bb"
+                            }
+                        />
+                    ))}
+                </Pie>
             </PieChart>
         </ResponsiveContainer>
     );
@@ -191,25 +210,21 @@ const TeamPlayerDetails = observer((props: TeamPlayerDetailsProps) => {
         .sort((a, b) => b.ppContribution - a.ppContribution);
 
     return (
-        <>
+        <TeamPlayerDetailsWrapper>
             <TeamPlayers>
-                {players.slice(0, 3).map((player) => (
+                {players.slice(0, 20).map((player, i) => (
                     <PlayerRow
                         key={player.id}
                         player={player}
                         teamColour={props.teamColour}
+                        rank={i + 1}
                     />
                 ))}
-                {players.length > 3 && (
-                    <PlayerCount>
-                        ...and {players.length - 3} more players
-                    </PlayerCount>
-                )}
             </TeamPlayers>
             <PlayerChartContainer>
                 <PlayerChart teamColour={props.teamColour} players={players} />
             </PlayerChartContainer>
-        </>
+        </TeamPlayerDetailsWrapper>
     );
 });
 

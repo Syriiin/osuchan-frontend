@@ -95,13 +95,14 @@ interface RecentScoreRowProps {
 const RecentScoresSurface = styled(Surface)`
     padding: 10px;
     flex: 1;
+    background-color: transparent;
 `;
 
 const RecentScores = observer((props: RecentScoresProps) => {
     return (
         <RecentScoresSurface>
             <TransitionGroup>
-                {props.recentScores.slice(0, 20).map((score) => {
+                {props.recentScores.slice(0, 50).map((score) => {
                     const team = props.teams.find((t) =>
                         t.players.some(
                             (p) => p.user.id === score.userStats!.osuUserId

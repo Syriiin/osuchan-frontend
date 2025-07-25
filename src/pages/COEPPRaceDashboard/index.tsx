@@ -20,11 +20,12 @@ export const TeamColours = [
 ];
 
 const DashboardWrapper = styled.div`
-    background-color: ${(props) => props.theme.colours.background};
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: "chart teams rightContainer";
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: 1fr 150px;
+    grid-template-areas:
+        "teams rightContainer"
+        "chart rightContainer";
     grid-gap: 10px;
     padding: 10px;
     height: 100vh;
@@ -43,19 +44,24 @@ const DashboardWrapper = styled.div`
 const ChartSurface = styled(Surface)`
     grid-area: chart;
     padding: 10px;
+    background-color: transparent;
 `;
 
 const TeamDetailsContainer = styled.div`
     display: flex;
     grid-area: teams;
     gap: 10px;
+    overflow: hidden;
 `;
 
-const TeamSurface = styled(Surface)<{ teamColour: string }>`
+const TeamSurface = styled(Surface)<{
+    teamColour: string;
+    teamDarkColour?: string;
+}>`
     flex: 1;
-    padding: 10px;
+    padding: 5px;
     border: 5px solid ${(props) => props.teamColour};
-    background-color: ${(props) => props.teamColour + "33"};
+    background-color: transparent;
     display: flex;
 `;
 
@@ -63,7 +69,6 @@ const RightContainer = styled.div`
     grid-area: rightContainer;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 `;
 
 const CountdownSurface = styled(Surface)`
@@ -75,6 +80,7 @@ const CountdownSurface = styled(Surface)`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
 `;
 
 const Finalising = styled.span`
@@ -82,6 +88,15 @@ const Finalising = styled.span`
 `;
 
 const COEPPRaceDashboard = observer(() => {
+    useEffect(() => {
+        const original = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = "transparent";
+
+        return () => {
+            document.body.style.backgroundColor = original;
+        };
+    }, []);
+
     const params = useParams<RouteParams>();
     const ppraceId = parseInt(params.ppraceId);
 
@@ -103,7 +118,7 @@ const COEPPRaceDashboard = observer(() => {
 
     const [teamDetailsMode, setTeamDetailsMode] = useState<
         "players" | "scores"
-    >("players");
+    >("scores");
 
     return (
         <>
