@@ -13,10 +13,10 @@ import RecentScores from "./RecentScores";
 import { PPRaceStatus } from "../../store/models/ppraces/enums";
 
 export const TeamColours = [
-    "#a34c4c", // Red
-    "#4c6aa3", // Blue
-    "#4fa34c", // Green
-    "#9da34c", // Yellow
+    "#db202b", // Red
+    "#1e55dc", // Blue
+    // "#4fa34c", // Green
+    // "#9da34c", // Yellow
 ];
 
 const DashboardWrapper = styled.div`
