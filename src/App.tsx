@@ -18,6 +18,7 @@ import Osuchan from "./Osuchan/Osuchan";
 import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
+import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
 
 if (process.env.NODE_ENV === "production") {
     ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
@@ -72,6 +73,9 @@ const AppWithContext = () => {
             </Route>
             <Route exact path="/ppraces/:ppraceId(\d+)/dashboard">
                 <PPRaceDashboard />
+            </Route>
+            <Route exact path="/ppraces/:ppraceId(\d+)/coe-dashboard">
+                <COEPPRaceDashboard />
             </Route>
             <Route>
                 <Osuchan />
