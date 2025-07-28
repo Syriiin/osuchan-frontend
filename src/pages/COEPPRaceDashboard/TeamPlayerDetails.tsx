@@ -187,7 +187,7 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                         <Cell
                             key={`cell-${index}`}
                             fill={
-                                index % 2 == 0
+                                index % 2 === 0
                                     ? props.teamColour
                                     : props.teamColour + "bb"
                             }

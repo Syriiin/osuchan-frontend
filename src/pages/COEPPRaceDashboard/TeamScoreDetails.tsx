@@ -261,7 +261,7 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                         <Cell
                             key={`cell-${index}`}
                             fill={
-                                index % 2 == 0
+                                index % 2 === 0
                                     ? props.teamColour
                                     : props.teamColour + "bb"
                             }

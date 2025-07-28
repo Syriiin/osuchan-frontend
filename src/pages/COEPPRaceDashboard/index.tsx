@@ -83,10 +83,6 @@ const CountdownSurface = styled(Surface)`
     background-color: transparent;
 `;
 
-const Finalising = styled.span`
-    font-size: 0.6em;
-`;
-
 const COEPPRaceDashboard = observer(() => {
     useEffect(() => {
         const original = document.body.style.backgroundColor;
@@ -173,24 +169,11 @@ const COEPPRaceDashboard = observer(() => {
                     </TeamDetailsContainer>
                     <RightContainer>
                         <CountdownSurface>
-                            {pprace.status === PPRaceStatus.InProgress && (
-                                <Countdown
-                                    endTime={pprace.endTime ?? undefined}
-                                />
-                            )}
-                            {pprace.status === PPRaceStatus.WaitingToStart && (
-                                <Countdown
-                                    endTime={pprace.startTime ?? undefined}
-                                />
-                            )}
-                            {pprace.status === PPRaceStatus.Finalising && (
-                                <Finalising>Finalising scores...</Finalising>
-                            )}
-                            {pprace.status === PPRaceStatus.Finished && (
-                                <Countdown
-                                    endTime={pprace.endTime ?? undefined}
-                                />
-                            )}
+                            <Countdown
+                                endTime={pprace.endTime ?? undefined}
+                                startTime={pprace.startTime ?? undefined}
+                                status={pprace.status}
+                            />
                         </CountdownSurface>
                         <RecentScores
                             recentScores={recentScores}
