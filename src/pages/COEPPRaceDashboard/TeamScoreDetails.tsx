@@ -34,6 +34,7 @@ const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
             `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
+    height: 60px;
 `;
 
 interface ScoreRowWrapperProps {

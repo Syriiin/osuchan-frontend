@@ -30,6 +30,7 @@ const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
     align-items: unset;
     background-color: ${(props) => props.teamColour + "77"};
     font-size: 0.9em;
+    height: 60px;
 `;
 
 const Rank = styled.div`
