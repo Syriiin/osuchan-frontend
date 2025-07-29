@@ -217,10 +217,10 @@ const ScoreChart = observer((props: ScoreChartProps) => {
     const missingPp = props.teamPpTotal - topScoreTotal;
 
     const mainScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal > 0.01
+        (score) => score / props.teamPpTotal > 0.02
     );
     const otherScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal <= 0.01
+        (score) => score / props.teamPpTotal <= 0.02
     );
     const otherScoresContribution =
         otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
