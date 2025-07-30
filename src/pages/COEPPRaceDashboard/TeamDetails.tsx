@@ -17,9 +17,17 @@ const TeamDetailsWrapper = styled.div`
     width: 100%;
 `;
 
-const Header = styled.div<{ teamColour: string }>`
+const Header = styled.div<{ teamColour: string; teamColourDark: string }>`
     grid-area: header;
-    background-color: ${(props) => props.teamColour};
+    background: linear-gradient(
+        110deg,
+        ${(props) => props.teamColour},
+        ${(props) => props.teamColour} 55%,
+        ${(props) => props.teamColourDark} 55%,
+        ${(props) => props.teamColourDark}
+    );
+    background-size: cover;
+    background-repeat: no-repeat;
     border-radius: 5px;
     padding: 10px;
     height: 100%;
@@ -65,7 +73,10 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 
     return (
         <TeamDetailsWrapper>
-            <Header teamColour={props.teamColour}>
+            <Header
+                teamColour={props.teamColour}
+                teamColourDark={props.teamColourDark}
+            >
                 <TeamTitle>{team.name}</TeamTitle>
                 <TeamTotal>
                     <TeamPerformanceTotal>
@@ -102,6 +113,7 @@ interface TeamDetailsProps {
     team: PPRaceTeam;
     scores: Score[];
     teamColour: string;
+    teamColourDark: string;
     mode: "players" | "scores";
     ppDecayBase: number;
 }
