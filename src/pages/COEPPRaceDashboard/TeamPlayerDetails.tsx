@@ -30,6 +30,7 @@ const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
     align-items: unset;
     background-color: ${(props) => props.teamColour + "77"};
     font-size: 0.9em;
+    height: 60px;
 `;
 
 const Rank = styled.div`
@@ -140,10 +141,10 @@ const PlayerChart = observer((props: PlayerChartProps) => {
         0
     );
     const mainPlayers = props.players.filter(
-        (player) => player.ppContribution / total > 0.01
+        (player) => player.ppContribution / total > 0.02
     );
     const otherPlayers = props.players.filter(
-        (player) => player.ppContribution / total <= 0.01
+        (player) => player.ppContribution / total <= 0.02
     );
     const otherPlayersContribution = otherPlayers.reduce(
         (acc, player) => acc + player.ppContribution,

@@ -26,6 +26,7 @@ const PPChart = observer((props: PPChartProps) => {
             >
                 <YAxis type="category" dataKey="name" hide />
                 <Bar
+                    minPointSize={150}
                     dataKey="pp"
                     label={{
                         position: "right",

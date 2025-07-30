@@ -10,13 +10,14 @@ import PPChart from "./PPChart";
 import Countdown from "./Countdown";
 import TeamDetails from "./TeamDetails";
 import RecentScores from "./RecentScores";
-import { PPRaceStatus } from "../../store/models/ppraces/enums";
 
 export const TeamColours = [
     "#db202b", // Red
     "#1e55dc", // Blue
-    // "#4fa34c", // Green
-    // "#9da34c", // Yellow
+];
+export const TeamColoursDark = [
+    "#9e171f", // Red
+    "#143a97", // Blue
 ];
 
 const DashboardWrapper = styled.div`
@@ -161,6 +162,7 @@ const COEPPRaceDashboard = observer(() => {
                                     team={team}
                                     scores={teamScores[team.id]}
                                     teamColour={TeamColours[index]}
+                                    teamColourDark={TeamColoursDark[index]}
                                     mode={teamDetailsMode}
                                     ppDecayBase={pprace.ppDecayBase}
                                 ></TeamDetails>
