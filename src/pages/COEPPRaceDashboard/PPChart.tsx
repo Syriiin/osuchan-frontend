@@ -5,6 +5,7 @@ import {
     Cell,
     YAxis,
     LabelList,
+    XAxis,
 } from "recharts";
 import { PPRaceTeam } from "../../store/models/ppraces/types";
 import { observer } from "mobx-react-lite";
@@ -25,6 +26,7 @@ const PPChart = observer((props: PPChartProps) => {
                 barSize={40}
             >
                 <YAxis type="category" dataKey="name" hide />
+                <XAxis type="number" domain={[0, "dataMax + 1000"]} hide />
                 <Bar
                     minPointSize={150}
                     dataKey="pp"
