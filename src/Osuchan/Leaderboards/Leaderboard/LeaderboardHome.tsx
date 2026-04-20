@@ -8,7 +8,7 @@ import {
     useParams,
     useRouteMatch,
 } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import {
     AbsoluteDate,
@@ -41,6 +41,10 @@ import {
     modsJsonFromModAcronyms,
 } from "../../../utils/osu";
 import { scoreFilterIsDefault } from "../../../utils/osuchan";
+import {
+    setCssCustomProperties,
+    clearCssCustomProperties,
+} from "../../../utils/general";
 import EditLeaderboardModal from "./EditLeaderboardModal";
 import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
@@ -436,6 +440,19 @@ const LeaderboardHome = observer(() => {
         detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
+    useEffect(() => {
+        const shouldApply = leaderboard?.isEvent && leaderboard?.customColours;
+        const coloursToApply = shouldApply ? leaderboard.customColours : null;
+        if (coloursToApply) {
+            setCssCustomProperties(coloursToApply);
+        }
+        return () => {
+            if (coloursToApply) {
+                clearCssCustomProperties(coloursToApply);
+            }
+        };
+    }, [leaderboard]);
+
     useAutorun(() => {
         if (meStore.user?.osuUserId) {
             detailStore.loadUserMembership(meStore.user?.osuUserId);
@@ -461,120 +478,139 @@ const LeaderboardHome = observer(() => {
             )}
             {detailStore.loadingStatus === ResourceStatus.Loaded &&
                 leaderboard && (
-                    <>
-                        {/*Leaderboard Details */}
-                        <LeaderboardSurface>
-                            <LeaderboardDetailsContainer>
-                                <LeaderboardInfoContainer>
-                                    {leaderboard.iconUrl && (
-                                        <LeaderboardIcon
-                                            src={leaderboard.iconUrl}
-                                        />
-                                    )}
-                                    <LeaderboardInfo>
-                                        <LeaderboardInfoRow>
-                                            <LeaderboardName>
-                                                {leaderboard.name}
-                                            </LeaderboardName>
-                                        </LeaderboardInfoRow>
-                                        <LeaderboardInfoRow>
-                                            {/* Labels */}
-                                            <LabelGroup>
-                                                {leaderboard.archived && (
-                                                    <Label negative>
-                                                        ARCHIVED
-                                                    </Label>
-                                                )}
-                                                <Label>
-                                                    {formatGamemodeName(
-                                                        leaderboard.gamemode
-                                                    )}
-                                                </Label>
-                                                <Label>
-                                                    {leaderboard.accessType ===
-                                                        LeaderboardAccessType.Global &&
-                                                        "Global"}
-                                                    {leaderboard.accessType ===
-                                                        LeaderboardAccessType.Public &&
-                                                        "Public"}
-                                                    {leaderboard.accessType ===
-                                                        LeaderboardAccessType.PublicInviteOnly &&
-                                                        "Invite-Only"}
-                                                    {leaderboard.accessType ===
-                                                        LeaderboardAccessType.Private &&
-                                                        "Private"}
-                                                </Label>
-                                                {leaderboard.scoreSet !==
-                                                    ScoreSet.Normal && (
-                                                    <Label special>
-                                                        {leaderboard.scoreSet ===
-                                                            ScoreSet.NeverChoke &&
-                                                            "Never Choke"}
-                                                        {leaderboard.scoreSet ===
-                                                            ScoreSet.AlwaysFullCombo &&
-                                                            "Always Full Combo"}
-                                                    </Label>
-                                                )}
-                                                {!leaderboard.allowPastScores && (
-                                                    <Label special>
-                                                        Only scores after
-                                                        joining
-                                                    </Label>
-                                                )}
-                                                <Label>
-                                                    {formatCalculatorEngine(
-                                                        leaderboard.calculatorEngine
-                                                    )}{" "}
-                                                    (
-                                                    {formatDiffcalcValueName(
-                                                        leaderboard.primaryPerformanceValue
-                                                    )}
-                                                    )
-                                                </Label>
-                                            </LabelGroup>
-                                        </LeaderboardInfoRow>
-                                        {leaderboard.owner && (
-                                            <LeaderboardInfoRow>
-                                                Owned by{" "}
-                                                <Owner>
-                                                    {leaderboard.owner.username}
-                                                </Owner>
-                                            </LeaderboardInfoRow>
+                    <ThemeProvider
+                        theme={(theme) =>
+                            leaderboard.isEvent
+                                ? {
+                                      ...theme,
+                                      colours: {
+                                          ...theme.colours,
+                                          ...leaderboard.customColours,
+                                      },
+                                  }
+                                : theme
+                        }
+                    >
+                        <>
+                            {/*Leaderboard Details */}
+                            <LeaderboardSurface>
+                                <LeaderboardDetailsContainer>
+                                    <LeaderboardInfoContainer>
+                                        {leaderboard.iconUrl && (
+                                            <LeaderboardIcon
+                                                src={leaderboard.iconUrl}
+                                            />
                                         )}
-                                    </LeaderboardInfo>
-                                </LeaderboardInfoContainer>
-                                <Description>
-                                    {leaderboard.description}
-                                </Description>
-                            </LeaderboardDetailsContainer>
-                            {leaderboard.scoreFilter &&
-                                !scoreFilterIsDefault(
-                                    leaderboard.scoreFilter
-                                ) && (
-                                    <LeaderboardScoreFilterContainer>
-                                        <LeaderboardFilters
-                                            gamemode={leaderboard.gamemode}
-                                            scoreFilter={
-                                                leaderboard.scoreFilter
-                                            }
-                                        />
-                                    </LeaderboardScoreFilterContainer>
-                                )}
-                            {leaderboard.accessType !==
-                                LeaderboardAccessType.Global &&
-                                meStore.isAuthenticated && (
-                                    <LeaderboardButtonsContainer>
-                                        <LeaderboardButtons />
-                                    </LeaderboardButtonsContainer>
-                                )}
-                        </LeaderboardSurface>
+                                        <LeaderboardInfo>
+                                            <LeaderboardInfoRow>
+                                                <LeaderboardName>
+                                                    {leaderboard.name}
+                                                </LeaderboardName>
+                                            </LeaderboardInfoRow>
+                                            <LeaderboardInfoRow>
+                                                {/* Labels */}
+                                                <LabelGroup>
+                                                    {leaderboard.isEvent && (
+                                                        <Label special>
+                                                            EVENT
+                                                        </Label>
+                                                    )}
+                                                    {leaderboard.archived && (
+                                                        <Label negative>
+                                                            ARCHIVED
+                                                        </Label>
+                                                    )}
+                                                    <Label>
+                                                        {formatGamemodeName(
+                                                            leaderboard.gamemode
+                                                        )}
+                                                    </Label>
+                                                    <Label>
+                                                        {leaderboard.accessType ===
+                                                            LeaderboardAccessType.Global &&
+                                                            "Global"}
+                                                        {leaderboard.accessType ===
+                                                            LeaderboardAccessType.Public &&
+                                                            "Public"}
+                                                        {leaderboard.accessType ===
+                                                            LeaderboardAccessType.PublicInviteOnly &&
+                                                            "Invite-Only"}
+                                                        {leaderboard.accessType ===
+                                                            LeaderboardAccessType.Private &&
+                                                            "Private"}
+                                                    </Label>
+                                                    {leaderboard.scoreSet !==
+                                                        ScoreSet.Normal && (
+                                                        <Label special>
+                                                            {leaderboard.scoreSet ===
+                                                                ScoreSet.NeverChoke &&
+                                                                "Never Choke"}
+                                                            {leaderboard.scoreSet ===
+                                                                ScoreSet.AlwaysFullCombo &&
+                                                                "Always Full Combo"}
+                                                        </Label>
+                                                    )}
+                                                    {!leaderboard.allowPastScores && (
+                                                        <Label special>
+                                                            Only scores after
+                                                            joining
+                                                        </Label>
+                                                    )}
+                                                    <Label>
+                                                        {formatCalculatorEngine(
+                                                            leaderboard.calculatorEngine
+                                                        )}{" "}
+                                                        (
+                                                        {formatDiffcalcValueName(
+                                                            leaderboard.primaryPerformanceValue
+                                                        )}
+                                                        )
+                                                    </Label>
+                                                </LabelGroup>
+                                            </LeaderboardInfoRow>
+                                            {!leaderboard.isEvent && leaderboard.owner && (
+                                                <LeaderboardInfoRow>
+                                                    Owned by{" "}
+                                                    <Owner>
+                                                        {leaderboard.owner.username}
+                                                    </Owner>
+                                                </LeaderboardInfoRow>
+                                            )}
+                                        </LeaderboardInfo>
+                                    </LeaderboardInfoContainer>
+                                    <Description>
+                                        {leaderboard.description}
+                                    </Description>
+                                </LeaderboardDetailsContainer>
+                                {leaderboard.scoreFilter &&
+                                    !scoreFilterIsDefault(
+                                        leaderboard.scoreFilter
+                                    ) && (
+                                        <LeaderboardScoreFilterContainer>
+                                            <LeaderboardFilters
+                                                gamemode={leaderboard.gamemode}
+                                                scoreFilter={
+                                                    leaderboard.scoreFilter
+                                                }
+                                            />
+                                        </LeaderboardScoreFilterContainer>
+                                    )}
+                                {leaderboard.accessType !==
+                                    LeaderboardAccessType.Global &&
+                                    meStore.isAuthenticated && (
+                                        <LeaderboardButtonsContainer>
+                                            <LeaderboardButtons />
+                                        </LeaderboardButtonsContainer>
+                                    )}
+                            </LeaderboardSurface>
 
-                        {/* Top Scores */}
-                        <TopScores scores={detailStore.leaderboardScores} />
+                            {/* Top Scores */}
+                            <TopScores scores={detailStore.leaderboardScores} />
 
-                        {/* Rankings */}
-                        <Rankings memberships={detailStore.rankings} />
-                    </>
+                            {/* Rankings */}
+                            <Rankings memberships={detailStore.rankings} />
+                        </>
+                    </ThemeProvider>
                 )}
             {detailStore.loadingStatus === ResourceStatus.Error && (
                 <h3>Leaderboard not found!</h3>

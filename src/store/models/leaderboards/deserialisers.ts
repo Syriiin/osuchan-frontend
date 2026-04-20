@@ -44,6 +44,7 @@ export function leaderboardFromJson(data: any): Leaderboard {
                     ? data["owner"]["id"]
                     : data["owner"],
         creationTime: new Date(data["creation_time"]),
+        isEvent: data["is_event"],
     };
 }
 
