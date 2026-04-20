@@ -66,7 +66,6 @@ const LeaderboardDetailsContainer = styled.div`
 const LeaderboardInfoContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 128px;
 `;
 
 const LeaderboardIcon = styled.img`
@@ -81,6 +80,7 @@ const LeaderboardInfo = styled.div`
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+    gap: 10px;
 `;
 
 const LeaderboardInfoRow = styled.div``;
@@ -168,11 +168,11 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
             )}
             {scoreFilter.allowedBeatmapStatus ===
                 AllowedBeatmapStatus.LovedOnly && (
-                <>
-                    <ScoreFilterName>Beatmap Status</ScoreFilterName>
-                    <ScoreFilterValue>Loved</ScoreFilterValue>
-                </>
-            )}
+                    <>
+                        <ScoreFilterName>Beatmap Status</ScoreFilterName>
+                        <ScoreFilterValue>Loved</ScoreFilterValue>
+                    </>
+                )}
             {/* Beatmap date */}
             {scoreFilter.oldestBeatmapDate !== null && (
                 <>
@@ -373,15 +373,15 @@ const LeaderboardButtons = observer(() => {
                                 {(leaderboard!.accessType ===
                                     LeaderboardAccessType.PublicInviteOnly ||
                                     leaderboard!.accessType ===
-                                        LeaderboardAccessType.Private) && (
-                                    <Button
-                                        as={UnstyledLink}
-                                        to={`${match.url}/invites`}
-                                        type="button"
-                                    >
-                                        Manage Invites
-                                    </Button>
-                                )}
+                                    LeaderboardAccessType.Private) && (
+                                        <Button
+                                            as={UnstyledLink}
+                                            to={`${match.url}/invites`}
+                                            type="button"
+                                        >
+                                            Manage Invites
+                                        </Button>
+                                    )}
 
                                 <Button
                                     negative
@@ -482,12 +482,12 @@ const LeaderboardHome = observer(() => {
                         theme={(theme) =>
                             leaderboard.isEvent
                                 ? {
-                                      ...theme,
-                                      colours: {
-                                          ...theme.colours,
-                                          ...leaderboard.customColours,
-                                      },
-                                  }
+                                    ...theme,
+                                    colours: {
+                                        ...theme.colours,
+                                        ...leaderboard.customColours,
+                                    },
+                                }
                                 : theme
                         }
                     >
@@ -541,15 +541,15 @@ const LeaderboardHome = observer(() => {
                                                     </Label>
                                                     {leaderboard.scoreSet !==
                                                         ScoreSet.Normal && (
-                                                        <Label special>
-                                                            {leaderboard.scoreSet ===
-                                                                ScoreSet.NeverChoke &&
-                                                                "Never Choke"}
-                                                            {leaderboard.scoreSet ===
-                                                                ScoreSet.AlwaysFullCombo &&
-                                                                "Always Full Combo"}
-                                                        </Label>
-                                                    )}
+                                                            <Label special>
+                                                                {leaderboard.scoreSet ===
+                                                                    ScoreSet.NeverChoke &&
+                                                                    "Never Choke"}
+                                                                {leaderboard.scoreSet ===
+                                                                    ScoreSet.AlwaysFullCombo &&
+                                                                    "Always Full Combo"}
+                                                            </Label>
+                                                        )}
                                                     {!leaderboard.allowPastScores && (
                                                         <Label special>
                                                             Only scores after
@@ -630,7 +630,7 @@ const LeaderboardHome = observer(() => {
                                 {props.match !== null &&
                                     leaderboard &&
                                     leaderboard.ownerId !==
-                                        meStore.user?.osuUserId && (
+                                    meStore.user?.osuUserId && (
                                         <Redirect to={match.url} />
                                     )}
                             </>
