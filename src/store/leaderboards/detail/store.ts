@@ -105,7 +105,7 @@ export class DetailStore {
                 `${this.resourceUrl}/scores`,
                 {
                     params: {
-                        limit: moreScores ? 100 : 5,
+                        limit: 100,
                     },
                 }
             );
