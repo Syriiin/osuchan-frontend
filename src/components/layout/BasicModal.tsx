@@ -1,9 +1,8 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { CSSTransition } from "react-transition-group";
 import { RootPortal } from "../helpers/RootPortal";
 
-const ModalBase = styled.div`
+const ModalBase = styled.div<{ $isVisible: boolean }>`
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -14,23 +13,10 @@ const ModalBase = styled.div`
     left: 0;
     z-index: 1;
     background-color: rgba(0, 0, 0, 0.5);
-    transition: opacity 200ms;
-
-    &.modal-base-enter {
-        opacity: 0;
-    }
-
-    &.modal-base-enter-active {
-        opacity: 1;
-    }
-
-    &.modal-base-exit {
-        opacity: 1;
-    }
-
-    &.modal-base-exit-active {
-        opacity: 0;
-    }
+    opacity: ${(props) => (props.$isVisible ? 1 : 0)};
+    visibility: ${(props) => (props.$isVisible ? "visible" : "hidden")};
+    transition: opacity 200ms ease-out, visibility 200ms ease-out;
+    pointer-events: ${(props) => (props.$isVisible ? "auto" : "none")};
 `;
 
 const ModalBody = styled.div`
@@ -44,7 +30,7 @@ const ModalBody = styled.div`
 `;
 
 export const BasicModal = (props: BasicModalProps) => {
-    const modalBaseEl = useRef(null);
+    const modalBaseEl = useRef<HTMLDivElement>(null);
 
     const handleCloseClick = (e: React.MouseEvent) => {
         if (e.target === modalBaseEl.current) {
@@ -54,17 +40,9 @@ export const BasicModal = (props: BasicModalProps) => {
 
     return (
         <RootPortal>
-            <CSSTransition
-                in={props.open}
-                timeout={200}
-                classNames="modal-base"
-                mountOnEnter
-                unmountOnExit
-            >
-                <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
-                    <ModalBody>{props.children}</ModalBody>
-                </ModalBase>
-            </CSSTransition>
+            <ModalBase ref={modalBaseEl} $isVisible={props.open} onMouseDown={handleCloseClick}>
+                <ModalBody>{props.children}</ModalBody>
+            </ModalBase>
         </RootPortal>
     );
 };
