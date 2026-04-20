@@ -22,6 +22,7 @@ export interface Leaderboard {
     owner: OsuUser | null;
     ownerId: number | null;
     creationTime: Date;
+    isEvent: boolean;
 }
 
 export interface Membership {

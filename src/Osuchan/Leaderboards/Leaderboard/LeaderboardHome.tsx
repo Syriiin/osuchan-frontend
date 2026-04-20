@@ -480,6 +480,11 @@ const LeaderboardHome = observer(() => {
                                         <LeaderboardInfoRow>
                                             {/* Labels */}
                                             <LabelGroup>
+                                                {leaderboard.isEvent && (
+                                                    <Label special>
+                                                        EVENT
+                                                    </Label>
+                                                )}
                                                 {leaderboard.archived && (
                                                     <Label negative>
                                                         ARCHIVED
@@ -533,7 +538,7 @@ const LeaderboardHome = observer(() => {
                                                 </Label>
                                             </LabelGroup>
                                         </LeaderboardInfoRow>
-                                        {leaderboard.owner && (
+                                        {!leaderboard.isEvent && leaderboard.owner && (
                                             <LeaderboardInfoRow>
                                                 Owned by{" "}
                                                 <Owner>
