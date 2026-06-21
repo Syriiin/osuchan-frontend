@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+import { CSSTransition } from "react-transition-group";
 import { RootPortal } from "../helpers/RootPortal";
 
-const ModalBase = styled.div<{ $isVisible: boolean }>`
+const ModalBase = styled.div`
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -13,10 +14,23 @@ const ModalBase = styled.div<{ $isVisible: boolean }>`
     left: 0;
     z-index: 1;
     background-color: rgba(0, 0, 0, 0.5);
-    opacity: ${(props) => (props.$isVisible ? 1 : 0)};
-    visibility: ${(props) => (props.$isVisible ? "visible" : "hidden")};
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
     transition: opacity 200ms ease-out, visibility 200ms ease-out;
-    pointer-events: ${(props) => (props.$isVisible ? "auto" : "none")};
+
+    &.modal-base-enter-active,
+    &.modal-base-enter-done {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    &.modal-base-exit-active {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
 `;
 
 const ModalBody = styled.div`
@@ -40,9 +54,17 @@ export const BasicModal = (props: BasicModalProps) => {
 
     return (
         <RootPortal>
-            <ModalBase ref={modalBaseEl} $isVisible={props.open} onMouseDown={handleCloseClick}>
-                <ModalBody>{props.children}</ModalBody>
-            </ModalBase>
+            <CSSTransition
+                in={props.open}
+                timeout={200}
+                classNames="modal-base"
+                mountOnEnter
+                unmountOnExit
+            >
+                <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
+                    <ModalBody>{props.children}</ModalBody>
+                </ModalBase>
+            </CSSTransition>
         </RootPortal>
     );
 };
