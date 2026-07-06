@@ -10,6 +10,7 @@ import LeaderboardsRoot from "./Leaderboards";
 import Me from "./Me/Me";
 import Navbar from "./Navbar";
 import Profiles from "./Profiles/Profiles";
+import EventsRoot from "./Events";
 
 const OsuchanWrapper = styled.div`
     display: flex;
@@ -49,6 +50,9 @@ const Osuchan = () => {
                     </Route>
                     <Route path="/leaderboards">
                         <LeaderboardsRoot />
+                    </Route>
+                    <Route path="/events">
+                        <EventsRoot />
                     </Route>
                     <Route path="/about">
                         <About />

@@ -227,6 +227,9 @@ const Navbar = observer(() => {
                 >
                     Leaderboards
                 </NavbarLink>
+                <NavbarLink to="/events" $active={location.pathname.startsWith("/events")}>
+                    Events
+                </NavbarLink>
                 <NavbarLink to="/about" $active={location.pathname === "/about"}>
                     About
                 </NavbarLink>
