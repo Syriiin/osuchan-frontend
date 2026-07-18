@@ -3,13 +3,13 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 import { useStore } from "../utils/hooks";
-import About from "./About/About";
 import Footer from "./Footer";
 import Home from "./Home/Home";
 import LeaderboardsRoot from "./Leaderboards";
 import Me from "./Me/Me";
 import Navbar from "./Navbar";
 import Profiles from "./Profiles/Profiles";
+import EventsRoot from "./Events";
 
 const OsuchanWrapper = styled.div`
     display: flex;
@@ -50,8 +50,8 @@ const Osuchan = () => {
                     <Route path="/leaderboards">
                         <LeaderboardsRoot />
                     </Route>
-                    <Route path="/about">
-                        <About />
+                    <Route path="/events">
+                        <EventsRoot />
                     </Route>
                     <Redirect to="/" />
                 </Switch>
