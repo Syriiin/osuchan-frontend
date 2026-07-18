@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 import { useStore } from "../utils/hooks";
-import About from "./About/About";
 import Footer from "./Footer";
 import Home from "./Home/Home";
 import LeaderboardsRoot from "./Leaderboards";
@@ -53,9 +52,6 @@ const Osuchan = () => {
                     </Route>
                     <Route path="/events">
                         <EventsRoot />
-                    </Route>
-                    <Route path="/about">
-                        <About />
                     </Route>
                     <Redirect to="/" />
                 </Switch>
