@@ -8,7 +8,7 @@ const FooterWrapper = styled.footer`
 
 const Footer = () => (
     <FooterWrapper>
-        <span>&copy; osu!chan 2019 | Team osu!chan</span>
+        <span>&copy; osu!chan 2026</span>
     </FooterWrapper>
 );
 
