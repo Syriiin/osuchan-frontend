@@ -76,6 +76,8 @@ interface NavbarLinkProps extends LinkProps {
 const TitleContainer = styled.div`
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
 `;
 
 const Logo = styled.img`
@@ -85,7 +87,7 @@ const Logo = styled.img`
 
 const Title = styled.h1`
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     margin: 10px;
     font-size: 2em;
     font-weight: 400;
@@ -97,6 +99,10 @@ const Title = styled.h1`
             text-decoration: none;
         }
     }
+`;
+
+const TitleText = styled.span`
+    transform: translateY(-4px);
 `;
 
 const UserMenuContainer = styled.div`
@@ -251,7 +257,7 @@ const Navbar = observer(() => {
                     <UnstyledLink to="/">
                         <Title>
                             <Logo src="/static/icon.svg" />
-                            <span>osu!chan</span>
+                            <TitleText>osu!chan</TitleText>
                         </Title>
                     </UnstyledLink>
                 </TitleContainer>

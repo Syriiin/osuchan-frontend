@@ -27,6 +27,10 @@ const Logo = styled.img`
     margin-right: 50px;
 `;
 
+const TitleText = styled.span`
+    transform: translateY(-14px);
+`;
+
 const HomeSurface = styled(Surface)`
     width: 1000px;
     padding: 20px;
@@ -75,7 +79,7 @@ const Home = () => {
             <HomeWrapper>
                 <Title>
                     <Logo src="/static/icon.svg" />
-                    <span>osu!chan</span>
+                    <TitleText>osu!chan</TitleText>
                 </Title>
                 <HomeSurface>
                     <form onSubmit={handleSearchSubmit}>
