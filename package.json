@@ -8,7 +8,7 @@
         "@fortawesome/free-solid-svg-icons": "^5.15.3",
         "@fortawesome/react-fontawesome": "^0.1.14",
         "@types/js-cookie": "^2.2.6",
-        "@types/node": "^16.7.10",
+        "@types/node": "^24.13.3",
         "@types/react": "^17.0.3",
         "@types/react-datepicker": "^3.1.8",
         "@types/react-dom": "^17.0.2",
@@ -47,9 +47,9 @@
     },
     "scripts": {
         "analyse": "source-map-explorer 'build/static/js/*.js'",
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
+        "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+        "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+        "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier --write ."
     },
