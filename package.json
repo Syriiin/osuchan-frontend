@@ -7,17 +7,6 @@
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.3",
         "@fortawesome/react-fontawesome": "^0.1.14",
-        "@types/js-cookie": "^2.2.6",
-        "@types/node": "^24.13.3",
-        "@types/react": "^17.0.3",
-        "@types/react-datepicker": "^3.1.8",
-        "@types/react-dom": "^17.0.2",
-        "@types/react-helmet": "^6.1.0",
-        "@types/react-router": "^5.1.12",
-        "@types/react-router-dom": "^5.1.7",
-        "@types/react-select": "^4.0.13",
-        "@types/react-transition-group": "^4.4.1",
-        "@types/styled-components": "^5.1.9",
         "axios": "^0.21.1",
         "http-proxy-middleware": "^2.0.1",
         "i18n-iso-countries": "^6.5.0",
@@ -26,7 +15,6 @@
         "mobx": "^6.1.8",
         "mobx-react-lite": "^3.2.0",
         "ojsama": "^2.2.0",
-        "prettier": "^2.3.2",
         "react": "^17.0.1",
         "react-datepicker": "^3.8.0",
         "react-dom": "^17.0.1",
@@ -40,10 +28,8 @@
         "react-tooltip": "^4.2.15",
         "react-transition-group": "^4.4.1",
         "recharts": "^2.15.4",
-        "source-map-explorer": "^2.5.2",
         "styled-components": "^5.2.1",
-        "timeago-react": "^3.0.2",
-        "typescript": "^4.2.3"
+        "timeago-react": "^3.0.2"
     },
     "scripts": {
         "analyse": "source-map-explorer 'build/static/js/*.js'",
@@ -52,8 +38,25 @@
         "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
         "eject": "react-scripts eject",
         "checkformatting": "prettier --check .",
-        "fixformatting": "prettier --write .",
-        "format": "prettier --write ."
+        "fixformatting": "prettier --write ."
+    },
+    "devDependencies": {
+        "@testing-library/react": "^12.1.5",
+        "@types/jest": "^26.0.24",
+        "@types/js-cookie": "^2.2.6",
+        "@types/node": "^24.13.3",
+        "@types/react": "^17.0.3",
+        "@types/react-datepicker": "^3.1.8",
+        "@types/react-dom": "^17.0.2",
+        "@types/react-helmet": "^6.1.0",
+        "@types/react-router": "^5.1.12",
+        "@types/react-router-dom": "^5.1.7",
+        "@types/react-select": "^4.0.13",
+        "@types/react-transition-group": "^4.4.1",
+        "@types/styled-components": "^5.1.9",
+        "prettier": "^2.3.2",
+        "source-map-explorer": "^2.5.2",
+        "typescript": "^4.2.3"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -69,9 +72,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "@testing-library/react": "^12.1.5",
-        "@types/jest": "^26.0.24"
     }
 }
