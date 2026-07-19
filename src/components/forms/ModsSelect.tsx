@@ -48,7 +48,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
     if (props.gamemode === Gamemode.Standard) {
         selectModOptions.push(
             { value: ModAcronym.SpunOut, label: ModAcronym.SpunOut },
-            { value: ModAcronym.TouchDevice, label: ModAcronym.TouchDevice }
+            { value: ModAcronym.TouchDevice, label: ModAcronym.TouchDevice },
         );
     }
 
@@ -73,21 +73,21 @@ export const ModsSelect = (props: ModsSelectProps) => {
             value={mods.map(
                 (value) =>
                     selectModOptions.find(
-                        (option) => option.value === value
-                    ) as OptionType
+                        (option) => option.value === value,
+                    ) as OptionType,
             )}
             isMulti
             onChange={(value: ValueType<OptionType, true>) => {
                 if (value) {
                     const modAcronyms = (value as OptionType[]).map(
-                        (option) => option.value
+                        (option) => option.value,
                     );
                     const selectedMods = modAcronyms.reduce(
                         (jsonMods, modAcronym) => ({
                             ...jsonMods,
                             [modAcronym]: {},
                         }),
-                        {}
+                        {},
                     );
                     props.onChange(selectedMods);
                 }

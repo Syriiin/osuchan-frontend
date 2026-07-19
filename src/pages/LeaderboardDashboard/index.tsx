@@ -75,7 +75,7 @@ const LeaderboardDashboard = observer(() => {
             leaderboardType,
             gamemode,
             leaderboardId,
-            true
+            true,
         );
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 

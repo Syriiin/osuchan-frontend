@@ -4,7 +4,7 @@ export function hasFlag(value: number, bitmask: number) {
 
 export function setCssCustomProperties(
     colours: Record<string, string>,
-    prefix = "colours"
+    prefix = "colours",
 ) {
     const root = document.documentElement;
     Object.entries(colours).forEach(([key, value]) => {
@@ -14,7 +14,7 @@ export function setCssCustomProperties(
 
 export function clearCssCustomProperties(
     colours: Record<string, string>,
-    prefix = "colours"
+    prefix = "colours",
 ) {
     const root = document.documentElement;
     Object.keys(colours).forEach((key) => {

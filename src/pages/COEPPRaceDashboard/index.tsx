@@ -149,7 +149,7 @@ const COEPPRaceDashboard = observer(() => {
                             setTeamDetailsMode(
                                 teamDetailsMode === "players"
                                     ? "scores"
-                                    : "players"
+                                    : "players",
                             );
                         }}
                     >

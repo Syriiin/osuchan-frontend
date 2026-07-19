@@ -2,7 +2,7 @@ import React, { ComponentProps } from "react";
 import styled from "styled-components";
 
 export const DataTable = (
-    props: DataTableProps & ComponentProps<typeof DataTableContainer>
+    props: DataTableProps & ComponentProps<typeof DataTableContainer>,
 ) => (
     <DataTableContainer {...props}>
         <tbody>{props.children}</tbody>

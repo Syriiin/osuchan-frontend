@@ -28,11 +28,11 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
     const { leaderboard } = detailStore;
 
     const [accessType, setAccessType] = useState(
-        leaderboard?.accessType ?? LeaderboardAccessType.Public
+        leaderboard?.accessType ?? LeaderboardAccessType.Public,
     );
     const [name, setName] = useState(leaderboard?.name ?? "");
     const [description, setDescription] = useState(
-        leaderboard?.description ?? ""
+        leaderboard?.description ?? "",
     );
     const [iconUrl, setIconUrl] = useState(leaderboard?.iconUrl ?? "");
 

@@ -86,7 +86,7 @@ describe("calculateClassicAccuracy", () => {
         // expected = 100 * 27650 / 30000 = 92.166...
         expect(calculateClassicAccuracy(stats, Gamemode.Standard)).toBeCloseTo(
             92.166,
-            2
+            2,
         );
     });
 
@@ -96,7 +96,7 @@ describe("calculateClassicAccuracy", () => {
         // expected = 100 * 27000 / 30000 = 90
         expect(calculateClassicAccuracy(stats, Gamemode.Taiko)).toBeCloseTo(
             90,
-            1
+            1,
         );
     });
 
@@ -112,7 +112,7 @@ describe("calculateClassicAccuracy", () => {
         // expected = 100 * 170 / 175 = 97.14...
         expect(calculateClassicAccuracy(stats, Gamemode.Catch)).toBeCloseTo(
             97.14,
-            1
+            1,
         );
     });
 
@@ -130,7 +130,7 @@ describe("calculateClassicAccuracy", () => {
         // expected = 100 * 26650 / 30000 = 88.83...
         expect(calculateClassicAccuracy(stats, Gamemode.Mania)).toBeCloseTo(
             88.83,
-            1
+            1,
         );
     });
 });

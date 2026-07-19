@@ -129,7 +129,7 @@ const PPRaceDashboard = observer(() => {
                             setTeamDetailsMode(
                                 teamDetailsMode === "players"
                                     ? "scores"
-                                    : "players"
+                                    : "players",
                             );
                         }}
                     >

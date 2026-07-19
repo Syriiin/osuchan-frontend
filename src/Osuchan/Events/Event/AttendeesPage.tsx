@@ -110,7 +110,7 @@ const AttendeesPage = observer(() => {
 
     const themeColours = useMemo(
         () => (event?.themeColours ? { ...event.themeColours } : undefined),
-        [event]
+        [event],
     );
     useEffect(() => {
         if (themeColours) {
@@ -185,7 +185,7 @@ const AttendeesPage = observer(() => {
                                             action={() =>
                                                 store.eventsStore.removeAttendee(
                                                     slug,
-                                                    attendee.user.id
+                                                    attendee.user.id,
                                                 )
                                             }
                                             confirmationMessage={`Remove ${attendee.user.username}?`}
@@ -209,7 +209,7 @@ const AttendeesPage = observer(() => {
                                         disabled={offset === 0}
                                         action={() =>
                                             setOffset(
-                                                Math.max(0, offset - PAGE_SIZE)
+                                                Math.max(0, offset - PAGE_SIZE),
                                             )
                                         }
                                     >

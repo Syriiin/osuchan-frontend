@@ -23,7 +23,7 @@ export function ppraceTeamFromJson(data: any) {
         totalPp: data["total_pp"],
         scoreCount: data["score_count"],
         players: data["players"].map((player: any) =>
-            ppracePlayerFromJson(player)
+            ppracePlayerFromJson(player),
         ),
     };
 }

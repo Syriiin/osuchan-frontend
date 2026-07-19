@@ -85,7 +85,7 @@ export const CommunityLeaderboardRow = observer(
                 </MembershipInfoContainer>
             )}
         </Row>
-    )
+    ),
 );
 
 interface CommunityLeaderboardRowProps {

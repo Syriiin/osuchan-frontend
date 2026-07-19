@@ -30,9 +30,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
         height: ${(props) => (props.scale ? props.scale * 7 : 7)}px;
         border-radius: 50%;
         background: #fff;
-        margin: -${(props) => (props.scale ? props.scale * 4 : 4)}px 0 0 -${(
-                props
-            ) => (props.scale ? props.scale * 4 : 4)}px;
+        margin: -${(props) => (props.scale ? props.scale * 4 : 4)}px 0
+            0 -${(props) => (props.scale ? props.scale * 4 : 4)}px;
     }
 
     div:nth-child(1) {

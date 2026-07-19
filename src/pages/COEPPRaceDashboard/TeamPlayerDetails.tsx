@@ -138,17 +138,17 @@ interface PlayerRowProps {
 const PlayerChart = observer((props: PlayerChartProps) => {
     const total = props.players.reduce(
         (acc, player) => acc + player.ppContribution,
-        0
+        0,
     );
     const mainPlayers = props.players.filter(
-        (player) => player.ppContribution / total > 0.02
+        (player) => player.ppContribution / total > 0.02,
     );
     const otherPlayers = props.players.filter(
-        (player) => player.ppContribution / total <= 0.02
+        (player) => player.ppContribution / total <= 0.02,
     );
     const otherPlayersContribution = otherPlayers.reduce(
         (acc, player) => acc + player.ppContribution,
-        0
+        0,
     );
     const data = mainPlayers
         .sort((a, b) => b.ppContribution - a.ppContribution)
@@ -180,7 +180,7 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                             "en",
                             {
                                 maximumFractionDigits: 0,
-                            }
+                            },
                         )}%`;
                     }}
                 >

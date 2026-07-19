@@ -3,7 +3,7 @@ import ReactSelect, { StylesConfig } from "react-select";
 import { ThemeContext } from "styled-components";
 
 export const Select = <T extends OptionValue = number>(
-    props: SelectProps<T>
+    props: SelectProps<T>,
 ) => {
     const theme = useContext(ThemeContext);
 
@@ -42,7 +42,7 @@ export const Select = <T extends OptionValue = number>(
     };
 
     const selectedOption = props.options.find(
-        (option) => option.value === props.value
+        (option) => option.value === props.value,
     );
     return (
         <ReactSelect

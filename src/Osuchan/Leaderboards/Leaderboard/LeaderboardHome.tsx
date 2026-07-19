@@ -139,7 +139,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterValue>
                         <ModIcons
                             mods={modsJsonFromModAcronyms(
-                                scoreFilter.requiredModsJson
+                                scoreFilter.requiredModsJson,
                             )}
                             small
                         />
@@ -152,7 +152,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterValue>
                         <ModIcons
                             mods={modsJsonFromModAcronyms(
-                                scoreFilter.disqualifiedModsJson
+                                scoreFilter.disqualifiedModsJson,
                             )}
                             small
                         />
@@ -319,7 +319,7 @@ const LeaderboardButtons = observer(() => {
                 {/* Join button if public or pending invite, and not member */}
                 {(leaderboard!.accessType === LeaderboardAccessType.Public ||
                     meStore.invites.find(
-                        (i) => i.leaderboardId === leaderboard!.id
+                        (i) => i.leaderboardId === leaderboard!.id,
                     ) !== undefined) &&
                     detailStore.userMembership === null && (
                         <Button
@@ -522,7 +522,7 @@ const LeaderboardHome = observer(() => {
                                                     )}
                                                     <Label>
                                                         {formatGamemodeName(
-                                                            leaderboard.gamemode
+                                                            leaderboard.gamemode,
                                                         )}
                                                     </Label>
                                                     <Label>
@@ -558,11 +558,11 @@ const LeaderboardHome = observer(() => {
                                                     )}
                                                     <Label>
                                                         {formatCalculatorEngine(
-                                                            leaderboard.calculatorEngine
+                                                            leaderboard.calculatorEngine,
                                                         )}{" "}
                                                         (
                                                         {formatDiffcalcValueName(
-                                                            leaderboard.primaryPerformanceValue
+                                                            leaderboard.primaryPerformanceValue,
                                                         )}
                                                         )
                                                     </Label>
@@ -589,7 +589,7 @@ const LeaderboardHome = observer(() => {
                                 </LeaderboardDetailsContainer>
                                 {leaderboard.scoreFilter &&
                                     !scoreFilterIsDefault(
-                                        leaderboard.scoreFilter
+                                        leaderboard.scoreFilter,
                                     ) && (
                                         <LeaderboardScoreFilterContainer>
                                             <LeaderboardFilters

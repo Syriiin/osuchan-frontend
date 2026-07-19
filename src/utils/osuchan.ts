@@ -7,7 +7,7 @@ import { ScoreFilter } from "../store/models/profiles/types";
 export function getScoreResult(
     countMiss: number,
     bestCombo: number,
-    maxCombo: number
+    maxCombo: number,
 ) {
     if (countMiss === 1) {
         return ScoreResult.OneMiss;

@@ -24,7 +24,9 @@ const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     &.slide-enter-active {
         opacity: 1;
         transform: translateX(0);
-        transition: opacity 300ms, transform 300ms;
+        transition:
+            opacity 300ms,
+            transform 300ms;
     }
     &.slide-enter-done {
         opacity: 1;
@@ -104,8 +106,8 @@ const RecentScores = observer((props: RecentScoresProps) => {
                 {props.recentScores.slice(0, 20).map((score) => {
                     const team = props.teams.find((t) =>
                         t.players.some(
-                            (p) => p.user.id === score.userStats!.osuUserId
-                        )
+                            (p) => p.user.id === score.userStats!.osuUserId,
+                        ),
                     );
                     return (
                         <CSSTransition

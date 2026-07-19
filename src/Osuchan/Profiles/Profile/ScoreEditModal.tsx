@@ -45,7 +45,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
             combo,
             countOk,
             countMeh,
-            countMiss
+            countMiss,
         );
 
         props.onClose();

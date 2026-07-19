@@ -93,7 +93,7 @@ const InviteRow = observer((props: InviteRowProps) => {
             <Button
                 as={UnstyledLink}
                 to={`/leaderboards/community/${formatGamemodeNameShort(
-                    invite.leaderboard!.gamemode
+                    invite.leaderboard!.gamemode,
                 )}/${invite.leaderboardId}`}
                 type="button"
             >

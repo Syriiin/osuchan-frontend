@@ -69,7 +69,7 @@ const Leaderboards = observer(() => {
                     <UnstyledLink
                         key={i}
                         to={`/leaderboards/global/${formatGamemodeNameShort(
-                            membership.leaderboard!.gamemode
+                            membership.leaderboard!.gamemode,
                         )}/${membership.leaderboardId}/members/${
                             membership.osuUserId
                         }`}
@@ -84,14 +84,14 @@ const Leaderboards = observer(() => {
                 <>
                     {hasFlag(
                         usersStore.communityMembershipsStatus,
-                        PaginatedResourceStatus.ContentAvailable
+                        PaginatedResourceStatus.ContentAvailable,
                     ) && (
                         <>
                             {communityMemberships.map((membership, i) => (
                                 <UnstyledLink
                                     key={i}
                                     to={`/leaderboards/community/${formatGamemodeNameShort(
-                                        membership.leaderboard!.gamemode
+                                        membership.leaderboard!.gamemode,
                                     )}/${membership.leaderboardId}/members/${
                                         membership.osuUserId
                                     }`}
@@ -104,7 +104,7 @@ const Leaderboards = observer(() => {
                             ))}
                             {hasFlag(
                                 usersStore.communityMembershipsStatus,
-                                PaginatedResourceStatus.MoreToLoad
+                                PaginatedResourceStatus.MoreToLoad,
                             ) && (
                                 <Button
                                     fullWidth

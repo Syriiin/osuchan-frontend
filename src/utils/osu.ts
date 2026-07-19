@@ -82,7 +82,7 @@ function sortModAcronyms(modAcronyms: string[]) {
 
 export function calculateClassicAccuracy(
     statistics: Record<string, number>,
-    gamemode: Gamemode
+    gamemode: Gamemode,
 ): number {
     let maxPoints: number;
     let points: number;
@@ -150,7 +150,7 @@ export function calculateLength(length: number, mods: ModsJson) {
 export function calculateCircleSize(
     circleSize: number,
     mods: ModsJson,
-    gamemode: Gamemode
+    gamemode: Gamemode,
 ) {
     if (gamemode & Gamemode.Mania) {
         if (ModAcronym.Key1 in mods) {
@@ -220,7 +220,7 @@ export function calculateApproachRate(approachRate: number, mods: ModsJson) {
 
 export function calculateOverallDifficulty(
     overallDifficulty: number,
-    mods: ModsJson
+    mods: ModsJson,
 ) {
     const odToMs = (od: number) => -6 * od + 79.5;
     const msToOd = (ms: number) => (ms - 79.5) / -6;

@@ -69,11 +69,11 @@ export class ListStore {
                             offset: 0,
                             limit: 25,
                         },
-                    }
+                    },
                 );
                 const globalMemberships: Membership[] =
                     globalMembershipsResponse.data["results"].map((data: any) =>
-                        membershipFromJson(data)
+                        membershipFromJson(data),
                     );
 
                 this.globalMemberships.replace(globalMemberships);
@@ -96,11 +96,11 @@ export class ListStore {
                             offset: 0,
                             limit: 25,
                         },
-                    }
+                    },
                 );
                 const globalLeaderboards: Leaderboard[] =
                     globalLeaderboardsResponse.data["results"].map(
-                        (data: any) => leaderboardFromJson(data)
+                        (data: any) => leaderboardFromJson(data),
                     );
 
                 this.globalLeaderboards.replace(globalLeaderboards);
@@ -135,15 +135,15 @@ export class ListStore {
                             offset: this.globalMemberships.length,
                             limit: 25,
                         },
-                    }
+                    },
                 );
                 const globalMemberships: Membership[] =
                     globalMembershipsResponse.data["results"].map((data: any) =>
-                        membershipFromJson(data)
+                        membershipFromJson(data),
                     );
 
                 this.globalMemberships.replace(
-                    this.globalMemberships.concat(globalMemberships)
+                    this.globalMemberships.concat(globalMemberships),
                 );
 
                 if (
@@ -164,15 +164,15 @@ export class ListStore {
                             offset: this.globalLeaderboards.length,
                             limit: 25,
                         },
-                    }
+                    },
                 );
                 const globalLeaderboards: Leaderboard[] =
                     globalLeaderboardsResponse.data["results"].map(
-                        (data: any) => leaderboardFromJson(data)
+                        (data: any) => leaderboardFromJson(data),
                     );
 
                 this.globalLeaderboards.replace(
-                    this.globalLeaderboards.concat(globalLeaderboards)
+                    this.globalLeaderboards.concat(globalLeaderboards),
                 );
 
                 if (
@@ -207,11 +207,11 @@ export class ListStore {
                         offset: 0,
                         limit: 10,
                     },
-                }
+                },
             );
             const communityLeaderboards: Leaderboard[] =
                 communityLeaderboardsResponse.data["results"].map((data: any) =>
-                    leaderboardFromJson(data)
+                    leaderboardFromJson(data),
                 );
 
             this.communityLeaderboards.replace(communityLeaderboards);
@@ -244,15 +244,15 @@ export class ListStore {
                         offset: this.communityLeaderboards.length,
                         limit: 25,
                     },
-                }
+                },
             );
             const communityLeaderboards: Leaderboard[] =
                 communityLeaderboardsResponse.data["results"].map((data: any) =>
-                    leaderboardFromJson(data)
+                    leaderboardFromJson(data),
                 );
 
             this.communityLeaderboards.replace(
-                this.communityLeaderboards.concat(communityLeaderboards)
+                this.communityLeaderboards.concat(communityLeaderboards),
             );
 
             if (
@@ -286,11 +286,11 @@ export class ListStore {
                         offset: 0,
                         limit: 5,
                     },
-                }
+                },
             );
             const communityMemberships: Membership[] =
                 communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.communityMemberships.replace(communityMemberships);
@@ -323,15 +323,15 @@ export class ListStore {
                         offset: this.communityMemberships.length,
                         limit: 10,
                     },
-                }
+                },
             );
             const communityMemberships: Membership[] =
                 communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.communityMemberships.replace(
-                this.communityMemberships.concat(communityMemberships)
+                this.communityMemberships.concat(communityMemberships),
             );
 
             if (
@@ -359,7 +359,7 @@ export class ListStore {
         description: string,
         iconUrl: string,
         allowPastScores: boolean,
-        scoreFilter: ScoreFilter
+        scoreFilter: ScoreFilter,
     ): any {
         this.isCreatingLeaderboard = true;
 
@@ -394,10 +394,10 @@ export class ListStore {
                         lowest_length: scoreFilter.lowestLength,
                         highest_length: scoreFilter.highestLength,
                     },
-                }
+                },
             );
             const leaderboard: Leaderboard = leaderboardFromJson(
-                leaderboardResponse.data
+                leaderboardResponse.data,
             );
 
             this.communityLeaderboards.push(leaderboard);
@@ -406,7 +406,7 @@ export class ListStore {
             history.push(
                 `/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${
                     leaderboard.id
-                }`
+                }`,
             );
 
             notify.positive("Leaderboard created");
@@ -417,7 +417,7 @@ export class ListStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to create leaderboard: ${errorMessage}`
+                    `Failed to create leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to create leaderboard");

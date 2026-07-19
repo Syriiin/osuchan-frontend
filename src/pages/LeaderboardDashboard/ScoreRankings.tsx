@@ -7,7 +7,8 @@ import { formatScoreResult } from "../../utils/formatting";
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     padding: 0;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
             `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;

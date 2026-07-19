@@ -9,10 +9,10 @@ export const Label = styled.span<LabelProps>`
         props.special
             ? props.theme.colours.timber
             : props.negative
-            ? props.theme.colours.negative
-            : props.positive
-            ? props.theme.colours.positive
-            : "#fff"};
+              ? props.theme.colours.negative
+              : props.positive
+                ? props.theme.colours.positive
+                : "#fff"};
     margin-right: 5px;
     margin-bottom: 5px;
 `;

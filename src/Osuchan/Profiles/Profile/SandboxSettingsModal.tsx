@@ -31,7 +31,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
 
     const handleScoreFilterChange = useCallback(
         (scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter),
-        []
+        [],
     );
 
     return (

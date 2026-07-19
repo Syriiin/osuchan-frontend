@@ -20,7 +20,7 @@ const TopScores = observer((props: TopScoresProps) => {
             {(showAllScores ? props.scores : props.scores.slice(0, 5)).map(
                 (score, i) => (
                     <ScoreRow key={i} score={score} />
-                )
+                ),
             )}
             {props.scores.length > 5 && !showAllScores && (
                 <Button

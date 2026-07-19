@@ -215,7 +215,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             </tr>
                         )}
                         {[Gamemode.Standard, Gamemode.Catch].includes(
-                            score.gamemode
+                            score.gamemode,
                         ) && (
                             <tr>
                                 <td>Approach Rate</td>
@@ -416,7 +416,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             >
                                 <DiffcalcHeader>
                                     {formatCalculatorEngine(
-                                        performanceCalculation.calculatorEngine
+                                        performanceCalculation.calculatorEngine,
                                     )}
                                 </DiffcalcHeader>
                                 <DiffcalcDetailsContainer>
@@ -426,7 +426,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                                                 <tr key={value.name}>
                                                     <td>
                                                         {formatDiffcalcValueName(
-                                                            value.name
+                                                            value.name,
                                                         )}
                                                     </td>
                                                     <DataCell>
@@ -437,7 +437,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                                                         stars
                                                     </DataCell>
                                                 </tr>
-                                            )
+                                            ),
                                         )}
                                     </DifficultyDataTable>
                                     <PerformanceDataTable>
@@ -446,7 +446,7 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                                                 <tr key={value.name}>
                                                     <td>
                                                         {formatDiffcalcValueName(
-                                                            value.name
+                                                            value.name,
                                                         )}
                                                     </td>
                                                     <DataCell>
@@ -457,12 +457,12 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                                                         pp
                                                     </DataCell>
                                                 </tr>
-                                            )
+                                            ),
                                         )}
                                     </PerformanceDataTable>
                                 </DiffcalcDetailsContainer>
                             </Fragment>
-                        )
+                        ),
                     )}
                 </DetailsContainer>
             </DetailsCollapser>

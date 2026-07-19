@@ -4,7 +4,7 @@ const Countdown = (props: CountdownProps) => {
     const endTime = props.endTime;
 
     const [remainingTime, setRemainingTime] = useState(
-        (endTime?.getTime() ?? Date.now()) - Date.now()
+        (endTime?.getTime() ?? Date.now()) - Date.now(),
     );
     useEffect(() => {
         const interval = setInterval(() => {

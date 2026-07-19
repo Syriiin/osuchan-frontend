@@ -154,7 +154,7 @@ const EventHome = observer(() => {
 
     const themeColours = useMemo(
         () => (event?.themeColours ? { ...event.themeColours } : undefined),
-        [event]
+        [event],
     );
     useEffect(() => {
         if (themeColours) {
@@ -305,7 +305,7 @@ const EventHome = observer(() => {
                                 <LeaderboardRow key={lb.id}>
                                     <UnstyledLink
                                         to={`/leaderboards/community/${formatGamemodeNameShort(
-                                            lb.leaderboard.gamemode
+                                            lb.leaderboard.gamemode,
                                         )}/${lb.leaderboard.id}`}
                                     >
                                         <CommunityLeaderboardRow
@@ -320,7 +320,7 @@ const EventHome = observer(() => {
                                             action={() =>
                                                 store.eventsStore.deleteLeaderboard(
                                                     slug,
-                                                    lb.id
+                                                    lb.id,
                                                 )
                                             }
                                             confirmationMessage={`Delete leaderboard "${lb.leaderboard.name}"?`}

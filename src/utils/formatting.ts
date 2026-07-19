@@ -7,7 +7,7 @@ export function formatTime(seconds: number) {
     const minutesString = String(Math.floor(seconds / 60));
     const secondsString = String(seconds % 60);
     return `${minutesString}:${("00" + secondsString).substring(
-        secondsString.length
+        secondsString.length,
     )}`;
 }
 

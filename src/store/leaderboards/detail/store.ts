@@ -74,14 +74,14 @@ export class DetailStore {
             this.leaderboardType!,
             this.gamemode!,
             this.leaderboardId!,
-            moreScores
+            moreScores,
         );
 
     *loadLeaderboard(
         leaderboardType: string,
         gamemode: Gamemode,
         leaderboardId: number,
-        moreScores: boolean = false
+        moreScores: boolean = false,
     ): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;
@@ -91,14 +91,14 @@ export class DetailStore {
         try {
             const leaderboardResponse = yield http.get(this.resourceUrl);
             const leaderboard: Leaderboard = leaderboardFromJson(
-                leaderboardResponse.data
+                leaderboardResponse.data,
             );
 
             const membersResponse = yield http.get(
-                `${this.resourceUrl}/members`
+                `${this.resourceUrl}/members`,
             );
             const members: Membership[] = membersResponse.data.map(
-                (data: any) => membershipFromJson(data)
+                (data: any) => membershipFromJson(data),
             );
 
             const scoresResponse = yield http.get(
@@ -107,14 +107,14 @@ export class DetailStore {
                     params: {
                         limit: 100,
                     },
-                }
+                },
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
                 scoreFromJson(
                     data,
                     leaderboard.calculatorEngine,
-                    leaderboard.primaryPerformanceValue
-                )
+                    leaderboard.primaryPerformanceValue,
+                ),
             );
 
             this.leaderboard = leaderboard;
@@ -135,7 +135,7 @@ export class DetailStore {
 
         try {
             const membershipResponse = yield http.get(
-                `${this.resourceUrl}/members/${userId}`
+                `${this.resourceUrl}/members/${userId}`,
             );
             const membership = membershipFromJson(membershipResponse.data);
 
@@ -170,7 +170,7 @@ export class DetailStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to update leaderboard: ${errorMessage}`
+                    `Failed to update leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to update leaderboard");
@@ -198,7 +198,7 @@ export class DetailStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to archive leaderboard: ${errorMessage}`
+                    `Failed to archive leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to archive leaderboard");
@@ -226,7 +226,7 @@ export class DetailStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to restore leaderboard: ${errorMessage}`
+                    `Failed to restore leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to restore leaderboard");
@@ -245,8 +245,8 @@ export class DetailStore {
             // Navigate to leaderboard list page after deletion
             history.push(
                 `/leaderboards/community/${formatGamemodeNameShort(
-                    this.gamemode!
-                )}`
+                    this.gamemode!,
+                )}`,
             );
 
             this.leaderboard = null;
@@ -261,7 +261,7 @@ export class DetailStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to delete leaderboard: ${errorMessage}`
+                    `Failed to delete leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to delete leaderboard");
@@ -277,10 +277,10 @@ export class DetailStore {
 
         try {
             const invitesResponse = yield http.get(
-                `${this.resourceUrl}/invites`
+                `${this.resourceUrl}/invites`,
             );
             const invites: Invite[] = invitesResponse.data.map((data: any) =>
-                inviteFromJson(data)
+                inviteFromJson(data),
             );
 
             this.invites.replace(invites);
@@ -302,11 +302,11 @@ export class DetailStore {
                 {
                     user_ids: userIds,
                     message: message,
-                }
+                },
             );
 
             const invites: Invite[] = invitesResponse.data.map((data: any) =>
-                inviteFromJson(data)
+                inviteFromJson(data),
             );
 
             this.invites.replace(this.invites.concat(invites));
@@ -334,7 +334,7 @@ export class DetailStore {
             yield http.delete(`${this.resourceUrl}/invites/${userId}`);
 
             this.invites.replace(
-                this.invites.filter((i) => i.osuUserId !== userId)
+                this.invites.filter((i) => i.osuUserId !== userId),
             );
 
             notify.positive("Invite cancelled");
@@ -359,21 +359,21 @@ export class DetailStore {
 
         try {
             const membershipResponse = yield http.get(
-                `${this.resourceUrl}/members/${userId}`
+                `${this.resourceUrl}/members/${userId}`,
             );
             const membership: Membership = membershipFromJson(
-                membershipResponse.data
+                membershipResponse.data,
             );
 
             const scoresResponse = yield http.get(
-                `${this.resourceUrl}/members/${userId}/scores`
+                `${this.resourceUrl}/members/${userId}/scores`,
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
                 scoreFromJson(
                     data,
                     this.leaderboard?.calculatorEngine,
-                    this.leaderboard?.primaryPerformanceValue
-                )
+                    this.leaderboard?.primaryPerformanceValue,
+                ),
             );
 
             this.membership = membership;
@@ -392,7 +392,7 @@ export class DetailStore {
 
         try {
             const membershipResponse = yield http.post(
-                `${this.resourceUrl}/members`
+                `${this.resourceUrl}/members`,
             );
             const membership = membershipFromJson(membershipResponse.data);
 
@@ -419,7 +419,7 @@ export class DetailStore {
 
         try {
             yield http.delete(
-                `${this.resourceUrl}/members/${this.userMembership!.osuUserId}`
+                `${this.resourceUrl}/members/${this.userMembership!.osuUserId}`,
             );
 
             this.userMembership = null;
@@ -445,7 +445,7 @@ export class DetailStore {
 
         try {
             yield http.delete(
-                `${this.resourceUrl}/members/${this.membership!.osuUserId}`
+                `${this.resourceUrl}/members/${this.membership!.osuUserId}`,
             );
 
             history.push(
@@ -453,17 +453,18 @@ export class DetailStore {
                     this.leaderboardType
                 }/${formatGamemodeNameShort(this.gamemode!)}/${
                     this.leaderboardId
-                }`
+                }`,
             );
             this.rankings.replace(
                 this.rankings.filter(
-                    (m) => m.osuUserId !== this.membership!.osuUserId
-                )
+                    (m) => m.osuUserId !== this.membership!.osuUserId,
+                ),
             );
             this.leaderboardScores.replace(
                 this.leaderboardScores.filter(
-                    (s) => s.userStats!.osuUserId !== this.membership!.osuUserId
-                )
+                    (s) =>
+                        s.userStats!.osuUserId !== this.membership!.osuUserId,
+                ),
             );
             this.membership = null;
 

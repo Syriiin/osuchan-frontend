@@ -17,7 +17,9 @@ const ModalBase = styled.div`
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 200ms ease-out, visibility 200ms ease-out;
+    transition:
+        opacity 200ms ease-out,
+        visibility 200ms ease-out;
 
     &.modal-base-enter-active,
     &.modal-base-enter-done {

@@ -17,10 +17,10 @@ const StyledButton = styled("button").withConfig({
         props.negative
             ? props.theme.colours.negative
             : props.positive
-            ? props.theme.colours.positive
-            : props.$active
-            ? props.theme.colours.mystic
-            : props.theme.colours.currant};
+              ? props.theme.colours.positive
+              : props.$active
+                ? props.theme.colours.mystic
+                : props.theme.colours.currant};
     border: none;
     cursor: pointer;
     width: ${(props) => (props.fullWidth ? "100%" : "unset")};
@@ -45,7 +45,7 @@ interface StyledButtonProps {
 }
 
 export const Button = (
-    props: ButtonProps & ComponentProps<typeof StyledButton>
+    props: ButtonProps & ComponentProps<typeof StyledButton>,
 ) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 

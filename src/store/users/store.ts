@@ -73,7 +73,7 @@ export class UsersStore {
                   this.scores.reduce(
                       (total, score, i) =>
                           total + score.performanceTotal * 0.95 ** i,
-                      0
+                      0,
                   )
             : 0;
     }
@@ -82,7 +82,7 @@ export class UsersStore {
         return (
             this.sandboxScores.reduce(
                 (total, score, i) => total + score.performanceTotal * 0.95 ** i,
-                0
+                0,
             ) + this.extraPerformance
         );
     }
@@ -90,7 +90,7 @@ export class UsersStore {
     get sandboxScoreStyleAccuracy() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.accuracy)
+                this.sandboxScores.map((score) => score.accuracy),
             ) || 0
         );
     }
@@ -98,7 +98,7 @@ export class UsersStore {
     get sandboxScoreStyleBpm() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.bpm)
+                this.sandboxScores.map((score) => score.bpm),
             ) || 0
         );
     }
@@ -106,7 +106,7 @@ export class UsersStore {
     get sandboxScoreStyleLength() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.length)
+                this.sandboxScores.map((score) => score.length),
             ) || 0
         );
     }
@@ -114,7 +114,7 @@ export class UsersStore {
     get sandboxScoreStyleCircleSize() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.circleSize)
+                this.sandboxScores.map((score) => score.circleSize),
             ) || 0
         );
     }
@@ -122,7 +122,7 @@ export class UsersStore {
     get sandboxScoreStyleApproachRate() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.approachRate)
+                this.sandboxScores.map((score) => score.approachRate),
             ) || 0
         );
     }
@@ -130,7 +130,7 @@ export class UsersStore {
     get sandboxScoreStyleOverallDifficulty() {
         return (
             calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.overallDifficulty)
+                this.sandboxScores.map((score) => score.overallDifficulty),
             ) || 0
         );
     }
@@ -153,19 +153,19 @@ export class UsersStore {
                     params: {
                         user_id_type: "username",
                     },
-                }
+                },
             );
             const userStats: UserStats = userStatsFromJson(
-                userStatsResponse.data
+                userStatsResponse.data,
             );
 
             const userId = userStats.osuUserId;
 
             const scoresResponse = yield http.get(
-                `/api/profiles/users/${userId}/stats/${gamemode}/scores`
+                `/api/profiles/users/${userId}/stats/${gamemode}/scores`,
             );
             const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data)
+                scoreFromJson(data),
             );
 
             const globalMembershipsResponse = yield http.get(
@@ -175,11 +175,11 @@ export class UsersStore {
                         offset: 0,
                         limit: 25,
                     },
-                }
+                },
             );
             const globalMemberships: Membership[] =
                 globalMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.currentUserStats = userStats;
@@ -217,15 +217,15 @@ export class UsersStore {
                         offset: this.globalMemberships.length,
                         limit: 25,
                     },
-                }
+                },
             );
             const globalMemberships: Membership[] =
                 globalMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.globalMemberships.replace(
-                this.globalMemberships.concat(globalMemberships)
+                this.globalMemberships.concat(globalMemberships),
             );
 
             if (
@@ -258,11 +258,11 @@ export class UsersStore {
                         offset: 0,
                         limit: 5,
                     },
-                }
+                },
             );
             const communityMemberships: Membership[] =
                 communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.communityMemberships.replace(communityMemberships);
@@ -295,15 +295,15 @@ export class UsersStore {
                         offset: this.communityMemberships.length,
                         limit: 10,
                     },
-                }
+                },
             );
             const communityMemberships: Membership[] =
                 communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data)
+                    membershipFromJson(data),
                 );
 
             this.communityMemberships.replace(
-                this.communityMemberships.concat(communityMemberships)
+                this.communityMemberships.concat(communityMemberships),
             );
 
             if (
@@ -352,10 +352,10 @@ export class UsersStore {
                         lowest_length: scoreFilter.lowestLength,
                         highest_length: scoreFilter.highestLength,
                     },
-                }
+                },
             );
             let scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data)
+                scoreFromJson(data),
             );
 
             this.sandboxScores.replace(scores);
@@ -372,7 +372,7 @@ export class UsersStore {
 
             if (errorMessage) {
                 notify.negative(
-                    `Failed to load sandbox scores: ${errorMessage}`
+                    `Failed to load sandbox scores: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to load sandbox scores");
@@ -386,7 +386,7 @@ export class UsersStore {
         bestCombo: number,
         countOk: number,
         countMeh: number,
-        countMiss: number
+        countMiss: number,
     ): any {
         const beatmap = score.beatmap!;
         const totalObjects =
@@ -406,22 +406,22 @@ export class UsersStore {
 
         score.accuracy = calculateClassicAccuracy(
             score.statistics,
-            this.currentUserStats!.gamemode
+            this.currentUserStats!.gamemode,
         );
         score.bpm = calculateBpm(beatmap.bpm, score.modsJson);
         score.length = calculateLength(beatmap.drainTime, score.modsJson);
         score.circleSize = calculateCircleSize(
             beatmap.circleSize,
             score.modsJson,
-            score.gamemode
+            score.gamemode,
         );
         score.approachRate = calculateApproachRate(
             beatmap.approachRate,
-            score.modsJson
+            score.modsJson,
         );
         score.overallDifficulty = calculateOverallDifficulty(
             beatmap.overallDifficulty,
-            score.modsJson
+            score.modsJson,
         );
         score.result = getScoreResult(countMiss, bestCombo, beatmap.maxCombo);
 
@@ -448,7 +448,7 @@ export class UsersStore {
         this.sandboxScores.replace(
             this.sandboxScores
                 .slice()
-                .sort((a, b) => b.performanceTotal - a.performanceTotal)
+                .sort((a, b) => b.performanceTotal - a.performanceTotal),
         );
 
         notify.neutral("Sandbox scores recalculated");

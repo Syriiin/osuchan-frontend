@@ -40,19 +40,19 @@ export class DetailStore {
             this.pprace = pprace;
 
             const recentScoresResponse = yield http.get(
-                `/api/ppraces/${ppraceId}/recentscores`
+                `/api/ppraces/${ppraceId}/recentscores`,
             );
             const recentScores = recentScoresResponse.data.map((score: any) =>
-                scoreFromJson(score)
+                scoreFromJson(score),
             );
             this.recentScores = recentScores;
 
             for (const team of pprace.teams) {
                 const teamScoresResponse = yield http.get(
-                    `/api/ppraces/${ppraceId}/teams/${team.id}/scores`
+                    `/api/ppraces/${ppraceId}/teams/${team.id}/scores`,
                 );
                 this.teamScores[team.id] = teamScoresResponse.data.map(
-                    (score: any) => scoreFromJson(score)
+                    (score: any) => scoreFromJson(score),
                 );
             }
 

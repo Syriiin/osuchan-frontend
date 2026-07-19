@@ -34,16 +34,16 @@ const CreateLeaderboardModal = observer(
         const [gamemode, setGamemode] = useState(Gamemode.Standard);
         const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
         const [accessType, setAccessType] = useState(
-            LeaderboardAccessType.Public
+            LeaderboardAccessType.Public,
         );
         const [name, setName] = useState("");
         const [description, setDescription] = useState("");
         const [iconUrl, setIconUrl] = useState(
-            `${window.location.origin}/static/icon-64.png`
+            `${window.location.origin}/static/icon-64.png`,
         );
         const [allowPastScores, setAllowPastScores] = useState(true);
         const [scoreFilter, setScoreFilter] = useState<Partial<ScoreFilter>>(
-            {}
+            {},
         );
 
         // Timeout updated icon url so we don't spam preview image requests on every character change
@@ -67,14 +67,14 @@ const CreateLeaderboardModal = observer(
                 description,
                 iconUrl,
                 allowPastScores,
-                scoreFilter as ScoreFilter
+                scoreFilter as ScoreFilter,
             );
         };
 
         // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
         const handleScoreFilterChange = useCallback(
             (scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter),
-            []
+            [],
         );
 
         const handleGamemodeChange = (mode: Gamemode) => {
@@ -193,7 +193,7 @@ const CreateLeaderboardModal = observer(
                 </form>
             </SimpleModal>
         );
-    }
+    },
 );
 
 interface CreateLeaderboardModalProps {

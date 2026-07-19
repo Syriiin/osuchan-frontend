@@ -73,7 +73,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                     </DataCell>
                 </tr>
                 {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(
-                    userStats.gamemode
+                    userStats.gamemode,
                 ) && (
                     <tr>
                         <td>
@@ -100,7 +100,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                     </tr>
                 )}
                 {[Gamemode.Standard, Gamemode.Catch].includes(
-                    userStats.gamemode
+                    userStats.gamemode,
                 ) && (
                     <tr>
                         <td>Approach Rate</td>

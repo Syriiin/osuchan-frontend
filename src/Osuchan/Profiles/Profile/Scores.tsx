@@ -58,7 +58,7 @@ const Scores = observer((props: ScoresProps) => {
                         gamemode={props.gamemode}
                         sandboxMode={props.sandboxMode}
                     />
-                )
+                ),
             )}
             {props.scores.length <= 5 || showAllScores || (
                 <Button

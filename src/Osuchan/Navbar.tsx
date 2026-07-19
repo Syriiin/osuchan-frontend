@@ -192,7 +192,7 @@ const Navbar = observer(() => {
     useAutorun(() => {
         setAddScoreUserUrl(
             `https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` ||
-                ""
+                "",
         );
     });
 
@@ -211,7 +211,7 @@ const Navbar = observer(() => {
         const userUrlMatch = addScoreUserUrl.match(userUrlRe);
         const beatmapUrlRe = new RegExp(
             /osu.ppy.sh\/beatmapsets\/\d+#(osu|taiko|fruits|mania)\/(\d+)/,
-            "g"
+            "g",
         );
 
         let match;
@@ -237,7 +237,7 @@ const Navbar = observer(() => {
         setAddScoreUserUrl(
             osuUserId !== undefined
                 ? `https://osu.ppy.sh/users/${osuUserId.toString()}`
-                : ""
+                : "",
         );
         setAddScoreBeatmapUrl("");
     };
@@ -328,7 +328,7 @@ const Navbar = observer(() => {
                                     <Link
                                         key={i}
                                         to={`/leaderboards/community/${formatGamemodeNameShort(
-                                            invite.leaderboard!.gamemode
+                                            invite.leaderboard!.gamemode,
                                         )}/${invite.leaderboardId}`}
                                     >
                                         <SimpleMenuItem>
@@ -413,7 +413,7 @@ const Navbar = observer(() => {
                                             placeholder="https://osu.ppy.sh/users/5701575"
                                             onChange={(e) =>
                                                 setAddScoreUserUrl(
-                                                    e.currentTarget.value
+                                                    e.currentTarget.value,
                                                 )
                                             }
                                             value={addScoreUserUrl}
@@ -427,7 +427,7 @@ const Navbar = observer(() => {
                                             placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
                                             onChange={(e) =>
                                                 setAddScoreBeatmapUrl(
-                                                    e.currentTarget.value
+                                                    e.currentTarget.value,
                                                 )
                                             }
                                             value={addScoreBeatmapUrl}

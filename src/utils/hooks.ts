@@ -11,7 +11,7 @@ export const useAction = (fn: () => void, deps: React.DependencyList) => {
 
 export const useAutorun = (
     view: (r: IReactionPublic) => any,
-    opts?: IAutorunOptions
+    opts?: IAutorunOptions,
 ) => {
     useEffect(() => {
         autorun(view, opts);

@@ -78,7 +78,7 @@ const LeaderboardList = observer(() => {
             if (isAuthenticated) {
                 listStore.loadCommunityMemberships(
                     localStore.gamemode,
-                    user!.osuUserId
+                    user!.osuUserId,
                 );
             }
         }
@@ -87,7 +87,7 @@ const LeaderboardList = observer(() => {
         if (localStore.leaderboardType === "global") {
             listStore.loadGlobalLeaderboards(
                 localStore.gamemode,
-                user?.osuUserId
+                user?.osuUserId,
             );
         }
     });
@@ -183,7 +183,7 @@ const LeaderboardList = observer(() => {
                     <>
                         {hasFlag(
                             listStore.globalLeaderboardsStatus,
-                            PaginatedResourceStatus.ContentAvailable
+                            PaginatedResourceStatus.ContentAvailable,
                         ) && (
                             <>
                                 {/* NOTE: ideally we want to defer loading leaderboards until we are logged in so we dont needlessly load the leaderboards and then memberships straight after */}
@@ -219,7 +219,7 @@ const LeaderboardList = observer(() => {
                                 </SurfaceSubtitle>
                                 {hasFlag(
                                     listStore.communityMembershipsStatus,
-                                    PaginatedResourceStatus.ContentAvailable
+                                    PaginatedResourceStatus.ContentAvailable,
                                 ) && (
                                     <>
                                         <JoinedLeaderboards
@@ -228,7 +228,7 @@ const LeaderboardList = observer(() => {
 
                                         {hasFlag(
                                             listStore.communityMembershipsStatus,
-                                            PaginatedResourceStatus.MoreToLoad
+                                            PaginatedResourceStatus.MoreToLoad,
                                         ) && (
                                             <Button
                                                 fullWidth
@@ -238,7 +238,7 @@ const LeaderboardList = observer(() => {
                                                 }
                                                 action={() =>
                                                     listStore.loadNextCommunityMembershipsPage(
-                                                        user!.osuUserId
+                                                        user!.osuUserId,
                                                     )
                                                 }
                                             >
@@ -282,7 +282,7 @@ const LeaderboardList = observer(() => {
                         </SurfaceHeaderContainer>
                         {hasFlag(
                             listStore.communityLeaderboardsStatus,
-                            PaginatedResourceStatus.ContentAvailable
+                            PaginatedResourceStatus.ContentAvailable,
                         ) && (
                             <BottomScrollDetector
                                 onBottomScrolled={
@@ -296,7 +296,7 @@ const LeaderboardList = observer(() => {
                         )}
                         {hasFlag(
                             listStore.communityLeaderboardsStatus,
-                            PaginatedResourceStatus.Loading
+                            PaginatedResourceStatus.Loading,
                         ) && <LoadingSection />}
                         <CreateLeaderboardModal
                             open={createLeaderboardModalOpen}

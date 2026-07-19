@@ -84,7 +84,7 @@ export function beatmapFromJson(data: any): Beatmap {
 export function scoreFromJson(
     data: any,
     defaultEngine: string | null = null,
-    primaryPerformanceValue: string = "total"
+    primaryPerformanceValue: string = "total",
 ): Score {
     if (defaultEngine === null) {
         switch (data["gamemode"]) {
@@ -154,13 +154,13 @@ export function scoreFromJson(
             performanceCalculations
                 .at(0)
                 ?.performanceValues.find(
-                    (value) => value["name"] === primaryPerformanceValue
+                    (value) => value["name"] === primaryPerformanceValue,
                 )?.value ?? 0,
         difficultyTotal:
             performanceCalculations
                 .at(0)
                 ?.difficultyCalculation.difficultyValues.find(
-                    (value) => value["name"] === "total"
+                    (value) => value["name"] === "total",
                 )?.value ?? 0,
         performanceCalculations: performanceCalculations,
     };
@@ -197,14 +197,14 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
 }
 
 export function difficultyCalculationFromJson(
-    data: any
+    data: any,
 ): DifficultyCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
         mods: data["mods"],
         difficultyValues: data["difficulty_values"].map(
-            difficultyValueFromJson
+            difficultyValueFromJson,
         ),
     };
 }
@@ -217,16 +217,16 @@ export function difficultyValueFromJson(data: any): DifficultyValue {
 }
 
 export function performanceCalculationFromJson(
-    data: any
+    data: any,
 ): PerformanceCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
         performanceValues: data["performance_values"].map(
-            performanceValueFromJson
+            performanceValueFromJson,
         ),
         difficultyCalculation: difficultyCalculationFromJson(
-            data["difficulty_calculation"]
+            data["difficulty_calculation"],
         ),
     };
 }

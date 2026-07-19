@@ -1,7 +1,7 @@
 import React from "react";
 
 export const ClickPropagationSupressor = (
-    props: ClickPropagationSupressorProps
+    props: ClickPropagationSupressorProps,
 ) => <div onClick={(e) => e.stopPropagation()}>{props.children}</div>;
 
 interface ClickPropagationSupressorProps {

@@ -14,7 +14,8 @@ const TeamScores = styled.div`
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     padding: 0;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
             `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
@@ -212,16 +213,16 @@ interface ScoreRowProps {
 const ScoreChart = observer((props: ScoreChartProps) => {
     const scoreValues = props.topScores.map((score) => score.performanceTotal);
     const weightedScores = scoreValues.map(
-        (value, index) => value * props.ppDecayBase ** index
+        (value, index) => value * props.ppDecayBase ** index,
     );
     const topScoreTotal = weightedScores.reduce((acc, value) => acc + value, 0);
     const missingPp = props.teamPpTotal - topScoreTotal;
 
     const mainScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal > 0.01
+        (score) => score / props.teamPpTotal > 0.01,
     );
     const otherScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal <= 0.01
+        (score) => score / props.teamPpTotal <= 0.01,
     );
     const otherScoresContribution =
         otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
@@ -255,7 +256,7 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                             "en",
                             {
                                 maximumFractionDigits: 0,
-                            }
+                            },
                         )}%`;
                     }}
                 />

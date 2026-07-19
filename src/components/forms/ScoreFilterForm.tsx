@@ -41,13 +41,13 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const [presetName, setPresetName] = useState("");
 
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(
-        AllowedBeatmapStatus.RankedOnly
+        AllowedBeatmapStatus.RankedOnly,
     );
     const [oldestBeatmapDate, setOldestBeatmapDate] = useState<Date | null>(
-        null
+        null,
     );
     const [newestBeatmapDate, setNewestBeatmapDate] = useState<Date | null>(
-        null
+        null,
     );
     const [oldestScoreDate, setOldestScoreDate] = useState<Date | null>(null);
     const [newestScoreDate, setNewestScoreDate] = useState<Date | null>(null);
@@ -102,7 +102,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             highestAccuracy,
             lowestLength,
             highestLength,
-        ]
+        ],
     );
 
     // Call onChange if the score filters update
@@ -128,7 +128,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
 
         setAllowedBeatmapStatus(
             preset?.scoreFilter?.allowedBeatmapStatus ??
-                AllowedBeatmapStatus.RankedOnly
+                AllowedBeatmapStatus.RankedOnly,
         );
         setOldestBeatmapDate(preset?.scoreFilter?.oldestBeatmapDate ?? null);
         setNewestBeatmapDate(preset?.scoreFilter?.newestBeatmapDate ?? null);
@@ -143,10 +143,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setRequiredMods(preset?.scoreFilter?.requiredModsJson ?? []);
         setDisqualifiedMods(preset?.scoreFilter?.disqualifiedModsJson ?? []);
         setLowestAccuracy(
-            preset?.scoreFilter?.lowestAccuracy?.toString() ?? ""
+            preset?.scoreFilter?.lowestAccuracy?.toString() ?? "",
         );
         setHighestAccuracy(
-            preset?.scoreFilter?.highestAccuracy?.toString() ?? ""
+            preset?.scoreFilter?.highestAccuracy?.toString() ?? "",
         );
         setLowestLength(preset?.scoreFilter?.lowestLength?.toString() ?? "");
         setHighestLength(preset?.scoreFilter?.highestLength?.toString() ?? "");
@@ -155,13 +155,13 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const handleSavePreset = () =>
         meStore.createScoreFilterPreset(
             presetName || "New Preset",
-            getScoreFilter()
+            getScoreFilter(),
         );
     const handleUpdatePreset = () =>
         meStore.updateScoreFilterPreset(
             preset!.id,
             presetName || preset!.name,
-            getScoreFilter()
+            getScoreFilter(),
         );
     const handleDeletePreset = () =>
         meStore.deleteScoreFilterPreset(preset!.id);
@@ -179,7 +179,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     onChange={(value) =>
                         loadPreset(
                             presets.find((preset) => preset.id === value) ??
-                                null
+                                null,
                         )
                     }
                     options={[
@@ -306,7 +306,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <ModsSelect
                     gamemode={gamemode}
                     value={modsJsonFromModAcronyms(
-                        value.requiredModsJson || []
+                        value.requiredModsJson || [],
                     )}
                     onChange={(mods) =>
                         setRequiredMods(modAcronymsFromJsonMods(mods))
@@ -318,7 +318,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <ModsSelect
                     gamemode={gamemode}
                     value={modsJsonFromModAcronyms(
-                        value.disqualifiedModsJson || []
+                        value.disqualifiedModsJson || [],
                     )}
                     onChange={(mods) =>
                         setDisqualifiedMods(modAcronymsFromJsonMods(mods))
@@ -328,7 +328,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
 
             {/* Ranges */}
             {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(
-                gamemode
+                gamemode,
             ) && (
                 <>
                     <FormLabel>

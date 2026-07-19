@@ -76,7 +76,7 @@ const CreateLeaderboardModal = observer(
                 </form>
             </SimpleModal>
         );
-    }
+    },
 );
 
 interface CreateLeaderboardModalProps {

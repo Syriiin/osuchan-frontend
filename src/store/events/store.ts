@@ -63,7 +63,7 @@ export class EventsStore {
                 params: { limit: 50, offset: 0 },
             });
             const events: Event[] = response.data.results.map((data: any) =>
-                eventFromJson(data)
+                eventFromJson(data),
             );
 
             this.events.replace(events);
@@ -116,7 +116,7 @@ export class EventsStore {
                 params: { limit, offset },
             });
             const attendees: EventAttendee[] = response.data.results.map(
-                (data: any) => eventAttendeeFromJson(data)
+                (data: any) => eventAttendeeFromJson(data),
             );
             this.attendeesCount = response.data.count;
             this.eventAttendees.replace(attendees);
@@ -157,7 +157,7 @@ export class EventsStore {
         try {
             yield http.delete(`/api/events/${slug}/attendees/${userId}`);
             this.eventAttendees.replace(
-                this.eventAttendees.filter((a) => a.user.id !== userId)
+                this.eventAttendees.filter((a) => a.user.id !== userId),
             );
             this.attendeesCount = Math.max(0, this.attendeesCount - 1);
             notify.positive("Attendee removed");
@@ -181,7 +181,7 @@ export class EventsStore {
         try {
             const response = yield http.get(`/api/events/${slug}/leaderboards`);
             const leaderboards: EventLeaderboard[] = response.data.map(
-                (data: any) => eventLeaderboardFromJson(data)
+                (data: any) => eventLeaderboardFromJson(data),
             );
             this.eventLeaderboards.replace(leaderboards);
             this.loadingLeaderboardsStatus = ResourceStatus.Loaded;
@@ -197,7 +197,7 @@ export class EventsStore {
         try {
             const response = yield http.post(
                 `/api/events/${slug}/leaderboards`,
-                data
+                data,
             );
             const leaderboard = eventLeaderboardFromJson(response.data);
             this.eventLeaderboards.push(leaderboard);
@@ -207,7 +207,7 @@ export class EventsStore {
             const errorMessage = error.response?.data?.detail;
             if (errorMessage) {
                 notify.negative(
-                    `Failed to create leaderboard: ${errorMessage}`
+                    `Failed to create leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to create leaderboard");
@@ -222,12 +222,12 @@ export class EventsStore {
 
         try {
             yield http.delete(
-                `/api/events/${slug}/leaderboards/${eventLeaderboardId}`
+                `/api/events/${slug}/leaderboards/${eventLeaderboardId}`,
             );
             this.eventLeaderboards.replace(
                 this.eventLeaderboards.filter(
-                    (lb) => lb.id !== eventLeaderboardId
-                )
+                    (lb) => lb.id !== eventLeaderboardId,
+                ),
             );
             notify.positive("Leaderboard deleted");
         } catch (error: any) {
@@ -235,7 +235,7 @@ export class EventsStore {
             const errorMessage = error.response?.data?.detail;
             if (errorMessage) {
                 notify.negative(
-                    `Failed to delete leaderboard: ${errorMessage}`
+                    `Failed to delete leaderboard: ${errorMessage}`,
                 );
             } else {
                 notify.negative("Failed to delete leaderboard");

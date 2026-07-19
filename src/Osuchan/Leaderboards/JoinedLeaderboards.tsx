@@ -9,7 +9,7 @@ const JoinedLeaderboards = observer((props: JoinedLeaderboardsProps) => (
             <UnstyledLink
                 key={i}
                 to={`/leaderboards/community/${formatGamemodeNameShort(
-                    membership.leaderboard!.gamemode
+                    membership.leaderboard!.gamemode,
                 )}/${membership.leaderboardId}`}
             >
                 <CommunityLeaderboardRow
