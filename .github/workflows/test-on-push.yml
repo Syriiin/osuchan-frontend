@@ -1,0 +1,31 @@
+name: test-on-push
+on: [push]
+jobs:
+    checkfixup:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+            - run: make checkfixup
+
+    checkformatting:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v6
+            - run: make setup
+            - run: make checkformatting
+
+    test:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v6
+            - run: make setup
+            - run: make test
+
+    build:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v6
+            - run: make setup
+            - run: make build
