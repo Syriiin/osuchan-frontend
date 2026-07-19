@@ -12,7 +12,10 @@ import {
 } from "../../../components";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
-import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
+import {
+    setCssCustomProperties,
+    clearCssCustomProperties,
+} from "../../../utils/general";
 
 const AttendeesSurface = styled(Surface)`
     margin: 20px auto;
@@ -54,8 +57,6 @@ const AttendeeAvatar = styled.img`
     border-radius: 50%;
     border: 2px solid ${(props) => props.theme.colours.midground};
 `;
-
-
 
 const PaginationBar = styled.div`
     display: flex;
@@ -154,7 +155,9 @@ const AttendeesPage = observer(() => {
                         <PageHeader>
                             <Title>Attendees ({attendeesCount})</Title>
                             <UnstyledLink to={eventUrl}>
-                                <Button type="button">&larr; Back to Event</Button>
+                                <Button type="button">
+                                    &larr; Back to Event
+                                </Button>
                             </UnstyledLink>
                         </PageHeader>
 
@@ -172,9 +175,7 @@ const AttendeesPage = observer(() => {
                                             src={`https://a.ppy.sh/${attendee.user.id}`}
                                             alt={attendee.user.username}
                                         />
-                                        <span>
-                                            {attendee.user.username}
-                                        </span>
+                                        <span>{attendee.user.username}</span>
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
@@ -198,8 +199,8 @@ const AttendeesPage = observer(() => {
                         <PaginationBar>
                             <CountInfo>
                                 Showing {offset + 1}–
-                                {Math.min(offset + PAGE_SIZE, attendeesCount)} of{" "}
-                                {attendeesCount}
+                                {Math.min(offset + PAGE_SIZE, attendeesCount)}{" "}
+                                of {attendeesCount}
                             </CountInfo>
                             {attendeesCount > PAGE_SIZE && (
                                 <div style={{ display: "flex", gap: "8px" }}>

@@ -11,7 +11,10 @@ import {
     Button,
 } from "../../../components";
 import { BitMods, Gamemode } from "../../../store/models/common/enums";
-import { AllowedBeatmapStatus, ScoreSet } from "../../../store/models/profiles/enums";
+import {
+    AllowedBeatmapStatus,
+    ScoreSet,
+} from "../../../store/models/profiles/enums";
 import { useStore } from "../../../utils/hooks";
 
 const CreateLeaderboardModal = observer(

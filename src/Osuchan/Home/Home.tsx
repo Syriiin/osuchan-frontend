@@ -73,7 +73,8 @@ const Home = () => {
                 <title>Home - osu!chan</title>
                 <meta
                     name="description"
-                    content="osu!chan - osu! stats, custom leaderboards, and much more!" />
+                    content="osu!chan - osu! stats, custom leaderboards, and much more!"
+                />
             </Helmet>
 
             <HomeWrapper>
@@ -89,8 +90,11 @@ const Home = () => {
                                 id="home-search"
                                 placeholder="osu! username"
                                 autoComplete="off"
-                                onChange={(e) => setSearchValue(e.currentTarget.value)}
-                                value={searchValue} />
+                                onChange={(e) =>
+                                    setSearchValue(e.currentTarget.value)
+                                }
+                                value={searchValue}
+                            />
                             <SearchButton type="submit">Search</SearchButton>
                         </SearchContainer>
                     </form>

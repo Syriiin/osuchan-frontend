@@ -15,7 +15,10 @@ import {
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
-import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
+import {
+    setCssCustomProperties,
+    clearCssCustomProperties,
+} from "../../../utils/general";
 import AddAttendeeModal from "./AddAttendeeModal";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
 
@@ -260,19 +263,25 @@ const EventHome = observer(() => {
                                 {attendeesCount > MAX_VISIBLE_AVATARS && (
                                     <UnstyledLink to={`${url}/attendees`}>
                                         <ExtraCount>
-                                            +{attendeesCount - MAX_VISIBLE_AVATARS} more
+                                            +
+                                            {attendeesCount -
+                                                MAX_VISIBLE_AVATARS}{" "}
+                                            more
                                         </ExtraCount>
                                     </UnstyledLink>
                                 )}
-                                {attendeesCount > 0 && attendeesCount <= MAX_VISIBLE_AVATARS && (
-                                    <UnstyledLink to={`${url}/attendees`}>
-                                        <ExtraCount>View all</ExtraCount>
-                                    </UnstyledLink>
-                                )}
+                                {attendeesCount > 0 &&
+                                    attendeesCount <= MAX_VISIBLE_AVATARS && (
+                                        <UnstyledLink to={`${url}/attendees`}>
+                                            <ExtraCount>View all</ExtraCount>
+                                        </UnstyledLink>
+                                    )}
                             </AvatarStack>
                         )}
                         {loadingAttendeesStatus === ResourceStatus.Loaded &&
-                            eventAttendees.length === 0 && <p>No attendees yet.</p>}
+                            eventAttendees.length === 0 && (
+                                <p>No attendees yet.</p>
+                            )}
                     </EventSurface>
 
                     <EventSurface>
@@ -321,8 +330,7 @@ const EventHome = observer(() => {
                                     )}
                                 </LeaderboardRow>
                             ))}
-                        {loadingLeaderboardsStatus ===
-                            ResourceStatus.Loaded &&
+                        {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
                             eventLeaderboards.length === 0 && (
                                 <p>No leaderboards yet.</p>
                             )}

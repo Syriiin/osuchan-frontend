@@ -131,12 +131,9 @@ export class EventsStore {
         this.isAddingAttendee = true;
 
         try {
-            const response = yield http.post(
-                `/api/events/${slug}/attendees`,
-                {
-                    user_id: userId,
-                }
-            );
+            const response = yield http.post(`/api/events/${slug}/attendees`, {
+                user_id: userId,
+            });
             const attendee = eventAttendeeFromJson(response.data);
             this.eventAttendees.push(attendee);
             this.attendeesCount += 1;
@@ -182,9 +179,7 @@ export class EventsStore {
         this.eventLeaderboards.clear();
 
         try {
-            const response = yield http.get(
-                `/api/events/${slug}/leaderboards`
-            );
+            const response = yield http.get(`/api/events/${slug}/leaderboards`);
             const leaderboards: EventLeaderboard[] = response.data.map(
                 (data: any) => eventLeaderboardFromJson(data)
             );

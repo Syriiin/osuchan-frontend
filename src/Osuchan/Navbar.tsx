@@ -48,7 +48,7 @@ const LinksContainer = styled.div`
     align-items: center;
 `;
 
-const NavbarLink = styled(Link) <NavbarLinkProps>`
+const NavbarLink = styled(Link)<NavbarLinkProps>`
     margin: 10px;
     font-size: 1.1em;
     font-weight: normal;
@@ -63,9 +63,9 @@ const NavbarLink = styled(Link) <NavbarLinkProps>`
     &:hover {
         text-decoration: none;
         color: ${(props) =>
-        props.$active
-            ? props.theme.colours.mango
-            : props.theme.colours.timber};
+            props.$active
+                ? props.theme.colours.mango
+                : props.theme.colours.timber};
     }
 `;
 
@@ -192,7 +192,7 @@ const Navbar = observer(() => {
     useAutorun(() => {
         setAddScoreUserUrl(
             `https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` ||
-            ""
+                ""
         );
     });
 
@@ -264,16 +264,27 @@ const Navbar = observer(() => {
 
                 <LinksContainer>
                     {/* Links */}
-                    <NavbarLink to="/" $active={location.pathname === "/" || location.pathname.startsWith("/users")}>
+                    <NavbarLink
+                        to="/"
+                        $active={
+                            location.pathname === "/" ||
+                            location.pathname.startsWith("/users")
+                        }
+                    >
                         profiles
                     </NavbarLink>
                     <NavbarLink
-                        to={leaderboardsMatch?.url ?? "/leaderboards/global/osu"}
+                        to={
+                            leaderboardsMatch?.url ?? "/leaderboards/global/osu"
+                        }
                         $active={leaderboardsMatch !== null}
                     >
                         leaderboards
                     </NavbarLink>
-                    <NavbarLink to="/events" $active={location.pathname.startsWith("/events")}>
+                    <NavbarLink
+                        to="/events"
+                        $active={location.pathname.startsWith("/events")}
+                    >
                         events
                     </NavbarLink>
                 </LinksContainer>
@@ -285,7 +296,9 @@ const Navbar = observer(() => {
                             <SearchInput
                                 id="home-search"
                                 placeholder="osu! username"
-                                onChange={(e) => setSearchValue(e.currentTarget.value)}
+                                onChange={(e) =>
+                                    setSearchValue(e.currentTarget.value)
+                                }
                                 value={searchValue}
                             />
                             <FontAwesomeIcon icon={faSearch} />
@@ -322,7 +335,8 @@ const Navbar = observer(() => {
                                             <InviteWrapper>
                                                 <InviteLeaderboardImage
                                                     src={
-                                                        invite.leaderboard!.iconUrl
+                                                        invite.leaderboard!
+                                                            .iconUrl
                                                     }
                                                     alt="Leaderboard icon"
                                                 />
@@ -345,7 +359,9 @@ const Navbar = observer(() => {
                                 )}
                                 <SimpleMenuDivider />
                                 <Link to="/me/invites">
-                                    <SimpleMenuItem>See all invites</SimpleMenuItem>
+                                    <SimpleMenuItem>
+                                        See all invites
+                                    </SimpleMenuItem>
                                 </Link>
                             </SimpleMenu>
                             <SimpleMenu
@@ -353,8 +369,9 @@ const Navbar = observer(() => {
                                 triggerElement={
                                     <UserAvatarWrapper>
                                         <UserAvatar
-                                            src={`https://a.ppy.sh/${user!.osuUserId
-                                                }`}
+                                            src={`https://a.ppy.sh/${
+                                                user!.osuUserId
+                                            }`}
                                         />
                                     </UserAvatarWrapper>
                                 }
@@ -380,11 +397,12 @@ const Navbar = observer(() => {
                             >
                                 <SimpleModalTitle>Add Scores</SimpleModalTitle>
                                 <p>
-                                    Enter a player's osu! profile URL and beatmap
-                                    URL(s) to add scores from those beatmaps.
+                                    Enter a player's osu! profile URL and
+                                    beatmap URL(s) to add scores from those
+                                    beatmaps.
                                     <br />
-                                    URLs must be from the new site so they match the
-                                    format below.
+                                    URLs must be from the new site so they match
+                                    the format below.
                                 </p>
                                 <form onSubmit={handleAddScoreSubmit}>
                                     <label>

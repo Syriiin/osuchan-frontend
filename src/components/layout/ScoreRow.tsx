@@ -138,7 +138,8 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                             <small>by</small> {beatmap.artist}
                         </Artist>
                         <DifficultyName>
-                            {beatmap.difficultyName} <CreatorName> - {beatmap.creatorName}</CreatorName>
+                            {beatmap.difficultyName}{" "}
+                            <CreatorName> - {beatmap.creatorName}</CreatorName>
                         </DifficultyName>
                     </BeatmapInfo>
                 )}

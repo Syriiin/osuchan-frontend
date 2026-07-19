@@ -1,5 +1,15 @@
 import { Gamemode } from "../common/enums";
-import { Beatmap, DifficultyCalculation, DifficultyValue, OsuUser, PerformanceCalculation, PerformanceValue, Score, ScoreFilter, UserStats } from "./types";
+import {
+    Beatmap,
+    DifficultyCalculation,
+    DifficultyValue,
+    OsuUser,
+    PerformanceCalculation,
+    PerformanceValue,
+    Score,
+    ScoreFilter,
+    UserStats,
+} from "./types";
 
 export function osuUserFromJson(data: any): OsuUser {
     return {
@@ -71,7 +81,11 @@ export function beatmapFromJson(data: any): Beatmap {
     };
 }
 
-export function scoreFromJson(data: any, defaultEngine: string | null = null, primaryPerformanceValue: string = "total"): Score {
+export function scoreFromJson(
+    data: any,
+    defaultEngine: string | null = null,
+    primaryPerformanceValue: string = "total"
+): Score {
     if (defaultEngine === null) {
         switch (data["gamemode"]) {
             case Gamemode.Standard:
@@ -88,7 +102,9 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
                 break;
         }
     }
-    const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
+    const performanceCalculations: PerformanceCalculation[] = data[
+        "performance_calculations"
+    ].map(performanceCalculationFromJson);
     performanceCalculations.sort((a, b) => {
         if (a.calculatorEngine === defaultEngine) {
             // If a is the default engine, sort it before b
@@ -134,8 +150,18 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === primaryPerformanceValue)?.value ?? 0,
-        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
+        performanceTotal:
+            performanceCalculations
+                .at(0)
+                ?.performanceValues.find(
+                    (value) => value["name"] === primaryPerformanceValue
+                )?.value ?? 0,
+        difficultyTotal:
+            performanceCalculations
+                .at(0)
+                ?.difficultyCalculation.difficultyValues.find(
+                    (value) => value["name"] === "total"
+                )?.value ?? 0,
         performanceCalculations: performanceCalculations,
     };
 }
@@ -170,12 +196,16 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
     };
 }
 
-export function difficultyCalculationFromJson(data: any): DifficultyCalculation {
+export function difficultyCalculationFromJson(
+    data: any
+): DifficultyCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
         mods: data["mods"],
-        difficultyValues: data["difficulty_values"].map(difficultyValueFromJson),
+        difficultyValues: data["difficulty_values"].map(
+            difficultyValueFromJson
+        ),
     };
 }
 
@@ -186,12 +216,18 @@ export function difficultyValueFromJson(data: any): DifficultyValue {
     };
 }
 
-export function performanceCalculationFromJson(data: any): PerformanceCalculation {
+export function performanceCalculationFromJson(
+    data: any
+): PerformanceCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
-        performanceValues: data["performance_values"].map(performanceValueFromJson),
-        difficultyCalculation: difficultyCalculationFromJson(data["difficulty_calculation"]),
+        performanceValues: data["performance_values"].map(
+            performanceValueFromJson
+        ),
+        difficultyCalculation: difficultyCalculationFromJson(
+            data["difficulty_calculation"]
+        ),
     };
 }
 

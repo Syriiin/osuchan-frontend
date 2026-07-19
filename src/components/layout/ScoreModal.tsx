@@ -6,7 +6,12 @@ import { observer } from "mobx-react-lite";
 import { Fragment, useState } from "react";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
 import { Score } from "../../store/models/profiles/types";
-import { formatCalculatorEngine, formatDiffcalcValueName, formatScoreResult, formatTime } from "../../utils/formatting";
+import {
+    formatCalculatorEngine,
+    formatDiffcalcValueName,
+    formatScoreResult,
+    formatTime,
+} from "../../utils/formatting";
 import { Button } from "../forms/Button";
 import { BasicModal } from "./BasicModal";
 import { DataCell, DataTable } from "./DataTable";
@@ -195,33 +200,33 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             Gamemode.Catch,
                             Gamemode.Mania,
                         ].includes(score.gamemode) && (
-                                <tr>
-                                    <td>
-                                        {score.gamemode === Gamemode.Mania
-                                            ? "Keys"
-                                            : "Circle Size"}
-                                    </td>
-                                    <DataCell>
-                                        <NumberFormat
-                                            value={score.circleSize}
-                                            decimalPlaces={1}
-                                        />
-                                    </DataCell>
-                                </tr>
-                            )}
+                            <tr>
+                                <td>
+                                    {score.gamemode === Gamemode.Mania
+                                        ? "Keys"
+                                        : "Circle Size"}
+                                </td>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.circleSize}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
+                            </tr>
+                        )}
                         {[Gamemode.Standard, Gamemode.Catch].includes(
                             score.gamemode
                         ) && (
-                                <tr>
-                                    <td>Approach Rate</td>
-                                    <DataCell>
-                                        <NumberFormat
-                                            value={score.approachRate}
-                                            decimalPlaces={1}
-                                        />
-                                    </DataCell>
-                                </tr>
-                            )}
+                            <tr>
+                                <td>Approach Rate</td>
+                                <DataCell>
+                                    <NumberFormat
+                                        value={score.approachRate}
+                                        decimalPlaces={1}
+                                    />
+                                </DataCell>
+                            </tr>
+                        )}
                         <tr>
                             <td>Overall Difficulty</td>
                             <DataCell>
@@ -251,19 +256,27 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             <>
                                 <tr>
                                     <td>300</td>
-                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["great"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>100</td>
-                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["ok"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>50</td>
-                                    <DataCell>{score.statistics["meh"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["meh"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Miss</td>
-                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["miss"] ?? 0}
+                                    </DataCell>
                                 </tr>
                             </>
                         )}
@@ -271,15 +284,21 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             <>
                                 <tr>
                                     <td>Great</td>
-                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["great"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Good</td>
-                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["ok"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Miss</td>
-                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["miss"] ?? 0}
+                                    </DataCell>
                                 </tr>
                             </>
                         )}
@@ -287,23 +306,36 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             <>
                                 <tr>
                                     <td>Fruits</td>
-                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["great"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Ticks</td>
-                                    <DataCell>{score.statistics["large_tick_hit"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["large_tick_hit"] ??
+                                            0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Droplets</td>
-                                    <DataCell>{score.statistics["small_tick_hit"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["small_tick_hit"] ??
+                                            0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Droplet Miss</td>
-                                    <DataCell>{score.statistics["small_tick_miss"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["small_tick_miss"] ??
+                                            0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Miss</td>
-                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["miss"] ?? 0}
+                                    </DataCell>
                                 </tr>
                             </>
                         )}
@@ -311,27 +343,39 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                             <>
                                 <tr>
                                     <td>MAX</td>
-                                    <DataCell>{score.statistics["perfect"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["perfect"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>300</td>
-                                    <DataCell>{score.statistics["great"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["great"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>200</td>
-                                    <DataCell>{score.statistics["good"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["good"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>100</td>
-                                    <DataCell>{score.statistics["ok"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["ok"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>50</td>
-                                    <DataCell>{score.statistics["meh"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["meh"] ?? 0}
+                                    </DataCell>
                                 </tr>
                                 <tr>
                                     <td>Miss</td>
-                                    <DataCell>{score.statistics["miss"] ?? 0}</DataCell>
+                                    <DataCell>
+                                        {score.statistics["miss"] ?? 0}
+                                    </DataCell>
                                 </tr>
                             </>
                         )}
@@ -357,57 +401,69 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                 </ScoreInfo>
             </InfoContainer>
             <DetailsBar action={() => setDetailsOpen(!detailsOpen)}>
-                <Chevron
-                    open={detailsOpen}
-                    icon={faChevronDown}
-                    size="sm"
-                />
-                {detailsOpen ? (
-                    " Hide difficulty and performance details "
-                ) : (
-                    " Show difficulty and performance details "
-                )}
-                <Chevron
-                    open={detailsOpen}
-                    icon={faChevronDown}
-                    size="sm"
-                />
+                <Chevron open={detailsOpen} icon={faChevronDown} size="sm" />
+                {detailsOpen
+                    ? " Hide difficulty and performance details "
+                    : " Show difficulty and performance details "}
+                <Chevron open={detailsOpen} icon={faChevronDown} size="sm" />
             </DetailsBar>
             <DetailsCollapser open={detailsOpen}>
                 <DetailsContainer>
-                    {score.performanceCalculations.map(performanceCalculation => (
-                        <Fragment key={performanceCalculation.calculatorEngine}>
-                            <DiffcalcHeader>{formatCalculatorEngine(performanceCalculation.calculatorEngine)}</DiffcalcHeader>
-                            <DiffcalcDetailsContainer>
-                                <DifficultyDataTable>
-                                    {performanceCalculation.difficultyCalculation.difficultyValues.map((value) => (
-                                        <tr key={value.name}>
-                                            <td>{formatDiffcalcValueName(value.name)}</td>
-                                            <DataCell>
-                                                <NumberFormat
-                                                    value={value.value}
-                                                    decimalPlaces={2}
-                                                /> stars
-                                            </DataCell>
-                                        </tr>
-                                    ))}
-                                </DifficultyDataTable>
-                                <PerformanceDataTable>
-                                    {performanceCalculation.performanceValues.map((value) => (
-                                        <tr key={value.name}>
-                                            <td>{formatDiffcalcValueName(value.name)}</td>
-                                            <DataCell>
-                                                <NumberFormat
-                                                    value={value.value}
-                                                    decimalPlaces={0}
-                                                />pp
-                                            </DataCell>
-                                        </tr>
-                                    ))}
-                                </PerformanceDataTable>
-                            </DiffcalcDetailsContainer>
-                        </Fragment>
-                    ))}
+                    {score.performanceCalculations.map(
+                        (performanceCalculation) => (
+                            <Fragment
+                                key={performanceCalculation.calculatorEngine}
+                            >
+                                <DiffcalcHeader>
+                                    {formatCalculatorEngine(
+                                        performanceCalculation.calculatorEngine
+                                    )}
+                                </DiffcalcHeader>
+                                <DiffcalcDetailsContainer>
+                                    <DifficultyDataTable>
+                                        {performanceCalculation.difficultyCalculation.difficultyValues.map(
+                                            (value) => (
+                                                <tr key={value.name}>
+                                                    <td>
+                                                        {formatDiffcalcValueName(
+                                                            value.name
+                                                        )}
+                                                    </td>
+                                                    <DataCell>
+                                                        <NumberFormat
+                                                            value={value.value}
+                                                            decimalPlaces={2}
+                                                        />{" "}
+                                                        stars
+                                                    </DataCell>
+                                                </tr>
+                                            )
+                                        )}
+                                    </DifficultyDataTable>
+                                    <PerformanceDataTable>
+                                        {performanceCalculation.performanceValues.map(
+                                            (value) => (
+                                                <tr key={value.name}>
+                                                    <td>
+                                                        {formatDiffcalcValueName(
+                                                            value.name
+                                                        )}
+                                                    </td>
+                                                    <DataCell>
+                                                        <NumberFormat
+                                                            value={value.value}
+                                                            decimalPlaces={0}
+                                                        />
+                                                        pp
+                                                    </DataCell>
+                                                </tr>
+                                            )
+                                        )}
+                                    </PerformanceDataTable>
+                                </DiffcalcDetailsContainer>
+                            </Fragment>
+                        )
+                    )}
                 </DetailsContainer>
             </DetailsCollapser>
         </BasicModal>

@@ -17,12 +17,11 @@ const TopScores = observer((props: TopScoresProps) => {
     return (
         <TopScoresSurface>
             <SurfaceTitle>Top Scores</SurfaceTitle>
-            {(showAllScores
-                ? props.scores
-                : props.scores.slice(0, 5)
-            ).map((score, i) => (
-                <ScoreRow key={i} score={score} />
-            ))}
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map(
+                (score, i) => (
+                    <ScoreRow key={i} score={score} />
+                )
+            )}
             {props.scores.length > 5 && !showAllScores && (
                 <Button
                     type="button"

@@ -83,17 +83,14 @@ const EventList = observer(() => {
                                 <EventIconContainer>
                                     <EventIcon
                                         src={
-                                            event.logo ||
-                                            "/static/icon-64.png"
+                                            event.logo || "/static/icon-64.png"
                                         }
                                     />
                                 </EventIconContainer>
                                 <EventTitleContainer>
                                     <EventTitle>{event.name}</EventTitle>
                                     <EventSubtitle>
-                                        <AbsoluteDate
-                                            date={event.startDate}
-                                        />{" "}
+                                        <AbsoluteDate date={event.startDate} />{" "}
                                         - <AbsoluteDate date={event.endDate} />
                                     </EventSubtitle>
                                 </EventTitleContainer>

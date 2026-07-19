@@ -12,7 +12,7 @@ import {
     calculateCircleSize,
     calculateClassicAccuracy,
     calculateLength,
-    calculateOverallDifficulty
+    calculateOverallDifficulty,
 } from "../../utils/osu";
 import { getScoreResult } from "../../utils/osuchan";
 import { Gamemode } from "../models/common/enums";
@@ -23,7 +23,12 @@ import {
     userStatsFromJson,
 } from "../models/profiles/deserialisers";
 import { ScoreSet } from "../models/profiles/enums";
-import { ModsJson, Score, ScoreFilter, UserStats } from "../models/profiles/types";
+import {
+    ModsJson,
+    Score,
+    ScoreFilter,
+    UserStats,
+} from "../models/profiles/types";
 import { PaginatedResourceStatus, ResourceStatus } from "../status";
 
 function calculateScoreStyleValue(values: number[]) {
@@ -65,11 +70,11 @@ export class UsersStore {
     get extraPerformance() {
         return this.currentUserStats
             ? this.currentUserStats.pp -
-            this.scores.reduce(
-                (total, score, i) =>
-                    total + score.performanceTotal * 0.95 ** i,
-                0
-            )
+                  this.scores.reduce(
+                      (total, score, i) =>
+                          total + score.performanceTotal * 0.95 ** i,
+                      0
+                  )
             : 0;
     }
 
@@ -340,7 +345,8 @@ export class UsersStore {
                         lowest_cs: scoreFilter.lowestCs,
                         highest_cs: scoreFilter.highestCs,
                         required_mods_json: scoreFilter.requiredModsJson,
-                        disqualified_mods_json: scoreFilter.disqualifiedModsJson,
+                        disqualified_mods_json:
+                            scoreFilter.disqualifiedModsJson,
                         lowest_accuracy: scoreFilter.lowestAccuracy,
                         highest_accuracy: scoreFilter.highestAccuracy,
                         lowest_length: scoreFilter.lowestLength,
@@ -384,11 +390,16 @@ export class UsersStore {
     ): any {
         const beatmap = score.beatmap!;
         const totalObjects =
-            score.statistics["great"] ?? 0 + score.statistics["ok"] ?? 0 + score.statistics["meh"] ?? 0 + score.statistics["miss"] ?? 0;
+            score.statistics["great"] ??
+            0 + score.statistics["ok"] ??
+            0 + score.statistics["meh"] ??
+            0 + score.statistics["miss"] ??
+            0;
 
         score.modsJson = mods;
         score.bestCombo = bestCombo;
-        score.statistics["great"] = totalObjects - countOk - countMeh - countMiss;
+        score.statistics["great"] =
+            totalObjects - countOk - countMeh - countMiss;
         score.statistics["ok"] = countOk;
         score.statistics["meh"] = countMeh;
         score.statistics["miss"] = countMiss;

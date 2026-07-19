@@ -53,11 +53,17 @@ export const ModsSelect = (props: ModsSelectProps) => {
     }
 
     if (props.gamemode !== Gamemode.Mania) {
-        selectModOptions.push({ value: ModAcronym.HardRock, label: ModAcronym.HardRock });
+        selectModOptions.push({
+            value: ModAcronym.HardRock,
+            label: ModAcronym.HardRock,
+        });
     }
 
     if (props.gamemode === Gamemode.Mania) {
-        selectModOptions.push({ value: ModAcronym.FadeIn, label: ModAcronym.FadeIn });
+        selectModOptions.push({
+            value: ModAcronym.FadeIn,
+            label: ModAcronym.FadeIn,
+        });
     }
 
     const mods = modAcronymsFromJsonMods(props.value);

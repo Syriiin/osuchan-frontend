@@ -77,7 +77,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={score.bestCombo.toString()}
                         value={combo}
-                        onChange={(e) => setCombo(parseInt(e.currentTarget.value))}
+                        onChange={(e) =>
+                            setCombo(parseInt(e.currentTarget.value))
+                        }
                         min={0}
                         max={beatmap.maxCombo}
                     />
@@ -90,7 +92,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["ok"] ?? 0).toString()}
                         value={countOk}
-                        onChange={(e) => setCountOk(parseInt(e.currentTarget.value))}
+                        onChange={(e) =>
+                            setCountOk(parseInt(e.currentTarget.value))
+                        }
                         min={0}
                     />
                 </FormControl>
@@ -102,7 +106,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["meh"] ?? 0).toString()}
                         value={countMeh}
-                        onChange={(e) => setCountMeh(parseInt(e.currentTarget.value))}
+                        onChange={(e) =>
+                            setCountMeh(parseInt(e.currentTarget.value))
+                        }
                         min={0}
                     />
                 </FormControl>
@@ -114,7 +120,9 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["miss"] ?? 0).toString()}
                         value={countMiss}
-                        onChange={(e) => setCountMiss(parseInt(e.currentTarget.value))}
+                        onChange={(e) =>
+                            setCountMiss(parseInt(e.currentTarget.value))
+                        }
                         min={0}
                     />
                 </FormControl>

@@ -387,7 +387,8 @@ export class ListStore {
                         lowest_cs: scoreFilter.lowestCs,
                         highest_cs: scoreFilter.highestCs,
                         required_mods_json: scoreFilter.requiredModsJson,
-                        disqualified_mods_json: scoreFilter.disqualifiedModsJson,
+                        disqualified_mods_json:
+                            scoreFilter.disqualifiedModsJson,
                         lowest_accuracy: scoreFilter.lowestAccuracy,
                         highest_accuracy: scoreFilter.highestAccuracy,
                         lowest_length: scoreFilter.lowestLength,
