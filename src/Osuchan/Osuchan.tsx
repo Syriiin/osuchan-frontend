@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
 import { useStore } from "../utils/hooks";
@@ -37,24 +37,14 @@ const Osuchan = () => {
         <OsuchanWrapper>
             <Navbar />
             <ContentWrapper>
-                <Switch>
-                    <Route path="/" exact>
-                        <Home />
-                    </Route>
-                    <Route path="/me">
-                        <Me />
-                    </Route>
-                    <Route path="/users">
-                        <Profiles />
-                    </Route>
-                    <Route path="/leaderboards">
-                        <LeaderboardsRoot />
-                    </Route>
-                    <Route path="/events">
-                        <EventsRoot />
-                    </Route>
-                    <Redirect to="/" />
-                </Switch>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/me/*" element={<Me />} />
+                    <Route path="/users/*" element={<Profiles />} />
+                    <Route path="/leaderboards/*" element={<LeaderboardsRoot />} />
+                    <Route path="/events/*" element={<EventsRoot />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
             </ContentWrapper>
             <Footer />
         </OsuchanWrapper>

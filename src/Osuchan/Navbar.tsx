@@ -5,9 +5,9 @@ import React, { useState } from "react";
 import {
     Link,
     LinkProps,
-    matchPath,
-    useHistory,
+    useMatch,
     useLocation,
+    useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
 
@@ -176,7 +176,7 @@ const UserAvatar = styled.img`
 `;
 
 const Navbar = observer(() => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
 
     const store = useStore();
@@ -199,7 +199,7 @@ const Navbar = observer(() => {
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            history.push(`/users/${searchValue}`);
+            navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();
@@ -245,9 +245,7 @@ const Navbar = observer(() => {
     // Variables
     const { user, invites, isAuthenticated } = meStore;
 
-    const leaderboardsMatch = matchPath(location.pathname, {
-        path: "/leaderboards/:leaderboardType/:gamemode",
-    });
+    const leaderboardsMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/*");
 
     return (
         <NavbarWrapper>
@@ -275,7 +273,9 @@ const Navbar = observer(() => {
                     </NavbarLink>
                     <NavbarLink
                         to={
-                            leaderboardsMatch?.url ?? "/leaderboards/global/osu"
+                            leaderboardsMatch != null
+                                ? `/leaderboards/${leaderboardsMatch.params.leaderboardType}/${leaderboardsMatch.params.gamemode}`
+                                : "/leaderboards/global/osu"
                         }
                         $active={leaderboardsMatch !== null}
                     >

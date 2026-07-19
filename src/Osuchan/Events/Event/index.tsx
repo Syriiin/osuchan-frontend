@@ -1,21 +1,15 @@
-import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import EventHome from "./EventHome";
 import AttendeesPage from "./AttendeesPage";
 
 const EventRoot = () => {
-    const match = useRouteMatch();
-
     return (
-        <Switch>
-            <Route exact path={match.path}>
-                <EventHome />
-            </Route>
-            <Route path={`${match.path}/attendees`}>
-                <AttendeesPage />
-            </Route>
-            <Redirect to={match.url} />
-        </Switch>
+        <Routes>
+            <Route index element={<EventHome />} />
+            <Route path="attendees" element={<AttendeesPage />} />
+            <Route path="*" element={<Navigate to="." replace />} />
+        </Routes>
     );
 };
 

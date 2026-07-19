@@ -1,12 +1,11 @@
-import { Observer, observer } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import {
-    Redirect,
-    Route,
-    useHistory,
+    Navigate,
+    useMatch,
+    useNavigate,
     useParams,
-    useRouteMatch,
 } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
@@ -294,7 +293,6 @@ interface LeaderboardFiltersProps {
 }
 
 const LeaderboardButtons = observer(() => {
-    const match = useRouteMatch();
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
@@ -376,7 +374,7 @@ const LeaderboardButtons = observer(() => {
                                         LeaderboardAccessType.Private) && (
                                     <Button
                                         as={UnstyledLink}
-                                        to={`${match.url}/invites`}
+                                        to="invites"
                                         type="button"
                                     >
                                         Manage Invites
@@ -423,12 +421,13 @@ const LeaderboardButtons = observer(() => {
 });
 
 const LeaderboardHome = observer(() => {
-    const match = useRouteMatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const params = useParams<RouteParams>();
     const leaderboardType = params.leaderboardType;
     const gamemode = gamemodeIdFromName(params.gamemode);
     const leaderboardId = parseInt(params.leaderboardId);
+    const invitesMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/invites");
+    const memberMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/members/:userId");
 
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
@@ -620,37 +619,19 @@ const LeaderboardHome = observer(() => {
             {detailStore.loadingStatus === ResourceStatus.Error && (
                 <h3>Leaderboard not found!</h3>
             )}
-            <Route exact path={`${match.path}/invites`}>
-                {(props) => (
-                    <Observer>
-                        {() => (
-                            <>
-                                <ManageInvitesModal
-                                    open={
-                                        props.match !== null &&
-                                        leaderboard !== null
-                                    }
-                                    onClose={() => history.push(match.url)}
-                                />
-                                {props.match !== null &&
-                                    leaderboard &&
-                                    leaderboard.ownerId !==
-                                        meStore.user?.osuUserId && (
-                                        <Redirect to={match.url} />
-                                    )}
-                            </>
-                        )}
-                    </Observer>
-                )}
-            </Route>
-            <Route exact path={`${match.path}/members/:userId`}>
-                {(props) => (
-                    <MemberModal
-                        open={props.match !== null && leaderboard !== null}
-                        onClose={() => history.push(match.url)}
-                    />
-                )}
-            </Route>
+            <ManageInvitesModal
+                open={invitesMatch !== null && leaderboard !== null}
+                onClose={() => navigate(".")}
+            />
+            {invitesMatch !== null && leaderboard &&
+                leaderboard.ownerId !== meStore.user?.osuUserId && (
+                <Navigate to="." replace />
+            )}
+            <MemberModal
+                open={memberMatch !== null && leaderboard !== null}
+                onClose={() => navigate(".")}
+                userId={memberMatch?.params.userId}
+            />
         </>
     );
 });

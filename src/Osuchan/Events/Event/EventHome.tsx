@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import {
@@ -121,7 +121,6 @@ const LeaderboardRow = styled.div`
 const EventHome = observer(() => {
     const params = useParams<{ slug: string }>();
     const slug = params.slug;
-    const { url } = useRouteMatch();
 
     const store = useStore();
     const {
@@ -261,7 +260,7 @@ const EventHome = observer(() => {
                                         </AvatarWrapper>
                                     ))}
                                 {attendeesCount > MAX_VISIBLE_AVATARS && (
-                                    <UnstyledLink to={`${url}/attendees`}>
+                                    <UnstyledLink to="attendees">
                                         <ExtraCount>
                                             +
                                             {attendeesCount -
@@ -272,7 +271,7 @@ const EventHome = observer(() => {
                                 )}
                                 {attendeesCount > 0 &&
                                     attendeesCount <= MAX_VISIBLE_AVATARS && (
-                                        <UnstyledLink to={`${url}/attendees`}>
+                                        <UnstyledLink to="attendees">
                                             <ExtraCount>View all</ExtraCount>
                                         </UnstyledLink>
                                     )}

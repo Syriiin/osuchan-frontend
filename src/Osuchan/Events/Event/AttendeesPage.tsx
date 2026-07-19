@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
-import { useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import {
@@ -75,7 +75,6 @@ const PAGE_SIZE = 50;
 
 const AttendeesPage = observer(() => {
     const { slug } = useParams<{ slug: string }>();
-    const { url } = useRouteMatch();
     const store = useStore();
     const {
         event,
@@ -127,8 +126,6 @@ const AttendeesPage = observer(() => {
         meStore.user &&
         event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
 
-    const eventUrl = url.replace(/\/attendees$/, "");
-
     return (
         <>
             <Helmet>
@@ -154,7 +151,7 @@ const AttendeesPage = observer(() => {
                     <AttendeesSurface>
                         <PageHeader>
                             <Title>Attendees ({attendeesCount})</Title>
-                            <UnstyledLink to={eventUrl}>
+                            <UnstyledLink to="..">
                                 <Button type="button">
                                     &larr; Back to Event
                                 </Button>

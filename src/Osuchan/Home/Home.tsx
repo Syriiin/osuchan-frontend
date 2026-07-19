@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Surface, TextInput } from "../../components";
 
@@ -55,13 +55,13 @@ const SearchButton = styled(Button)`
 `;
 
 const Home = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [searchValue, setSearchValue] = useState("");
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            history.push(`/users/${searchValue}`);
+            navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();

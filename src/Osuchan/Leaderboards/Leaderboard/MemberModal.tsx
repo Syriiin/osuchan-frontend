@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -57,13 +56,12 @@ const ScoreCount = styled.span`
     font-size: 1em;
 `;
 
-const MemberInfo = observer(() => {
-    const params = useParams<RouteParams>();
+const MemberInfo = observer((props: { userId?: string }) => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
 
-    const userId = parseInt(params.userId);
+    const userId = parseInt(props.userId ?? "");
     const {
         loadingMembershipStatus,
         leaderboard,
@@ -197,20 +195,14 @@ const MemberInfo = observer(() => {
 
 const MemberModal = (props: MemberModalProps) => (
     <SimpleModal open={props.open} onClose={props.onClose}>
-        <MemberInfo />
+        <MemberInfo userId={props.userId} />
     </SimpleModal>
 );
 
 interface MemberModalProps {
     open: boolean;
     onClose: () => void;
-}
-
-interface RouteParams {
-    leaderboardType: "global" | "community";
-    gamemode: "osu" | "taiko" | "catch" | "mania";
-    leaderboardId: string;
-    userId: string;
+    userId?: string;
 }
 
 export default MemberModal;

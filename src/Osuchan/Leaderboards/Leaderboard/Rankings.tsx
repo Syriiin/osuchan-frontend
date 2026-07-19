@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { useRouteMatch } from "react-router-dom";
 
 import {
     Surface,
@@ -87,15 +86,13 @@ interface RankingRowProps {
 }
 
 const Rankings = observer((props: TopScoresProps) => {
-    const match = useRouteMatch();
-
     return (
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
                 <UnstyledLink
                     key={i}
-                    to={`${match.url}/members/${membership.osuUserId}`}
+                    to={`members/${membership.osuUserId}`}
                 >
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>

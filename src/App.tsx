@@ -1,7 +1,7 @@
 import { configure } from "mobx";
 import { useEffect } from "react";
 import ReactGA from "react-ga";
-import { Route, Router, Switch, useLocation } from "react-router-dom";
+import { Route, Routes, unstable_HistoryRouter as Router, useLocation } from "react-router-dom";
 import {
     ThemeProvider as StyledThemeProvider,
     createGlobalStyle,
@@ -64,23 +64,15 @@ const AppWithContext = () => {
     }, [location]);
 
     return (
-        <Switch>
+        <Routes>
             <Route
-                exact
-                path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard"
-            >
-                <LeaderboardDashboard />
-            </Route>
-            <Route exact path="/ppraces/:ppraceId(\d+)/dashboard">
-                <PPRaceDashboard />
-            </Route>
-            <Route exact path="/ppraces/:ppraceId(\d+)/coe-dashboard">
-                <COEPPRaceDashboard />
-            </Route>
-            <Route>
-                <Osuchan />
-            </Route>
-        </Switch>
+                path="/leaderboards/:leaderboardType/:gamemode/:leaderboardId/dashboard"
+                element={<LeaderboardDashboard />}
+            />
+            <Route path="/ppraces/:ppraceId/dashboard" element={<PPRaceDashboard />} />
+            <Route path="/ppraces/:ppraceId/coe-dashboard" element={<COEPPRaceDashboard />} />
+            <Route path="*" element={<Osuchan />} />
+        </Routes>
     );
 };
 
