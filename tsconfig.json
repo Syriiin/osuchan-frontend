@@ -15,7 +15,8 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
-        "useDefineForClassFields": true
+        "useDefineForClassFields": true,
+        "types": ["jest"]
     },
     "include": ["src"],
     "exclude": ["src/setupProxy.js"]
