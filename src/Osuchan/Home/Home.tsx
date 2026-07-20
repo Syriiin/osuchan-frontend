@@ -59,9 +59,9 @@ const Home = () => {
 
     const [searchValue, setSearchValue] = useState("");
 
-    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSearchSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            navigate(`/users/${searchValue}`);
+            void navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();

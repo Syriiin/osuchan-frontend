@@ -180,13 +180,13 @@ const Navbar = observer(() => {
 
     // Use effect to initialse form values
     useAutorun(() => {
-        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}`);
     });
 
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            navigate(`/users/${searchValue}`);
+            void navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();

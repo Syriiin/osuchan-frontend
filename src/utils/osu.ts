@@ -119,7 +119,7 @@ export function calculateClassicAccuracy(
             break;
 
         default:
-            throw new Error(`${gamemode} is not a valid gamemode`);
+            throw new Error(`${String(gamemode)} is not a valid gamemode`);
     }
 
     return 100 * (points / maxPoints);

@@ -60,12 +60,12 @@ const LeaderboardList = observer(() => {
 
     useEffect(() => {
         return () => {
-            listStore.unload();
+            void listStore.unload();
         };
     }, [listStore]);
 
     useAutorun(() => {
-        listStore.unload();
+        void listStore.unload();
 
         // Load community leaderboards
         if (localStore.leaderboardType === "community") {

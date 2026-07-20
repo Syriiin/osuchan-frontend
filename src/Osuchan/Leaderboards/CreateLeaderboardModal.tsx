@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { flowResult } from "mobx";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 
@@ -55,19 +56,23 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
     const handleCreateLeaderboardSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const leaderboard = await listStore.createLeaderboard(
-            gamemode,
-            scoreSet,
-            accessType,
-            name,
-            description,
-            iconUrl,
-            allowPastScores,
-            scoreFilter as ScoreFilter,
+        const leaderboard = await flowResult(
+            listStore.createLeaderboard(
+                gamemode,
+                scoreSet,
+                accessType,
+                name,
+                description,
+                iconUrl,
+                allowPastScores,
+                scoreFilter as ScoreFilter,
+            ),
         );
 
-        if (leaderboard) {
-            navigate(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
+        if (leaderboard !== null) {
+            void navigate(
+                `/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`,
+            );
         }
     };
 

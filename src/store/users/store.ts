@@ -387,7 +387,7 @@ export class UsersStore {
         const beatmapData = response.data;
 
         // Save to idb cache
-        setBeatmap(beatmapId, beatmapData);
+        yield setBeatmap(beatmapId, beatmapData);
 
         return beatmapData;
     }

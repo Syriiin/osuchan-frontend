@@ -103,12 +103,12 @@ const COEPPRaceDashboard = observer(() => {
     const { loadingStatus, pprace, teamScores, recentScores } = detailStore;
 
     useEffect(() => {
-        detailStore.loadPPRace(ppraceId);
+        void detailStore.loadPPRace(ppraceId);
     }, [detailStore, ppraceId]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            detailStore.reloadPPRace();
+            void detailStore.reloadPPRace();
         }, 15 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);

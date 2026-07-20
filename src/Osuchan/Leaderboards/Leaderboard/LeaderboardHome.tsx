@@ -1,4 +1,5 @@
 import { observer } from "mobx-react-lite";
+import { flowResult } from "mobx";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Navigate, useMatch, useNavigate, useParams } from "react-router";
@@ -278,12 +279,16 @@ const LeaderboardButtons = observer(() => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const handleJoin = async () => {
-        await detailStore.joinLeaderboard();
+        await flowResult(detailStore.joinLeaderboard());
         await detailStore.reloadLeaderboard();
     };
     const handleLeave = async () => {
-        await detailStore.leaveLeaderboard();
+        await flowResult(detailStore.leaveLeaderboard());
         await detailStore.reloadLeaderboard();
+    };
+    const handleDelete = async () => {
+        await flowResult(detailStore.deleteLeaderboard());
+        void navigate(`/leaderboards/community/${params.gamemode}`);
     };
 
     return (
@@ -323,10 +328,7 @@ const LeaderboardButtons = observer(() => {
                                 <Button
                                     negative
                                     isLoading={detailStore.isDeletingLeaderboard}
-                                    action={async () => {
-                                        await detailStore.deleteLeaderboard();
-                                        navigate(`/leaderboards/community/${params.gamemode}`);
-                                    }}
+                                    action={handleDelete}
                                     confirmationMessage="Are you sure you want to delete this leaderboard?"
                                 >
                                     Delete Leaderboard

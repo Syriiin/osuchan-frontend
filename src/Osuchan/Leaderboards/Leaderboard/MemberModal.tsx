@@ -125,9 +125,9 @@ const MemberInfo = observer((props: { userId?: string }) => {
                                 <Button
                                     negative
                                     isLoading={detailStore.isKickingMember}
-                                    action={async () => {
-                                        await detailStore.kickMember();
-                                        navigate(".");
+                                    action={() => {
+                                        detailStore.kickMember();
+                                        void navigate(".");
                                     }}
                                     confirmationMessage="Are you sure you want to kick this member from the leaderboard?"
                                 >
