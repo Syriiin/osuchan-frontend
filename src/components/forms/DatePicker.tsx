@@ -1,4 +1,4 @@
-import ReactDatePicker, { type ReactDatePickerProps } from "react-datepicker";
+import ReactDatePicker from "react-datepicker";
 import styled from "styled-components";
 
 const DatePickerWrapper = styled.div`
@@ -70,7 +70,7 @@ const DatePickerWrapper = styled.div`
     }
 `;
 
-export const DatePicker = (props: DatePickerProps) => (
+export const DatePicker = (props: React.ComponentProps<typeof ReactDatePicker>) => (
     <DatePickerWrapper>
         <ReactDatePicker
             {...props}
@@ -80,5 +80,3 @@ export const DatePicker = (props: DatePickerProps) => (
         />
     </DatePickerWrapper>
 );
-
-interface DatePickerProps extends ReactDatePickerProps {}

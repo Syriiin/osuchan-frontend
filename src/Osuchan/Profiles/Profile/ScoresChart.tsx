@@ -48,8 +48,8 @@ const ScoresChart = observer((props: ScoresChartProps) => {
                     <CartesianGrid vertical={false} />
                     <Tooltip
                         labelFormatter={(label) => `# ${label}`}
-                        formatter={(value: number) =>
-                            value.toLocaleString("en", {
+                        formatter={(value) =>
+                            (value ?? 0).toLocaleString("en", {
                                 maximumFractionDigits: 0,
                             })
                         }

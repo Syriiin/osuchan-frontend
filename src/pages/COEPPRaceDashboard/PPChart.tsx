@@ -32,8 +32,8 @@ const PPChart = observer((props: PPChartProps) => {
                     dataKey="pp"
                     label={{
                         position: "right",
-                        formatter: (value: number) =>
-                            `${value.toLocaleString("en", {
+                        formatter: (value) =>
+                            `${(value ?? 0).toLocaleString("en", {
                                 maximumFractionDigits: 0,
                             })}pp`,
                         style: {

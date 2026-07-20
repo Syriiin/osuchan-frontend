@@ -269,8 +269,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <DatePicker
                     selectsEnd
-                    startDate={value.oldestBeatmapDate}
-                    minDate={value.oldestBeatmapDate}
+                    startDate={value.oldestBeatmapDate ?? undefined}
+                    minDate={value.oldestBeatmapDate ?? undefined}
                     endDate={value.newestBeatmapDate}
                     selected={value.newestBeatmapDate}
                     onChange={(date) =>
@@ -292,8 +292,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <DatePicker
                     selectsEnd
-                    startDate={value.oldestScoreDate}
-                    minDate={value.oldestScoreDate}
+                    startDate={value.oldestScoreDate ?? undefined}
+                    minDate={value.oldestScoreDate ?? undefined}
                     endDate={value.newestScoreDate}
                     selected={value.newestScoreDate}
                     onChange={(date) => setNewestScoreDate(date as Date | null)}

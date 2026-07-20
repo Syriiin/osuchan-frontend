@@ -176,7 +176,7 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${(percent * 100).toLocaleString(
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString(
                             "en",
                             {
                                 maximumFractionDigits: 0,

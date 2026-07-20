@@ -8,7 +8,6 @@ import {
 } from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "react-toastify/dist/ReactToastify.css";
 
 import history from "./history";
 import { NotificationContainer } from "./notifications";
