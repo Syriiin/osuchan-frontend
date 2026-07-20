@@ -38,8 +38,8 @@
         "test:watch": "vitest",
         "lint": "oxlint",
         "preview": "vite preview",
-        "checkformatting": "prettier --check .",
-        "fixformatting": "prettier --write ."
+        "checkformatting": "oxfmt --check .",
+        "fixformatting": "oxfmt --write ."
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^6.9.1",
@@ -52,8 +52,8 @@
         "@types/react-transition-group": "^4.4.12",
         "@vitejs/plugin-react": "^6.0.3",
         "jsdom": "^29.1.1",
+        "oxfmt": "^0.59.0",
         "oxlint": "^0.16.6",
-        "prettier": "^3.9.5",
         "typescript": "~6.0.2",
         "vite": "^8.1.5",
         "vitest": "^4.1.10"
