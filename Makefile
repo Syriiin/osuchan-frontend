@@ -1,6 +1,6 @@
 ENV ?= dev
 
-.PHONY: help checkfixup checkformatting fixformatting test setup build
+.PHONY: help checkfixup checkformatting fixformatting lint typecheck test setup build ci
 
 help:	## Show this help
 	@printf "\nUSAGE: make [command] \n\n"
@@ -16,6 +16,12 @@ checkformatting:	## Checks code formatting
 fixformatting:	## Fixes code formatting
 	npm run fixformatting
 
+lint:	## Runs linting
+	npm run lint
+
+typecheck:	## Runs TypeScript type checking
+	npm run typecheck
+
 test:	## Runs test suite
 	CI=true npm test
 
@@ -24,3 +30,5 @@ setup:	## Installs dependencies
 
 build:	## Builds the project
 	npm run build
+
+ci: checkfixup lint typecheck checkformatting test build	## Runs all checks
