@@ -109,15 +109,13 @@ export function calculateClassicAccuracy(
             break;
 
         case Gamemode.Catch:
-            maxPoints =
-                great + largeTickHit + smallTickHit + miss + smallTickMiss;
+            maxPoints = great + largeTickHit + smallTickHit + miss + smallTickMiss;
             points = great + largeTickHit + smallTickHit;
             break;
 
         case Gamemode.Mania:
             maxPoints = 300 * (meh + ok + good + great + perfect + miss);
-            points =
-                50 * meh + 100 * ok + 200 * good + 300 * great + 300 * perfect;
+            points = 50 * meh + 100 * ok + 200 * good + 300 * great + 300 * perfect;
             break;
 
         default:
@@ -147,11 +145,7 @@ export function calculateLength(length: number, mods: ModsJson) {
     return length;
 }
 
-export function calculateCircleSize(
-    circleSize: number,
-    mods: ModsJson,
-    gamemode: Gamemode,
-) {
+export function calculateCircleSize(circleSize: number, mods: ModsJson, gamemode: Gamemode) {
     if (gamemode & Gamemode.Mania) {
         if (ModAcronym.Key1 in mods) {
             return 1;
@@ -192,10 +186,8 @@ export function calculateCircleSize(
 }
 
 export function calculateApproachRate(approachRate: number, mods: ModsJson) {
-    const arToMs = (ar: number) =>
-        ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950;
-    const msToAr = (ms: number) =>
-        ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150;
+    const arToMs = (ar: number) => (ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950);
+    const msToAr = (ms: number) => (ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150);
 
     if (ModAcronym.HardRock in mods) {
         approachRate *= 1.4;
@@ -218,10 +210,7 @@ export function calculateApproachRate(approachRate: number, mods: ModsJson) {
     return approachRate;
 }
 
-export function calculateOverallDifficulty(
-    overallDifficulty: number,
-    mods: ModsJson,
-) {
+export function calculateOverallDifficulty(overallDifficulty: number, mods: ModsJson) {
     const odToMs = (od: number) => -6 * od + 79.5;
     const msToOd = (ms: number) => (ms - 79.5) / -6;
 

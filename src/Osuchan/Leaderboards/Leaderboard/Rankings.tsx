@@ -1,14 +1,7 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
-import {
-    Surface,
-    Row,
-    SurfaceTitle,
-    UnstyledLink,
-    NumberFormat,
-    Flag,
-} from "../../../components";
+import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat, Flag } from "../../../components";
 import type { Membership } from "../../../store/models/leaderboards/types";
 
 const RankingsSurface = styled(Surface)`
@@ -90,10 +83,7 @@ const Rankings = observer((props: TopScoresProps) => {
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
-                <UnstyledLink
-                    key={i}
-                    to={`members/${membership.osuUserId}`}
-                >
+                <UnstyledLink key={i} to={`members/${membership.osuUserId}`}>
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>
             ))}

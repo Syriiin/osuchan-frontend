@@ -11,9 +11,7 @@ export const Row = styled.div<RowProps>`
 
     &:hover {
         background-color: ${(props) =>
-            props.hoverable
-                ? props.theme.colours.pillow
-                : props.theme.colours.foreground};
+            props.hoverable ? props.theme.colours.pillow : props.theme.colours.foreground};
     }
 `;
 

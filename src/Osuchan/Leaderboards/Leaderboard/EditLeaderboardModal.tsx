@@ -31,9 +31,7 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
         leaderboard?.accessType ?? LeaderboardAccessType.Public,
     );
     const [name, setName] = useState(leaderboard?.name ?? "");
-    const [description, setDescription] = useState(
-        leaderboard?.description ?? "",
-    );
+    const [description, setDescription] = useState(leaderboard?.description ?? "");
     const [iconUrl, setIconUrl] = useState(leaderboard?.iconUrl ?? "");
 
     // Timeout updated icon url so we don't spam preview image requests on every character change
@@ -107,10 +105,7 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
                     <LeaderboardIcon src={delayedIconUrl} />
                 </FormControl>
 
-                <Button
-                    isLoading={detailStore.isUpdatingLeaderboard}
-                    type="submit"
-                >
+                <Button isLoading={detailStore.isUpdatingLeaderboard} type="submit">
                     Update
                 </Button>
             </form>

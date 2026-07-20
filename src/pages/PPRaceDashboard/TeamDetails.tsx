@@ -42,10 +42,7 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
         <TeamDetailsWrapper>
             <TeamTitle teamColour={props.teamColour}>{team.name}</TeamTitle>
             {props.mode === "players" && (
-                <TeamPlayerDetails
-                    teamColour={props.teamColour}
-                    players={players}
-                />
+                <TeamPlayerDetails teamColour={props.teamColour} players={players} />
             )}
             {props.mode === "scores" && (
                 <TeamScoreDetails

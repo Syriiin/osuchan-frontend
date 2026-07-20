@@ -23,14 +23,8 @@ export function osuUserFromJson(data: any): OsuUser {
 export function userStatsFromJson(data: any): UserStats {
     return {
         id: data["id"],
-        osuUser:
-            typeof data["user"] === "object"
-                ? osuUserFromJson(data["user"])
-                : null,
-        osuUserId:
-            typeof data["user"] === "object"
-                ? data["user"]["id"]
-                : data["user"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
         gamemode: data["gamemode"],
         playcount: data["playcount"],
         playtime: data["playtime"],
@@ -59,14 +53,8 @@ export function beatmapFromJson(data: any): Beatmap {
         gamemode: data["gamemode"],
         status: data["status"],
         creatorName: data["creator_name"],
-        creator:
-            typeof data["creator"] === "object"
-                ? osuUserFromJson(data["creator"])
-                : null,
-        creatorId:
-            typeof data["creator"] === "object"
-                ? data["creator"]["id"]
-                : data["creator"],
+        creator: typeof data["creator"] === "object" ? osuUserFromJson(data["creator"]) : null,
+        creatorId: typeof data["creator"] === "object" ? data["creator"]["id"] : data["creator"],
         bpm: data["bpm"],
         drainTime: data["drain_time"],
         totalTime: data["total_time"],
@@ -102,9 +90,9 @@ export function scoreFromJson(
                 break;
         }
     }
-    const performanceCalculations: PerformanceCalculation[] = data[
-        "performance_calculations"
-    ].map(performanceCalculationFromJson);
+    const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(
+        performanceCalculationFromJson,
+    );
     performanceCalculations.sort((a, b) => {
         if (a.calculatorEngine === defaultEngine) {
             // If a is the default engine, sort it before b
@@ -120,22 +108,12 @@ export function scoreFromJson(
 
     return {
         id: data["id"],
-        beatmap:
-            typeof data["beatmap"] === "object"
-                ? beatmapFromJson(data["beatmap"])
-                : null,
-        beatmapId:
-            typeof data["beatmap"] === "object"
-                ? data["beatmap"]["id"]
-                : data["beatmap"],
+        beatmap: typeof data["beatmap"] === "object" ? beatmapFromJson(data["beatmap"]) : null,
+        beatmapId: typeof data["beatmap"] === "object" ? data["beatmap"]["id"] : data["beatmap"],
         userStats:
-            typeof data["user_stats"] === "object"
-                ? userStatsFromJson(data["user_stats"])
-                : null,
+            typeof data["user_stats"] === "object" ? userStatsFromJson(data["user_stats"]) : null,
         userStatsId:
-            typeof data["user_stats"] === "object"
-                ? data["user_stats"]["id"]
-                : data["user_stats"],
+            typeof data["user_stats"] === "object" ? data["user_stats"]["id"] : data["user_stats"],
         score: data["score"],
         statistics: data["statistics"],
         bestCombo: data["best_combo"],
@@ -153,15 +131,13 @@ export function scoreFromJson(
         performanceTotal:
             performanceCalculations
                 .at(0)
-                ?.performanceValues.find(
-                    (value) => value["name"] === primaryPerformanceValue,
-                )?.value ?? 0,
+                ?.performanceValues.find((value) => value["name"] === primaryPerformanceValue)
+                ?.value ?? 0,
         difficultyTotal:
             performanceCalculations
                 .at(0)
-                ?.difficultyCalculation.difficultyValues.find(
-                    (value) => value["name"] === "total",
-                )?.value ?? 0,
+                ?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")
+                ?.value ?? 0,
         performanceCalculations: performanceCalculations,
     };
 }
@@ -175,12 +151,8 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
         newestBeatmapDate: data["newest_beatmap_date"]
             ? new Date(data["newest_beatmap_date"])
             : null,
-        oldestScoreDate: data["oldest_score_date"]
-            ? new Date(data["oldest_score_date"])
-            : null,
-        newestScoreDate: data["newest_score_date"]
-            ? new Date(data["newest_score_date"])
-            : null,
+        oldestScoreDate: data["oldest_score_date"] ? new Date(data["oldest_score_date"]) : null,
+        newestScoreDate: data["newest_score_date"] ? new Date(data["newest_score_date"]) : null,
         lowestAr: data["lowest_ar"],
         highestAr: data["highest_ar"],
         lowestOd: data["lowest_od"],
@@ -196,16 +168,12 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
     };
 }
 
-export function difficultyCalculationFromJson(
-    data: any,
-): DifficultyCalculation {
+export function difficultyCalculationFromJson(data: any): DifficultyCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
         mods: data["mods"],
-        difficultyValues: data["difficulty_values"].map(
-            difficultyValueFromJson,
-        ),
+        difficultyValues: data["difficulty_values"].map(difficultyValueFromJson),
     };
 }
 
@@ -216,18 +184,12 @@ export function difficultyValueFromJson(data: any): DifficultyValue {
     };
 }
 
-export function performanceCalculationFromJson(
-    data: any,
-): PerformanceCalculation {
+export function performanceCalculationFromJson(data: any): PerformanceCalculation {
     return {
         calculatorEngine: data["calculator_engine"],
         calculatorVersion: data["calculator_version"],
-        performanceValues: data["performance_values"].map(
-            performanceValueFromJson,
-        ),
-        difficultyCalculation: difficultyCalculationFromJson(
-            data["difficulty_calculation"],
-        ),
+        performanceValues: data["performance_values"].map(performanceValueFromJson),
+        difficultyCalculation: difficultyCalculationFromJson(data["difficulty_calculation"]),
     };
 }
 

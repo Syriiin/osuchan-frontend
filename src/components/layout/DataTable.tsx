@@ -2,9 +2,7 @@ import React from "react";
 import type { ComponentProps } from "react";
 import styled from "styled-components";
 
-export const DataTable = (
-    props: DataTableProps & ComponentProps<typeof DataTableContainer>,
-) => (
+export const DataTable = (props: DataTableProps & ComponentProps<typeof DataTableContainer>) => (
     <DataTableContainer {...props}>
         <tbody>{props.children}</tbody>
     </DataTableContainer>
@@ -20,8 +18,7 @@ const DataTableContainer = styled.table`
 
 export const DataCell = styled.td<DataCellProps>`
     text-align: right;
-    color: ${(props) =>
-        props.highlighted ? props.theme.colours.timber : "inherit"};
+    color: ${(props) => (props.highlighted ? props.theme.colours.timber : "inherit")};
 `;
 
 interface DataCellProps {

@@ -10,10 +10,7 @@ export const useAction = (fn: () => void, deps: React.DependencyList) => {
     }, deps);
 };
 
-export const useAutorun = (
-    view: (r: IReactionPublic) => any,
-    opts?: IAutorunOptions,
-) => {
+export const useAutorun = (view: (r: IReactionPublic) => any, opts?: IAutorunOptions) => {
     useEffect(() => {
         const disposer = autorun(view, opts);
         return () => disposer();

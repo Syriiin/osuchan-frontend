@@ -33,8 +33,7 @@ export const SimpleMenuItem = styled.div<SimpleMenuItemProps>`
     cursor: ${(props) => (props.disabled ? "default" : "pointer")};
 
     &:hover {
-        background-color: ${(props) =>
-            !props.disabled && props.theme.colours.currant};
+        background-color: ${(props) => !props.disabled && props.theme.colours.currant};
     }
 `;
 
@@ -56,8 +55,7 @@ const MenuTriggerWrapper = styled.div`
 
 export const SimpleMenu = (props: SimpleMenuProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const handleMenuOpen = (_event: React.MouseEvent<HTMLElement>) =>
-        setMenuOpen(!menuOpen);
+    const handleMenuOpen = (_event: React.MouseEvent<HTMLElement>) => setMenuOpen(!menuOpen);
 
     return (
         <MenuTriggerWrapper onClick={handleMenuOpen}>

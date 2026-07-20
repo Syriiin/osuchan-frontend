@@ -116,15 +116,11 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
         <>
             <ScoreRowWrapper
                 hoverable
-                onClick={
-                    props.onClickOverride || (() => setDetailsModalOpen(true))
-                }
+                onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}
             >
                 {!props.hidePlayerInfo && (
                     <PlayerInfo>
-                        <Avatar
-                            src={`https://a.ppy.sh/${userStats.osuUserId}`}
-                        />
+                        <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
                         <FlagContainer>
                             <Flag countryCode={userStats.osuUser!.country} />
                         </FlagContainer>
@@ -149,11 +145,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 <ScoreInfo>
                     <AccuracyContainer>
                         <Accuracy>
-                            <NumberFormat
-                                value={score.accuracy}
-                                decimalPlaces={2}
-                            />
-                            %
+                            <NumberFormat value={score.accuracy} decimalPlaces={2} />%
                         </Accuracy>
                         <ScoreDate>
                             <TimeAgo datetime={score.date} />
@@ -161,10 +153,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                     </AccuracyContainer>
                     <PerformanceContainer>
                         <Performance>
-                            <NumberFormat
-                                value={score.performanceTotal}
-                                decimalPlaces={0}
-                            />
+                            <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                             pp
                         </Performance>
                         <Result>{formatScoreResult(score.result)}</Result>
@@ -172,10 +161,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 </ScoreInfo>
                 {props.actionButton && (
                     <ClickPropagationSupressor>
-                        <ActionButton
-                            minWidth={0}
-                            action={props.actionButtonOnClick}
-                        >
+                        <ActionButton minWidth={0} action={props.actionButtonOnClick}>
                             {props.actionButtonText}
                         </ActionButton>
                     </ClickPropagationSupressor>

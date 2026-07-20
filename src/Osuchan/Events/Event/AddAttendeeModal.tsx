@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 
-import {
-    SimpleModal,
-    SimpleModalTitle,
-    FormLabel,
-    TextInput,
-    Button,
-} from "../../../components";
+import { SimpleModal, SimpleModalTitle, FormLabel, TextInput, Button } from "../../../components";
 import { useStore } from "../../../utils/hooks";
 
 const AddAttendeeModal = observer((props: AddAttendeeModalProps) => {
@@ -44,11 +38,7 @@ const AddAttendeeModal = observer((props: AddAttendeeModalProps) => {
                         }
                     }}
                 />
-                <Button
-                    positive
-                    type="submit"
-                    isLoading={eventsStore.isAddingAttendee}
-                >
+                <Button positive type="submit" isLoading={eventsStore.isAddingAttendee}>
                     Add
                 </Button>
             </form>

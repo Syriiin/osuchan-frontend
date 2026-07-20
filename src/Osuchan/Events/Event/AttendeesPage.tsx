@@ -4,18 +4,10 @@ import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
-import {
-    Button,
-    LoadingPage,
-    Surface,
-    UnstyledLink,
-} from "../../../components";
+import { Button, LoadingPage, Surface, UnstyledLink } from "../../../components";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
-import {
-    setCssCustomProperties,
-    clearCssCustomProperties,
-} from "../../../utils/general";
+import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 
 const AttendeesSurface = styled(Surface)`
     margin: 20px auto;
@@ -123,15 +115,12 @@ const AttendeesPage = observer(() => {
     }, [themeColours]);
 
     const isOrganiser =
-        meStore.user &&
-        event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
+        meStore.user && event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
 
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && event && (
                     <title>{event.name} - Attendees - osu!chan</title>
                 )}
@@ -142,9 +131,7 @@ const AttendeesPage = observer(() => {
 
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {loadingStatus === ResourceStatus.Error && (
-                <h3>Event not found!</h3>
-            )}
+            {loadingStatus === ResourceStatus.Error && <h3>Event not found!</h3>}
 
             {loadingStatus === ResourceStatus.Loaded && event && (
                 <ThemeProvider theme={mergedTheme}>
@@ -152,22 +139,16 @@ const AttendeesPage = observer(() => {
                         <PageHeader>
                             <Title>Attendees ({attendeesCount})</Title>
                             <UnstyledLink to="..">
-                                <Button type="button">
-                                    &larr; Back to Event
-                                </Button>
+                                <Button type="button">&larr; Back to Event</Button>
                             </UnstyledLink>
                         </PageHeader>
 
-                        {loadingAttendeesStatus === ResourceStatus.Loading && (
-                            <LoadingPage />
-                        )}
+                        {loadingAttendeesStatus === ResourceStatus.Loading && <LoadingPage />}
 
                         {loadingAttendeesStatus === ResourceStatus.Loaded &&
                             eventAttendees.map((attendee) => (
                                 <AttendeeRow key={attendee.id}>
-                                    <UnstyledLink
-                                        to={`/users/${attendee.user.username}`}
-                                    >
+                                    <UnstyledLink to={`/users/${attendee.user.username}`}>
                                         <AttendeeAvatar
                                             src={`https://a.ppy.sh/${attendee.user.id}`}
                                             alt={attendee.user.username}
@@ -195,8 +176,7 @@ const AttendeesPage = observer(() => {
 
                         <PaginationBar>
                             <CountInfo>
-                                Showing {offset + 1}–
-                                {Math.min(offset + PAGE_SIZE, attendeesCount)}{" "}
+                                Showing {offset + 1}–{Math.min(offset + PAGE_SIZE, attendeesCount)}{" "}
                                 of {attendeesCount}
                             </CountInfo>
                             {attendeesCount > PAGE_SIZE && (
@@ -204,22 +184,14 @@ const AttendeesPage = observer(() => {
                                     <Button
                                         type="button"
                                         disabled={offset === 0}
-                                        action={() =>
-                                            setOffset(
-                                                Math.max(0, offset - PAGE_SIZE),
-                                            )
-                                        }
+                                        action={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
                                     >
                                         Previous
                                     </Button>
                                     <Button
                                         type="button"
-                                        disabled={
-                                            offset + PAGE_SIZE >= attendeesCount
-                                        }
-                                        action={() =>
-                                            setOffset(offset + PAGE_SIZE)
-                                        }
+                                        disabled={offset + PAGE_SIZE >= attendeesCount}
+                                        action={() => setOffset(offset + PAGE_SIZE)}
                                     >
                                         Next
                                     </Button>

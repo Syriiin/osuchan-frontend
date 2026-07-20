@@ -113,16 +113,12 @@ const COEPPRaceDashboard = observer(() => {
         return () => clearInterval(interval);
     }, [detailStore]);
 
-    const [teamDetailsMode, setTeamDetailsMode] = useState<
-        "players" | "scores"
-    >("scores");
+    const [teamDetailsMode, setTeamDetailsMode] = useState<"players" | "scores">("scores");
 
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && pprace && (
                     <title>{pprace.name} - osu!chan</title>
                 )}
@@ -131,13 +127,9 @@ const COEPPRaceDashboard = observer(() => {
                 )}
             </Helmet>
 
-            {detailStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
+            {detailStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {detailStore.loadingStatus === ResourceStatus.Error && (
-                <h3>PP Race not found!</h3>
-            )}
+            {detailStore.loadingStatus === ResourceStatus.Error && <h3>PP Race not found!</h3>}
 
             {detailStore.loadingStatus === ResourceStatus.Loaded && pprace && (
                 <DashboardWrapper>
@@ -147,17 +139,12 @@ const COEPPRaceDashboard = observer(() => {
                     <TeamDetailsContainer
                         onClick={() => {
                             setTeamDetailsMode(
-                                teamDetailsMode === "players"
-                                    ? "scores"
-                                    : "players",
+                                teamDetailsMode === "players" ? "scores" : "players",
                             );
                         }}
                     >
                         {pprace.teams.map((team, index) => (
-                            <TeamSurface
-                                teamColour={TeamColours[index]}
-                                key={team.id}
-                            >
+                            <TeamSurface teamColour={TeamColours[index]} key={team.id}>
                                 <TeamDetails
                                     team={team}
                                     scores={teamScores[team.id]}
@@ -177,10 +164,7 @@ const COEPPRaceDashboard = observer(() => {
                                 status={pprace.status}
                             />
                         </CountdownSurface>
-                        <RecentScores
-                            recentScores={recentScores}
-                            teams={pprace.teams}
-                        />
+                        <RecentScores recentScores={recentScores} teams={pprace.teams} />
                     </RightContainer>
                 </DashboardWrapper>
             )}

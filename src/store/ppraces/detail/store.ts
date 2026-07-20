@@ -39,9 +39,7 @@ export class DetailStore {
 
             this.pprace = pprace;
 
-            const recentScoresResponse = yield http.get(
-                `/api/ppraces/${ppraceId}/recentscores`,
-            );
+            const recentScoresResponse = yield http.get(`/api/ppraces/${ppraceId}/recentscores`);
             const recentScores = recentScoresResponse.data.map((score: any) =>
                 scoreFromJson(score),
             );
@@ -51,8 +49,8 @@ export class DetailStore {
                 const teamScoresResponse = yield http.get(
                     `/api/ppraces/${ppraceId}/teams/${team.id}/scores`,
                 );
-                this.teamScores[team.id] = teamScoresResponse.data.map(
-                    (score: any) => scoreFromJson(score),
+                this.teamScores[team.id] = teamScoresResponse.data.map((score: any) =>
+                    scoreFromJson(score),
                 );
             }
 

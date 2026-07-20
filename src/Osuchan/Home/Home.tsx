@@ -90,9 +90,7 @@ const Home = () => {
                                 id="home-search"
                                 placeholder="osu! username"
                                 autoComplete="off"
-                                onChange={(e) =>
-                                    setSearchValue(e.currentTarget.value)
-                                }
+                                onChange={(e) => setSearchValue(e.currentTarget.value)}
                                 value={searchValue}
                             />
                             <SearchButton type="submit">Search</SearchButton>

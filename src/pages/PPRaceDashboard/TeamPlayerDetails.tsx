@@ -103,15 +103,11 @@ const PlayerRow = observer((props: PlayerRowProps) => {
             <PlayerInfo>
                 <PerformanceContainer>
                     <PerformanceContribution>
-                        <NumberFormat
-                            value={player.ppContribution}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={player.ppContribution} decimalPlaces={0} />
                         pp <ContributionText>contributed</ContributionText>
                     </PerformanceContribution>
                     <ScoreCount>
-                        {player.scoreCount}{" "}
-                        {player.scoreCount === 1 ? "score" : "scores"} /{" "}
+                        {player.scoreCount} {player.scoreCount === 1 ? "score" : "scores"} /{" "}
                         <NumberFormat value={player.pp} decimalPlaces={0} />
                         pp total
                     </ScoreCount>
@@ -127,16 +123,9 @@ interface PlayerRowProps {
 }
 
 const PlayerChart = observer((props: PlayerChartProps) => {
-    const total = props.players.reduce(
-        (acc, player) => acc + player.ppContribution,
-        0,
-    );
-    const mainPlayers = props.players.filter(
-        (player) => player.ppContribution / total > 0.01,
-    );
-    const otherPlayers = props.players.filter(
-        (player) => player.ppContribution / total <= 0.01,
-    );
+    const total = props.players.reduce((acc, player) => acc + player.ppContribution, 0);
+    const mainPlayers = props.players.filter((player) => player.ppContribution / total > 0.01);
+    const otherPlayers = props.players.filter((player) => player.ppContribution / total <= 0.01);
     const otherPlayersContribution = otherPlayers.reduce(
         (acc, player) => acc + player.ppContribution,
         0,
@@ -167,12 +156,9 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${((percent ?? 0) * 100).toLocaleString(
-                            "en",
-                            {
-                                maximumFractionDigits: 0,
-                            },
-                        )}%`;
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString("en", {
+                            maximumFractionDigits: 0,
+                        })}%`;
                     }}
                 />
             </PieChart>
@@ -186,24 +172,16 @@ interface PlayerChartProps {
 }
 
 const TeamPlayerDetails = observer((props: TeamPlayerDetailsProps) => {
-    const players = props.players
-        .slice()
-        .sort((a, b) => b.ppContribution - a.ppContribution);
+    const players = props.players.slice().sort((a, b) => b.ppContribution - a.ppContribution);
 
     return (
         <>
             <TeamPlayers>
                 {players.slice(0, 3).map((player) => (
-                    <PlayerRow
-                        key={player.id}
-                        player={player}
-                        teamColour={props.teamColour}
-                    />
+                    <PlayerRow key={player.id} player={player} teamColour={props.teamColour} />
                 ))}
                 {players.length > 3 && (
-                    <PlayerCount>
-                        ...and {players.length - 3} more players
-                    </PlayerCount>
+                    <PlayerCount>...and {players.length - 3} more players</PlayerCount>
                 )}
             </TeamPlayers>
             <PlayerChartContainer>

@@ -2,13 +2,7 @@ import { faEnvelope, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import {
-    Link,
-    type LinkProps,
-    useMatch,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import { Link, type LinkProps, useMatch, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import {
@@ -55,17 +49,13 @@ const NavbarLink = styled(Link)<NavbarLinkProps>`
     color: ${(props) => (props.$active ? props.theme.colours.mango : "#fff")};
     text-decoration: none;
     border-bottom: ${(props) =>
-        props.$active
-            ? `2px solid ${props.theme.colours.mango}`
-            : "2px solid transparent"};
+        props.$active ? `2px solid ${props.theme.colours.mango}` : "2px solid transparent"};
     padding-bottom: 2px;
 
     &:hover {
         text-decoration: none;
         color: ${(props) =>
-            props.$active
-                ? props.theme.colours.mango
-                : props.theme.colours.timber};
+            props.$active ? props.theme.colours.mango : props.theme.colours.timber};
     }
 `;
 
@@ -190,10 +180,7 @@ const Navbar = observer(() => {
 
     // Use effect to initialse form values
     useAutorun(() => {
-        setAddScoreUserUrl(
-            `https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` ||
-                "",
-        );
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` || "");
     });
 
     // Handlers
@@ -235,9 +222,7 @@ const Navbar = observer(() => {
     const handleAddScoreModalClose = () => {
         setAddScoreModalOpen(false);
         setAddScoreUserUrl(
-            osuUserId !== undefined
-                ? `https://osu.ppy.sh/users/${osuUserId.toString()}`
-                : "",
+            osuUserId !== undefined ? `https://osu.ppy.sh/users/${osuUserId.toString()}` : "",
         );
         setAddScoreBeatmapUrl("");
     };
@@ -265,8 +250,7 @@ const Navbar = observer(() => {
                     <NavbarLink
                         to="/"
                         $active={
-                            location.pathname === "/" ||
-                            location.pathname.startsWith("/users")
+                            location.pathname === "/" || location.pathname.startsWith("/users")
                         }
                     >
                         profiles
@@ -281,10 +265,7 @@ const Navbar = observer(() => {
                     >
                         leaderboards
                     </NavbarLink>
-                    <NavbarLink
-                        to="/events"
-                        $active={location.pathname.startsWith("/events")}
-                    >
+                    <NavbarLink to="/events" $active={location.pathname.startsWith("/events")}>
                         events
                     </NavbarLink>
                 </LinksContainer>
@@ -296,9 +277,7 @@ const Navbar = observer(() => {
                             <SearchInput
                                 id="home-search"
                                 placeholder="osu! username"
-                                onChange={(e) =>
-                                    setSearchValue(e.currentTarget.value)
-                                }
+                                onChange={(e) => setSearchValue(e.currentTarget.value)}
                                 value={searchValue}
                             />
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -317,10 +296,7 @@ const Navbar = observer(() => {
                                                 {invites.length}
                                             </NotificationNumber>
                                         )}
-                                        <FontAwesomeIcon
-                                            icon={faEnvelope}
-                                            size="lg"
-                                        />
+                                        <FontAwesomeIcon icon={faEnvelope} size="lg" />
                                     </InviteIconWrapper>
                                 }
                             >
@@ -334,23 +310,16 @@ const Navbar = observer(() => {
                                         <SimpleMenuItem>
                                             <InviteWrapper>
                                                 <InviteLeaderboardImage
-                                                    src={
-                                                        invite.leaderboard!
-                                                            .iconUrl
-                                                    }
+                                                    src={invite.leaderboard!.iconUrl}
                                                     alt="Leaderboard icon"
                                                 />
-                                                <div>
-                                                    {invite.leaderboard!.name}
-                                                </div>
+                                                <div>{invite.leaderboard!.name}</div>
                                             </InviteWrapper>
                                         </SimpleMenuItem>
                                     </Link>
                                 ))}
                                 {invites.length === 0 && (
-                                    <SimpleMenuItem disabled>
-                                        No pending invites
-                                    </SimpleMenuItem>
+                                    <SimpleMenuItem disabled>No pending invites</SimpleMenuItem>
                                 )}
                                 {invites.length > 5 && (
                                     <SimpleMenuItem disabled>
@@ -359,29 +328,21 @@ const Navbar = observer(() => {
                                 )}
                                 <SimpleMenuDivider />
                                 <Link to="/me/invites">
-                                    <SimpleMenuItem>
-                                        See all invites
-                                    </SimpleMenuItem>
+                                    <SimpleMenuItem>See all invites</SimpleMenuItem>
                                 </Link>
                             </SimpleMenu>
                             <SimpleMenu
                                 width={150}
                                 triggerElement={
                                     <UserAvatarWrapper>
-                                        <UserAvatar
-                                            src={`https://a.ppy.sh/${
-                                                user!.osuUserId
-                                            }`}
-                                        />
+                                        <UserAvatar src={`https://a.ppy.sh/${user!.osuUserId}`} />
                                     </UserAvatarWrapper>
                                 }
                             >
                                 <Link to={`/users/${user!.osuUser!.username}`}>
                                     <SimpleMenuItem>My Profile</SimpleMenuItem>
                                 </Link>
-                                <SimpleMenuItem
-                                    onClick={() => setAddScoreModalOpen(true)}
-                                >
+                                <SimpleMenuItem onClick={() => setAddScoreModalOpen(true)}>
                                     Add Scores
                                 </SimpleMenuItem>
                                 <SimpleMenuDivider />
@@ -397,12 +358,10 @@ const Navbar = observer(() => {
                             >
                                 <SimpleModalTitle>Add Scores</SimpleModalTitle>
                                 <p>
-                                    Enter a player's osu! profile URL and
-                                    beatmap URL(s) to add scores from those
-                                    beatmaps.
+                                    Enter a player's osu! profile URL and beatmap URL(s) to add
+                                    scores from those beatmaps.
                                     <br />
-                                    URLs must be from the new site so they match
-                                    the format below.
+                                    URLs must be from the new site so they match the format below.
                                 </p>
                                 <form onSubmit={handleAddScoreSubmit}>
                                     <label>
@@ -412,9 +371,7 @@ const Navbar = observer(() => {
                                             required
                                             placeholder="https://osu.ppy.sh/users/5701575"
                                             onChange={(e) =>
-                                                setAddScoreUserUrl(
-                                                    e.currentTarget.value,
-                                                )
+                                                setAddScoreUserUrl(e.currentTarget.value)
                                             }
                                             value={addScoreUserUrl}
                                         />
@@ -426,9 +383,7 @@ const Navbar = observer(() => {
                                             required
                                             placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
                                             onChange={(e) =>
-                                                setAddScoreBeatmapUrl(
-                                                    e.currentTarget.value,
-                                                )
+                                                setAddScoreBeatmapUrl(e.currentTarget.value)
                                             }
                                             value={addScoreBeatmapUrl}
                                         />

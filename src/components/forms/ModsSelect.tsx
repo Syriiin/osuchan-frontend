@@ -70,17 +70,12 @@ export const ModsSelect = (props: ModsSelectProps) => {
     return (
         <Select
             value={mods.map(
-                (value) =>
-                    selectModOptions.find(
-                        (option) => option.value === value,
-                    ) as OptionType,
+                (value) => selectModOptions.find((option) => option.value === value) as OptionType,
             )}
             isMulti
             onChange={(value: OnChangeValue<OptionType, true>) => {
                 if (value) {
-                    const modAcronyms = (value as OptionType[]).map(
-                        (option) => option.value,
-                    );
+                    const modAcronyms = (value as OptionType[]).map((option) => option.value);
                     const selectedMods = modAcronyms.reduce(
                         (jsonMods, modAcronym) => ({
                             ...jsonMods,

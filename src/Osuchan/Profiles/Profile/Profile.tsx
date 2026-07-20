@@ -57,30 +57,21 @@ const Profile = observer(() => {
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && osuUser && (
                     <title>{osuUser.username} - osu!chan</title>
                 )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>User not found - osu!chan</title>
-                )}
+                {loadingStatus === ResourceStatus.Error && <title>User not found - osu!chan</title>}
             </Helmet>
 
-            {usersStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
+            {usersStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {userStats && osuUser && (
                 <ProfileGrid>
                     {/* User info */}
                     <UserInfo osuUser={osuUser} />
 
                     {/* Mode switcher */}
-                    <ModeSwitcher
-                        gamemodeId={gamemodeId}
-                        userString={userString}
-                    />
+                    <ModeSwitcher gamemodeId={gamemodeId} userString={userString} />
 
                     {/* Sandbox controls */}
                     <SandboxControls
@@ -90,17 +81,10 @@ const Profile = observer(() => {
                     />
 
                     {/* PP/rank info */}
-                    <RankInfo
-                        osuUser={osuUser}
-                        userStats={userStats}
-                        sandboxMode={sandboxMode}
-                    />
+                    <RankInfo osuUser={osuUser} userStats={userStats} sandboxMode={sandboxMode} />
 
                     {/* Score style */}
-                    <ScoreStyle
-                        userStats={userStats}
-                        sandboxMode={sandboxMode}
-                    />
+                    <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
 
                     {scores.length > 0 && (
                         <>

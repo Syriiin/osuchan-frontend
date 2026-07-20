@@ -3,6 +3,17 @@
     "version": "0.1.0",
     "private": true,
     "type": "module",
+    "scripts": {
+        "start": "vite",
+        "build": "tsc -b && vite build",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "lint": "oxlint",
+        "preview": "vite preview",
+        "checkformatting": "oxfmt --check .",
+        "fixformatting": "oxfmt --write ."
+    },
     "dependencies": {
         "@floating-ui/react": "^0.27.20",
         "@fortawesome/fontawesome-svg-core": "^7.3.1",
@@ -29,17 +40,6 @@
         "recharts": "^3.9.2",
         "styled-components": "^6.4.4",
         "timeago-react": "^3.0.7"
-    },
-    "scripts": {
-        "start": "vite",
-        "build": "tsc -b && vite build",
-        "typecheck": "tsc --noEmit",
-        "test": "vitest run",
-        "test:watch": "vitest",
-        "lint": "oxlint",
-        "preview": "vite preview",
-        "checkformatting": "oxfmt --check .",
-        "fixformatting": "oxfmt --write ."
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^6.9.1",

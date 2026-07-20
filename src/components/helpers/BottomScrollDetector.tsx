@@ -6,10 +6,7 @@ export const BottomScrollDetector = (props: BottomScrollDetectorProps) => {
 
     useEffect(() => {
         const onScroll = () => {
-            if (
-                wrapperRef.current!.getBoundingClientRect().bottom <=
-                window.innerHeight
-            ) {
+            if (wrapperRef.current!.getBoundingClientRect().bottom <= window.innerHeight) {
                 onBottomScrolled();
             }
         };

@@ -18,17 +18,9 @@ import { getScoreResult } from "../../utils/osuchan";
 import { Gamemode } from "../models/common/enums";
 import { membershipFromJson } from "../models/leaderboards/deserialisers";
 import type { Membership } from "../models/leaderboards/types";
-import {
-    scoreFromJson,
-    userStatsFromJson,
-} from "../models/profiles/deserialisers";
+import { scoreFromJson, userStatsFromJson } from "../models/profiles/deserialisers";
 import { ScoreSet } from "../models/profiles/enums";
-import type {
-    ModsJson,
-    Score,
-    ScoreFilter,
-    UserStats,
-} from "../models/profiles/types";
+import type { ModsJson, Score, ScoreFilter, UserStats } from "../models/profiles/types";
 import { PaginatedResourceStatus, ResourceStatus } from "../status";
 
 function calculateScoreStyleValue(values: number[]) {
@@ -36,10 +28,7 @@ function calculateScoreStyleValue(values: number[]) {
     for (let i = 0; i < values.length; i++) {
         weighting_value += 0.95 ** i;
     }
-    return (
-        values.reduce((total, value, i) => total + value * 0.95 ** i, 0) /
-        weighting_value
-    );
+    return values.reduce((total, value, i) => total + value * 0.95 ** i, 0) / weighting_value;
 }
 
 export class UsersStore {
@@ -71,8 +60,7 @@ export class UsersStore {
         return this.currentUserStats
             ? this.currentUserStats.pp -
                   this.scores.reduce(
-                      (total, score, i) =>
-                          total + score.performanceTotal * 0.95 ** i,
+                      (total, score, i) => total + score.performanceTotal * 0.95 ** i,
                       0,
                   )
             : 0;
@@ -88,50 +76,29 @@ export class UsersStore {
     }
 
     get sandboxScoreStyleAccuracy() {
-        return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.accuracy),
-            ) || 0
-        );
+        return calculateScoreStyleValue(this.sandboxScores.map((score) => score.accuracy)) || 0;
     }
 
     get sandboxScoreStyleBpm() {
-        return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.bpm),
-            ) || 0
-        );
+        return calculateScoreStyleValue(this.sandboxScores.map((score) => score.bpm)) || 0;
     }
 
     get sandboxScoreStyleLength() {
-        return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.length),
-            ) || 0
-        );
+        return calculateScoreStyleValue(this.sandboxScores.map((score) => score.length)) || 0;
     }
 
     get sandboxScoreStyleCircleSize() {
-        return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.circleSize),
-            ) || 0
-        );
+        return calculateScoreStyleValue(this.sandboxScores.map((score) => score.circleSize)) || 0;
     }
 
     get sandboxScoreStyleApproachRate() {
-        return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.approachRate),
-            ) || 0
-        );
+        return calculateScoreStyleValue(this.sandboxScores.map((score) => score.approachRate)) || 0;
     }
 
     get sandboxScoreStyleOverallDifficulty() {
         return (
-            calculateScoreStyleValue(
-                this.sandboxScores.map((score) => score.overallDifficulty),
-            ) || 0
+            calculateScoreStyleValue(this.sandboxScores.map((score) => score.overallDifficulty)) ||
+            0
         );
     }
 
@@ -155,18 +122,14 @@ export class UsersStore {
                     },
                 },
             );
-            const userStats: UserStats = userStatsFromJson(
-                userStatsResponse.data,
-            );
+            const userStats: UserStats = userStatsFromJson(userStatsResponse.data);
 
             const userId = userStats.osuUserId;
 
             const scoresResponse = yield http.get(
                 `/api/profiles/users/${userId}/stats/${gamemode}/scores`,
             );
-            const scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data),
-            );
+            const scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             const globalMembershipsResponse = yield http.get(
                 `/api/profiles/users/${userId}/memberships/global/${gamemode}`,
@@ -177,10 +140,9 @@ export class UsersStore {
                     },
                 },
             );
-            const globalMemberships: Membership[] =
-                globalMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data),
-                );
+            const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map(
+                (data: any) => membershipFromJson(data),
+            );
 
             this.currentUserStats = userStats;
             this.scores.replace(scores);
@@ -189,14 +151,10 @@ export class UsersStore {
 
             this.loadingStatus = ResourceStatus.Loaded;
 
-            if (
-                this.globalMemberships.length ===
-                globalMembershipsResponse.data["count"]
-            ) {
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
                 this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
             } else {
-                this.globalMembershipsStatus =
-                    PaginatedResourceStatus.PartiallyLoaded;
+                this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error: any) {
             console.log(error);
@@ -219,23 +177,16 @@ export class UsersStore {
                     },
                 },
             );
-            const globalMemberships: Membership[] =
-                globalMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data),
-                );
-
-            this.globalMemberships.replace(
-                this.globalMemberships.concat(globalMemberships),
+            const globalMemberships: Membership[] = globalMembershipsResponse.data["results"].map(
+                (data: any) => membershipFromJson(data),
             );
 
-            if (
-                this.globalMemberships.length ===
-                globalMembershipsResponse.data["count"]
-            ) {
+            this.globalMemberships.replace(this.globalMemberships.concat(globalMemberships));
+
+            if (this.globalMemberships.length === globalMembershipsResponse.data["count"]) {
                 this.globalMembershipsStatus = PaginatedResourceStatus.Loaded;
             } else {
-                this.globalMembershipsStatus =
-                    PaginatedResourceStatus.PartiallyLoaded;
+                this.globalMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error: any) {
             console.log(error);
@@ -245,8 +196,7 @@ export class UsersStore {
     }
 
     *loadCommunityMemberships(): any {
-        this.communityMembershipsStatus =
-            PaginatedResourceStatus.LoadingInitial;
+        this.communityMembershipsStatus = PaginatedResourceStatus.LoadingInitial;
 
         this.communityMemberships.clear();
 
@@ -260,22 +210,16 @@ export class UsersStore {
                     },
                 },
             );
-            const communityMemberships: Membership[] =
-                communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data),
-                );
+            const communityMemberships: Membership[] = communityMembershipsResponse.data[
+                "results"
+            ].map((data: any) => membershipFromJson(data));
 
             this.communityMemberships.replace(communityMemberships);
 
-            if (
-                this.communityMemberships.length ===
-                communityMembershipsResponse.data["count"]
-            ) {
-                this.communityMembershipsStatus =
-                    PaginatedResourceStatus.Loaded;
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
             } else {
-                this.communityMembershipsStatus =
-                    PaginatedResourceStatus.PartiallyLoaded;
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error: any) {
             console.log(error);
@@ -297,24 +241,18 @@ export class UsersStore {
                     },
                 },
             );
-            const communityMemberships: Membership[] =
-                communityMembershipsResponse.data["results"].map((data: any) =>
-                    membershipFromJson(data),
-                );
+            const communityMemberships: Membership[] = communityMembershipsResponse.data[
+                "results"
+            ].map((data: any) => membershipFromJson(data));
 
             this.communityMemberships.replace(
                 this.communityMemberships.concat(communityMemberships),
             );
 
-            if (
-                this.communityMemberships.length ===
-                communityMembershipsResponse.data["count"]
-            ) {
-                this.communityMembershipsStatus =
-                    PaginatedResourceStatus.Loaded;
+            if (this.communityMemberships.length === communityMembershipsResponse.data["count"]) {
+                this.communityMembershipsStatus = PaginatedResourceStatus.Loaded;
             } else {
-                this.communityMembershipsStatus =
-                    PaginatedResourceStatus.PartiallyLoaded;
+                this.communityMembershipsStatus = PaginatedResourceStatus.PartiallyLoaded;
             }
         } catch (error: any) {
             console.log(error);
@@ -332,8 +270,7 @@ export class UsersStore {
                 {
                     params: {
                         score_set: scoreSet,
-                        allowed_beatmap_status:
-                            scoreFilter.allowedBeatmapStatus,
+                        allowed_beatmap_status: scoreFilter.allowedBeatmapStatus,
                         oldest_beatmap_date: scoreFilter.oldestBeatmapDate,
                         newest_beatmap_date: scoreFilter.newestBeatmapDate,
                         oldest_score_date: scoreFilter.oldestScoreDate,
@@ -345,8 +282,7 @@ export class UsersStore {
                         lowest_cs: scoreFilter.lowestCs,
                         highest_cs: scoreFilter.highestCs,
                         required_mods_json: scoreFilter.requiredModsJson,
-                        disqualified_mods_json:
-                            scoreFilter.disqualifiedModsJson,
+                        disqualified_mods_json: scoreFilter.disqualifiedModsJson,
                         lowest_accuracy: scoreFilter.lowestAccuracy,
                         highest_accuracy: scoreFilter.highestAccuracy,
                         lowest_length: scoreFilter.lowestLength,
@@ -354,9 +290,7 @@ export class UsersStore {
                     },
                 },
             );
-            let scores: Score[] = scoresResponse.data.map((data: any) =>
-                scoreFromJson(data),
-            );
+            let scores: Score[] = scoresResponse.data.map((data: any) => scoreFromJson(data));
 
             this.sandboxScores.replace(scores);
 
@@ -371,9 +305,7 @@ export class UsersStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(
-                    `Failed to load sandbox scores: ${errorMessage}`,
-                );
+                notify.negative(`Failed to load sandbox scores: ${errorMessage}`);
             } else {
                 notify.negative("Failed to load sandbox scores");
             }
@@ -397,8 +329,7 @@ export class UsersStore {
 
         score.modsJson = mods;
         score.bestCombo = bestCombo;
-        score.statistics["great"] =
-            totalObjects - countOk - countMeh - countMiss;
+        score.statistics["great"] = totalObjects - countOk - countMeh - countMiss;
         score.statistics["ok"] = countOk;
         score.statistics["meh"] = countMeh;
         score.statistics["miss"] = countMiss;
@@ -409,15 +340,8 @@ export class UsersStore {
         );
         score.bpm = calculateBpm(beatmap.bpm, score.modsJson);
         score.length = calculateLength(beatmap.drainTime, score.modsJson);
-        score.circleSize = calculateCircleSize(
-            beatmap.circleSize,
-            score.modsJson,
-            score.gamemode,
-        );
-        score.approachRate = calculateApproachRate(
-            beatmap.approachRate,
-            score.modsJson,
-        );
+        score.circleSize = calculateCircleSize(beatmap.circleSize, score.modsJson, score.gamemode);
+        score.approachRate = calculateApproachRate(beatmap.approachRate, score.modsJson);
         score.overallDifficulty = calculateOverallDifficulty(
             beatmap.overallDifficulty,
             score.modsJson,
@@ -445,9 +369,7 @@ export class UsersStore {
 
         // Sort observable array
         this.sandboxScores.replace(
-            this.sandboxScores
-                .slice()
-                .sort((a, b) => b.performanceTotal - a.performanceTotal),
+            this.sandboxScores.slice().sort((a, b) => b.performanceTotal - a.performanceTotal),
         );
 
         notify.neutral("Sandbox scores recalculated");

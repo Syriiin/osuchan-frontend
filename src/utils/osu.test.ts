@@ -67,10 +67,7 @@ describe("modsJsonFromModAcronyms", () => {
 
 describe("modAcronymsFromJsonMods", () => {
     test("converts mods JSON to sorted acronyms", () => {
-        expect(modAcronymsFromJsonMods({ DT: {}, HD: {} })).toEqual([
-            "HD",
-            "DT",
-        ]);
+        expect(modAcronymsFromJsonMods({ DT: {}, HD: {} })).toEqual(["HD", "DT"]);
     });
 });
 
@@ -84,20 +81,14 @@ describe("calculateClassicAccuracy", () => {
         const stats = { great: 90, ok: 5, meh: 3, miss: 2 };
         // max = 300 * 100 = 30000, points = 50*3 + 100*5 + 300*90 = 150 + 500 + 27000 = 27650
         // expected = 100 * 27650 / 30000 = 92.166...
-        expect(calculateClassicAccuracy(stats, Gamemode.Standard)).toBeCloseTo(
-            92.166,
-            2,
-        );
+        expect(calculateClassicAccuracy(stats, Gamemode.Standard)).toBeCloseTo(92.166, 2);
     });
 
     test("calculates taiko accuracy", () => {
         const stats = { great: 80, ok: 20, miss: 0 };
         // max = 300 * 100 = 30000, points = 300 * (0.5*20 + 80) = 300 * 90 = 27000
         // expected = 100 * 27000 / 30000 = 90
-        expect(calculateClassicAccuracy(stats, Gamemode.Taiko)).toBeCloseTo(
-            90,
-            1,
-        );
+        expect(calculateClassicAccuracy(stats, Gamemode.Taiko)).toBeCloseTo(90, 1);
     });
 
     test("calculates catch accuracy", () => {
@@ -110,10 +101,7 @@ describe("calculateClassicAccuracy", () => {
         };
         // max = 100 + 20 + 50 + 0 + 5 = 175, points = 100 + 20 + 50 = 170
         // expected = 100 * 170 / 175 = 97.14...
-        expect(calculateClassicAccuracy(stats, Gamemode.Catch)).toBeCloseTo(
-            97.14,
-            1,
-        );
+        expect(calculateClassicAccuracy(stats, Gamemode.Catch)).toBeCloseTo(97.14, 1);
     });
 
     test("calculates mania accuracy", () => {
@@ -128,10 +116,7 @@ describe("calculateClassicAccuracy", () => {
         // max = 300 * (3+5+10+30+50+2) = 300 * 100 = 30000
         // points = 50*3 + 100*5 + 200*10 + 300*30 + 300*50 = 150 + 500 + 2000 + 9000 + 15000 = 26650
         // expected = 100 * 26650 / 30000 = 88.83...
-        expect(calculateClassicAccuracy(stats, Gamemode.Mania)).toBeCloseTo(
-            88.83,
-            1,
-        );
+        expect(calculateClassicAccuracy(stats, Gamemode.Mania)).toBeCloseTo(88.83, 1);
     });
 });
 

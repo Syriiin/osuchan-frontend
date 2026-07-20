@@ -1,12 +1,7 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
-import {
-    Surface,
-    DataCell,
-    DataTable,
-    NumberFormat,
-} from "../../../components";
+import { Surface, DataCell, DataTable, NumberFormat } from "../../../components";
 import type { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { useStore } from "../../../utils/hooks";
 
@@ -38,9 +33,7 @@ const RankInfo = observer((props: RankInfoProps) => {
             {props.userStats.pp === 0 ? (
                 <InactiveStatusContainer>
                     <InactiveStatus>
-                        {usersStore.scores.length === 0
-                            ? "UNPLAYED GAMEMODE"
-                            : "INACTIVE PLAYER"}
+                        {usersStore.scores.length === 0 ? "UNPLAYED GAMEMODE" : "INACTIVE PLAYER"}
                     </InactiveStatus>
                 </InactiveStatusContainer>
             ) : (
@@ -57,27 +50,18 @@ const RankInfo = observer((props: RankInfoProps) => {
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat
-                                value={props.userStats.pp}
-                                decimalPlaces={0}
-                            />
+                            <NumberFormat value={props.userStats.pp} decimalPlaces={0} />
                             pp
                         </DataCell>
                     </tr>
                     <tr>
                         <td>Rank</td>
-                        {props.sandboxMode && (
-                            <DataCell highlighted>-</DataCell>
-                        )}
-                        <DataCell>
-                            #{props.userStats.rank.toLocaleString("en")}
-                        </DataCell>
+                        {props.sandboxMode && <DataCell highlighted>-</DataCell>}
+                        <DataCell>#{props.userStats.rank.toLocaleString("en")}</DataCell>
                     </tr>
                     <tr>
                         <td>Country Rank</td>
-                        {props.sandboxMode && (
-                            <DataCell highlighted>-</DataCell>
-                        )}
+                        {props.sandboxMode && <DataCell highlighted>-</DataCell>}
                         <DataCell>
                             #{props.userStats.countryRank.toLocaleString("en")}{" "}
                             {props.osuUser.country}

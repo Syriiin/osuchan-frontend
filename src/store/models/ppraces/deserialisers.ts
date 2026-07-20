@@ -8,8 +8,7 @@ export function ppraceFromJson(data: any): PPRace {
         name: data["name"],
         status: data["status"],
         duration: data["duration"],
-        startTime:
-            data["start_time"] !== null ? new Date(data["start_time"]) : null,
+        startTime: data["start_time"] !== null ? new Date(data["start_time"]) : null,
         endTime: data["end_time"] !== null ? new Date(data["end_time"]) : null,
         ppDecayBase: data["pp_decay_base"],
         teams: data["teams"].map((team: any) => ppraceTeamFromJson(team)),
@@ -22,9 +21,7 @@ export function ppraceTeamFromJson(data: any) {
         name: data["name"],
         totalPp: data["total_pp"],
         scoreCount: data["score_count"],
-        players: data["players"].map((player: any) =>
-            ppracePlayerFromJson(player),
-        ),
+        players: data["players"].map((player: any) => ppracePlayerFromJson(player)),
     };
 }
 

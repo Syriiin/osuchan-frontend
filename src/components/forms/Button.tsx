@@ -42,9 +42,7 @@ interface StyledButtonProps {
     $active?: boolean;
 }
 
-export const Button = (
-    props: ButtonProps & ComponentProps<typeof StyledButton>,
-) => {
+export const Button = (props: ButtonProps & ComponentProps<typeof StyledButton>) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
     const { action, ...rest } = props;
 
@@ -61,11 +59,7 @@ export const Button = (
     return (
         <>
             <StyledButton {...rest} onClick={handleClick}>
-                {props.isLoading ? (
-                    <LoadingSpinner scale={0.15} />
-                ) : (
-                    props.children
-                )}
+                {props.isLoading ? <LoadingSpinner scale={0.15} /> : props.children}
             </StyledButton>
             {props.confirmationMessage && props.action && (
                 <ConfirmationModal

@@ -31,8 +31,7 @@ const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     align-items: unset;
     background:
         linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-        ${(props) =>
-            `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+        ${(props) => `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     height: 60px;
@@ -192,10 +191,7 @@ const ScoreRow = observer((props: ScoreRowProps) => {
             </AccuracyContainer>
             <PerformanceContainer>
                 <Performance>
-                    <NumberFormat
-                        value={score.performanceTotal}
-                        decimalPlaces={0}
-                    />
+                    <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                     pp
                 </Performance>
                 <Result>{formatScoreResult(score.result)}</Result>
@@ -211,20 +207,13 @@ interface ScoreRowProps {
 
 const ScoreChart = observer((props: ScoreChartProps) => {
     const scoreValues = props.topScores.map((score) => score.performanceTotal);
-    const weightedScores = scoreValues.map(
-        (value, index) => value * props.ppDecayBase ** index,
-    );
+    const weightedScores = scoreValues.map((value, index) => value * props.ppDecayBase ** index);
     const topScoreTotal = weightedScores.reduce((acc, value) => acc + value, 0);
     const missingPp = props.teamPpTotal - topScoreTotal;
 
-    const mainScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal > 0.02,
-    );
-    const otherScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal <= 0.02,
-    );
-    const otherScoresContribution =
-        otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
+    const mainScores = weightedScores.filter((score) => score / props.teamPpTotal > 0.02);
+    const otherScores = weightedScores.filter((score) => score / props.teamPpTotal <= 0.02);
+    const otherScoresContribution = otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
     const data = mainScores
         .sort((a, b) => b - a)
         .map((score) => ({
@@ -251,22 +240,15 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${((percent ?? 0) * 100).toLocaleString(
-                            "en",
-                            {
-                                maximumFractionDigits: 0,
-                            },
-                        )}%`;
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString("en", {
+                            maximumFractionDigits: 0,
+                        })}%`;
                     }}
                 >
                     {data.map((_entry, index) => (
                         <Cell
                             key={`cell-${index}`}
-                            fill={
-                                index % 2 === 0
-                                    ? props.teamColour
-                                    : props.teamColour + "bb"
-                            }
+                            fill={index % 2 === 0 ? props.teamColour : props.teamColour + "bb"}
                         />
                     ))}
                 </Pie>

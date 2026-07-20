@@ -1,17 +1,13 @@
 import ReactSelect, { type StylesConfig } from "react-select";
 import { useTheme } from "styled-components";
 
-export const Select = <T extends OptionValue = number>(
-    props: SelectProps<T>,
-) => {
+export const Select = <T extends OptionValue = number>(props: SelectProps<T>) => {
     const theme = useTheme();
 
     const styles: StylesConfig<Option<T>, false> = {
         control: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isDisabled
-                ? theme.colours.midground
-                : theme.colours.background,
+            backgroundColor: state.isDisabled ? theme.colours.midground : theme.colours.background,
             border: "none",
         }),
         input: (provided, _state) => ({
@@ -29,20 +25,13 @@ export const Select = <T extends OptionValue = number>(
         }),
         option: (provided, state) => ({
             ...provided,
-            color:
-                state.isSelected || state.isFocused
-                    ? theme.colours.background
-                    : "#fff",
+            color: state.isSelected || state.isFocused ? theme.colours.background : "#fff",
             backgroundColor:
-                state.isSelected || state.isFocused
-                    ? "#fff"
-                    : provided.backgroundColor,
+                state.isSelected || state.isFocused ? "#fff" : provided.backgroundColor,
         }),
     };
 
-    const selectedOption = props.options.find(
-        (option) => option.value === props.value,
-    );
+    const selectedOption = props.options.find((option) => option.value === props.value);
     return (
         <ReactSelect
             options={props.options}

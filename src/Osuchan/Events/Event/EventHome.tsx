@@ -15,10 +15,7 @@ import {
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
-import {
-    setCssCustomProperties,
-    clearCssCustomProperties,
-} from "../../../utils/general";
+import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 import AddAttendeeModal from "./AddAttendeeModal";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
 
@@ -136,8 +133,7 @@ const EventHome = observer(() => {
     const meStore = store.meStore;
 
     const [addAttendeeModalOpen, setAddAttendeeModalOpen] = useState(false);
-    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] =
-        useState(false);
+    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] = useState(false);
 
     useEffect(() => {
         store.eventsStore.loadEvent(slug);
@@ -178,15 +174,12 @@ const EventHome = observer(() => {
         : outerTheme;
 
     const isOrganiser =
-        meStore.user &&
-        event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
+        meStore.user && event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
 
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && event && (
                     <title>{event.name} - osu!chan</title>
                 )}
@@ -197,17 +190,13 @@ const EventHome = observer(() => {
 
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {loadingStatus === ResourceStatus.Error && (
-                <h3>Event not found!</h3>
-            )}
+            {loadingStatus === ResourceStatus.Error && <h3>Event not found!</h3>}
 
             {loadingStatus === ResourceStatus.Loaded && event && (
                 <ThemeProvider theme={mergedTheme}>
                     <EventSurface>
                         <EventHeader>
-                            {event.logo && (
-                                <EventLogo src={event.logo} alt={event.name} />
-                            )}
+                            {event.logo && <EventLogo src={event.logo} alt={event.name} />}
                             <EventInfo>
                                 <EventName>{event.name}</EventName>
                                 <EventDates>
@@ -215,9 +204,7 @@ const EventHome = observer(() => {
                                     <AbsoluteDate date={event.endDate} />
                                 </EventDates>
                                 {event.description && (
-                                    <EventDescription>
-                                        {event.description}
-                                    </EventDescription>
+                                    <EventDescription>{event.description}</EventDescription>
                                 )}
                             </EventInfo>
                         </EventHeader>
@@ -225,33 +212,21 @@ const EventHome = observer(() => {
 
                     <EventSurface>
                         <SectionHeader>
-                            <SectionTitle>
-                                Attendees ({attendeesCount})
-                            </SectionTitle>
+                            <SectionTitle>Attendees ({attendeesCount})</SectionTitle>
                             {isOrganiser && (
-                                <Button
-                                    type="button"
-                                    action={() => setAddAttendeeModalOpen(true)}
-                                >
+                                <Button type="button" action={() => setAddAttendeeModalOpen(true)}>
                                     Add Attendee
                                 </Button>
                             )}
                         </SectionHeader>
-                        {loadingAttendeesStatus === ResourceStatus.Loading && (
-                            <LoadingPage />
-                        )}
+                        {loadingAttendeesStatus === ResourceStatus.Loading && <LoadingPage />}
                         {loadingAttendeesStatus === ResourceStatus.Loaded && (
                             <AvatarStack>
                                 {eventAttendees
                                     .slice(0, MAX_VISIBLE_AVATARS)
                                     .map((attendee, index) => (
-                                        <AvatarWrapper
-                                            key={attendee.id}
-                                            index={index}
-                                        >
-                                            <UnstyledLink
-                                                to={`/users/${attendee.user.username}`}
-                                            >
+                                        <AvatarWrapper key={attendee.id} index={index}>
+                                            <UnstyledLink to={`/users/${attendee.user.username}`}>
                                                 <AvatarImage
                                                     src={`https://a.ppy.sh/${attendee.user.id}`}
                                                     alt={attendee.user.username}
@@ -262,25 +237,19 @@ const EventHome = observer(() => {
                                 {attendeesCount > MAX_VISIBLE_AVATARS && (
                                     <UnstyledLink to="attendees">
                                         <ExtraCount>
-                                            +
-                                            {attendeesCount -
-                                                MAX_VISIBLE_AVATARS}{" "}
-                                            more
+                                            +{attendeesCount - MAX_VISIBLE_AVATARS} more
                                         </ExtraCount>
                                     </UnstyledLink>
                                 )}
-                                {attendeesCount > 0 &&
-                                    attendeesCount <= MAX_VISIBLE_AVATARS && (
-                                        <UnstyledLink to="attendees">
-                                            <ExtraCount>View all</ExtraCount>
-                                        </UnstyledLink>
-                                    )}
+                                {attendeesCount > 0 && attendeesCount <= MAX_VISIBLE_AVATARS && (
+                                    <UnstyledLink to="attendees">
+                                        <ExtraCount>View all</ExtraCount>
+                                    </UnstyledLink>
+                                )}
                             </AvatarStack>
                         )}
                         {loadingAttendeesStatus === ResourceStatus.Loaded &&
-                            eventAttendees.length === 0 && (
-                                <p>No attendees yet.</p>
-                            )}
+                            eventAttendees.length === 0 && <p>No attendees yet.</p>}
                     </EventSurface>
 
                     <EventSurface>
@@ -289,16 +258,13 @@ const EventHome = observer(() => {
                             {isOrganiser && (
                                 <Button
                                     type="button"
-                                    action={() =>
-                                        setCreateLeaderboardModalOpen(true)
-                                    }
+                                    action={() => setCreateLeaderboardModalOpen(true)}
                                 >
                                     Create Leaderboard
                                 </Button>
                             )}
                         </SectionHeader>
-                        {loadingLeaderboardsStatus ===
-                            ResourceStatus.Loading && <LoadingPage />}
+                        {loadingLeaderboardsStatus === ResourceStatus.Loading && <LoadingPage />}
                         {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
                             eventLeaderboards.map((lb) => (
                                 <LeaderboardRow key={lb.id}>
@@ -307,9 +273,7 @@ const EventHome = observer(() => {
                                             lb.leaderboard.gamemode,
                                         )}/${lb.leaderboard.id}`}
                                     >
-                                        <CommunityLeaderboardRow
-                                            leaderboard={lb.leaderboard}
-                                        />
+                                        <CommunityLeaderboardRow leaderboard={lb.leaderboard} />
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
@@ -317,10 +281,7 @@ const EventHome = observer(() => {
                                             type="button"
                                             isLoading={isDeletingLeaderboard}
                                             action={() =>
-                                                store.eventsStore.deleteLeaderboard(
-                                                    slug,
-                                                    lb.id,
-                                                )
+                                                store.eventsStore.deleteLeaderboard(slug, lb.id)
                                             }
                                             confirmationMessage={`Delete leaderboard "${lb.leaderboard.name}"?`}
                                         >
@@ -330,9 +291,7 @@ const EventHome = observer(() => {
                                 </LeaderboardRow>
                             ))}
                         {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
-                            eventLeaderboards.length === 0 && (
-                                <p>No leaderboards yet.</p>
-                            )}
+                            eventLeaderboards.length === 0 && <p>No leaderboards yet.</p>}
                     </EventSurface>
 
                     <AddAttendeeModal

@@ -12,10 +12,7 @@ const ModImage = styled.img`
     max-height: 100%;
 `;
 
-const DIFFICULTY_INCREASING_BLANKS = [
-    ModAcronym.Blinds,
-    ModAcronym.AccuracyChallenge,
-];
+const DIFFICULTY_INCREASING_BLANKS = [ModAcronym.Blinds, ModAcronym.AccuracyChallenge];
 
 const DIFFICULTY_DECREASING_BLANKS = [ModAcronym.Daycore];
 
@@ -51,22 +48,14 @@ const ModIcon = (props: ModIconProps) => {
     if (FUN_BLANKS.includes(acronym as ModAcronym)) {
         return (
             <Tooltip content={formatModName(acronym)}>
-                <ModImage
-                    src={`/static/images/mods/blanks/Fun${
-                        props.small ? "" : "@2x"
-                    }.png`}
-                />
+                <ModImage src={`/static/images/mods/blanks/Fun${props.small ? "" : "@2x"}.png`} />
             </Tooltip>
         );
     }
 
     return (
         <Tooltip content={formatModName(acronym)}>
-            <ModImage
-                src={`/static/images/mods/mod_${acronym}${
-                    props.small ? "" : "@2x"
-                }.png`}
-            />
+            <ModImage src={`/static/images/mods/mod_${acronym}${props.small ? "" : "@2x"}.png`} />
         </Tooltip>
     );
 };

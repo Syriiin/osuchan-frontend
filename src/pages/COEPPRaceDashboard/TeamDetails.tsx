@@ -73,27 +73,19 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 
     return (
         <TeamDetailsWrapper>
-            <Header
-                teamColour={props.teamColour}
-                teamColourDark={props.teamColourDark}
-            >
+            <Header teamColour={props.teamColour} teamColourDark={props.teamColourDark}>
                 <TeamTitle>{team.name}</TeamTitle>
                 <TeamTotal>
                     <TeamPerformanceTotal>
                         <NumberFormat value={team.totalPp} decimalPlaces={0} />
                         pp
                     </TeamPerformanceTotal>
-                    <TeamScoreCount>
-                        {team.scoreCount} scores in total
-                    </TeamScoreCount>
+                    <TeamScoreCount>{team.scoreCount} scores in total</TeamScoreCount>
                 </TeamTotal>
             </Header>
             <Details>
                 {props.mode === "players" && (
-                    <TeamPlayerDetails
-                        teamColour={props.teamColour}
-                        players={players}
-                    />
+                    <TeamPlayerDetails teamColour={props.teamColour} players={players} />
                 )}
                 {props.mode === "scores" && (
                     <TeamScoreDetails

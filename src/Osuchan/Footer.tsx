@@ -46,11 +46,7 @@ const Footer = () => (
             </FooterLink>
         </div>
         <SocialLinks>
-            <SocialLink
-                href="https://discord.gg/z7c9tD6"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+            <SocialLink href="https://discord.gg/z7c9tD6" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faDiscord} />
             </SocialLink>
             <SocialLink

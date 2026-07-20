@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
-import {
-    Surface,
-    DataTable,
-    DataCell,
-    NumberFormat,
-} from "../../../components";
+import { Surface, DataTable, DataCell, NumberFormat } from "../../../components";
 import type { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
 import { observer } from "mobx-react-lite";
@@ -55,10 +50,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                         </DataCell>
                     )}
                     <DataCell>
-                        <NumberFormat
-                            value={props.userStats.scoreStyleBpm}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={props.userStats.scoreStyleBpm} decimalPlaces={0} />
                     </DataCell>
                 </tr>
                 <tr>
@@ -68,57 +60,39 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                             {formatTime(usersStore.sandboxScoreStyleLength)}
                         </DataCell>
                     )}
-                    <DataCell>
-                        {formatTime(props.userStats.scoreStyleLength)}
-                    </DataCell>
+                    <DataCell>{formatTime(props.userStats.scoreStyleLength)}</DataCell>
                 </tr>
                 {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(
                     userStats.gamemode,
                 ) && (
                     <tr>
-                        <td>
-                            {userStats.gamemode === Gamemode.Mania
-                                ? "Keys"
-                                : "Circle Size"}
-                        </td>
+                        <td>{userStats.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
                         {props.sandboxMode && (
                             <DataCell highlighted>
                                 <NumberFormat
-                                    value={
-                                        usersStore.sandboxScoreStyleCircleSize
-                                    }
+                                    value={usersStore.sandboxScoreStyleCircleSize}
                                     decimalPlaces={1}
                                 />
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat
-                                value={props.userStats.scoreStyleCs}
-                                decimalPlaces={1}
-                            />
+                            <NumberFormat value={props.userStats.scoreStyleCs} decimalPlaces={1} />
                         </DataCell>
                     </tr>
                 )}
-                {[Gamemode.Standard, Gamemode.Catch].includes(
-                    userStats.gamemode,
-                ) && (
+                {[Gamemode.Standard, Gamemode.Catch].includes(userStats.gamemode) && (
                     <tr>
                         <td>Approach Rate</td>
                         {props.sandboxMode && (
                             <DataCell highlighted>
                                 <NumberFormat
-                                    value={
-                                        usersStore.sandboxScoreStyleApproachRate
-                                    }
+                                    value={usersStore.sandboxScoreStyleApproachRate}
                                     decimalPlaces={1}
                                 />
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat
-                                value={props.userStats.scoreStyleAr}
-                                decimalPlaces={1}
-                            />
+                            <NumberFormat value={props.userStats.scoreStyleAr} decimalPlaces={1} />
                         </DataCell>
                     </tr>
                 )}
@@ -127,18 +101,13 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                     {props.sandboxMode && (
                         <DataCell highlighted>
                             <NumberFormat
-                                value={
-                                    usersStore.sandboxScoreStyleOverallDifficulty
-                                }
+                                value={usersStore.sandboxScoreStyleOverallDifficulty}
                                 decimalPlaces={1}
                             />
                         </DataCell>
                     )}
                     <DataCell>
-                        <NumberFormat
-                            value={props.userStats.scoreStyleOd}
-                            decimalPlaces={1}
-                        />
+                        <NumberFormat value={props.userStats.scoreStyleOd} decimalPlaces={1} />
                     </DataCell>
                 </tr>
             </DataTable>

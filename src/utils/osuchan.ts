@@ -1,14 +1,7 @@
-import {
-    AllowedBeatmapStatus,
-    ScoreResult,
-} from "../store/models/profiles/enums";
+import { AllowedBeatmapStatus, ScoreResult } from "../store/models/profiles/enums";
 import type { ScoreFilter } from "../store/models/profiles/types";
 
-export function getScoreResult(
-    countMiss: number,
-    bestCombo: number,
-    maxCombo: number,
-) {
+export function getScoreResult(countMiss: number, bestCombo: number, maxCombo: number) {
     if (countMiss === 1) {
         return ScoreResult.OneMiss;
     }

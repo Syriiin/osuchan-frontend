@@ -113,9 +113,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                         fullWidth
                         required
                         placeholder="https://osu.ppy.sh/users/5701575"
-                        onChange={(e) =>
-                            setInviteUserUrl(e.currentTarget.value)
-                        }
+                        onChange={(e) => setInviteUserUrl(e.currentTarget.value)}
                         value={inviteUserUrl}
                     />
                 </FormControl>
@@ -123,9 +121,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                 <FormControl>
                     <TextField
                         fullWidth
-                        onChange={(e) =>
-                            setInviteMessage(e.currentTarget.value)
-                        }
+                        onChange={(e) => setInviteMessage(e.currentTarget.value)}
                         value={inviteMessage}
                     />
                 </FormControl>
@@ -167,15 +163,10 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
     return (
         <SimpleModal open={props.open} onClose={props.onClose}>
             <Helmet>
-                {loadingInvitesStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
+                {loadingInvitesStatus === ResourceStatus.Loading && <title>Loading...</title>}
+                {loadingInvitesStatus === ResourceStatus.Loaded && leaderboard && (
+                    <title>Manage Invites - {leaderboard.name} - osu!chan</title>
                 )}
-                {loadingInvitesStatus === ResourceStatus.Loaded &&
-                    leaderboard && (
-                        <title>
-                            Manage Invites - {leaderboard.name} - osu!chan
-                        </title>
-                    )}
                 {loadingInvitesStatus === ResourceStatus.Error && (
                     <title>Leaderboard not found - osu!chan</title>
                 )}
@@ -196,19 +187,13 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
                 ))}
             </InvitesList>
 
-            {loadingInvitesStatus === ResourceStatus.Loaded &&
-                invites.length === 0 && (
-                    <p>There are no pending invites for this leaderboard...</p>
-                )}
-
-            {loadingInvitesStatus === ResourceStatus.Loading && (
-                <LoadingSection />
+            {loadingInvitesStatus === ResourceStatus.Loaded && invites.length === 0 && (
+                <p>There are no pending invites for this leaderboard...</p>
             )}
 
-            <InvitePlayerModal
-                open={inviteModalOpen}
-                onClose={() => setInviteModalOpen(false)}
-            />
+            {loadingInvitesStatus === ResourceStatus.Loading && <LoadingSection />}
+
+            <InvitePlayerModal open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} />
         </SimpleModal>
     );
 });

@@ -39,14 +39,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
     const handleApply = (e: React.FormEvent) => {
         e.preventDefault();
 
-        usersStore.updateSandboxScore(
-            score,
-            mods,
-            combo,
-            countOk,
-            countMeh,
-            countMiss,
-        );
+        usersStore.updateSandboxScore(score, mods, combo, countOk, countMeh, countMiss);
 
         props.onClose();
     };
@@ -55,8 +48,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
         <SimpleModal open={props.open} onClose={props.onClose}>
             <SimpleModalTitle>Edit Score</SimpleModalTitle>
             <p>
-                Edit you score to see how your profile stats would look if you
-                played differently!
+                Edit you score to see how your profile stats would look if you played differently!
             </p>
             <form onSubmit={handleApply}>
                 <FormLabel>Mods</FormLabel>
@@ -77,9 +69,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={score.bestCombo.toString()}
                         value={combo}
-                        onChange={(e) =>
-                            setCombo(parseInt(e.currentTarget.value))
-                        }
+                        onChange={(e) => setCombo(parseInt(e.currentTarget.value))}
                         min={0}
                         max={beatmap.maxCombo}
                     />
@@ -92,9 +82,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["ok"] ?? 0).toString()}
                         value={countOk}
-                        onChange={(e) =>
-                            setCountOk(parseInt(e.currentTarget.value))
-                        }
+                        onChange={(e) => setCountOk(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>
@@ -106,9 +94,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["meh"] ?? 0).toString()}
                         value={countMeh}
-                        onChange={(e) =>
-                            setCountMeh(parseInt(e.currentTarget.value))
-                        }
+                        onChange={(e) => setCountMeh(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>
@@ -120,9 +106,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         required
                         placeholder={(score.statistics["miss"] ?? 0).toString()}
                         value={countMiss}
-                        onChange={(e) =>
-                            setCountMiss(parseInt(e.currentTarget.value))
-                        }
+                        onChange={(e) => setCountMiss(parseInt(e.currentTarget.value))}
                         min={0}
                     />
                 </FormControl>

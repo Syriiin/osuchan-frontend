@@ -3,14 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
 
-import {
-    LoadingPage,
-    Surface,
-    SurfaceTitle,
-    Row,
-    UnstyledLink,
-    Button,
-} from "../../components";
+import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
 import type { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { formatGamemodeNameShort } from "../../utils/formatting";
@@ -80,14 +73,11 @@ const InviteRow = observer((props: InviteRowProps) => {
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{invite.leaderboard!.name}</LeaderboardTitle>
                 <LeaderboardType>
-                    {invite.leaderboard!.accessType ===
-                        LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                    {invite.leaderboard!.accessType ===
-                        LeaderboardAccessType.Private && "PRIVATE"}
+                    {invite.leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly &&
+                        "INVITE-ONLY"}
+                    {invite.leaderboard!.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                 </LeaderboardType>
-                <LeaderboardSubtitle>
-                    {invite.leaderboard!.memberCount} members
-                </LeaderboardSubtitle>
+                <LeaderboardSubtitle>{invite.leaderboard!.memberCount} members</LeaderboardSubtitle>
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
             <Button
@@ -128,12 +118,8 @@ const Invites = observer(() => {
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && (
-                    <title>Invites - osu!chan</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
+                {loadingStatus === ResourceStatus.Loaded && <title>Invites - osu!chan</title>}
             </Helmet>
 
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
@@ -143,9 +129,7 @@ const Invites = observer(() => {
                     {invites.map((invite) => (
                         <InviteRow invite={invite} />
                     ))}
-                    {invites.length === 0 && (
-                        <p>You currently have no pending invites...</p>
-                    )}
+                    {invites.length === 0 && <p>You currently have no pending invites...</p>}
                 </InvitesSurface>
             )}
         </>

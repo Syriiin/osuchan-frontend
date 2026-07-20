@@ -69,37 +69,29 @@ const EventList = observer(() => {
                     <SurfaceTitle>Events</SurfaceTitle>
                 </SurfaceHeaderContainer>
 
-                {eventsStatus === PaginatedResourceStatus.LoadingInitial && (
-                    <LoadingSection />
-                )}
+                {eventsStatus === PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
 
                 {eventsStatus === PaginatedResourceStatus.Loaded &&
                     events.map((event) => (
-                        <UnstyledLink
-                            key={event.id}
-                            to={`/events/${event.slug}`}
-                        >
+                        <UnstyledLink key={event.id} to={`/events/${event.slug}`}>
                             <Row hoverable>
                                 <EventIconContainer>
-                                    <EventIcon
-                                        src={
-                                            event.logo || "/static/icon-64.png"
-                                        }
-                                    />
+                                    <EventIcon src={event.logo || "/static/icon-64.png"} />
                                 </EventIconContainer>
                                 <EventTitleContainer>
                                     <EventTitle>{event.name}</EventTitle>
                                     <EventSubtitle>
-                                        <AbsoluteDate date={event.startDate} />{" "}
-                                        - <AbsoluteDate date={event.endDate} />
+                                        <AbsoluteDate date={event.startDate} /> -{" "}
+                                        <AbsoluteDate date={event.endDate} />
                                     </EventSubtitle>
                                 </EventTitleContainer>
                             </Row>
                         </UnstyledLink>
                     ))}
 
-                {eventsStatus === PaginatedResourceStatus.Loaded &&
-                    events.length === 0 && <p>No events found.</p>}
+                {eventsStatus === PaginatedResourceStatus.Loaded && events.length === 0 && (
+                    <p>No events found.</p>
+                )}
             </EventsSurface>
         </>
     );

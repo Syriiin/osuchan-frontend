@@ -1,12 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import {
-    Navigate,
-    useMatch,
-    useNavigate,
-    useParams,
-} from "react-router-dom";
+import { Navigate, useMatch, useNavigate, useParams } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
 import {
@@ -22,10 +17,7 @@ import {
 } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
 import { LeaderboardAccessType } from "../../../store/models/leaderboards/enums";
-import {
-    AllowedBeatmapStatus,
-    ScoreSet,
-} from "../../../store/models/profiles/enums";
+import { AllowedBeatmapStatus, ScoreSet } from "../../../store/models/profiles/enums";
 import type { ScoreFilter } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
 import {
@@ -35,15 +27,9 @@ import {
     formatTime,
 } from "../../../utils/formatting";
 import { useAutorun, useStore } from "../../../utils/hooks";
-import {
-    gamemodeIdFromName,
-    modsJsonFromModAcronyms,
-} from "../../../utils/osu";
+import { gamemodeIdFromName, modsJsonFromModAcronyms } from "../../../utils/osu";
 import { scoreFilterIsDefault } from "../../../utils/osuchan";
-import {
-    setCssCustomProperties,
-    clearCssCustomProperties,
-} from "../../../utils/general";
+import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 import EditLeaderboardModal from "./EditLeaderboardModal";
 import ManageInvitesModal from "./ManageInvitesModal";
 import MemberModal from "./MemberModal";
@@ -137,9 +123,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterName>Required Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            mods={modsJsonFromModAcronyms(
-                                scoreFilter.requiredModsJson,
-                            )}
+                            mods={modsJsonFromModAcronyms(scoreFilter.requiredModsJson)}
                             small
                         />
                     </ScoreFilterValue>
@@ -150,9 +134,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterName>Disqualified Mods</ScoreFilterName>
                     <ScoreFilterValue>
                         <ModIcons
-                            mods={modsJsonFromModAcronyms(
-                                scoreFilter.disqualifiedModsJson,
-                            )}
+                            mods={modsJsonFromModAcronyms(scoreFilter.disqualifiedModsJson)}
                             small
                         />
                     </ScoreFilterValue>
@@ -165,8 +147,7 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
                     <ScoreFilterValue>Ranked or Loved</ScoreFilterValue>
                 </>
             )}
-            {scoreFilter.allowedBeatmapStatus ===
-                AllowedBeatmapStatus.LovedOnly && (
+            {scoreFilter.allowedBeatmapStatus === AllowedBeatmapStatus.LovedOnly && (
                 <>
                     <ScoreFilterName>Beatmap Status</ScoreFilterName>
                     <ScoreFilterValue>Loved</ScoreFilterValue>
@@ -210,34 +191,26 @@ const LeaderboardFilters = observer((props: LeaderboardFiltersProps) => {
             {scoreFilter.lowestAccuracy !== null && (
                 <>
                     <ScoreFilterName>Min Accuracy</ScoreFilterName>
-                    <ScoreFilterValue>
-                        {scoreFilter.lowestAccuracy}%
-                    </ScoreFilterValue>
+                    <ScoreFilterValue>{scoreFilter.lowestAccuracy}%</ScoreFilterValue>
                 </>
             )}
             {scoreFilter.highestAccuracy !== null && (
                 <>
                     <ScoreFilterName>Max Accuracy</ScoreFilterName>
-                    <ScoreFilterValue>
-                        {scoreFilter.highestAccuracy}%
-                    </ScoreFilterValue>
+                    <ScoreFilterValue>{scoreFilter.highestAccuracy}%</ScoreFilterValue>
                 </>
             )}
             {/* Length */}
             {scoreFilter.lowestLength !== null && (
                 <>
                     <ScoreFilterName>Min Length</ScoreFilterName>
-                    <ScoreFilterValue>
-                        {formatTime(scoreFilter.lowestLength)}
-                    </ScoreFilterValue>
+                    <ScoreFilterValue>{formatTime(scoreFilter.lowestLength)}</ScoreFilterValue>
                 </>
             )}
             {scoreFilter.highestLength !== null && (
                 <>
                     <ScoreFilterName>Max Length</ScoreFilterName>
-                    <ScoreFilterValue>
-                        {formatTime(scoreFilter.highestLength)}
-                    </ScoreFilterValue>
+                    <ScoreFilterValue>{formatTime(scoreFilter.highestLength)}</ScoreFilterValue>
                 </>
             )}
             {/* CS */}
@@ -316,9 +289,8 @@ const LeaderboardButtons = observer(() => {
             <VerticalButtonGroup>
                 {/* Join button if public or pending invite, and not member */}
                 {(leaderboard!.accessType === LeaderboardAccessType.Public ||
-                    meStore.invites.find(
-                        (i) => i.leaderboardId === leaderboard!.id,
-                    ) !== undefined) &&
+                    meStore.invites.find((i) => i.leaderboardId === leaderboard!.id) !==
+                        undefined) &&
                     detailStore.userMembership === null && (
                         <Button
                             type="button"
@@ -334,32 +306,22 @@ const LeaderboardButtons = observer(() => {
                 {leaderboard!.ownerId === user?.osuUserId && (
                     <>
                         {/* Edit button */}
-                        <Button action={() => setEditModalOpen(true)}>
-                            Edit Leaderboard
-                        </Button>
+                        <Button action={() => setEditModalOpen(true)}>Edit Leaderboard</Button>
 
                         {/* Delete / archive / restore buttons */}
                         {leaderboard!.archived ? (
                             <>
                                 <Button
                                     positive
-                                    isLoading={
-                                        detailStore.isRestoringLeaderboard
-                                    }
-                                    action={() =>
-                                        detailStore.restoreLeaderboard()
-                                    }
+                                    isLoading={detailStore.isRestoringLeaderboard}
+                                    action={() => detailStore.restoreLeaderboard()}
                                 >
                                     Restore Leaderboard
                                 </Button>
                                 <Button
                                     negative
-                                    isLoading={
-                                        detailStore.isDeletingLeaderboard
-                                    }
-                                    action={() =>
-                                        detailStore.deleteLeaderboard()
-                                    }
+                                    isLoading={detailStore.isDeletingLeaderboard}
+                                    action={() => detailStore.deleteLeaderboard()}
                                     confirmationMessage="Are you sure you want to delete this leaderboard?"
                                 >
                                     Delete Leaderboard
@@ -370,25 +332,16 @@ const LeaderboardButtons = observer(() => {
                                 {/* Manage invites button if either private or public invite-only */}
                                 {(leaderboard!.accessType ===
                                     LeaderboardAccessType.PublicInviteOnly ||
-                                    leaderboard!.accessType ===
-                                        LeaderboardAccessType.Private) && (
-                                    <Button
-                                        as={UnstyledLink}
-                                        to="invites"
-                                        type="button"
-                                    >
+                                    leaderboard!.accessType === LeaderboardAccessType.Private) && (
+                                    <Button as={UnstyledLink} to="invites" type="button">
                                         Manage Invites
                                     </Button>
                                 )}
 
                                 <Button
                                     negative
-                                    isLoading={
-                                        detailStore.isArchivingLeaderboard
-                                    }
-                                    action={() =>
-                                        detailStore.archiveLeaderboard()
-                                    }
+                                    isLoading={detailStore.isArchivingLeaderboard}
+                                    action={() => detailStore.archiveLeaderboard()}
                                     confirmationMessage="Are you sure you want to archive this leaderboard?"
                                 >
                                     Archive Leaderboard
@@ -412,10 +365,7 @@ const LeaderboardButtons = observer(() => {
                         </Button>
                     )}
             </VerticalButtonGroup>
-            <EditLeaderboardModal
-                open={editModalOpen}
-                onClose={() => setEditModalOpen(false)}
-            />
+            <EditLeaderboardModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
         </>
     );
 });
@@ -426,8 +376,12 @@ const LeaderboardHome = observer(() => {
     const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
     const leaderboardId = parseInt(params.leaderboardId!);
-    const invitesMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/invites");
-    const memberMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/members/:userId");
+    const invitesMatch = useMatch(
+        "/leaderboards/:leaderboardType/:gamemode/:leaderboardId/invites",
+    );
+    const memberMatch = useMatch(
+        "/leaderboards/:leaderboardType/:gamemode/:leaderboardId/members/:userId",
+    );
 
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
@@ -461,9 +415,7 @@ const LeaderboardHome = observer(() => {
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && leaderboard && (
                     <title>{leaderboard.name} - osu!chan</title>
                 )}
@@ -472,162 +424,123 @@ const LeaderboardHome = observer(() => {
                 )}
             </Helmet>
 
-            {detailStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
-            {detailStore.loadingStatus === ResourceStatus.Loaded &&
-                leaderboard && (
-                    <ThemeProvider
-                        theme={(osuchanTheme) => {
-                            const theme = osuchanTheme!;
-                            return leaderboard.isEvent
-                                ? {
-                                      ...theme,
-                                      colours: {
-                                          ...theme.colours,
-                                          ...leaderboard.customColours,
-                                      },
-                                  }
-                                : theme;
-                        }}
-                    >
-                        <>
-                            {/*Leaderboard Details */}
-                            <LeaderboardSurface>
-                                <LeaderboardDetailsContainer>
-                                    <LeaderboardInfoContainer>
-                                        {leaderboard.iconUrl && (
-                                            <LeaderboardIcon
-                                                src={leaderboard.iconUrl}
-                                            />
-                                        )}
-                                        <LeaderboardInfo>
-                                            <LeaderboardInfoRow>
-                                                <LeaderboardName>
-                                                    {leaderboard.name}
-                                                </LeaderboardName>
-                                            </LeaderboardInfoRow>
-                                            <LeaderboardInfoRow>
-                                                {/* Labels */}
-                                                <LabelGroup>
-                                                    {leaderboard.isEvent && (
-                                                        <Label special>
-                                                            EVENT
-                                                        </Label>
-                                                    )}
-                                                    {leaderboard.archived && (
-                                                        <Label negative>
-                                                            ARCHIVED
-                                                        </Label>
-                                                    )}
-                                                    <Label>
-                                                        {formatGamemodeName(
-                                                            leaderboard.gamemode,
-                                                        )}
-                                                    </Label>
-                                                    <Label>
-                                                        {leaderboard.accessType ===
-                                                            LeaderboardAccessType.Global &&
-                                                            "Global"}
-                                                        {leaderboard.accessType ===
-                                                            LeaderboardAccessType.Public &&
-                                                            "Public"}
-                                                        {leaderboard.accessType ===
-                                                            LeaderboardAccessType.PublicInviteOnly &&
-                                                            "Invite-Only"}
-                                                        {leaderboard.accessType ===
-                                                            LeaderboardAccessType.Private &&
-                                                            "Private"}
-                                                    </Label>
-                                                    {leaderboard.scoreSet !==
-                                                        ScoreSet.Normal && (
-                                                        <Label special>
-                                                            {leaderboard.scoreSet ===
-                                                                ScoreSet.NeverChoke &&
-                                                                "Never Choke"}
-                                                            {leaderboard.scoreSet ===
-                                                                ScoreSet.AlwaysFullCombo &&
-                                                                "Always Full Combo"}
-                                                        </Label>
-                                                    )}
-                                                    {!leaderboard.allowPastScores && (
-                                                        <Label special>
-                                                            Only scores after
-                                                            joining
-                                                        </Label>
-                                                    )}
-                                                    <Label>
-                                                        {formatCalculatorEngine(
-                                                            leaderboard.calculatorEngine,
-                                                        )}{" "}
-                                                        (
-                                                        {formatDiffcalcValueName(
-                                                            leaderboard.primaryPerformanceValue,
-                                                        )}
-                                                        )
-                                                    </Label>
-                                                </LabelGroup>
-                                            </LeaderboardInfoRow>
-                                            {!leaderboard.isEvent &&
-                                                leaderboard.owner && (
-                                                    <LeaderboardInfoRow>
-                                                        Owned by{" "}
-                                                        <Owner>
-                                                            {
-                                                                leaderboard
-                                                                    .owner
-                                                                    .username
-                                                            }
-                                                        </Owner>
-                                                    </LeaderboardInfoRow>
+            {detailStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
+            {detailStore.loadingStatus === ResourceStatus.Loaded && leaderboard && (
+                <ThemeProvider
+                    theme={(osuchanTheme) => {
+                        const theme = osuchanTheme!;
+                        return leaderboard.isEvent
+                            ? {
+                                  ...theme,
+                                  colours: {
+                                      ...theme.colours,
+                                      ...leaderboard.customColours,
+                                  },
+                              }
+                            : theme;
+                    }}
+                >
+                    <>
+                        {/*Leaderboard Details */}
+                        <LeaderboardSurface>
+                            <LeaderboardDetailsContainer>
+                                <LeaderboardInfoContainer>
+                                    {leaderboard.iconUrl && (
+                                        <LeaderboardIcon src={leaderboard.iconUrl} />
+                                    )}
+                                    <LeaderboardInfo>
+                                        <LeaderboardInfoRow>
+                                            <LeaderboardName>{leaderboard.name}</LeaderboardName>
+                                        </LeaderboardInfoRow>
+                                        <LeaderboardInfoRow>
+                                            {/* Labels */}
+                                            <LabelGroup>
+                                                {leaderboard.isEvent && (
+                                                    <Label special>EVENT</Label>
                                                 )}
-                                        </LeaderboardInfo>
-                                    </LeaderboardInfoContainer>
-                                    <Description>
-                                        {leaderboard.description}
-                                    </Description>
-                                </LeaderboardDetailsContainer>
-                                {leaderboard.scoreFilter &&
-                                    !scoreFilterIsDefault(
-                                        leaderboard.scoreFilter,
-                                    ) && (
-                                        <LeaderboardScoreFilterContainer>
-                                            <LeaderboardFilters
-                                                gamemode={leaderboard.gamemode}
-                                                scoreFilter={
-                                                    leaderboard.scoreFilter
-                                                }
-                                            />
-                                        </LeaderboardScoreFilterContainer>
-                                    )}
-                                {leaderboard.accessType !==
-                                    LeaderboardAccessType.Global &&
-                                    meStore.isAuthenticated && (
-                                        <LeaderboardButtonsContainer>
-                                            <LeaderboardButtons />
-                                        </LeaderboardButtonsContainer>
-                                    )}
-                            </LeaderboardSurface>
+                                                {leaderboard.archived && (
+                                                    <Label negative>ARCHIVED</Label>
+                                                )}
+                                                <Label>
+                                                    {formatGamemodeName(leaderboard.gamemode)}
+                                                </Label>
+                                                <Label>
+                                                    {leaderboard.accessType ===
+                                                        LeaderboardAccessType.Global && "Global"}
+                                                    {leaderboard.accessType ===
+                                                        LeaderboardAccessType.Public && "Public"}
+                                                    {leaderboard.accessType ===
+                                                        LeaderboardAccessType.PublicInviteOnly &&
+                                                        "Invite-Only"}
+                                                    {leaderboard.accessType ===
+                                                        LeaderboardAccessType.Private && "Private"}
+                                                </Label>
+                                                {leaderboard.scoreSet !== ScoreSet.Normal && (
+                                                    <Label special>
+                                                        {leaderboard.scoreSet ===
+                                                            ScoreSet.NeverChoke && "Never Choke"}
+                                                        {leaderboard.scoreSet ===
+                                                            ScoreSet.AlwaysFullCombo &&
+                                                            "Always Full Combo"}
+                                                    </Label>
+                                                )}
+                                                {!leaderboard.allowPastScores && (
+                                                    <Label special>Only scores after joining</Label>
+                                                )}
+                                                <Label>
+                                                    {formatCalculatorEngine(
+                                                        leaderboard.calculatorEngine,
+                                                    )}{" "}
+                                                    (
+                                                    {formatDiffcalcValueName(
+                                                        leaderboard.primaryPerformanceValue,
+                                                    )}
+                                                    )
+                                                </Label>
+                                            </LabelGroup>
+                                        </LeaderboardInfoRow>
+                                        {!leaderboard.isEvent && leaderboard.owner && (
+                                            <LeaderboardInfoRow>
+                                                Owned by <Owner>{leaderboard.owner.username}</Owner>
+                                            </LeaderboardInfoRow>
+                                        )}
+                                    </LeaderboardInfo>
+                                </LeaderboardInfoContainer>
+                                <Description>{leaderboard.description}</Description>
+                            </LeaderboardDetailsContainer>
+                            {leaderboard.scoreFilter &&
+                                !scoreFilterIsDefault(leaderboard.scoreFilter) && (
+                                    <LeaderboardScoreFilterContainer>
+                                        <LeaderboardFilters
+                                            gamemode={leaderboard.gamemode}
+                                            scoreFilter={leaderboard.scoreFilter}
+                                        />
+                                    </LeaderboardScoreFilterContainer>
+                                )}
+                            {leaderboard.accessType !== LeaderboardAccessType.Global &&
+                                meStore.isAuthenticated && (
+                                    <LeaderboardButtonsContainer>
+                                        <LeaderboardButtons />
+                                    </LeaderboardButtonsContainer>
+                                )}
+                        </LeaderboardSurface>
 
-                            {/* Top Scores */}
-                            <TopScores scores={detailStore.leaderboardScores} />
+                        {/* Top Scores */}
+                        <TopScores scores={detailStore.leaderboardScores} />
 
-                            {/* Rankings */}
-                            <Rankings memberships={detailStore.rankings} />
-                        </>
-                    </ThemeProvider>
-                )}
-            {detailStore.loadingStatus === ResourceStatus.Error && (
-                <h3>Leaderboard not found!</h3>
+                        {/* Rankings */}
+                        <Rankings memberships={detailStore.rankings} />
+                    </>
+                </ThemeProvider>
             )}
+            {detailStore.loadingStatus === ResourceStatus.Error && <h3>Leaderboard not found!</h3>}
             <ManageInvitesModal
                 open={invitesMatch !== null && leaderboard !== null}
                 onClose={() => navigate(".")}
             />
-            {invitesMatch !== null && leaderboard &&
-                leaderboard.ownerId !== meStore.user?.osuUserId && (
-                <Navigate to="." replace />
-            )}
+            {invitesMatch !== null &&
+                leaderboard &&
+                leaderboard.ownerId !== meStore.user?.osuUserId && <Navigate to="." replace />}
             <MemberModal
                 open={memberMatch !== null && leaderboard !== null}
                 onClose={() => navigate(".")}

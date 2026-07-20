@@ -50,22 +50,16 @@ const Scores = observer((props: ScoresProps) => {
     return (
         <ScoresSurface>
             <SurfaceTitle>Scores</SurfaceTitle>
-            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map(
-                (score, i) => (
-                    <ProfileScoreRow
-                        key={i}
-                        score={score}
-                        gamemode={props.gamemode}
-                        sandboxMode={props.sandboxMode}
-                    />
-                ),
-            )}
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
+                <ProfileScoreRow
+                    key={i}
+                    score={score}
+                    gamemode={props.gamemode}
+                    sandboxMode={props.sandboxMode}
+                />
+            ))}
             {props.scores.length <= 5 || showAllScores || (
-                <Button
-                    type="button"
-                    fullWidth
-                    action={() => setShowAllScores(true)}
-                >
+                <Button type="button" fullWidth action={() => setShowAllScores(true)}>
                     Show More
                 </Button>
             )}

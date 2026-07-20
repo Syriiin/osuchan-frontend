@@ -1,9 +1,6 @@
 import { configure } from "mobx";
 import { Route, Routes, unstable_HistoryRouter as Router } from "react-router-dom";
-import {
-    ThemeProvider as StyledThemeProvider,
-    createGlobalStyle,
-} from "styled-components";
+import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -48,16 +45,16 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const AppWithContext = () => (
-        <Routes>
-            <Route
-                path="/leaderboards/:leaderboardType/:gamemode/:leaderboardId/dashboard"
-                element={<LeaderboardDashboard />}
-            />
-            <Route path="/ppraces/:ppraceId/dashboard" element={<PPRaceDashboard />} />
-            <Route path="/ppraces/:ppraceId/coe-dashboard" element={<COEPPRaceDashboard />} />
-            <Route path="*" element={<Osuchan />} />
-        </Routes>
-    );
+    <Routes>
+        <Route
+            path="/leaderboards/:leaderboardType/:gamemode/:leaderboardId/dashboard"
+            element={<LeaderboardDashboard />}
+        />
+        <Route path="/ppraces/:ppraceId/dashboard" element={<PPRaceDashboard />} />
+        <Route path="/ppraces/:ppraceId/coe-dashboard" element={<COEPPRaceDashboard />} />
+        <Route path="*" element={<Osuchan />} />
+    </Routes>
+);
 
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>

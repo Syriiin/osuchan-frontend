@@ -102,11 +102,9 @@ describe("formatCalculatorEngine", () => {
     });
 
     test("formats PP+ engine", () => {
-        expect(
-            formatCalculatorEngine(
-                "https://github.com/Syriiin/osu/tree/performanceplus",
-            ),
-        ).toBe("PP+");
+        expect(formatCalculatorEngine("https://github.com/Syriiin/osu/tree/performanceplus")).toBe(
+            "PP+",
+        );
     });
 });
 

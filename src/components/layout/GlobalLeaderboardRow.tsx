@@ -50,20 +50,13 @@ export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
         </LeaderboardIconContainer>
         <LeaderboardTitleContainer>
             <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
-            <LeaderboardSubtitle>
-                {props.leaderboard.description}
-            </LeaderboardSubtitle>
+            <LeaderboardSubtitle>{props.leaderboard.description}</LeaderboardSubtitle>
         </LeaderboardTitleContainer>
         {props.membership && (
             <MembershipInfoContainer>
-                <MembershipRank>
-                    #{props.membership.rank.toLocaleString("en")}
-                </MembershipRank>
+                <MembershipRank>#{props.membership.rank.toLocaleString("en")}</MembershipRank>
                 <MembershipPerformance>
-                    <NumberFormat
-                        value={props.membership.pp}
-                        decimalPlaces={0}
-                    />
+                    <NumberFormat value={props.membership.pp} decimalPlaces={0} />
                     pp
                 </MembershipPerformance>
             </MembershipInfoContainer>

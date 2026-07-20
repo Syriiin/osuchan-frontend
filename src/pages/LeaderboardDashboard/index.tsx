@@ -67,16 +67,10 @@ const LeaderboardDashboard = observer(() => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
-    const { loadingStatus, leaderboard, rankings, leaderboardScores } =
-        detailStore;
+    const { loadingStatus, leaderboard, rankings, leaderboardScores } = detailStore;
 
     useEffect(() => {
-        detailStore.loadLeaderboard(
-            leaderboardType,
-            gamemode,
-            leaderboardId,
-            true,
-        );
+        detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId, true);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
     useEffect(() => {
@@ -89,9 +83,7 @@ const LeaderboardDashboard = observer(() => {
     return (
         <>
             <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
+                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
                 {loadingStatus === ResourceStatus.Loaded && leaderboard && (
                     <title>{leaderboard.name} - osu!chan</title>
                 )}
@@ -100,14 +92,11 @@ const LeaderboardDashboard = observer(() => {
                 )}
             </Helmet>
 
-            {leaderboard === null &&
-                detailStore.loadingStatus === ResourceStatus.Loading && (
-                    <LoadingPage />
-                )}
-
-            {detailStore.loadingStatus === ResourceStatus.Error && (
-                <h3>Leaderboard not found!</h3>
+            {leaderboard === null && detailStore.loadingStatus === ResourceStatus.Loading && (
+                <LoadingPage />
             )}
+
+            {detailStore.loadingStatus === ResourceStatus.Error && <h3>Leaderboard not found!</h3>}
 
             {leaderboard && (
                 <ThemeProvider

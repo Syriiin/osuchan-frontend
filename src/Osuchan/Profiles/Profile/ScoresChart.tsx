@@ -32,18 +32,8 @@ const ScoresChart = observer((props: ScoresChartProps) => {
         <ScoresChartSurface>
             <ResponsiveContainer>
                 <LineChart data={scoresData}>
-                    <XAxis
-                        type="number"
-                        dataKey="x"
-                        name="#"
-                        domain={[0, 100]}
-                    />
-                    <YAxis
-                        type="number"
-                        name="PP"
-                        unit="pp"
-                        domain={["auto", "auto"]}
-                    />
+                    <XAxis type="number" dataKey="x" name="#" domain={[0, 100]} />
+                    <YAxis type="number" name="PP" unit="pp" domain={["auto", "auto"]} />
                     <CartesianGrid vertical={false} />
                     <Tooltip
                         labelFormatter={(label) => `# ${label}`}

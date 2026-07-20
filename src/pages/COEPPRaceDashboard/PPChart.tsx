@@ -1,12 +1,4 @@
-import {
-    ResponsiveContainer,
-    BarChart,
-    Bar,
-    Cell,
-    YAxis,
-    LabelList,
-    XAxis,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, Cell, YAxis, LabelList, XAxis } from "recharts";
 import type { PPRaceTeam } from "../../store/models/ppraces/types";
 import { observer } from "mobx-react-lite";
 import { TeamColours } from ".";
@@ -19,12 +11,7 @@ const PPChart = observer((props: PPChartProps) => {
     return (
         // 99% to fix resizing down https://github.com/recharts/recharts/issues/172
         <ResponsiveContainer width="99%" height="99%">
-            <BarChart
-                data={data}
-                layout="vertical"
-                barCategoryGap="20%"
-                barSize={40}
-            >
+            <BarChart data={data} layout="vertical" barCategoryGap="20%" barSize={40}>
                 <YAxis type="category" dataKey="name" hide />
                 <XAxis type="number" domain={[0, "dataMax + 1000"]} hide />
                 <Bar

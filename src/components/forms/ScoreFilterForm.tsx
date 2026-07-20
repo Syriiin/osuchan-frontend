@@ -13,10 +13,7 @@ import { Button } from "./Button";
 import { Select } from "./Select";
 import { DatePicker } from "./DatePicker";
 import { useStore } from "../../utils/hooks";
-import {
-    modAcronymsFromJsonMods,
-    modsJsonFromModAcronyms,
-} from "../../utils/osu";
+import { modAcronymsFromJsonMods, modsJsonFromModAcronyms } from "../../utils/osu";
 
 const SaveNewButton = styled(Button)``;
 
@@ -43,12 +40,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const [allowedBeatmapStatus, setAllowedBeatmapStatus] = useState(
         AllowedBeatmapStatus.RankedOnly,
     );
-    const [oldestBeatmapDate, setOldestBeatmapDate] = useState<Date | null>(
-        null,
-    );
-    const [newestBeatmapDate, setNewestBeatmapDate] = useState<Date | null>(
-        null,
-    );
+    const [oldestBeatmapDate, setOldestBeatmapDate] = useState<Date | null>(null);
+    const [newestBeatmapDate, setNewestBeatmapDate] = useState<Date | null>(null);
     const [oldestScoreDate, setOldestScoreDate] = useState<Date | null>(null);
     const [newestScoreDate, setNewestScoreDate] = useState<Date | null>(null);
     const [lowestAr, setLowestAr] = useState("");
@@ -127,8 +120,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setPresetName(preset?.name ?? "");
 
         setAllowedBeatmapStatus(
-            preset?.scoreFilter?.allowedBeatmapStatus ??
-                AllowedBeatmapStatus.RankedOnly,
+            preset?.scoreFilter?.allowedBeatmapStatus ?? AllowedBeatmapStatus.RankedOnly,
         );
         setOldestBeatmapDate(preset?.scoreFilter?.oldestBeatmapDate ?? null);
         setNewestBeatmapDate(preset?.scoreFilter?.newestBeatmapDate ?? null);
@@ -142,29 +134,17 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
         setHighestCs(preset?.scoreFilter?.highestCs?.toString() ?? "");
         setRequiredMods(preset?.scoreFilter?.requiredModsJson ?? []);
         setDisqualifiedMods(preset?.scoreFilter?.disqualifiedModsJson ?? []);
-        setLowestAccuracy(
-            preset?.scoreFilter?.lowestAccuracy?.toString() ?? "",
-        );
-        setHighestAccuracy(
-            preset?.scoreFilter?.highestAccuracy?.toString() ?? "",
-        );
+        setLowestAccuracy(preset?.scoreFilter?.lowestAccuracy?.toString() ?? "");
+        setHighestAccuracy(preset?.scoreFilter?.highestAccuracy?.toString() ?? "");
         setLowestLength(preset?.scoreFilter?.lowestLength?.toString() ?? "");
         setHighestLength(preset?.scoreFilter?.highestLength?.toString() ?? "");
     };
 
     const handleSavePreset = () =>
-        meStore.createScoreFilterPreset(
-            presetName || "New Preset",
-            getScoreFilter(),
-        );
+        meStore.createScoreFilterPreset(presetName || "New Preset", getScoreFilter());
     const handleUpdatePreset = () =>
-        meStore.updateScoreFilterPreset(
-            preset!.id,
-            presetName || preset!.name,
-            getScoreFilter(),
-        );
-    const handleDeletePreset = () =>
-        meStore.deleteScoreFilterPreset(preset!.id);
+        meStore.updateScoreFilterPreset(preset!.id, presetName || preset!.name, getScoreFilter());
+    const handleDeletePreset = () => meStore.deleteScoreFilterPreset(preset!.id);
 
     return (
         <>
@@ -177,10 +157,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <Select
                     value={preset?.id ?? 0}
                     onChange={(value) =>
-                        loadPreset(
-                            presets.find((preset) => preset.id === value) ??
-                                null,
-                        )
+                        loadPreset(presets.find((preset) => preset.id === value) ?? null)
                     }
                     options={[
                         { value: 0, label: "None" },
@@ -260,9 +237,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     startDate={value.oldestBeatmapDate}
                     endDate={value.newestBeatmapDate}
                     selected={value.oldestBeatmapDate}
-                    onChange={(date) =>
-                        setOldestBeatmapDate(date as Date | null)
-                    }
+                    onChange={(date) => setOldestBeatmapDate(date as Date | null)}
                 />
             </FormControl>
             <FormLabel>Newest Beatmap Date</FormLabel>
@@ -273,9 +248,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     minDate={value.oldestBeatmapDate ?? undefined}
                     endDate={value.newestBeatmapDate}
                     selected={value.newestBeatmapDate}
-                    onChange={(date) =>
-                        setNewestBeatmapDate(date as Date | null)
-                    }
+                    onChange={(date) => setNewestBeatmapDate(date as Date | null)}
                 />
             </FormControl>
             <FormLabel>Oldest Score Date</FormLabel>
@@ -305,35 +278,23 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             <FormControl>
                 <ModsSelect
                     gamemode={gamemode}
-                    value={modsJsonFromModAcronyms(
-                        value.requiredModsJson || [],
-                    )}
-                    onChange={(mods) =>
-                        setRequiredMods(modAcronymsFromJsonMods(mods))
-                    }
+                    value={modsJsonFromModAcronyms(value.requiredModsJson || [])}
+                    onChange={(mods) => setRequiredMods(modAcronymsFromJsonMods(mods))}
                 />
             </FormControl>
             <FormLabel>Disqualified mods</FormLabel>
             <FormControl>
                 <ModsSelect
                     gamemode={gamemode}
-                    value={modsJsonFromModAcronyms(
-                        value.disqualifiedModsJson || [],
-                    )}
-                    onChange={(mods) =>
-                        setDisqualifiedMods(modAcronymsFromJsonMods(mods))
-                    }
+                    value={modsJsonFromModAcronyms(value.disqualifiedModsJson || [])}
+                    onChange={(mods) => setDisqualifiedMods(modAcronymsFromJsonMods(mods))}
                 />
             </FormControl>
 
             {/* Ranges */}
-            {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(
-                gamemode,
-            ) && (
+            {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(gamemode) && (
                 <>
-                    <FormLabel>
-                        Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}
-                    </FormLabel>
+                    <FormLabel>Min {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
                         <TextInput
                             type="number"
@@ -344,9 +305,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                             onChange={(e) => setLowestCs(e.currentTarget.value)}
                         />
                     </FormControl>
-                    <FormLabel>
-                        Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}
-                    </FormLabel>
+                    <FormLabel>Max {gamemode === Gamemode.Mania ? "Keys" : "CS"}</FormLabel>
                     <FormControl>
                         <TextInput
                             type="number"
@@ -354,9 +313,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                             min={gamemode === Gamemode.Mania ? "1" : "0"}
                             max={gamemode === Gamemode.Mania ? "10" : "11"}
                             value={value.highestCs || ""}
-                            onChange={(e) =>
-                                setHighestCs(e.currentTarget.value)
-                            }
+                            onChange={(e) => setHighestCs(e.currentTarget.value)}
                         />
                     </FormControl>
                 </>
@@ -382,9 +339,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                             min="-5"
                             max="13"
                             value={value.highestAr || ""}
-                            onChange={(e) =>
-                                setHighestAr(e.currentTarget.value)
-                            }
+                            onChange={(e) => setHighestAr(e.currentTarget.value)}
                         />
                     </FormControl>
                 </>

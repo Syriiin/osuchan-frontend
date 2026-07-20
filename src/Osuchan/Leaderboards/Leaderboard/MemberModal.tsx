@@ -62,12 +62,7 @@ const MemberInfo = observer((props: { userId?: string }) => {
     const meStore = store.meStore;
 
     const userId = parseInt(props.userId ?? "");
-    const {
-        loadingMembershipStatus,
-        leaderboard,
-        membership,
-        membershipScores,
-    } = detailStore;
+    const { loadingMembershipStatus, leaderboard, membership, membershipScores } = detailStore;
     const { isAuthenticated, user } = meStore;
 
     useEffect(() => {
@@ -81,114 +76,80 @@ const MemberInfo = observer((props: { userId?: string }) => {
     return (
         <>
             <Helmet>
-                {loadingMembershipStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
+                {loadingMembershipStatus === ResourceStatus.Loading && <title>Loading...</title>}
+                {loadingMembershipStatus === ResourceStatus.Loaded && leaderboard && membership && (
+                    <title>
+                        {membership.osuUser?.username} - {leaderboard.name} - osu!chan
+                    </title>
                 )}
-                {loadingMembershipStatus === ResourceStatus.Loaded &&
-                    leaderboard &&
-                    membership && (
-                        <title>
-                            {membership.osuUser?.username} - {leaderboard.name}{" "}
-                            - osu!chan
-                        </title>
-                    )}
                 {loadingMembershipStatus === ResourceStatus.Error && (
                     <title>Member not found - osu!chan</title>
                 )}
             </Helmet>
 
-            {loadingMembershipStatus === ResourceStatus.Loaded &&
-                membership && (
-                    <>
-                        <UserInfo>
-                            <Avatar
-                                src={`https://a.ppy.sh/${membership.osuUserId}`}
-                            />
-                            <UserInfoContainer>
-                                <UserInfoRow>
-                                    <Username>
-                                        {membership.osuUser!.username}
-                                    </Username>
-                                </UserInfoRow>
-                                <UserInfoRow>
-                                    <Flag
-                                        countryCode={
-                                            membership.osuUser!.country
-                                        }
-                                        showFullName
-                                    />
-                                </UserInfoRow>
-                                <UserInfoRow>
-                                    <ScoreCount>
-                                        {membership.scoreCount} scores
-                                    </ScoreCount>
-                                </UserInfoRow>
-                            </UserInfoContainer>
-                            <UserInfoContainer>
-                                <UserInfoRow>
-                                    <Rank>
-                                        #{membership.rank.toLocaleString("en")}
-                                    </Rank>
-                                </UserInfoRow>
-                                <UserInfoRow>
-                                    <Performance>
-                                        <NumberFormat
-                                            value={membership.pp}
-                                            decimalPlaces={0}
-                                        />
-                                        pp
-                                    </Performance>
-                                </UserInfoRow>
-                            </UserInfoContainer>
-                        </UserInfo>
+            {loadingMembershipStatus === ResourceStatus.Loaded && membership && (
+                <>
+                    <UserInfo>
+                        <Avatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
+                        <UserInfoContainer>
+                            <UserInfoRow>
+                                <Username>{membership.osuUser!.username}</Username>
+                            </UserInfoRow>
+                            <UserInfoRow>
+                                <Flag countryCode={membership.osuUser!.country} showFullName />
+                            </UserInfoRow>
+                            <UserInfoRow>
+                                <ScoreCount>{membership.scoreCount} scores</ScoreCount>
+                            </UserInfoRow>
+                        </UserInfoContainer>
+                        <UserInfoContainer>
+                            <UserInfoRow>
+                                <Rank>#{membership.rank.toLocaleString("en")}</Rank>
+                            </UserInfoRow>
+                            <UserInfoRow>
+                                <Performance>
+                                    <NumberFormat value={membership.pp} decimalPlaces={0} />
+                                    pp
+                                </Performance>
+                            </UserInfoRow>
+                        </UserInfoContainer>
+                    </UserInfo>
 
-                        {isAuthenticated &&
-                            leaderboard!.ownerId === user!.osuUserId &&
-                            membership?.osuUserId !== user!.osuUserId && (
-                                <>
-                                    <Divider spacingScale={5} />
-                                    <Button
-                                        negative
-                                        isLoading={detailStore.isKickingMember}
-                                        action={() => detailStore.kickMember()}
-                                        confirmationMessage="Are you sure you want to kick this member from the leaderboard?"
-                                    >
-                                        Kick Member
-                                    </Button>
-                                </>
-                            )}
+                    {isAuthenticated &&
+                        leaderboard!.ownerId === user!.osuUserId &&
+                        membership?.osuUserId !== user!.osuUserId && (
+                            <>
+                                <Divider spacingScale={5} />
+                                <Button
+                                    negative
+                                    isLoading={detailStore.isKickingMember}
+                                    action={() => detailStore.kickMember()}
+                                    confirmationMessage="Are you sure you want to kick this member from the leaderboard?"
+                                >
+                                    Kick Member
+                                </Button>
+                            </>
+                        )}
 
-                        <Divider spacingScale={5} />
+                    <Divider spacingScale={5} />
 
-                        {(showAllScores
-                            ? membershipScores
-                            : membershipScores.slice(0, 5)
-                        ).map((score, i) => (
+                    {(showAllScores ? membershipScores : membershipScores.slice(0, 5)).map(
+                        (score, i) => (
                             <ScoreRow key={i} score={score} hidePlayerInfo />
-                        ))}
-                        {membershipScores.length <= 5 || showAllScores || (
-                            <Button
-                                type="button"
-                                fullWidth
-                                action={() => setShowAllScores(true)}
-                            >
-                                Show More
-                            </Button>
-                        )}
-                        {membershipScores.length === 0 && (
-                            <p>
-                                This member has no eligible scores for this
-                                leaderboard yet...
-                            </p>
-                        )}
-                    </>
-                )}
-            {loadingMembershipStatus === ResourceStatus.Loading && (
-                <LoadingSection />
+                        ),
+                    )}
+                    {membershipScores.length <= 5 || showAllScores || (
+                        <Button type="button" fullWidth action={() => setShowAllScores(true)}>
+                            Show More
+                        </Button>
+                    )}
+                    {membershipScores.length === 0 && (
+                        <p>This member has no eligible scores for this leaderboard yet...</p>
+                    )}
+                </>
             )}
-            {loadingMembershipStatus === ResourceStatus.Error && (
-                <h3>Member not found!</h3>
-            )}
+            {loadingMembershipStatus === ResourceStatus.Loading && <LoadingSection />}
+            {loadingMembershipStatus === ResourceStatus.Error && <h3>Member not found!</h3>}
         </>
     );
 });

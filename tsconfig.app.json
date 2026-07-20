@@ -21,7 +21,7 @@
         "noUnusedParameters": true,
         // "erasableSyntaxOnly": true,  // TODO: enable this
         "noFallthroughCasesInSwitch": true,
-        "strict": true,
+        "strict": true
     },
     "include": ["src"]
 }
