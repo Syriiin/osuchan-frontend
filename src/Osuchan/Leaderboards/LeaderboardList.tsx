@@ -198,7 +198,7 @@ const LeaderboardList = observer(() => {
                                             PaginatedResourceStatus.MoreToLoad,
                                         ) && (
                                             <Button
-                                                fullWidth
+                                                $fullWidth
                                                 isLoading={
                                                     listStore.communityMembershipsStatus ===
                                                     PaginatedResourceStatus.LoadingMore
@@ -220,7 +220,7 @@ const LeaderboardList = observer(() => {
                                             </p>
                                         )}
 
-                                        <Divider spacingScale={5} />
+                                        <Divider $spacingScale={5} />
                                     </>
                                 )}
                                 {listStore.communityMembershipsStatus ===
@@ -233,7 +233,7 @@ const LeaderboardList = observer(() => {
                             {user?.osuUser && (
                                 <div>
                                     <Button
-                                        fullWidth
+                                        $fullWidth
                                         action={() => setCreateLeaderboardModalOpen(true)}
                                     >
                                         Create New Leaderboard

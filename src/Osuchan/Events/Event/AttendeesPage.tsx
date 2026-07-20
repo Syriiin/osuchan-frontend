@@ -155,7 +155,7 @@ const AttendeesPage = observer(() => {
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
-                                            negative
+                                            $negative
                                             type="button"
                                             isLoading={isRemovingAttendee}
                                             action={() =>

@@ -89,7 +89,7 @@ const InviteRow = observer((props: InviteRowProps) => {
                 View Leaderboard
             </Button>
             <DeclineButton
-                negative
+                $negative
                 isLoading={meStore.isDecliningInvite}
                 action={() => meStore.declineInvite(invite.leaderboardId)}
                 confirmationMessage="Are you sure you want to decline this invite?"

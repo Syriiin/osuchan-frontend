@@ -6,11 +6,11 @@ export const Label = styled.span<LabelProps>`
     border-radius: 15px;
     background-color: ${(props) => props.theme.colours.foreground};
     color: ${(props) =>
-        props.special
+        props.$special
             ? props.theme.colours.timber
-            : props.negative
+            : props.$negative
               ? props.theme.colours.negative
-              : props.positive
+              : props.$positive
                 ? props.theme.colours.positive
                 : "#fff"};
     margin-right: 5px;
@@ -18,9 +18,9 @@ export const Label = styled.span<LabelProps>`
 `;
 
 interface LabelProps {
-    negative?: boolean;
-    positive?: boolean;
-    special?: boolean;
+    $negative?: boolean;
+    $positive?: boolean;
+    $special?: boolean;
 }
 
 export const LabelGroup = styled.div`

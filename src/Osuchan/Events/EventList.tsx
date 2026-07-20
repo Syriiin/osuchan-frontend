@@ -71,7 +71,7 @@ const EventList = observer(() => {
                 {eventsStatus === PaginatedResourceStatus.Loaded &&
                     events.map((event) => (
                         <UnstyledLink key={event.id} to={`/events/${event.slug}`}>
-                            <Row hoverable>
+                            <Row $hoverable>
                                 <EventIconContainer>
                                     <EventIcon src={event.logo || "/static/icon-64.png"} />
                                 </EventIconContainer>

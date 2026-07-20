@@ -22,10 +22,11 @@ const ScoresChartSurface = styled(Surface)`
 const ScoresChart = observer((props: ScoresChartProps) => {
     const theme = useTheme();
 
+    const sandboxScores = props.sandboxScores;
     const scoresData = props.scores.map((score, i) => ({
         x: i + 1,
         pp: score.performanceTotal,
-        sandboxPp: props.sandboxScores[i]?.performanceTotal,
+        sandboxPp: i < sandboxScores.length ? sandboxScores[i]?.performanceTotal : undefined,
     }));
 
     return (

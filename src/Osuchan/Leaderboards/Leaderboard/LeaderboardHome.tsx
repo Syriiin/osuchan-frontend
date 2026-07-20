@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { flowResult } from "mobx";
+import { flowResult, toJS } from "mobx";
 import { useEffect, useState } from "react";
 import { Navigate, useMatch, useNavigate, useParams } from "react-router";
 import styled, { ThemeProvider } from "styled-components";
@@ -300,7 +300,7 @@ const LeaderboardButtons = observer(() => {
                     detailStore.userMembership === null && (
                         <Button
                             type="button"
-                            positive
+                            $positive
                             isLoading={detailStore.isJoiningLeaderboard}
                             action={handleJoin}
                         >
@@ -318,14 +318,14 @@ const LeaderboardButtons = observer(() => {
                         {leaderboard!.archived ? (
                             <>
                                 <Button
-                                    positive
+                                    $positive
                                     isLoading={detailStore.isRestoringLeaderboard}
                                     action={() => detailStore.restoreLeaderboard()}
                                 >
                                     Restore Leaderboard
                                 </Button>
                                 <Button
-                                    negative
+                                    $negative
                                     isLoading={detailStore.isDeletingLeaderboard}
                                     action={handleDelete}
                                     confirmationMessage="Are you sure you want to delete this leaderboard?"
@@ -345,7 +345,7 @@ const LeaderboardButtons = observer(() => {
                                 )}
 
                                 <Button
-                                    negative
+                                    $negative
                                     isLoading={detailStore.isArchivingLeaderboard}
                                     action={() => detailStore.archiveLeaderboard()}
                                     confirmationMessage="Are you sure you want to archive this leaderboard?"
@@ -362,7 +362,7 @@ const LeaderboardButtons = observer(() => {
                     detailStore.userMembership !== null && (
                         <Button
                             type="button"
-                            negative
+                            $negative
                             isLoading={detailStore.isLeavingLeaderboard}
                             action={handleLeave}
                             confirmationMessage="Are you sure you want to leave this leaderboard?"
@@ -399,9 +399,12 @@ const LeaderboardHome = observer(() => {
         detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
+    const isEvent = leaderboard?.isEvent;
+    const customColours = toJS(leaderboard?.customColours);
+    const shouldApply = isEvent && customColours;
+    const coloursToApply = shouldApply ? customColours : null;
+
     useEffect(() => {
-        const shouldApply = leaderboard?.isEvent && leaderboard?.customColours;
-        const coloursToApply = shouldApply ? leaderboard.customColours : null;
         if (coloursToApply) {
             setCssCustomProperties(coloursToApply);
         }
@@ -410,7 +413,7 @@ const LeaderboardHome = observer(() => {
                 clearCssCustomProperties(coloursToApply);
             }
         };
-    }, [leaderboard]);
+    }, [coloursToApply]);
 
     useAutorun(() => {
         if (meStore.user?.osuUserId) {
@@ -434,12 +437,12 @@ const LeaderboardHome = observer(() => {
                 <ThemeProvider
                     theme={(osuchanTheme) => {
                         const theme = osuchanTheme!;
-                        return leaderboard.isEvent
+                        return isEvent && customColours
                             ? {
                                   ...theme,
                                   colours: {
                                       ...theme.colours,
-                                      ...leaderboard.customColours,
+                                      ...customColours,
                                   },
                               }
                             : theme;
@@ -461,10 +464,10 @@ const LeaderboardHome = observer(() => {
                                             {/* Labels */}
                                             <LabelGroup>
                                                 {leaderboard.isEvent && (
-                                                    <Label special>EVENT</Label>
+                                                    <Label $special>EVENT</Label>
                                                 )}
                                                 {leaderboard.archived && (
-                                                    <Label negative>ARCHIVED</Label>
+                                                    <Label $negative>ARCHIVED</Label>
                                                 )}
                                                 <Label>
                                                     {formatGamemodeName(leaderboard.gamemode)}
@@ -481,7 +484,7 @@ const LeaderboardHome = observer(() => {
                                                         LeaderboardAccessType.Private && "Private"}
                                                 </Label>
                                                 {leaderboard.scoreSet !== ScoreSet.Normal && (
-                                                    <Label special>
+                                                    <Label $special>
                                                         {leaderboard.scoreSet ===
                                                             ScoreSet.NeverChoke && "Never Choke"}
                                                         {leaderboard.scoreSet ===
@@ -490,7 +493,9 @@ const LeaderboardHome = observer(() => {
                                                     </Label>
                                                 )}
                                                 {!leaderboard.allowPastScores && (
-                                                    <Label special>Only scores after joining</Label>
+                                                    <Label $special>
+                                                        Only scores after joining
+                                                    </Label>
                                                 )}
                                                 <Label>
                                                     {formatCalculatorEngine(

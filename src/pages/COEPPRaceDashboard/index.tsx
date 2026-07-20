@@ -55,12 +55,12 @@ const TeamDetailsContainer = styled.div`
 `;
 
 const TeamSurface = styled(Surface)<{
-    teamColour: string;
-    teamDarkColour?: string;
+    $teamColour: string;
+    $teamColourDark?: string;
 }>`
     flex: 1;
     padding: 5px;
-    border: 5px solid ${(props) => props.teamColour};
+    border: 5px solid ${(props) => props.$teamColour};
     background-color: transparent;
     display: flex;
 `;
@@ -142,12 +142,12 @@ const COEPPRaceDashboard = observer(() => {
                         }}
                     >
                         {pprace.teams.map((team, index) => (
-                            <TeamSurface teamColour={TeamColours[index]} key={team.id}>
+                            <TeamSurface $teamColour={TeamColours[index]} key={team.id}>
                                 <TeamDetails
                                     team={team}
                                     scores={teamScores[team.id]}
-                                    teamColour={TeamColours[index]}
-                                    teamColourDark={TeamColoursDark[index]}
+                                    $teamColour={TeamColours[index]}
+                                    $teamColourDark={TeamColoursDark[index]}
                                     mode={teamDetailsMode}
                                     ppDecayBase={pprace.ppDecayBase}
                                 ></TeamDetails>

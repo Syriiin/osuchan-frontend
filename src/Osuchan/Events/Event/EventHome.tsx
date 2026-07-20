@@ -76,11 +76,11 @@ const AvatarStack = styled.div`
     align-items: center;
 `;
 
-const AvatarWrapper = styled.div<{ index: number }>`
+const AvatarWrapper = styled.div<{ $index: number }>`
     width: 40px;
     height: 40px;
-    margin-left: ${(props) => (props.index === 0 ? "0" : "-10px")};
-    opacity: ${(props) => Math.max(0.3, 1 - props.index / MAX_VISIBLE_AVATARS)};
+    margin-left: ${(props) => (props.$index === 0 ? "0" : "-10px")};
+    opacity: ${(props) => Math.max(0.3, 1 - props.$index / MAX_VISIBLE_AVATARS)};
     transition: opacity 0.2s;
 
     &:hover {
@@ -223,7 +223,7 @@ const EventHome = observer(() => {
                                 {eventAttendees
                                     .slice(0, MAX_VISIBLE_AVATARS)
                                     .map((attendee, index) => (
-                                        <AvatarWrapper key={attendee.id} index={index}>
+                                        <AvatarWrapper key={attendee.id} $index={index}>
                                             <UnstyledLink to={`/users/${attendee.user.username}`}>
                                                 <AvatarImage
                                                     src={`https://a.ppy.sh/${attendee.user.id}`}
@@ -275,7 +275,7 @@ const EventHome = observer(() => {
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
-                                            negative
+                                            $negative
                                             type="button"
                                             isLoading={isDeletingLeaderboard}
                                             action={() =>

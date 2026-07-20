@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
+import { toJS } from "mobx";
 import { AllowedBeatmapStatus } from "../../store/models/profiles/enums";
 import { Gamemode } from "../../store/models/common/enums";
 import { FormLabel } from "./FormLabel";
@@ -30,6 +31,8 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     const meStore = store.meStore;
 
     const presets = meStore.scoreFilterPresets;
+    const isCreatingPreset = meStore.isCreatingScoreFilterPreset;
+    const isDeletingPreset = meStore.isDeletingScoreFilterPreset;
     const gamemode = props.gamemode;
     const onChange = props.onChange;
     const value = props.value;
@@ -101,19 +104,27 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
     // Call onChange if the score filters update
     useEffect(() => onChange(getScoreFilter()), [onChange, getScoreFilter]);
 
+    const latestPreset = useMemo(
+        () => (presets.length > 0 ? toJS(presets[presets.length - 1]) : null),
+        [presets],
+    );
+
     // Set preset to latest in preset list if preset creation flag changes, or none if no presets exist
     useEffect(() => {
-        if (!meStore.isCreatingScoreFilterPreset) {
-            loadPreset(presets[presets.length - 1] ?? null);
+        if (!isCreatingPreset && latestPreset) {
+            loadPreset(latestPreset);
         }
-    }, [presets, meStore.isCreatingScoreFilterPreset]);
+    }, [latestPreset, isCreatingPreset]);
 
-    // Set preset to none if preset deletion flag changes
+    const prevIsDeletingPreset = useRef(isDeletingPreset);
+
+    // Set preset to none once preset deletion completes
     useEffect(() => {
-        if (!meStore.isDeletingScoreFilterPreset) {
+        if (prevIsDeletingPreset.current && !isDeletingPreset) {
             loadPreset(null);
         }
-    }, [presets, meStore.isDeletingScoreFilterPreset]);
+        prevIsDeletingPreset.current = isDeletingPreset;
+    }, [isDeletingPreset]);
 
     const loadPreset = (preset: ScoreFilterPreset | null) => {
         setPreset(preset);
@@ -178,7 +189,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
             </FormControl>
             <SaveNewButton
                 isLoading={meStore.isCreatingScoreFilterPreset}
-                positive
+                $positive
                 type="button"
                 action={handleSavePreset}
             >
@@ -188,7 +199,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                 <>
                     <SaveButton
                         isLoading={meStore.isUpdatingScoreFilterPreset}
-                        positive
+                        $positive
                         type="button"
                         action={handleUpdatePreset}
                     >
@@ -196,7 +207,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     </SaveButton>
                     <DeleteButton
                         isLoading={meStore.isDeletingScoreFilterPreset}
-                        negative
+                        $negative
                         type="button"
                         action={handleDeletePreset}
                         confirmationMessage="Are you sure you want to delete this preset?"

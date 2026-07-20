@@ -64,7 +64,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                 </FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         type="number"
                         required
                         placeholder={score.bestCombo.toString()}
@@ -77,7 +77,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                 <FormLabel>100s</FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         type="number"
                         required
                         placeholder={(score.statistics["ok"] ?? 0).toString()}
@@ -89,7 +89,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                 <FormLabel>50s</FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         type="number"
                         required
                         placeholder={(score.statistics["meh"] ?? 0).toString()}
@@ -101,7 +101,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                 <FormLabel>Misses</FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         type="number"
                         required
                         placeholder={(score.statistics["miss"] ?? 0).toString()}
@@ -110,7 +110,7 @@ const ScoreEditModal = observer((props: ScoreEditModalProps) => {
                         min={0}
                     />
                 </FormControl>
-                <Button positive type="submit">
+                <Button $positive type="submit">
                     Apply
                 </Button>
             </form>

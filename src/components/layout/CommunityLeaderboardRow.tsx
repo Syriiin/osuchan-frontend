@@ -51,7 +51,7 @@ const MembershipRank = styled.div`
 const MembershipPerformance = styled.div``;
 
 export const CommunityLeaderboardRow = observer((props: CommunityLeaderboardRowProps) => (
-    <Row hoverable>
+    <Row $hoverable>
         <LeaderboardIconContainer>
             <LeaderboardIcon src={props.leaderboard.iconUrl} />
         </LeaderboardIconContainer>

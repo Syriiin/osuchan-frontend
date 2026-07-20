@@ -3,14 +3,15 @@ import { useTheme } from "styled-components";
 
 export const Switch = (props: SwitchProps) => {
     const theme = useTheme();
+    const { mini, ...rest } = props;
 
     return (
         <ReactSwitch
-            {...props}
+            {...rest}
             uncheckedIcon={false}
             checkedIcon={false}
-            height={props.mini ? 20 : 30}
-            width={props.mini ? 45 : 58}
+            height={mini ? 20 : 30}
+            width={mini ? 45 : 58}
             offColor={theme.colours.currant}
             onColor={theme.colours.mystic}
         />

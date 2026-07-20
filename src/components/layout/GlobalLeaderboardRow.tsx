@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { observer } from "mobx-react-lite";
 import { Row } from "./Row";
 import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
@@ -43,8 +44,8 @@ const MembershipRank = styled.div`
 
 const MembershipPerformance = styled.div``;
 
-export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
-    <Row hoverable>
+export const GlobalLeaderboardRow = observer((props: GlobalLeaderboardRowProps) => (
+    <Row $hoverable>
         <LeaderboardIconContainer>
             <LeaderboardIcon src={props.leaderboard.iconUrl} />
         </LeaderboardIconContainer>
@@ -62,7 +63,7 @@ export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
             </MembershipInfoContainer>
         )}
     </Row>
-);
+));
 
 interface GlobalLeaderboardRowProps {
     leaderboard: Leaderboard;

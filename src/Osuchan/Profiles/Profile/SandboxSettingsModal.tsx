@@ -59,7 +59,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
                     value={scoreFilter}
                     onChange={handleScoreFilterChange}
                 />
-                <Button positive type="submit">
+                <Button $positive type="submit">
                     Load scores
                 </Button>
             </form>

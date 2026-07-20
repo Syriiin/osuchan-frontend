@@ -8,8 +8,8 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { TeamColours } from ".";
 import type { PPRaceTeam } from "../../store/models/ppraces/types";
 
-const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
-    background-color: ${(props) => props.teamColour};
+const ScoreRowWrapper = styled(Row)<{ $teamColour: string }>`
+    background-color: ${(props) => props.$teamColour};
 
     &.slide-enter {
         opacity: 0;
@@ -55,9 +55,9 @@ const RecentScoreRow = observer((props: RecentScoreRowProps) => {
     return (
         <>
             <ScoreRowWrapper
-                hoverable
+                $hoverable
                 onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}
-                teamColour={props.teamColour}
+                $teamColour={props.teamColour}
             >
                 <Player>{props.score.userStats!.osuUser!.username}</Player>
                 <Performance>

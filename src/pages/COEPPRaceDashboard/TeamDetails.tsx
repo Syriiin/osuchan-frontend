@@ -17,14 +17,14 @@ const TeamDetailsWrapper = styled.div`
     width: 100%;
 `;
 
-const Header = styled.div<{ teamColour: string; teamColourDark: string }>`
+const Header = styled.div<{ $teamColour: string; $teamColourDark: string }>`
     grid-area: header;
     background: linear-gradient(
         110deg,
-        ${(props) => props.teamColour},
-        ${(props) => props.teamColour} 55%,
-        ${(props) => props.teamColourDark} 55%,
-        ${(props) => props.teamColourDark}
+        ${(props) => props.$teamColour},
+        ${(props) => props.$teamColour} 55%,
+        ${(props) => props.$teamColourDark} 55%,
+        ${(props) => props.$teamColourDark}
     );
     background-size: cover;
     background-repeat: no-repeat;
@@ -73,7 +73,7 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 
     return (
         <TeamDetailsWrapper>
-            <Header teamColour={props.teamColour} teamColourDark={props.teamColourDark}>
+            <Header $teamColour={props.$teamColour} $teamColourDark={props.$teamColourDark}>
                 <TeamTitle>{team.name}</TeamTitle>
                 <TeamTotal>
                     <TeamPerformanceTotal>
@@ -85,11 +85,11 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
             </Header>
             <Details>
                 {props.mode === "players" && (
-                    <TeamPlayerDetails teamColour={props.teamColour} players={players} />
+                    <TeamPlayerDetails teamColour={props.$teamColour} players={players} />
                 )}
                 {props.mode === "scores" && (
                     <TeamScoreDetails
-                        teamColour={props.teamColour}
+                        teamColour={props.$teamColour}
                         topScores={scores}
                         scoresCount={team.scoreCount}
                         teamPpTotal={team.totalPp}
@@ -104,8 +104,8 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 interface TeamDetailsProps {
     team: PPRaceTeam;
     scores: Score[];
-    teamColour: string;
-    teamColourDark: string;
+    $teamColour: string;
+    $teamColourDark: string;
     mode: "players" | "scores";
     ppDecayBase: number;
 }

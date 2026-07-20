@@ -12,17 +12,17 @@ const StyledButton = styled.button<StyledButtonProps>`
     display: inline-block;
     color: #fff;
     background-color: ${(props) =>
-        props.negative
+        props.$negative
             ? props.theme.colours.negative
-            : props.positive
+            : props.$positive
               ? props.theme.colours.positive
               : props.$active
                 ? props.theme.colours.mystic
                 : props.theme.colours.currant};
     border: none;
     cursor: pointer;
-    width: ${(props) => (props.fullWidth ? "100%" : "unset")};
-    min-width: ${(props) => props.minWidth ?? 100}px;
+    width: ${(props) => (props.$fullWidth ? "100%" : "unset")};
+    min-width: ${(props) => props.$minWidth ?? 100}px;
 
     &:hover {
         filter: brightness(1.2);
@@ -35,20 +35,20 @@ const StyledButton = styled.button<StyledButtonProps>`
 `;
 
 interface StyledButtonProps {
-    fullWidth?: boolean;
-    minWidth?: number;
-    negative?: boolean;
-    positive?: boolean;
+    $fullWidth?: boolean;
+    $minWidth?: number;
+    $negative?: boolean;
+    $positive?: boolean;
     $active?: boolean;
 }
 
 export const Button = (props: ButtonProps & ComponentProps<typeof StyledButton>) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-    const { action, ...rest } = props;
+    const { action, confirmationMessage, isLoading, ...rest } = props;
 
     const handleClick = () => {
         if (action) {
-            if (props.confirmationMessage) {
+            if (confirmationMessage) {
                 setConfirmationModalOpen(true);
             } else {
                 action();
@@ -59,14 +59,14 @@ export const Button = (props: ButtonProps & ComponentProps<typeof StyledButton>)
     return (
         <>
             <StyledButton {...rest} onClick={handleClick}>
-                {props.isLoading ? <LoadingSpinner scale={0.15} /> : props.children}
+                {isLoading ? <LoadingSpinner $scale={0.15} /> : props.children}
             </StyledButton>
-            {props.confirmationMessage && props.action && (
+            {confirmationMessage && props.action && (
                 <ConfirmationModal
                     open={confirmationModalOpen}
                     onClose={() => setConfirmationModalOpen(false)}
                     action={props.action}
-                    message={props.confirmationMessage}
+                    message={confirmationMessage}
                 />
             )}
         </>
@@ -95,7 +95,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => (
         </Button>
         <YesButton
             type="button"
-            negative
+            $negative
             action={() => {
                 props.action();
                 props.onClose();

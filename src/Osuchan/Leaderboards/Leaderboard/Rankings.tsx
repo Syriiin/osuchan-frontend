@@ -54,7 +54,7 @@ const ScoreCount = styled.span`
 `;
 
 const RankingRow = observer((props: RankingRowProps) => (
-    <Row hoverable>
+    <Row $hoverable>
         <Rank>#{props.rank.toLocaleString("en")}</Rank>
         <PlayerInfo>
             <Avatar src={`https://a.ppy.sh/${props.membership.osuUserId}`} />

@@ -319,10 +319,10 @@ const Navbar = observer(() => {
                                     </Link>
                                 ))}
                                 {invites.length === 0 && (
-                                    <SimpleMenuItem disabled>No pending invites</SimpleMenuItem>
+                                    <SimpleMenuItem $disabled>No pending invites</SimpleMenuItem>
                                 )}
                                 {invites.length > 5 && (
-                                    <SimpleMenuItem disabled>
+                                    <SimpleMenuItem $disabled>
                                         and {invites.length - 5} more
                                     </SimpleMenuItem>
                                 )}
@@ -367,7 +367,7 @@ const Navbar = observer(() => {
                                     <label>
                                         osu! Profile URL
                                         <TextInput
-                                            fullWidth
+                                            $fullWidth
                                             required
                                             placeholder="https://osu.ppy.sh/users/5701575"
                                             onChange={(e) =>
@@ -379,7 +379,7 @@ const Navbar = observer(() => {
                                     <label>
                                         Beatmap URL(s)
                                         <TextField
-                                            fullWidth
+                                            $fullWidth
                                             required
                                             placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
                                             onChange={(e) =>
@@ -388,7 +388,7 @@ const Navbar = observer(() => {
                                             value={addScoreBeatmapUrl}
                                         />
                                     </label>
-                                    <Button positive type="submit">
+                                    <Button $positive type="submit">
                                         Submit
                                     </Button>
                                 </form>

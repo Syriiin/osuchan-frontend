@@ -59,7 +59,7 @@ const InviteRow = observer((props: InviteRowProps) => {
             <InviteMessage>{props.invite.message}</InviteMessage>
             <Button
                 type="button"
-                negative
+                $negative
                 isLoading={detailStore.isCancellingInvite}
                 action={() => detailStore.cancelInvite(osuUser.id)}
                 confirmationMessage="Are you sure you want to cancel this invite?"
@@ -109,7 +109,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                 <FormLabel>osu! Profile URL(s)</FormLabel>
                 <FormControl>
                     <TextField
-                        fullWidth
+                        $fullWidth
                         required
                         placeholder="https://osu.ppy.sh/users/5701575"
                         onChange={(e) => setInviteUserUrl(e.currentTarget.value)}
@@ -119,12 +119,12 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                 <FormLabel>Message</FormLabel>
                 <FormControl>
                     <TextField
-                        fullWidth
+                        $fullWidth
                         onChange={(e) => setInviteMessage(e.currentTarget.value)}
                         value={inviteMessage}
                     />
                 </FormControl>
-                <Button positive type="submit">
+                <Button $positive type="submit">
                     Invite
                 </Button>
             </form>

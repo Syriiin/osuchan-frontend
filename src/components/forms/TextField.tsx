@@ -8,10 +8,10 @@ export const TextField = styled.textarea<TextFieldProps>`
     border-width: 0;
     color: #fff;
     background-color: ${(props) => props.theme.colours.background};
-    width: ${(props) => (props.fullWidth ? "100%" : "auto")};
+    width: ${(props) => (props.$fullWidth ? "100%" : "auto")};
     resize: none;
 `;
 
 export interface TextFieldProps {
-    fullWidth?: boolean;
+    $fullWidth?: boolean;
 }

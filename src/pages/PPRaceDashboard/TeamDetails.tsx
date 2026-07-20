@@ -14,21 +14,21 @@ const TeamDetailsWrapper = styled.div`
     width: 100%;
 `;
 
-const TeamTitle = styled.div<{ teamColour: string }>`
+const TeamTitle = styled.div<{ $teamColour: string }>`
     text-align: center;
     font-size: 1.5em;
     font-weight: bold;
-    background-color: ${(props) => props.teamColour};
+    background-color: ${(props) => props.$teamColour};
     border-radius: 5px;
     padding: 10px;
 `;
 
-const TeamTotal = styled.div<{ teamColour: string }>`
+const TeamTotal = styled.div<{ $teamColour: string }>`
     text-align: center;
     font-size: 1.5em;
     font-weight: bold;
     margin-top: 1em;
-    background-color: ${(props) => props.teamColour};
+    background-color: ${(props) => props.$teamColour};
     border-radius: 5px;
     padding: 10px;
 `;
@@ -40,20 +40,20 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 
     return (
         <TeamDetailsWrapper>
-            <TeamTitle teamColour={props.teamColour}>{team.name}</TeamTitle>
+            <TeamTitle $teamColour={props.$teamColour}>{team.name}</TeamTitle>
             {props.mode === "players" && (
-                <TeamPlayerDetails teamColour={props.teamColour} players={players} />
+                <TeamPlayerDetails teamColour={props.$teamColour} players={players} />
             )}
             {props.mode === "scores" && (
                 <TeamScoreDetails
-                    teamColour={props.teamColour}
+                    teamColour={props.$teamColour}
                     topScores={scores}
                     scoresCount={team.scoreCount}
                     teamPpTotal={team.totalPp}
                     ppDecayBase={props.ppDecayBase}
                 />
             )}
-            <TeamTotal teamColour={props.teamColour}>
+            <TeamTotal $teamColour={props.$teamColour}>
                 <NumberFormat value={team.totalPp} decimalPlaces={0} />
                 pp
             </TeamTotal>
@@ -64,7 +64,7 @@ const TeamDetails = observer((props: TeamDetailsProps) => {
 interface TeamDetailsProps {
     team: PPRaceTeam;
     scores: Score[];
-    teamColour: string;
+    $teamColour: string;
     mode: "players" | "scores";
     ppDecayBase: number;
 }

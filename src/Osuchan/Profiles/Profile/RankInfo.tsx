@@ -41,7 +41,7 @@ const RankInfo = observer((props: RankInfoProps) => {
                     <tr>
                         <td>Performance</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>
+                            <DataCell $highlighted>
                                 <NumberFormat
                                     value={usersStore.sandboxPerformance}
                                     decimalPlaces={0}
@@ -56,12 +56,12 @@ const RankInfo = observer((props: RankInfoProps) => {
                     </tr>
                     <tr>
                         <td>Rank</td>
-                        {props.sandboxMode && <DataCell highlighted>-</DataCell>}
+                        {props.sandboxMode && <DataCell $highlighted>-</DataCell>}
                         <DataCell>#{props.userStats.rank.toLocaleString("en")}</DataCell>
                     </tr>
                     <tr>
                         <td>Country Rank</td>
-                        {props.sandboxMode && <DataCell highlighted>-</DataCell>}
+                        {props.sandboxMode && <DataCell $highlighted>-</DataCell>}
                         <DataCell>
                             #{props.userStats.countryRank.toLocaleString("en")}{" "}
                             {props.osuUser.country}

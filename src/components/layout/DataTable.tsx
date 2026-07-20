@@ -18,9 +18,9 @@ const DataTableContainer = styled.table`
 
 export const DataCell = styled.td<DataCellProps>`
     text-align: right;
-    color: ${(props) => (props.highlighted ? props.theme.colours.timber : "inherit")};
+    color: ${(props) => (props.$highlighted ? props.theme.colours.timber : "inherit")};
 `;
 
 interface DataCellProps {
-    highlighted?: boolean;
+    $highlighted?: boolean;
 }

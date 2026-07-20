@@ -97,7 +97,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 {/* Basic details */}
                 <FormLabel>Name</FormLabel>
                 <TextInput
-                    fullWidth
+                    $fullWidth
                     required
                     value={name}
                     onChange={(e) => setName(e.currentTarget.value)}
@@ -154,14 +154,14 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField
-                    fullWidth
+                    $fullWidth
                     value={description}
                     onChange={(e) => setDescription(e.currentTarget.value)}
                 />
                 <FormLabel>Icon URL</FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         placeholder={`${window.location.origin}/static/icon-64.png`}
                         value={iconUrl}
                         onChange={(e) => setIconUrl(e.currentTarget.value)}
@@ -184,7 +184,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                     onChange={handleScoreFilterChange}
                 />
 
-                <Button isLoading={listStore.isCreatingLeaderboard} positive type="submit">
+                <Button isLoading={listStore.isCreatingLeaderboard} $positive type="submit">
                     Create
                 </Button>
             </form>

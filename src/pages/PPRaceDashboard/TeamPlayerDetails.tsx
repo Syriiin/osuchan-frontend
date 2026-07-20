@@ -10,10 +10,10 @@ const TeamPlayers = styled.div`
     height: 26em;
 `;
 
-const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
+const PlayerRowWrapper = styled(Row)<{ $teamColour: string }>`
     padding: 0;
     align-items: unset;
-    background-color: ${(props) => props.teamColour + "77"};
+    background-color: ${(props) => props.$teamColour + "77"};
     font-size: 0.9em;
 `;
 
@@ -90,12 +90,12 @@ const PlayerRow = observer((props: PlayerRowProps) => {
     const user = props.player.user;
 
     return (
-        <PlayerRowWrapper teamColour={props.teamColour}>
+        <PlayerRowWrapper $teamColour={props.teamColour}>
             <LeftContainer>
                 <PlayerInfo>
                     <Avatar src={`https://a.ppy.sh/${user.id}`} />
                     <FlagContainer>
-                        <Flag countryCode={user.country} large />
+                        <Flag countryCode={user.country} $large />
                     </FlagContainer>
                     <Username>{user.username}</Username>
                 </PlayerInfo>

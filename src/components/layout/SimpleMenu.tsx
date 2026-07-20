@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 const Menu = styled.div<MenuProps>`
     position: absolute;
-    left: calc(50% - ${(props) => props.width / 2}px);
+    left: calc(50% - ${(props) => props.$width / 2}px);
     top: calc(100% + 10px);
     z-index: 100;
-    width: ${(props) => props.width}px;
+    width: ${(props) => props.$width}px;
     overflow-x: hidden;
     max-height: 500px;
 
@@ -22,23 +22,23 @@ const Menu = styled.div<MenuProps>`
 `;
 
 interface MenuProps {
-    width: number;
+    $width: number;
 }
 
 export const SimpleMenuItem = styled.div<SimpleMenuItemProps>`
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
-    color: ${(props) => (props.disabled ? "#777" : "#fff")};
-    cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+    color: ${(props) => (props.$disabled ? "#777" : "#fff")};
+    cursor: ${(props) => (props.$disabled ? "default" : "pointer")};
 
     &:hover {
-        background-color: ${(props) => !props.disabled && props.theme.colours.currant};
+        background-color: ${(props) => !props.$disabled && props.theme.colours.currant};
     }
 `;
 
 interface SimpleMenuItemProps {
-    disabled?: boolean;
+    $disabled?: boolean;
 }
 
 export const SimpleMenuDivider = styled.div`
@@ -61,11 +61,11 @@ export const SimpleMenu = (props: SimpleMenuProps) => {
         <MenuTriggerWrapper onClick={handleMenuOpen}>
             {props.triggerElement}
             {menuOpen && (
-                <Menu width={props.width ?? 100}>
+                <Menu $width={props.width ?? 100}>
                     {props.children.length > 0 ? (
                         props.children
                     ) : (
-                        <SimpleMenuItem disabled>
+                        <SimpleMenuItem $disabled>
                             {props.emptyText || "Nothing here!"}
                         </SimpleMenuItem>
                     )}

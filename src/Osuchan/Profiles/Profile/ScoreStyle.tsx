@@ -23,7 +23,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>Accuracy</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
                                 value={usersStore.sandboxScoreStyleAccuracy}
                                 decimalPlaces={2}
@@ -42,7 +42,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>BPM</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
                                 value={usersStore.sandboxScoreStyleBpm}
                                 decimalPlaces={0}
@@ -56,7 +56,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>Length</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             {formatTime(usersStore.sandboxScoreStyleLength)}
                         </DataCell>
                     )}
@@ -68,7 +68,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                     <tr>
                         <td>{userStats.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>
+                            <DataCell $highlighted>
                                 <NumberFormat
                                     value={usersStore.sandboxScoreStyleCircleSize}
                                     decimalPlaces={1}
@@ -84,7 +84,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                     <tr>
                         <td>Approach Rate</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>
+                            <DataCell $highlighted>
                                 <NumberFormat
                                     value={usersStore.sandboxScoreStyleApproachRate}
                                     decimalPlaces={1}
@@ -99,7 +99,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>Overall Difficulty</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
                                 value={usersStore.sandboxScoreStyleOverallDifficulty}
                                 decimalPlaces={1}

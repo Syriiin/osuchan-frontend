@@ -11,8 +11,8 @@ const FlagWrapper = styled.div`
     justify-content: center;
 `;
 
-const FlagImage = styled.img<{ large: boolean }>`
-    width: ${(props) => (props.large ? "3em" : "2em")};
+const FlagImage = styled.img<{ $large: boolean }>`
+    width: ${(props) => (props.$large ? "3em" : "2em")};
 `;
 
 const CountryName = styled.span`
@@ -27,7 +27,7 @@ export const Flag = (props: FlagProps) => {
             <Tooltip content={name}>
                 <FlagImage
                     src={`https://osu.ppy.sh/images/flags/${props.countryCode}.png`}
-                    large={props.large || false}
+                    $large={props.$large || false}
                 />
             </Tooltip>
             {props.showFullName && <CountryName>{name}</CountryName>}
@@ -38,5 +38,5 @@ export const Flag = (props: FlagProps) => {
 interface FlagProps {
     countryCode: string;
     showFullName?: boolean;
-    large?: boolean;
+    $large?: boolean;
 }

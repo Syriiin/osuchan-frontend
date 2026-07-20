@@ -21,14 +21,14 @@ const TeamPlayers = styled.div`
     overflow: hidden;
 `;
 
-const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
+const PlayerRowWrapper = styled(Row)<{ $teamColour: string }>`
     display: grid;
     grid-template-columns: 70px 1fr 200px;
     grid-template-areas: "rank player performance";
     grid-gap: 10px;
     padding: 10px;
     align-items: unset;
-    background-color: ${(props) => props.teamColour + "77"};
+    background-color: ${(props) => props.$teamColour + "77"};
     font-size: 0.9em;
     height: 60px;
 `;
@@ -101,12 +101,12 @@ const PlayerRow = observer((props: PlayerRowProps) => {
     const user = props.player.user;
 
     return (
-        <PlayerRowWrapper teamColour={props.teamColour}>
+        <PlayerRowWrapper $teamColour={props.teamColour}>
             <Rank>#{props.rank}</Rank>
             <PlayerInfo>
                 <Avatar src={`https://a.ppy.sh/${user.id}`} />
                 <FlagContainer>
-                    <Flag countryCode={user.country} large />
+                    <Flag countryCode={user.country} $large />
                 </FlagContainer>
                 <Username>{user.username}</Username>
             </PlayerInfo>

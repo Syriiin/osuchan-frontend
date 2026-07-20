@@ -29,13 +29,14 @@ const Leaderboards = observer(() => {
 
     const globalMemberships = usersStore.globalMemberships;
     const communityMemberships = usersStore.communityMemberships;
+    const communityMembershipsStatus = usersStore.communityMembershipsStatus;
 
     const [leaderboardType, setLeaderboardType] = useState<"global" | "community">("global");
 
     const handleGlobalClick = () => setLeaderboardType("global");
     const handleCommunityClick = () => {
         setLeaderboardType("community");
-        if (usersStore.communityMembershipsStatus === PaginatedResourceStatus.NotLoaded) {
+        if (communityMembershipsStatus === PaginatedResourceStatus.NotLoaded) {
             usersStore.loadCommunityMemberships();
         }
     };
@@ -70,7 +71,7 @@ const Leaderboards = observer(() => {
             {leaderboardType === "community" && (
                 <>
                     {hasFlag(
-                        usersStore.communityMembershipsStatus,
+                        communityMembershipsStatus,
                         PaginatedResourceStatus.ContentAvailable,
                     ) && (
                         <>
@@ -88,13 +89,13 @@ const Leaderboards = observer(() => {
                                 </UnstyledLink>
                             ))}
                             {hasFlag(
-                                usersStore.communityMembershipsStatus,
+                                communityMembershipsStatus,
                                 PaginatedResourceStatus.MoreToLoad,
                             ) && (
                                 <Button
-                                    fullWidth
+                                    $fullWidth
                                     isLoading={
-                                        usersStore.communityMembershipsStatus ===
+                                        communityMembershipsStatus ===
                                         PaginatedResourceStatus.LoadingMore
                                     }
                                     action={() => usersStore.loadNextCommunityMembershipsPage()}
@@ -107,7 +108,7 @@ const Leaderboards = observer(() => {
                             )}
                         </>
                     )}
-                    {usersStore.communityMembershipsStatus ===
+                    {communityMembershipsStatus ===
                         PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
                 </>
             )}

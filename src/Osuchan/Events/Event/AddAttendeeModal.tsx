@@ -26,7 +26,7 @@ const AddAttendeeModal = observer((props: AddAttendeeModalProps) => {
             <form onSubmit={handleSubmit}>
                 <FormLabel>osu! User ID</FormLabel>
                 <TextInput
-                    fullWidth
+                    $fullWidth
                     required
                     type="text"
                     placeholder="5701575"
@@ -38,7 +38,7 @@ const AddAttendeeModal = observer((props: AddAttendeeModalProps) => {
                         }
                     }}
                 />
-                <Button positive type="submit" isLoading={eventsStore.isAddingAttendee}>
+                <Button $positive type="submit" isLoading={eventsStore.isAddingAttendee}>
                     Add
                 </Button>
             </form>

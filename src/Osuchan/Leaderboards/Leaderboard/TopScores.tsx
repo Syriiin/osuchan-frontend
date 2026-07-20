@@ -21,7 +21,7 @@ const TopScores = observer((props: TopScoresProps) => {
                 <ScoreRow key={i} score={score} />
             ))}
             {props.scores.length > 5 && !showAllScores && (
-                <Button type="button" fullWidth action={() => setShowAllScores(true)}>
+                <Button type="button" $fullWidth action={() => setShowAllScores(true)}>
                     Show More
                 </Button>
             )}

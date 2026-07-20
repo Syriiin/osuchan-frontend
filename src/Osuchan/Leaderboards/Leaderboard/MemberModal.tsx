@@ -117,9 +117,9 @@ const MemberInfo = observer((props: { userId?: string }) => {
                         leaderboard!.ownerId === user!.osuUserId &&
                         membership?.osuUserId !== user!.osuUserId && (
                             <>
-                                <Divider spacingScale={5} />
+                                <Divider $spacingScale={5} />
                                 <Button
-                                    negative
+                                    $negative
                                     isLoading={detailStore.isKickingMember}
                                     action={() => {
                                         detailStore.kickMember();
@@ -132,7 +132,7 @@ const MemberInfo = observer((props: { userId?: string }) => {
                             </>
                         )}
 
-                    <Divider spacingScale={5} />
+                    <Divider $spacingScale={5} />
 
                     {(showAllScores ? membershipScores : membershipScores.slice(0, 5)).map(
                         (score, i) => (
@@ -140,7 +140,7 @@ const MemberInfo = observer((props: { userId?: string }) => {
                         ),
                     )}
                     {membershipScores.length <= 5 || showAllScores || (
-                        <Button type="button" fullWidth action={() => setShowAllScores(true)}>
+                        <Button type="button" $fullWidth action={() => setShowAllScores(true)}>
                             Show More
                         </Button>
                     )}

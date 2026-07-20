@@ -13,25 +13,25 @@ const animation = keyframes`
 const LoadingWrapper = styled.div<LoadingWrapperProps>`
     display: inline-block;
     position: relative;
-    width: ${(props) => (props.scale ? props.scale * 80 : 80)}px;
-    height: ${(props) => (props.scale ? props.scale * 80 : 80)}px;
+    width: ${(props) => (props.$scale ? props.$scale * 80 : 80)}px;
+    height: ${(props) => (props.$scale ? props.$scale * 80 : 80)}px;
 
     div {
         animation: ${animation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        transform-origin: ${(props) => (props.scale ? props.scale * 40 : 40)}px
-            ${(props) => (props.scale ? props.scale * 40 : 40)}px;
+        transform-origin: ${(props) => (props.$scale ? props.$scale * 40 : 40)}px
+            ${(props) => (props.$scale ? props.$scale * 40 : 40)}px;
     }
 
     div:after {
         content: " ";
         display: block;
         position: absolute;
-        width: ${(props) => (props.scale ? props.scale * 7 : 7)}px;
-        height: ${(props) => (props.scale ? props.scale * 7 : 7)}px;
+        width: ${(props) => (props.$scale ? props.$scale * 7 : 7)}px;
+        height: ${(props) => (props.$scale ? props.$scale * 7 : 7)}px;
         border-radius: 50%;
         background: #fff;
-        margin: -${(props) => (props.scale ? props.scale * 4 : 4)}px 0
-            0 -${(props) => (props.scale ? props.scale * 4 : 4)}px;
+        margin: -${(props) => (props.$scale ? props.$scale * 4 : 4)}px 0
+            0 -${(props) => (props.$scale ? props.$scale * 4 : 4)}px;
     }
 
     div:nth-child(1) {
@@ -39,8 +39,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(1):after {
-        top: ${(props) => (props.scale ? props.scale * 63 : 63)}px;
-        left: ${(props) => (props.scale ? props.scale * 63 : 63)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 63 : 63)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 63 : 63)}px;
     }
 
     div:nth-child(2) {
@@ -48,8 +48,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(2):after {
-        top: ${(props) => (props.scale ? props.scale * 68 : 68)}px;
-        left: ${(props) => (props.scale ? props.scale * 56 : 56)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 68 : 68)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 56 : 56)}px;
     }
 
     div:nth-child(3) {
@@ -57,8 +57,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(3):after {
-        top: ${(props) => (props.scale ? props.scale * 71 : 71)}px;
-        left: ${(props) => (props.scale ? props.scale * 48 : 48)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 71 : 71)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 48 : 48)}px;
     }
 
     div:nth-child(4) {
@@ -66,8 +66,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(4):after {
-        top: ${(props) => (props.scale ? props.scale * 72 : 72)}px;
-        left: ${(props) => (props.scale ? props.scale * 40 : 40)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 72 : 72)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 40 : 40)}px;
     }
 
     div:nth-child(5) {
@@ -75,8 +75,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(5):after {
-        top: ${(props) => (props.scale ? props.scale * 71 : 71)}px;
-        left: ${(props) => (props.scale ? props.scale * 32 : 32)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 71 : 71)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 32 : 32)}px;
     }
 
     div:nth-child(6) {
@@ -84,8 +84,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(6):after {
-        top: ${(props) => (props.scale ? props.scale * 68 : 68)}px;
-        left: ${(props) => (props.scale ? props.scale * 24 : 24)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 68 : 68)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 24 : 24)}px;
     }
 
     div:nth-child(7) {
@@ -93,8 +93,8 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(7):after {
-        top: ${(props) => (props.scale ? props.scale * 63 : 63)}px;
-        left: ${(props) => (props.scale ? props.scale * 17 : 17)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 63 : 63)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 17 : 17)}px;
     }
 
     div:nth-child(8) {
@@ -102,13 +102,13 @@ const LoadingWrapper = styled.div<LoadingWrapperProps>`
     }
 
     div:nth-child(8):after {
-        top: ${(props) => (props.scale ? props.scale * 56 : 56)}px;
-        left: ${(props) => (props.scale ? props.scale * 12 : 12)}px;
+        top: ${(props) => (props.$scale ? props.$scale * 56 : 56)}px;
+        left: ${(props) => (props.$scale ? props.$scale * 12 : 12)}px;
     }
 `;
 
 interface LoadingWrapperProps {
-    scale?: number;
+    $scale?: number;
 }
 
 const LoadingPageWrapper = styled.div`
@@ -128,7 +128,7 @@ const LoadingContainer = styled.div`
 `;
 
 export const LoadingSpinner = (props: LoadingSpinnerProps) => (
-    <LoadingWrapper scale={props.scale}>
+    <LoadingWrapper $scale={props.$scale}>
         <div></div>
         <div></div>
         <div></div>
@@ -144,7 +144,7 @@ interface LoadingSpinnerProps extends LoadingWrapperProps {}
 
 export const LoadingPage = () => (
     <LoadingPageWrapper>
-        <LoadingSpinner scale={2} />
+        <LoadingSpinner $scale={2} />
         <LoadingText>Loading...</LoadingText>
     </LoadingPageWrapper>
 );

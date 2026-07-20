@@ -43,7 +43,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
             <form onSubmit={handleSubmit}>
                 <FormLabel>Name</FormLabel>
                 <TextInput
-                    fullWidth
+                    $fullWidth
                     required
                     value={name}
                     onChange={(e) => setName(e.currentTarget.value)}
@@ -62,7 +62,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
                     />
                 </FormControl>
 
-                <Button positive type="submit" isLoading={eventsStore.isCreatingLeaderboard}>
+                <Button $positive type="submit" isLoading={eventsStore.isCreatingLeaderboard}>
                     Create
                 </Button>
             </form>

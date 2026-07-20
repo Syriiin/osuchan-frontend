@@ -41,11 +41,11 @@ const TeamDetailsContainer = styled.div`
     gap: 10px;
 `;
 
-const TeamSurface = styled(Surface)<{ teamColour: string }>`
+const TeamSurface = styled(Surface)<{ $teamColour: string }>`
     flex: 1;
     padding: 10px;
-    border: 5px solid ${(props) => props.teamColour};
-    background-color: ${(props) => props.teamColour + "33"};
+    border: 5px solid ${(props) => props.$teamColour};
+    background-color: ${(props) => props.$teamColour + "33"};
     display: flex;
 `;
 
@@ -122,11 +122,11 @@ const PPRaceDashboard = observer(() => {
                         }}
                     >
                         {pprace.teams.map((team, index) => (
-                            <TeamSurface teamColour={TeamColours[index]} key={team.id}>
+                            <TeamSurface $teamColour={TeamColours[index]} key={team.id}>
                                 <TeamDetails
                                     team={team}
                                     scores={teamScores[team.id]}
-                                    teamColour={TeamColours[index]}
+                                    $teamColour={TeamColours[index]}
                                     mode={teamDetailsMode}
                                     ppDecayBase={pprace.ppDecayBase}
                                 ></TeamDetails>

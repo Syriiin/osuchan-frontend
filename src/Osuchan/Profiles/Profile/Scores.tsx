@@ -12,7 +12,7 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
+const ProfileScoreRow = (props: ProfileScoreRowProps) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const score = props.score;
@@ -36,7 +36,7 @@ const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
             />
         </>
     );
-});
+};
 
 interface ProfileScoreRowProps {
     score: Score;
@@ -59,7 +59,7 @@ const Scores = observer((props: ScoresProps) => {
                 />
             ))}
             {props.scores.length <= 5 || showAllScores || (
-                <Button type="button" fullWidth action={() => setShowAllScores(true)}>
+                <Button type="button" $fullWidth action={() => setShowAllScores(true)}>
                     Show More
                 </Button>
             )}

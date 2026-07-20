@@ -9,14 +9,15 @@ const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     align-items: unset;
     background:
         linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-        ${(props) => `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+        ${(props) =>
+            `url("https://assets.ppy.sh/beatmaps/${props.$beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     font-size: 0.3em;
 `;
 
 interface ScoreRowWrapperProps {
-    beatmapSetId: number;
+    $beatmapSetId: number;
 }
 
 const LeftContainer = styled.div`
@@ -109,7 +110,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
     const beatmap = score.beatmap!;
 
     return (
-        <ScoreRowWrapper beatmapSetId={beatmap.setId}>
+        <ScoreRowWrapper $beatmapSetId={beatmap.setId}>
             <LeftContainer>
                 <PlayerInfo>
                     <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />

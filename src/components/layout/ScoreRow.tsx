@@ -115,7 +115,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
     return (
         <>
             <ScoreRowWrapper
-                hoverable
+                $hoverable
                 onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}
             >
                 {!props.hidePlayerInfo && (
@@ -161,7 +161,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 </ScoreInfo>
                 {props.actionButton && (
                     <ClickPropagationSupressor>
-                        <ActionButton minWidth={0} action={props.actionButtonOnClick}>
+                        <ActionButton $minWidth={0} action={props.actionButtonOnClick}>
                             {props.actionButtonText}
                         </ActionButton>
                     </ClickPropagationSupressor>
