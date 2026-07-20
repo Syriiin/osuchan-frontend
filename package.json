@@ -9,7 +9,7 @@
         "typecheck": "tsc --noEmit",
         "test": "vitest run",
         "test:watch": "vitest",
-        "lint": "oxlint",
+        "lint": "oxlint --type-aware --type-check",
         "preview": "vite preview",
         "checkformatting": "oxfmt --check .",
         "fixformatting": "oxfmt --write ."
@@ -53,6 +53,7 @@
         "jsdom": "^29.1.1",
         "oxfmt": "^0.59.0",
         "oxlint": "^1.74.0",
+        "oxlint-tsgolint": "^0.25.0",
         "typescript": "~7.0.2",
         "vite": "^8.1.5",
         "vitest": "^4.1.10"
