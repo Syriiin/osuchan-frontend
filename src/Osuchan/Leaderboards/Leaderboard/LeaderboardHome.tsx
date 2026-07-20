@@ -546,14 +546,14 @@ const LeaderboardHome = observer(() => {
             {detailStore.loadingStatus === ResourceStatus.Error && <h3>Leaderboard not found!</h3>}
             <ManageInvitesModal
                 open={invitesMatch !== null && leaderboard !== null}
-                onClose={() => navigate(".")}
+                onClose={() => navigate("..")}
             />
             {invitesMatch !== null &&
                 leaderboard &&
                 leaderboard.ownerId !== meStore.user?.osuUserId && <Navigate to="." replace />}
             <MemberModal
                 open={memberMatch !== null && leaderboard !== null}
-                onClose={() => navigate(".")}
+                onClose={() => navigate("..")}
                 userId={memberMatch?.params.userId}
             />
         </>
