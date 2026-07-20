@@ -26,60 +26,48 @@ const ModIcon = (props: ModIconProps) => {
 
     if (DIFFICULTY_INCREASING_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
+            <Tooltip content={formatModName(acronym)}>
                 <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
                     src={`/static/images/mods/blanks/DifficultyIncrease${
                         props.small ? "" : "@2x"
                     }.png`}
                 />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            </Tooltip>
         );
     }
 
     if (DIFFICULTY_DECREASING_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
+            <Tooltip content={formatModName(acronym)}>
                 <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
                     src={`/static/images/mods/blanks/DifficultyReduction${
                         props.small ? "" : "@2x"
                     }.png`}
                 />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            </Tooltip>
         );
     }
 
     if (FUN_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
+            <Tooltip content={formatModName(acronym)}>
                 <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
                     src={`/static/images/mods/blanks/Fun${
                         props.small ? "" : "@2x"
                     }.png`}
                 />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            </Tooltip>
         );
     }
 
     return (
-        <>
+        <Tooltip content={formatModName(acronym)}>
             <ModImage
-                data-tip={formatModName(acronym)}
-                data-for={`mod-${acronym}`}
                 src={`/static/images/mods/mod_${acronym}${
                     props.small ? "" : "@2x"
                 }.png`}
             />
-            <Tooltip id={`mod-${acronym}`} />
-        </>
+        </Tooltip>
     );
 };
 
