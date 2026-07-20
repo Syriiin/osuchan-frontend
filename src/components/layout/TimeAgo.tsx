@@ -1,4 +1,4 @@
-import TimeAgoReact from "timeago-react";
+import TimeAgoReact from "react-timeago";
 import { Tooltip } from "./Tooltip";
 import { useState, useEffect } from "react";
 
@@ -21,7 +21,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
                 </Tooltip>
             ) : (
                 <Tooltip content={content}>
-                    <TimeAgoReact datetime={props.datetime} />
+                    <TimeAgoReact date={props.datetime} />
                 </Tooltip>
             )}
         </>
