@@ -108,8 +108,9 @@ const Leaderboards = observer(() => {
                             )}
                         </>
                     )}
-                    {communityMembershipsStatus ===
-                        PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
+                    {communityMembershipsStatus === PaginatedResourceStatus.LoadingInitial && (
+                        <LoadingSection />
+                    )}
                 </>
             )}
         </LeaderboardsSurface>

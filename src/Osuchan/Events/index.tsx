@@ -7,9 +7,7 @@ const EventsRoot = () => {
     return (
         <Routes>
             <Route index element={<EventList />} />
-            <Route path=":slug">
-                <Route path="*" element={<EventRoot />} />
-            </Route>
+            <Route path=":slug/*" element={<EventRoot />} />
         </Routes>
     );
 };
