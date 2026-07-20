@@ -37,7 +37,7 @@ const SwitcherButtonGroup = styled(ButtonGroup)`
 
 const LeaderboardList = observer(() => {
     const params = useParams<RouteParams>();
-    const leaderboardType = params.leaderboardType;
+    const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
 
     const store = useStore();
@@ -309,7 +309,7 @@ const LeaderboardList = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     leaderboardType: "global" | "community";
     gamemode: "osu" | "taiko" | "catch" | "mania";
 }

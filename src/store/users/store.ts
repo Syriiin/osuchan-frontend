@@ -17,13 +17,13 @@ import {
 import { getScoreResult } from "../../utils/osuchan";
 import { Gamemode } from "../models/common/enums";
 import { membershipFromJson } from "../models/leaderboards/deserialisers";
-import { Membership } from "../models/leaderboards/types";
+import type { Membership } from "../models/leaderboards/types";
 import {
     scoreFromJson,
     userStatsFromJson,
 } from "../models/profiles/deserialisers";
 import { ScoreSet } from "../models/profiles/enums";
-import {
+import type {
     ModsJson,
     Score,
     ScoreFilter,
@@ -390,11 +390,10 @@ export class UsersStore {
     ): any {
         const beatmap = score.beatmap!;
         const totalObjects =
-            score.statistics["great"] ??
-            0 + score.statistics["ok"] ??
-            0 + score.statistics["meh"] ??
-            0 + score.statistics["miss"] ??
-            0;
+            (score.statistics["great"] ?? 0) +
+            (score.statistics["ok"] ?? 0) +
+            (score.statistics["meh"] ?? 0) +
+            (score.statistics["miss"] ?? 0);
 
         score.modsJson = mods;
         score.bestCombo = bestCombo;

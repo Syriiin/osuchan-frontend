@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import {
     Link,
-    LinkProps,
+    type LinkProps,
     useMatch,
     useLocation,
     useNavigate,

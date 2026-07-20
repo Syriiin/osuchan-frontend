@@ -11,7 +11,7 @@ import {
     UnstyledLink,
     Button,
 } from "../../components";
-import { Invite } from "../../store/models/leaderboards/types";
+import type { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { formatGamemodeNameShort } from "../../utils/formatting";
 import { ResourceStatus } from "../../store/status";

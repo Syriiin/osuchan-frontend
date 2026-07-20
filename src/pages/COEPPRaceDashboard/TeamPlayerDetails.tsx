@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { PPRacePlayer } from "../../store/models/ppraces/types";
+import type { PPRacePlayer } from "../../store/models/ppraces/types";
 import styled from "styled-components";
 import { Flag, NumberFormat, Row } from "../../components";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
@@ -184,7 +184,7 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                         )}%`;
                     }}
                 >
-                    {data.map((entry, index) => (
+                    {data.map((_entry, index) => (
                         <Cell
                             key={`cell-${index}`}
                             fill={

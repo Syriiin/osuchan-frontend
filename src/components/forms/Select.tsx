@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ReactSelect, { StylesConfig } from "react-select";
+import ReactSelect, { type StylesConfig } from "react-select";
 import { ThemeContext } from "styled-components";
 
 export const Select = <T extends OptionValue = number>(
@@ -15,16 +15,16 @@ export const Select = <T extends OptionValue = number>(
                 : theme.colours.background,
             border: "none",
         }),
-        input: (provided, state) => ({
+        input: (provided, _state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
             color: "#fff",
         }),
-        singleValue: (provided, state) => ({
+        singleValue: (provided, _state) => ({
             ...provided,
             color: "#fff",
         }),
-        menu: (provided, state) => ({
+        menu: (provided, _state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
         }),

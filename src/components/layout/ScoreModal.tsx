@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import { Fragment, useState } from "react";
 import { BeatmapStatus, Gamemode } from "../../store/models/common/enums";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import {
     formatCalculatorEngine,
     formatDiffcalcValueName,

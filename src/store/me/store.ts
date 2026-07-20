@@ -3,11 +3,11 @@ import { observable, makeAutoObservable, flow } from "mobx";
 import http from "../../http";
 import notify from "../../notifications";
 
-import { ScoreFilter } from "../models/profiles/types";
-import { Invite } from "../models/leaderboards/types";
+import type { ScoreFilter } from "../models/profiles/types";
+import type { Invite } from "../models/leaderboards/types";
 import { inviteFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
-import { User, ScoreFilterPreset } from "../models/users/types";
+import type { User, ScoreFilterPreset } from "../models/users/types";
 import {
     userFromJson,
     scoreFilterPresetFromJson,

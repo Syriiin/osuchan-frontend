@@ -56,7 +56,7 @@ const MenuTriggerWrapper = styled.div`
 
 export const SimpleMenu = (props: SimpleMenuProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
+    const handleMenuOpen = (_event: React.MouseEvent<HTMLElement>) =>
         setMenuOpen(!menuOpen);
 
     return (

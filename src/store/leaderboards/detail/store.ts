@@ -11,13 +11,13 @@ import {
     leaderboardFromJson,
     membershipFromJson,
 } from "../../models/leaderboards/deserialisers";
-import {
+import type {
     Invite,
     Leaderboard,
     Membership,
 } from "../../models/leaderboards/types";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
-import { Score } from "../../models/profiles/types";
+import type { Score } from "../../models/profiles/types";
 import { ResourceStatus } from "../../status";
 
 export class DetailStore {
@@ -69,19 +69,19 @@ export class DetailStore {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    reloadLeaderboard = async (moreScores: boolean = false) =>
+    reloadLeaderboard = async (_moreScores: boolean = false) =>
         this.loadLeaderboard(
             this.leaderboardType!,
             this.gamemode!,
             this.leaderboardId!,
-            moreScores,
+            _moreScores,
         );
 
     *loadLeaderboard(
         leaderboardType: string,
         gamemode: Gamemode,
         leaderboardId: number,
-        moreScores: boolean = false,
+        _moreScores: boolean = false,
     ): any {
         this.loadingStatus = ResourceStatus.Loading;
         this.leaderboardType = leaderboardType;

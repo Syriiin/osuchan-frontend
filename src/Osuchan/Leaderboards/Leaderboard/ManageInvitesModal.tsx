@@ -14,8 +14,8 @@ import {
     LoadingSection,
     Flag,
 } from "../../../components";
-import { OsuUser } from "../../../store/models/profiles/types";
-import { Invite } from "../../../store/models/leaderboards/types";
+import type { OsuUser } from "../../../store/models/profiles/types";
+import type { Invite } from "../../../store/models/leaderboards/types";
 import { ResourceStatus } from "../../../store/status";
 import { useAction, useAutorun, useStore } from "../../../utils/hooks";
 

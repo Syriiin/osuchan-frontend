@@ -1,6 +1,6 @@
 import { osuUserFromJson } from "../profiles/deserialisers";
 import { leaderboardFromJson } from "../leaderboards/deserialisers";
-import { Event, EventAttendee, EventLeaderboard } from "./types";
+import type { Event, EventAttendee, EventLeaderboard } from "./types";
 
 export function eventFromJson(data: any): Event {
     return {

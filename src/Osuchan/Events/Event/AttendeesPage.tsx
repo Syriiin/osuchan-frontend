@@ -89,11 +89,11 @@ const AttendeesPage = observer(() => {
     const [offset, setOffset] = useState(0);
 
     useEffect(() => {
-        store.eventsStore.loadEvent(slug);
+        store.eventsStore.loadEvent(slug!);
     }, [store.eventsStore, slug]);
 
     useEffect(() => {
-        store.eventsStore.loadAttendees(slug, PAGE_SIZE, offset);
+        store.eventsStore.loadAttendees(slug!, PAGE_SIZE, offset);
     }, [store.eventsStore, slug, offset]);
 
     const outerTheme = useTheme();
@@ -181,7 +181,7 @@ const AttendeesPage = observer(() => {
                                             isLoading={isRemovingAttendee}
                                             action={() =>
                                                 store.eventsStore.removeAttendee(
-                                                    slug,
+                                                    slug!,
                                                     attendee.user.id,
                                                 )
                                             }

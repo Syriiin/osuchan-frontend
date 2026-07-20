@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { Surface, SurfaceTitle, ScoreRow, Button } from "../../../components";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 import ScoreEditModal from "./ScoreEditModal";
 import { observer } from "mobx-react-lite";
 import { Gamemode } from "../../../store/models/common/enums";

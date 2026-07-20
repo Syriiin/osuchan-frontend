@@ -1,4 +1,4 @@
-import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { UnstyledLink, GlobalLeaderboardRow } from "../../components";
 import { formatGamemodeNameShort } from "../../utils/formatting";
 import { observer } from "mobx-react-lite";

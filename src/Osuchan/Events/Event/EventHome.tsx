@@ -120,7 +120,7 @@ const LeaderboardRow = styled.div`
 
 const EventHome = observer(() => {
     const params = useParams<{ slug: string }>();
-    const slug = params.slug;
+    const slug = params.slug!;
 
     const store = useStore();
     const {

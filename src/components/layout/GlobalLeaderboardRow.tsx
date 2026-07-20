@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Row } from "./Row";
-import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
 
 const LeaderboardIconContainer = styled.div`

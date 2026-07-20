@@ -9,7 +9,7 @@ import {
     NumberFormat,
     Flag,
 } from "../../../components";
-import { Membership } from "../../../store/models/leaderboards/types";
+import type { Membership } from "../../../store/models/leaderboards/types";
 
 const RankingsSurface = styled(Surface)`
     margin: 20px auto;

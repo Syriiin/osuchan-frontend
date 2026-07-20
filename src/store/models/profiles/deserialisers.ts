@@ -1,5 +1,5 @@
 import { Gamemode } from "../common/enums";
-import {
+import type {
     Beatmap,
     DifficultyCalculation,
     DifficultyValue,

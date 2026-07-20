@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 
 import { observer } from "mobx-react-lite";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../../components";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { TeamColours } from ".";
-import { PPRaceTeam } from "../../store/models/ppraces/types";
+import type { PPRaceTeam } from "../../store/models/ppraces/types";
 
 const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     background-color: ${(props) => props.teamColour};

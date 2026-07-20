@@ -1,4 +1,4 @@
-import { User, ScoreFilterPreset } from "./types";
+import type { User, ScoreFilterPreset } from "./types";
 import {
     osuUserFromJson,
     scoreFilterFromJson,

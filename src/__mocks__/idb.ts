@@ -1,1 +1,3 @@
-export const openDB = jest.fn();
+import { vi } from "vitest";
+
+export const openDB = vi.fn();

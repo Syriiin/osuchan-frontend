@@ -1,4 +1,4 @@
-import { OsuUser, ScoreFilter } from "../profiles/types";
+import type { OsuUser, ScoreFilter } from "../profiles/types";
 
 export interface User {
     id: number;

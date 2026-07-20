@@ -16,7 +16,7 @@ import {
 } from "../../components";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Gamemode } from "../../store/models/common/enums";
-import { ScoreFilter } from "../../store/models/profiles/types";
+import type { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
 import { useStore } from "../../utils/hooks";
 
@@ -170,7 +170,7 @@ const CreateLeaderboardModal = observer(
                         <Switch
                             mini
                             checked={allowPastScores}
-                            onChange={(checked, event, id) =>
+                            onChange={(checked, _event, _id) =>
                                 setAllowPastScores(checked)
                             }
                         />

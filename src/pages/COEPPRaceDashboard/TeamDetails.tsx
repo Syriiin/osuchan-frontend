@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { PPRaceTeam } from "../../store/models/ppraces/types";
-import { Score } from "../../store/models/profiles/types";
+import type { PPRaceTeam } from "../../store/models/ppraces/types";
+import type { Score } from "../../store/models/profiles/types";
 import { observer } from "mobx-react-lite";
 import { NumberFormat } from "../../components";
 import TeamPlayerDetails from "./TeamPlayerDetails";

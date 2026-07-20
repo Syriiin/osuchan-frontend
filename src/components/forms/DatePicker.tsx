@@ -1,4 +1,4 @@
-import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
+import ReactDatePicker, { type ReactDatePickerProps } from "react-datepicker";
 import styled from "styled-components";
 
 const DatePickerWrapper = styled.div`

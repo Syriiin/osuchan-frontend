@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ReactTooltip, { TooltipProps as ReactTooltipProps } from "react-tooltip";
+import ReactTooltip, { type TooltipProps as ReactTooltipProps } from "react-tooltip";
 
 const StyledTooltip = styled(ReactTooltip)`
     font-style: normal;

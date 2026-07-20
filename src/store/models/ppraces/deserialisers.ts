@@ -1,5 +1,5 @@
 import { osuUserFromJson } from "../profiles/deserialisers";
-import { PPRace } from "./types";
+import type { PPRace } from "./types";
 
 export function ppraceFromJson(data: any): PPRace {
     return {

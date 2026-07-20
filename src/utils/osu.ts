@@ -1,5 +1,5 @@
 import { Gamemode, ModAcronym, BitMods } from "../store/models/common/enums";
-import { ModsJson } from "../store/models/profiles/types";
+import type { ModsJson } from "../store/models/profiles/types";
 
 export function gamemodeIdFromName(gamemodeName: string | undefined) {
     switch (gamemodeName) {
@@ -16,7 +16,7 @@ export function gamemodeIdFromName(gamemodeName: string | undefined) {
     }
 }
 
-const modBitValues: { [name: string]: BitMods } = {
+const modBitValues: { [name: string]: number } = {
     NF: BitMods.NoFail,
     EZ: BitMods.Easy,
     TD: BitMods.TouchDevice,

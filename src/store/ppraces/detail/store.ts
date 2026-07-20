@@ -2,10 +2,10 @@ import { flow, makeAutoObservable } from "mobx";
 
 import http from "../../../http";
 
-import { PPRace } from "../../models/ppraces/types";
+import type { PPRace } from "../../models/ppraces/types";
 import { ResourceStatus } from "../../status";
 import { ppraceFromJson } from "../../models/ppraces/deserialisers";
-import { Score } from "../../models/profiles/types";
+import type { Score } from "../../models/profiles/types";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
 
 export class DetailStore {

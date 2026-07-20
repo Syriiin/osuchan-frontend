@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Row } from "./Row";
-import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
 import { observer } from "mobx-react-lite";
 

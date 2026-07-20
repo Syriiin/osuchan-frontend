@@ -11,7 +11,7 @@ import {
     TextInput,
 } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 import { useAutorun, useStore } from "../../../utils/hooks";
 
 const ScoreEditModal = observer((props: ScoreEditModalProps) => {

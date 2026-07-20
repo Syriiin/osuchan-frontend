@@ -1,1 +1,3 @@
-jest.mock("idb");
+import "@testing-library/jest-dom";
+
+vi.mock("idb");

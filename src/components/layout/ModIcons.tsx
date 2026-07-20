@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Tooltip } from "./Tooltip";
 import { formatModName } from "../../utils/formatting";
-import { ModsJson } from "../../store/models/profiles/types";
+import type { ModsJson } from "../../store/models/profiles/types";
 import { modAcronymsFromJsonMods } from "../../utils/osu";
 import { ModAcronym } from "../../store/models/common/enums";
 import { observer } from "mobx-react-lite";

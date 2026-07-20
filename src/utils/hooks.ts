@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { IReactionPublic, IAutorunOptions, autorun, runInAction } from "mobx";
+import type { IReactionPublic, IAutorunOptions } from "mobx";
+import { autorun, runInAction } from "mobx";
 import { StoreContext } from "../store";
 
 export const useAction = (fn: () => void, deps: React.DependencyList) => {

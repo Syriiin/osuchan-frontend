@@ -1,5 +1,5 @@
 import { ResponsiveContainer, BarChart, Bar, Cell } from "recharts";
-import { PPRaceTeam } from "../../store/models/ppraces/types";
+import type { PPRaceTeam } from "../../store/models/ppraces/types";
 import { observer } from "mobx-react-lite";
 import { TeamColours } from ".";
 
@@ -27,7 +27,7 @@ const PPChart = observer((props: PPChartProps) => {
                         },
                     }}
                 >
-                    {data.map((entry, index) => (
+                    {data.map((_entry, index) => (
                         <Cell key={`cell-${index}`} fill={TeamColours[index]} />
                     ))}
                 </Bar>

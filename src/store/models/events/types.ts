@@ -1,5 +1,5 @@
-import { OsuUser } from "../profiles/types";
-import { Leaderboard } from "../leaderboards/types";
+import type { OsuUser } from "../profiles/types";
+import type { Leaderboard } from "../leaderboards/types";
 
 export interface Event {
     id: number;

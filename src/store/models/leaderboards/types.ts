@@ -1,6 +1,6 @@
 import { Gamemode } from "../common/enums";
 import { ScoreSet } from "../profiles/enums";
-import { OsuUser, ScoreFilter } from "../profiles/types";
+import type { OsuUser, ScoreFilter } from "../profiles/types";
 import { LeaderboardAccessType } from "./enums";
 
 export interface Leaderboard {

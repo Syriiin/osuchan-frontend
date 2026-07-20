@@ -2,7 +2,7 @@ import {
     AllowedBeatmapStatus,
     ScoreResult,
 } from "../store/models/profiles/enums";
-import { ScoreFilter } from "../store/models/profiles/types";
+import type { ScoreFilter } from "../store/models/profiles/types";
 
 export function getScoreResult(
     countMiss: number,

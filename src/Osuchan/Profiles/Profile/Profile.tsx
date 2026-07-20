@@ -38,7 +38,7 @@ const Profile = observer(() => {
     const usersStore = store.usersStore;
 
     // use effect to fetch profile data
-    const { userString } = params;
+    const userString = params.userString!;
     const gamemodeId = gamemodeIdFromName(params.gamemodeName);
     useEffect(() => {
         usersStore.loadUser(userString, gamemodeId);
@@ -79,7 +79,7 @@ const Profile = observer(() => {
                     {/* Mode switcher */}
                     <ModeSwitcher
                         gamemodeId={gamemodeId}
-                        userString={params.userString}
+                        userString={userString}
                     />
 
                     {/* Sandbox controls */}
@@ -133,7 +133,7 @@ const Profile = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     userString: string;
     gamemodeName?: string;
 }

@@ -11,7 +11,7 @@ import {
 } from "recharts";
 
 import { Surface } from "../../../components";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 import { observer } from "mobx-react-lite";
 
 const ScoresChartSurface = styled(Surface)`

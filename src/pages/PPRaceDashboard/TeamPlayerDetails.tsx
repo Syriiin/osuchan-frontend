@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { PPRacePlayer } from "../../store/models/ppraces/types";
+import type { PPRacePlayer } from "../../store/models/ppraces/types";
 import styled from "styled-components";
 import { Flag, NumberFormat, Row } from "../../components";
 import { Pie, PieChart, ResponsiveContainer } from "recharts";

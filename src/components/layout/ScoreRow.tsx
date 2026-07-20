@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import { Row } from "./Row";
 import { ModIcons } from "./ModIcons";
 import { formatScoreResult } from "../../utils/formatting";

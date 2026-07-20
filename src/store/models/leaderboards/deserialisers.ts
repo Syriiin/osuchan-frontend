@@ -2,7 +2,7 @@ import {
     osuUserFromJson,
     scoreFilterFromJson,
 } from "../profiles/deserialisers";
-import { Invite, Leaderboard, Membership } from "./types";
+import type { Invite, Leaderboard, Membership } from "./types";
 
 export function leaderboardFromJson(data: any): Leaderboard {
     return {

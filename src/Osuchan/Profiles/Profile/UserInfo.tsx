@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
-import { OsuUser } from "../../../store/models/profiles/types";
+import type { OsuUser } from "../../../store/models/profiles/types";
 import { Surface, TimeAgo, Flag } from "../../../components";
 import { observer } from "mobx-react-lite";
 

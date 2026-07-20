@@ -60,9 +60,9 @@ const ScoreRankingsContainer = styled.div`
 
 const LeaderboardDashboard = observer(() => {
     const params = useParams<RouteParams>();
-    const leaderboardType = params.leaderboardType;
+    const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
-    const leaderboardId = parseInt(params.leaderboardId);
+    const leaderboardId = parseInt(params.leaderboardId!);
 
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
@@ -141,7 +141,7 @@ const LeaderboardDashboard = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     leaderboardType: "global" | "community";
     gamemode: "osu" | "taiko" | "catch" | "mania";
     leaderboardId: string;

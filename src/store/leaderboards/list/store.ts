@@ -4,12 +4,12 @@ import history from "../../../history";
 import http from "../../../http";
 import notify from "../../../notifications";
 
-import { Leaderboard, Membership } from "../../models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../models/leaderboards/types";
 import {
     leaderboardFromJson,
     membershipFromJson,
 } from "../../models/leaderboards/deserialisers";
-import { ScoreFilter } from "../../models/profiles/types";
+import type { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 import { ScoreSet } from "../../models/profiles/enums";

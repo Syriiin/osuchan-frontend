@@ -6,7 +6,7 @@ import {
     DataCell,
     NumberFormat,
 } from "../../../components";
-import { UserStats } from "../../../store/models/profiles/types";
+import type { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
 import { observer } from "mobx-react-lite";
 import { Gamemode } from "../../../store/models/common/enums";

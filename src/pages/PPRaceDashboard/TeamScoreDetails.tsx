@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, Row, TimeAgo } from "../../components";
 import { Pie, PieChart, ResponsiveContainer } from "recharts";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
 
 const TeamScores = styled.div`

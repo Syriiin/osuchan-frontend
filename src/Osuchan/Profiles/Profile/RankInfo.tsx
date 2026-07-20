@@ -7,7 +7,7 @@ import {
     DataTable,
     NumberFormat,
 } from "../../../components";
-import { UserStats, OsuUser } from "../../../store/models/profiles/types";
+import type { UserStats, OsuUser } from "../../../store/models/profiles/types";
 import { useStore } from "../../../utils/hooks";
 
 const RankInfoSurface = styled(Surface)`

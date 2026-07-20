@@ -1,8 +1,9 @@
 import countries from "i18n-iso-countries";
 import styled from "styled-components";
 import { Tooltip } from "./Tooltip";
+import enLocale from "i18n-iso-countries/langs/en.json";
 
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+countries.registerLocale(enLocale);
 
 const FlagWrapper = styled.div`
     display: flex;

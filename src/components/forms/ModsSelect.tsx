@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import Select, { ValueType, StylesConfig } from "react-select";
+import Select, { type StylesConfig, type OnChangeValue } from "react-select";
 import { Gamemode, ModAcronym } from "../../store/models/common/enums";
 import { ThemeContext } from "styled-components";
-import { ModsJson } from "../../store/models/profiles/types";
+import type { ModsJson } from "../../store/models/profiles/types";
 import { modAcronymsFromJsonMods } from "../../utils/osu";
 
 // TODO: replace this ugly mess... custom select needed
@@ -13,16 +13,16 @@ export const ModsSelect = (props: ModsSelectProps) => {
     const theme = useContext(ThemeContext);
 
     const styles: StylesConfig<OptionType, true> = {
-        menu: (provided, state) => ({
+        menu: (provided, _state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
         }),
-        control: (provided, state) => ({
+        control: (provided, _state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
             border: "none",
         }),
-        input: (provided, state) => ({
+        input: (provided, _state) => ({
             ...provided,
             backgroundColor: theme.colours.background,
             color: "#fff",
@@ -33,7 +33,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
         }),
     };
 
-    const selectModOptions = [
+    const selectModOptions: OptionType[] = [
         { value: ModAcronym.Hidden, label: ModAcronym.Hidden },
         { value: ModAcronym.DoubleTime, label: ModAcronym.DoubleTime },
         { value: ModAcronym.Nightcore, label: ModAcronym.Nightcore },
@@ -77,7 +77,7 @@ export const ModsSelect = (props: ModsSelectProps) => {
                     ) as OptionType,
             )}
             isMulti
-            onChange={(value: ValueType<OptionType, true>) => {
+            onChange={(value: OnChangeValue<OptionType, true>) => {
                 if (value) {
                     const modAcronyms = (value as OptionType[]).map(
                         (option) => option.value,

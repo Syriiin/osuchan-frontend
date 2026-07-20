@@ -1,4 +1,4 @@
-import { DefaultTheme } from "styled-components";
+import type { DefaultTheme } from "styled-components";
 
 const getColour = (key: string, fallback: string) =>
     `var(--colours-${key}, ${fallback})`;

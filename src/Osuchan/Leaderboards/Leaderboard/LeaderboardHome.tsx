@@ -26,7 +26,7 @@ import {
     AllowedBeatmapStatus,
     ScoreSet,
 } from "../../../store/models/profiles/enums";
-import { ScoreFilter } from "../../../store/models/profiles/types";
+import type { ScoreFilter } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
 import {
     formatCalculatorEngine,
@@ -423,9 +423,9 @@ const LeaderboardButtons = observer(() => {
 const LeaderboardHome = observer(() => {
     const navigate = useNavigate();
     const params = useParams<RouteParams>();
-    const leaderboardType = params.leaderboardType;
+    const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
-    const leaderboardId = parseInt(params.leaderboardId);
+    const leaderboardId = parseInt(params.leaderboardId!);
     const invitesMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/invites");
     const memberMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/:leaderboardId/members/:userId");
 
@@ -636,7 +636,7 @@ const LeaderboardHome = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     leaderboardType: "global" | "community";
     gamemode: "osu" | "taiko" | "catch" | "mania";
     leaderboardId: string;

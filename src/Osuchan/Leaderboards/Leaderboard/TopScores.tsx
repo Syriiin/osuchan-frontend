@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 
 import { Surface, SurfaceTitle, ScoreRow, Button } from "../../../components";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 
 const TopScoresSurface = styled(Surface)`
     margin: 20px auto;

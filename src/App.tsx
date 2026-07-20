@@ -20,8 +20,8 @@ import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
 import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
 
-if (process.env.NODE_ENV === "production") {
-    ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
+if (import.meta.env.PROD) {
+    ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
 }
 
 configure({
@@ -58,7 +58,7 @@ const AppWithContext = () => {
     const location = useLocation();
 
     useEffect(() => {
-        if (process.env.NODE_ENV === "production") {
+        if (import.meta.env.PROD) {
             ReactGA.pageview(location.pathname + location.search);
         }
     }, [location]);
@@ -79,7 +79,7 @@ const AppWithContext = () => {
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>
         <StyledThemeProvider theme={osuchanTheme}>
-            <Router history={history}>
+            <Router history={history as any}>
                 <GlobalStyle />
                 <NotificationContainer hideProgressBar />
                 <AppWithContext />

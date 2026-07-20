@@ -75,7 +75,7 @@ const Finalising = styled.span`
 
 const PPRaceDashboard = observer(() => {
     const params = useParams<RouteParams>();
-    const ppraceId = parseInt(params.ppraceId);
+    const ppraceId = parseInt(params.ppraceId!);
 
     const store = useStore();
     const detailStore = store.ppracesStore.detailStore;
@@ -180,7 +180,7 @@ const PPRaceDashboard = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     ppraceId: string;
 }
 

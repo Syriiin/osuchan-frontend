@@ -1,5 +1,5 @@
 import { Gamemode } from "../common/enums";
-import { OsuUser } from "../profiles/types";
+import type { OsuUser } from "../profiles/types";
 import { PPRaceStatus } from "./enums";
 
 export interface PPRace {

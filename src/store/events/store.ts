@@ -8,7 +8,7 @@ import {
     eventAttendeeFromJson,
     eventLeaderboardFromJson,
 } from "../models/events/deserialisers";
-import { Event, EventAttendee, EventLeaderboard } from "../models/events/types";
+import type { Event, EventAttendee, EventLeaderboard } from "../models/events/types";
 import { ResourceStatus, PaginatedResourceStatus } from "../status";
 
 export class EventsStore {

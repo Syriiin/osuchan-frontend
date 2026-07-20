@@ -11,7 +11,7 @@ import {
     Select,
 } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
-import { ScoreFilter } from "../../../store/models/profiles/types";
+import type { ScoreFilter } from "../../../store/models/profiles/types";
 import { useStore } from "../../../utils/hooks";
 
 const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {

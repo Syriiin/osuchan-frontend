@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, NumberFormat, Row } from "../../components";
-import { Membership } from "../../store/models/leaderboards/types";
+import type { Membership } from "../../store/models/leaderboards/types";
 
 const MemberRowWrapper = styled(Row)`
     font-size: 0.6em;

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ReactSwitch, { ReactSwitchProps } from "react-switch";
+import ReactSwitch, { type ReactSwitchProps } from "react-switch";
 import { ThemeContext } from "styled-components";
 
 export const Switch = (props: SwitchProps) => {

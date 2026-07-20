@@ -1,4 +1,5 @@
-import React, { useState, ComponentProps } from "react";
+import React, { useState } from "react";
+import type { ComponentProps } from "react";
 import styled from "styled-components";
 import { LoadingSpinner } from "../layout/Loading";
 import { SimpleModal, SimpleModalTitle } from "../layout/SimpleModal";
