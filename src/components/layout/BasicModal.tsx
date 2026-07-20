@@ -62,6 +62,7 @@ export const BasicModal = (props: BasicModalProps) => {
                 classNames="modal-base"
                 mountOnEnter
                 unmountOnExit
+                nodeRef={modalBaseEl}
             >
                 <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
                     <ModalBody>{props.children}</ModalBody>

@@ -1,7 +1,5 @@
 import { configure } from "mobx";
-import { useEffect } from "react";
-import ReactGA from "react-ga";
-import { Route, Routes, unstable_HistoryRouter as Router, useLocation } from "react-router-dom";
+import { Route, Routes, unstable_HistoryRouter as Router } from "react-router-dom";
 import {
     ThemeProvider as StyledThemeProvider,
     createGlobalStyle,
@@ -18,10 +16,6 @@ import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
 import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
-
-if (import.meta.env.PROD) {
-    ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
-}
 
 configure({
     enforceActions: "always",
@@ -53,16 +47,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-const AppWithContext = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-        if (import.meta.env.PROD) {
-            ReactGA.pageview(location.pathname + location.search);
-        }
-    }, [location]);
-
-    return (
+const AppWithContext = () => (
         <Routes>
             <Route
                 path="/leaderboards/:leaderboardType/:gamemode/:leaderboardId/dashboard"
@@ -73,7 +58,6 @@ const AppWithContext = () => {
             <Route path="*" element={<Osuchan />} />
         </Routes>
     );
-};
 
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>

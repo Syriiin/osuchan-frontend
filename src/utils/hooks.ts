@@ -15,7 +15,8 @@ export const useAutorun = (
     opts?: IAutorunOptions,
 ) => {
     useEffect(() => {
-        autorun(view, opts);
+        const disposer = autorun(view, opts);
+        return () => disposer();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 };

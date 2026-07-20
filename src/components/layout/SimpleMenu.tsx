@@ -79,7 +79,7 @@ export const SimpleMenu = (props: SimpleMenuProps) => {
 
 export interface SimpleMenuProps {
     triggerElement: React.ReactNode;
-    children: React.ReactNodeArray;
+    children: React.ReactNode[];
     emptyText?: string;
     width?: number;
 }
