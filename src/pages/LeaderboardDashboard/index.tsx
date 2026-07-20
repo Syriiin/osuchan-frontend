@@ -111,13 +111,16 @@ const LeaderboardDashboard = observer(() => {
 
             {leaderboard && (
                 <ThemeProvider
-                    theme={(theme) => ({
-                        ...theme,
-                        colours: {
-                            ...theme.colours,
-                            ...leaderboard.customColours,
-                        },
-                    })}
+                    theme={(osuchanTheme) => {
+                        const theme = osuchanTheme!;
+                        return {
+                            ...theme,
+                            colours: {
+                                ...theme.colours,
+                                ...leaderboard.customColours,
+                            },
+                        };
+                    }}
                 >
                     <DashboardWrapper>
                         <Header>

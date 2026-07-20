@@ -107,24 +107,16 @@ const DetailsBar = styled(Button)`
     border-radius: 0;
 `;
 
-const Chevron = styled(FontAwesomeIcon)`
-    transform: scaleY(${(props: ChevronProps) => (props.open ? "-1" : "1")});
+const Chevron = styled(FontAwesomeIcon)<{ $open?: boolean }>`
+    transform: scaleY(${(props) => (props.$open ? "-1" : "1")});
     transition: transform 0.2s linear;
 `;
 
-interface ChevronProps {
-    open?: boolean;
-}
-
-const DetailsCollapser = styled.div<DetailsCollapserProps>`
+const DetailsCollapser = styled.div<{ $open?: boolean }>`
     overflow: hidden;
-    max-height: ${(props) => (props.open ? "500px" : "0px")};
+    max-height: ${(props) => (props.$open ? "500px" : "0px")};
     transition: max-height 0.3s linear;
 `;
-
-interface DetailsCollapserProps {
-    open?: boolean;
-}
 
 const DetailsContainer = styled.div`
     padding: 10px;
@@ -401,13 +393,13 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                 </ScoreInfo>
             </InfoContainer>
             <DetailsBar action={() => setDetailsOpen(!detailsOpen)}>
-                <Chevron open={detailsOpen} icon={faChevronDown} size="sm" />
+                <Chevron $open={detailsOpen} icon={faChevronDown} size="sm" />
                 {detailsOpen
                     ? " Hide difficulty and performance details "
                     : " Show difficulty and performance details "}
-                <Chevron open={detailsOpen} icon={faChevronDown} size="sm" />
+                <Chevron $open={detailsOpen} icon={faChevronDown} size="sm" />
             </DetailsBar>
-            <DetailsCollapser open={detailsOpen}>
+            <DetailsCollapser $open={detailsOpen}>
                 <DetailsContainer>
                     {score.performanceCalculations.map(
                         (performanceCalculation) => (

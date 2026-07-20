@@ -478,8 +478,9 @@ const LeaderboardHome = observer(() => {
             {detailStore.loadingStatus === ResourceStatus.Loaded &&
                 leaderboard && (
                     <ThemeProvider
-                        theme={(theme) =>
-                            leaderboard.isEvent
+                        theme={(osuchanTheme) => {
+                            const theme = osuchanTheme!;
+                            return leaderboard.isEvent
                                 ? {
                                       ...theme,
                                       colours: {
@@ -487,8 +488,8 @@ const LeaderboardHome = observer(() => {
                                           ...leaderboard.customColours,
                                       },
                                   }
-                                : theme
-                        }
+                                : theme;
+                        }}
                     >
                         <>
                             {/*Leaderboard Details */}

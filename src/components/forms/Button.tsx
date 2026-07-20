@@ -4,10 +4,7 @@ import styled from "styled-components";
 import { LoadingSpinner } from "../layout/Loading";
 import { SimpleModal, SimpleModalTitle } from "../layout/SimpleModal";
 
-const StyledButton = styled("button").withConfig({
-    shouldForwardProp: (prop, defaultValidatorFn) =>
-        !["action"].includes(prop) && defaultValidatorFn(prop),
-})<StyledButtonProps>`
+const StyledButton = styled.button<StyledButtonProps>`
     padding: 10px;
     border-radius: 10px;
     font-size: 14px;
@@ -49,20 +46,21 @@ export const Button = (
     props: ButtonProps & ComponentProps<typeof StyledButton>,
 ) => {
     const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+    const { action, ...rest } = props;
 
     const handleClick = () => {
-        if (props.action) {
+        if (action) {
             if (props.confirmationMessage) {
                 setConfirmationModalOpen(true);
             } else {
-                props.action();
+                action();
             }
         }
     };
 
     return (
         <>
-            <StyledButton {...props} onClick={handleClick}>
+            <StyledButton {...rest} onClick={handleClick}>
                 {props.isLoading ? (
                     <LoadingSpinner scale={0.15} />
                 ) : (
@@ -87,6 +85,7 @@ interface ButtonProps {
     isLoading?: boolean;
     action?: () => void;
     confirmationMessage?: string;
+    to?: string;
 }
 
 const YesButton = styled(Button)`

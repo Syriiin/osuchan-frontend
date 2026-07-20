@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import Select, { type StylesConfig, type OnChangeValue } from "react-select";
 import { Gamemode, ModAcronym } from "../../store/models/common/enums";
-import { ThemeContext } from "styled-components";
+import { useTheme } from "styled-components";
 import type { ModsJson } from "../../store/models/profiles/types";
 import { modAcronymsFromJsonMods } from "../../utils/osu";
 
@@ -10,7 +9,7 @@ import { modAcronymsFromJsonMods } from "../../utils/osu";
 type OptionType = { label: string; value: string };
 
 export const ModsSelect = (props: ModsSelectProps) => {
-    const theme = useContext(ThemeContext);
+    const theme = useTheme();
 
     const styles: StylesConfig<OptionType, true> = {
         menu: (provided, _state) => ({

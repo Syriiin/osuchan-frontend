@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
     XAxis,
     YAxis,
@@ -21,7 +20,7 @@ const ScoresChartSurface = styled(Surface)`
 `;
 
 const ScoresChart = observer((props: ScoresChartProps) => {
-    const theme = useContext(ThemeContext);
+    const theme = useTheme();
 
     const scoresData = props.scores.map((score, i) => ({
         x: i + 1,

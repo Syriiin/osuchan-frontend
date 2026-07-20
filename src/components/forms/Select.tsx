@@ -1,11 +1,10 @@
-import { useContext } from "react";
 import ReactSelect, { type StylesConfig } from "react-select";
-import { ThemeContext } from "styled-components";
+import { useTheme } from "styled-components";
 
 export const Select = <T extends OptionValue = number>(
     props: SelectProps<T>,
 ) => {
-    const theme = useContext(ThemeContext);
+    const theme = useTheme();
 
     const styles: StylesConfig<Option<T>, false> = {
         control: (provided, state) => ({
