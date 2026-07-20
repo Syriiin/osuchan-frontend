@@ -1,4 +1,4 @@
-import { faEnvelope, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
@@ -301,7 +301,7 @@ const Navbar = observer(() => {
                                 }
                                 value={searchValue}
                             />
-                            <FontAwesomeIcon icon={faSearch} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </SearchWrapper>
                     </form>
 

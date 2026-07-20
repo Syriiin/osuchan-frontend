@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 import { OsuUser } from "../../../store/models/profiles/types";
 import { Surface, TimeAgo, Flag } from "../../../components";
@@ -55,7 +55,7 @@ const UserInfo = observer((props: UserInfoProps) => {
                     <Flag countryCode={osuUser.country} showFullName />
                 </UserInfoRow>
                 <UserInfoRow>
-                    <JoinIcon icon={faSignInAlt} />
+                    <JoinIcon icon={faRightToBracket} />
                     <TimeAgo datetime={osuUser.joinDate} />
                 </UserInfoRow>
             </UserInfoContainer>
