@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 

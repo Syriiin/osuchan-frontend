@@ -1,6 +1,5 @@
 import { observable, action, makeAutoObservable, flow } from "mobx";
 
-import history from "../../../history";
 import http from "../../../http";
 import notify from "../../../notifications";
 
@@ -10,7 +9,6 @@ import type { ScoreFilter } from "../../models/profiles/types";
 import { Gamemode } from "../../models/common/enums";
 import { LeaderboardAccessType } from "../../models/leaderboards/enums";
 import { ScoreSet } from "../../models/profiles/enums";
-import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { PaginatedResourceStatus } from "../../status";
 
 export class ListStore {
@@ -306,6 +304,7 @@ export class ListStore {
     ): any {
         this.isCreatingLeaderboard = true;
 
+        let leaderboard: Leaderboard | null = null;
         try {
             const leaderboardResponse = yield http.post(`/api/leaderboards/community/${gamemode}`, {
                 score_set: scoreSet,
@@ -334,14 +333,9 @@ export class ListStore {
                     highest_length: scoreFilter.highestLength,
                 },
             });
-            const leaderboard: Leaderboard = leaderboardFromJson(leaderboardResponse.data);
+            leaderboard = leaderboardFromJson(leaderboardResponse.data);
 
             this.communityLeaderboards.push(leaderboard);
-
-            // Navigate to leaderboard page after creation
-            history.push(
-                `/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`,
-            );
 
             notify.positive("Leaderboard created");
         } catch (error: any) {
@@ -357,5 +351,7 @@ export class ListStore {
         }
 
         this.isCreatingLeaderboard = false;
+
+        return leaderboard;
     }
 }

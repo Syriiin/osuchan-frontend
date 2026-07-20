@@ -1,10 +1,8 @@
 import { action, flow, makeAutoObservable, observable } from "mobx";
 
-import history from "../../../history";
 import http from "../../../http";
 import notify from "../../../notifications";
 
-import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { Gamemode } from "../../models/common/enums";
 import {
     inviteFromJson,
@@ -223,9 +221,6 @@ export class DetailStore {
         try {
             yield http.delete(this.resourceUrl);
 
-            // Navigate to leaderboard list page after deletion
-            history.push(`/leaderboards/community/${formatGamemodeNameShort(this.gamemode!)}`);
-
             this.leaderboard = null;
             this.rankings.clear();
             this.leaderboardScores.clear();
@@ -400,11 +395,6 @@ export class DetailStore {
         try {
             yield http.delete(`${this.resourceUrl}/members/${this.membership!.osuUserId}`);
 
-            history.push(
-                `/leaderboards/${this.leaderboardType}/${formatGamemodeNameShort(this.gamemode!)}/${
-                    this.leaderboardId
-                }`,
-            );
             this.rankings.replace(
                 this.rankings.filter((m) => m.osuUserId !== this.membership!.osuUserId),
             );

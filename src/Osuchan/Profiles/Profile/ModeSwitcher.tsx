@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { Surface } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";

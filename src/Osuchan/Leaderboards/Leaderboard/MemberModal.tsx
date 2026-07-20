@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -60,6 +61,7 @@ const MemberInfo = observer((props: { userId?: string }) => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
+    const navigate = useNavigate();
 
     const userId = parseInt(props.userId ?? "");
     const { loadingMembershipStatus, leaderboard, membership, membershipScores } = detailStore;
@@ -123,7 +125,10 @@ const MemberInfo = observer((props: { userId?: string }) => {
                                 <Button
                                     negative
                                     isLoading={detailStore.isKickingMember}
-                                    action={() => detailStore.kickMember()}
+                                    action={async () => {
+                                        await detailStore.kickMember();
+                                        navigate(".");
+                                    }}
                                     confirmationMessage="Are you sure you want to kick this member from the leaderboard?"
                                 >
                                     Kick Member

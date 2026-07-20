@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import { Button, LoadingPage, Surface, UnstyledLink } from "../../../components";

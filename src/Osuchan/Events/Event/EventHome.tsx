@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import {

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Navigate, useMatch, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useMatch, useNavigate, useParams } from "react-router";
 import styled, { ThemeProvider } from "styled-components";
 
 import {
@@ -269,6 +269,8 @@ const LeaderboardButtons = observer(() => {
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
     const meStore = store.meStore;
+    const navigate = useNavigate();
+    const params = useParams<RouteParams>();
 
     const { leaderboard } = detailStore;
     const { user } = meStore;
@@ -321,7 +323,10 @@ const LeaderboardButtons = observer(() => {
                                 <Button
                                     negative
                                     isLoading={detailStore.isDeletingLeaderboard}
-                                    action={() => detailStore.deleteLeaderboard()}
+                                    action={async () => {
+                                        await detailStore.deleteLeaderboard();
+                                        navigate(`/leaderboards/community/${params.gamemode}`);
+                                    }}
                                     confirmationMessage="Are you sure you want to delete this leaderboard?"
                                 >
                                     Delete Leaderboard

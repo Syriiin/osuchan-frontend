@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import { gamemodeIdFromName } from "../../../utils/osu";
 import UserInfo from "./UserInfo";

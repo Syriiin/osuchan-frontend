@@ -237,7 +237,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     startDate={value.oldestBeatmapDate}
                     endDate={value.newestBeatmapDate}
                     selected={value.oldestBeatmapDate}
-                    onChange={(date) => setOldestBeatmapDate(date as Date | null)}
+                    onChange={(date: Date | null) => setOldestBeatmapDate(date)}
                 />
             </FormControl>
             <FormLabel>Newest Beatmap Date</FormLabel>
@@ -248,7 +248,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     minDate={value.oldestBeatmapDate ?? undefined}
                     endDate={value.newestBeatmapDate}
                     selected={value.newestBeatmapDate}
-                    onChange={(date) => setNewestBeatmapDate(date as Date | null)}
+                    onChange={(date: Date | null) => setNewestBeatmapDate(date)}
                 />
             </FormControl>
             <FormLabel>Oldest Score Date</FormLabel>
@@ -258,7 +258,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     startDate={value.oldestScoreDate}
                     endDate={value.newestScoreDate}
                     selected={value.oldestScoreDate}
-                    onChange={(date) => setOldestScoreDate(date as Date | null)}
+                    onChange={(date: Date | null) => setOldestScoreDate(date)}
                 />
             </FormControl>
             <FormLabel>Newest Score Date</FormLabel>
@@ -269,7 +269,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     minDate={value.oldestScoreDate ?? undefined}
                     endDate={value.newestScoreDate}
                     selected={value.newestScoreDate}
-                    onChange={(date) => setNewestScoreDate(date as Date | null)}
+                    onChange={(date: Date | null) => setNewestScoreDate(date)}
                 />
             </FormControl>
 

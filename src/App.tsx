@@ -1,10 +1,9 @@
 import { configure } from "mobx";
-import { Route, Routes, unstable_HistoryRouter as Router } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import history from "./history";
 import { NotificationContainer } from "./notifications";
 import { osuchanTheme } from "./osuchanTheme";
 
@@ -59,11 +58,11 @@ const AppWithContext = () => (
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>
         <StyledThemeProvider theme={osuchanTheme}>
-            <Router history={history as any}>
+            <BrowserRouter>
                 <GlobalStyle />
                 <NotificationContainer hideProgressBar />
                 <AppWithContext />
-            </Router>
+            </BrowserRouter>
         </StyledThemeProvider>
     </StoreContext.Provider>
 );

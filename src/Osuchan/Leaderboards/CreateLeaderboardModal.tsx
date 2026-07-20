@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 
 import {
@@ -19,6 +20,7 @@ import { Gamemode } from "../../store/models/common/enums";
 import type { ScoreFilter } from "../../store/models/profiles/types";
 import { ScoreSet } from "../../store/models/profiles/enums";
 import { useStore } from "../../utils/hooks";
+import { formatGamemodeNameShort } from "../../utils/formatting";
 
 const LeaderboardIcon = styled.img`
     max-width: 128px;
@@ -29,6 +31,7 @@ const LeaderboardIcon = styled.img`
 const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => {
     const store = useStore();
     const listStore = store.leaderboardsStore.listStore;
+    const navigate = useNavigate();
 
     const [gamemode, setGamemode] = useState(Gamemode.Standard);
     const [scoreSet, setScoreSet] = useState(ScoreSet.Normal);
@@ -49,10 +52,10 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
         return () => clearTimeout(timeout);
     }, [setDelayedIconUrl, iconUrl]);
 
-    const handleCreateLeaderboardSubmit = (e: React.FormEvent) => {
+    const handleCreateLeaderboardSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        listStore.createLeaderboard(
+        const leaderboard = await listStore.createLeaderboard(
             gamemode,
             scoreSet,
             accessType,
@@ -62,6 +65,10 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
             allowPastScores,
             scoreFilter as ScoreFilter,
         );
+
+        if (leaderboard) {
+            navigate(`/leaderboards/community/${formatGamemodeNameShort(gamemode)}/${leaderboard.id}`);
+        }
     };
 
     // annoyingly need the useCallback hook here so that we can use the onChange callback as a dependency of useEffect inside ScoreFilterForm without causing an infinite render loop
