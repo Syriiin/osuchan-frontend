@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import {
     SimpleModal,
@@ -77,18 +76,15 @@ const MemberInfo = observer((props: { userId?: string }) => {
 
     return (
         <>
-            <Helmet>
-                {loadingMembershipStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingMembershipStatus === ResourceStatus.Loaded && leaderboard && membership && (
-                    <title>
-                        {membership.osuUser?.username} - {leaderboard.name} - osu!chan
-                    </title>
-                )}
-                {loadingMembershipStatus === ResourceStatus.Error && (
-                    <title>Member not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingMembershipStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingMembershipStatus === ResourceStatus.Loaded && leaderboard && membership
+                      ? `${membership.osuUser?.username} - ${leaderboard.name} - osu!chan`
+                      : loadingMembershipStatus === ResourceStatus.Error
+                        ? "Member not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {loadingMembershipStatus === ResourceStatus.Loaded && membership && (
                 <>
                     <UserInfo>

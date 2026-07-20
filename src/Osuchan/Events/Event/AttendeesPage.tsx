@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
@@ -119,16 +118,15 @@ const AttendeesPage = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingStatus === ResourceStatus.Loaded && event && (
-                    <title>{event.name} - Attendees - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>Event not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && event
+                      ? `${event.name} - Attendees - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "Event not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
             {loadingStatus === ResourceStatus.Error && <h3>Event not found!</h3>}

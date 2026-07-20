@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 
 import { gamemodeIdFromName } from "../../../utils/osu";
@@ -56,14 +55,15 @@ const Profile = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingStatus === ResourceStatus.Loaded && osuUser && (
-                    <title>{osuUser.username} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && <title>User not found - osu!chan</title>}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && osuUser
+                      ? `${osuUser.username} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "User not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {usersStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {userStats && osuUser && (
                 <ProfileGrid>

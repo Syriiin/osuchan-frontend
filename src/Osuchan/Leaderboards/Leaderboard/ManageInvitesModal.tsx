@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import {
     SimpleModal,
@@ -162,15 +161,15 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
 
     return (
         <SimpleModal open={props.open} onClose={props.onClose}>
-            <Helmet>
-                {loadingInvitesStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingInvitesStatus === ResourceStatus.Loaded && leaderboard && (
-                    <title>Manage Invites - {leaderboard.name} - osu!chan</title>
-                )}
-                {loadingInvitesStatus === ResourceStatus.Error && (
-                    <title>Leaderboard not found - osu!chan</title>
-                )}
-            </Helmet>
+            <title>
+                {loadingInvitesStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingInvitesStatus === ResourceStatus.Loaded && leaderboard
+                      ? `Manage Invites - ${leaderboard.name} - osu!chan`
+                      : loadingInvitesStatus === ResourceStatus.Error
+                        ? "Leaderboard not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             <SimpleModalTitle>Manage Invites</SimpleModalTitle>
 
             <Button

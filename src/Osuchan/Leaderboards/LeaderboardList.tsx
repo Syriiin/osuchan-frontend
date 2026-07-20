@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
@@ -98,16 +97,15 @@ const LeaderboardList = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {leaderboardType === "global" && <title>Global Leaderboards - osu!chan</title>}
-                {leaderboardType === "community" && (
-                    <title>Community Leaderboards - osu!chan</title>
-                )}
-                <meta
-                    name="description"
-                    content="osu!chan Leaderboards - Custom global and community leaderboards for osu!"
-                />
-            </Helmet>
+            <title>
+                {leaderboardType === "global"
+                    ? "Global Leaderboards - osu!chan"
+                    : "Community Leaderboards - osu!chan"}
+            </title>
+            <meta
+                name="description"
+                content="osu!chan Leaderboards - Custom global and community leaderboards for osu!"
+            />
 
             <LeaderboardsSurface>
                 <SurfaceHeaderContainer>

@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import styled, { ThemeProvider } from "styled-components";
 import { LoadingPage } from "../../components";
@@ -82,16 +81,15 @@ const LeaderboardDashboard = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingStatus === ResourceStatus.Loaded && leaderboard && (
-                    <title>{leaderboard.name} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>Leaderboard not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && leaderboard
+                      ? `${leaderboard.name} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "Leaderboard not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {leaderboard === null && detailStore.loadingStatus === ResourceStatus.Loading && (
                 <LoadingPage />
             )}

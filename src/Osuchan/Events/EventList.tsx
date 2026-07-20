@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import {
@@ -61,9 +60,7 @@ const EventList = observer(() => {
 
     return (
         <>
-            <Helmet>
-                <title>Events - osu!chan</title>
-            </Helmet>
+            <title>Events - osu!chan</title>
             <EventsSurface>
                 <SurfaceHeaderContainer>
                     <SurfaceTitle>Events</SurfaceTitle>

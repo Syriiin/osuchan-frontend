@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { LoadingPage, Surface } from "../../components";
@@ -117,16 +116,15 @@ const COEPPRaceDashboard = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && <title>Loading...</title>}
-                {loadingStatus === ResourceStatus.Loaded && pprace && (
-                    <title>{pprace.name} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>PP Race not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && pprace
+                      ? `${pprace.name} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "PP Race not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {detailStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
             {detailStore.loadingStatus === ResourceStatus.Error && <h3>PP Race not found!</h3>}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { Button, Surface, TextInput } from "../../components";
@@ -69,13 +68,11 @@ const Home = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Home - osu!chan</title>
-                <meta
-                    name="description"
-                    content="osu!chan - osu! stats, custom leaderboards, and much more!"
-                />
-            </Helmet>
+            <title>Home - osu!chan</title>
+            <meta
+                name="description"
+                content="osu!chan - osu! stats, custom leaderboards, and much more!"
+            />
 
             <HomeWrapper>
                 <Title>
