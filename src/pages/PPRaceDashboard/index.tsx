@@ -97,17 +97,21 @@ const PPRaceDashboard = observer(() => {
     return (
         <>
             <title>
-                {loadingStatus === ResourceStatus.Loading
-                    ? "Loading..."
-                    : loadingStatus === ResourceStatus.Loaded && pprace
-                      ? `${pprace.name} - osu!chan`
+                {pprace
+                    ? `${pprace.name} - osu!chan`
+                    : loadingStatus === ResourceStatus.Loading
+                      ? "Loading..."
                       : loadingStatus === ResourceStatus.Error
                         ? "PP Race not found - osu!chan"
                         : "osu!chan"}
             </title>
-            {detailStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
+            {pprace === null && detailStore.loadingStatus === ResourceStatus.Loading && (
+                <LoadingPage />
+            )}
 
-            {detailStore.loadingStatus === ResourceStatus.Error && <h3>PP Race not found!</h3>}
+            {pprace === null && detailStore.loadingStatus === ResourceStatus.Error && (
+                <h3>PP Race not found!</h3>
+            )}
 
             {detailStore.loadingStatus === ResourceStatus.Loaded && pprace && (
                 <DashboardWrapper>
