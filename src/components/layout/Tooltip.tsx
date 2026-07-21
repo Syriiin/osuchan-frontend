@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, cloneElement } from "react";
 import {
     useFloating,
     autoUpdate,
@@ -29,10 +29,6 @@ const TooltipContent = styled.div`
     align-items: center;
 `;
 
-const TriggerWrapper = styled.span`
-    display: inline;
-`;
-
 interface TooltipProps {
     content: React.ReactNode;
     children: React.ReactElement;
@@ -57,11 +53,14 @@ export const Tooltip = ({ content, children, place = "top" }: TooltipProps) => {
 
     const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 
+    const trigger = cloneElement(children, {
+        ...getReferenceProps(),
+        ref: refs.setReference,
+    } as Record<string, unknown>);
+
     return (
         <>
-            <TriggerWrapper ref={refs.setReference} {...getReferenceProps()}>
-                {children}
-            </TriggerWrapper>
+            {trigger}
             {isOpen && (
                 <FloatingPortal>
                     <TooltipContent
