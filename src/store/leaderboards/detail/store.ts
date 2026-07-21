@@ -63,12 +63,13 @@ export class DetailStore {
         return `/api/leaderboards/${this.leaderboardType}/${this.gamemode}/${this.leaderboardId}`;
     }
 
-    reloadLeaderboard = async (_moreScores: boolean = false) =>
+    reloadLeaderboard = async (_moreScores: boolean = false, background: boolean = false) =>
         this.loadLeaderboard(
             this.leaderboardType!,
             this.gamemode!,
             this.leaderboardId!,
             _moreScores,
+            background,
         );
 
     *loadLeaderboard(
@@ -76,8 +77,11 @@ export class DetailStore {
         gamemode: Gamemode,
         leaderboardId: number,
         _moreScores: boolean = false,
+        background: boolean = false,
     ): any {
-        this.loadingStatus = ResourceStatus.Loading;
+        if (!background) {
+            this.loadingStatus = ResourceStatus.Loading;
+        }
         this.leaderboardType = leaderboardType;
         this.gamemode = gamemode;
         this.leaderboardId = leaderboardId;
@@ -112,7 +116,9 @@ export class DetailStore {
         } catch (error: any) {
             console.log(error);
 
-            this.loadingStatus = ResourceStatus.Error;
+            if (this.leaderboard === null) {
+                this.loadingStatus = ResourceStatus.Error;
+            }
         }
     }
 
