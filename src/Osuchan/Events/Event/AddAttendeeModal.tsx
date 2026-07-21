@@ -21,7 +21,7 @@ const AddAttendeeModal = observer((props: AddAttendeeModalProps) => {
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Add Attendee</SimpleModalTitle>
             <form onSubmit={handleSubmit}>
                 <FormLabel>osu! User ID</FormLabel>

@@ -28,7 +28,8 @@ const ModalBase = styled.div`
         pointer-events: auto;
     }
 
-    &.modal-base-exit-active {
+    &.modal-base-exit-active,
+    &.modal-base-exit-done {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
@@ -60,8 +61,8 @@ export const BasicModal = (props: BasicModalProps) => {
                 in={props.open}
                 timeout={200}
                 classNames="modal-base"
-                mountOnEnter
-                unmountOnExit
+                mountOnEnter={!props.keepMounted}
+                unmountOnExit={!props.keepMounted}
                 nodeRef={modalBaseEl}
             >
                 <ModalBase ref={modalBaseEl} onMouseDown={handleCloseClick}>
@@ -76,4 +77,5 @@ export interface BasicModalProps {
     children: React.ReactNode;
     open: boolean;
     onClose: () => void;
+    keepMounted?: boolean;
 }

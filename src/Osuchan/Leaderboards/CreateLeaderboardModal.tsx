@@ -91,7 +91,7 @@ const CreateLeaderboardModal = observer((props: CreateLeaderboardModalProps) => 
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Create Leaderboard</SimpleModalTitle>
             <form onSubmit={handleCreateLeaderboardSubmit}>
                 {/* Basic details */}

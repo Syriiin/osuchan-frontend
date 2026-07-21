@@ -69,6 +69,7 @@ const SandboxControls = (props: SandboxControlsProps) => {
                 gamemode={props.gamemode}
                 open={sandboxSettingsModalOpen}
                 onClose={() => setSandboxSettingsModalOpen(false)}
+                keepMounted
             />
         </SandboxControlsSurface>
     );

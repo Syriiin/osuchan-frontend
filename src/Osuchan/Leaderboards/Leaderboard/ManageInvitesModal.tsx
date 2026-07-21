@@ -98,7 +98,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Invite Players</SimpleModalTitle>
             <p>
                 Enter osu!profile URLs to invite players.
@@ -160,7 +160,7 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <title>
                 {loadingInvitesStatus === ResourceStatus.Loading
                     ? "Loading..."

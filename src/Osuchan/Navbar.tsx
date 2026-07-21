@@ -355,6 +355,7 @@ const Navbar = observer(() => {
                             <SimpleModal
                                 open={addScoreModalOpen}
                                 onClose={handleAddScoreModalClose}
+                                keepMounted
                             >
                                 <SimpleModalTitle>Add Scores</SimpleModalTitle>
                                 <p>

@@ -56,7 +56,7 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Edit Leaderboard</SimpleModalTitle>
             <form onSubmit={handleUpdateLeaderboardSubmit}>
                 {/* Basic details */}

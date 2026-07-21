@@ -35,7 +35,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
     );
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted={props.keepMounted}>
             <SimpleModalTitle>Sandbox Settings</SimpleModalTitle>
             <form onSubmit={handleSandboxSettingsSubmit}>
                 <FormLabel>Score Set</FormLabel>
@@ -71,6 +71,7 @@ interface SandboxSettingsModalProps {
     gamemode: Gamemode;
     open: boolean;
     onClose: () => void;
+    keepMounted?: boolean;
 }
 
 export default SandboxSettingsModal;
