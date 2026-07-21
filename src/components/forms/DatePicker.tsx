@@ -24,10 +24,13 @@ const DatePickerWrapper = styled.div`
     .react-datepicker__header {
         background-color: ${(props) => props.theme.colours.foreground};
 
-        .react-datepicker__day-name,
         .react-datepicker__current-month {
             color: #fff;
         }
+    }
+
+    .react-datepicker__day-names .react-datepicker__day-name {
+        color: #fff;
     }
 
     .react-datepicker__month-container {
