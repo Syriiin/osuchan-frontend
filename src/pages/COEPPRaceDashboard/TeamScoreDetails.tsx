@@ -24,7 +24,7 @@ const TeamScores = styled.div`
 
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     display: grid;
-    grid-template-columns: 70px 150px 1fr 100px 100px;
+    grid-template-columns: 70px 150px 1fr 110px 100px;
     grid-template-areas: "rank player beatmap details performance";
     grid-gap: 10px;
     padding: 10px;
