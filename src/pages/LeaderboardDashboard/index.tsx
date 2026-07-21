@@ -74,7 +74,7 @@ const LeaderboardDashboard = observer(() => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            void detailStore.reloadLeaderboard(true);
+            void detailStore.reloadLeaderboard(true, true);
         }, 60 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
@@ -82,10 +82,10 @@ const LeaderboardDashboard = observer(() => {
     return (
         <>
             <title>
-                {loadingStatus === ResourceStatus.Loading
-                    ? "Loading..."
-                    : loadingStatus === ResourceStatus.Loaded && leaderboard
-                      ? `${leaderboard.name} - osu!chan`
+                {leaderboard
+                    ? `${leaderboard.name} - osu!chan`
+                    : loadingStatus === ResourceStatus.Loading
+                      ? "Loading..."
                       : loadingStatus === ResourceStatus.Error
                         ? "Leaderboard not found - osu!chan"
                         : "osu!chan"}
@@ -94,7 +94,9 @@ const LeaderboardDashboard = observer(() => {
                 <LoadingPage />
             )}
 
-            {detailStore.loadingStatus === ResourceStatus.Error && <h3>Leaderboard not found!</h3>}
+            {leaderboard === null && detailStore.loadingStatus === ResourceStatus.Error && (
+                <h3>Leaderboard not found!</h3>
+            )}
 
             {leaderboard && (
                 <ThemeProvider

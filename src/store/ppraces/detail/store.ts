@@ -58,7 +58,9 @@ export class DetailStore {
         } catch (error: any) {
             console.log(error);
 
-            this.loadingStatus = ResourceStatus.Error;
+            if (this.pprace === null) {
+                this.loadingStatus = ResourceStatus.Error;
+            }
         }
     }
 }
