@@ -50,9 +50,9 @@ const Scores = observer((props: ScoresProps) => {
     return (
         <ScoresSurface>
             <SurfaceTitle>Scores</SurfaceTitle>
-            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score, i) => (
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score) => (
                 <ProfileScoreRow
-                    key={i}
+                    key={score.id}
                     score={score}
                     gamemode={props.gamemode}
                     sandboxMode={props.sandboxMode}
