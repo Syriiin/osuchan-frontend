@@ -1,13 +1,5 @@
-import {
-    ResponsiveContainer,
-    BarChart,
-    Bar,
-    Cell,
-    YAxis,
-    LabelList,
-    XAxis,
-} from "recharts";
-import { PPRaceTeam } from "../../store/models/ppraces/types";
+import { ResponsiveContainer, BarChart, Bar, Cell, YAxis, LabelList, XAxis } from "recharts";
+import type { PPRaceTeam } from "../../store/models/ppraces/types";
 import { observer } from "mobx-react-lite";
 import { TeamColours } from ".";
 
@@ -19,12 +11,7 @@ const PPChart = observer((props: PPChartProps) => {
     return (
         // 99% to fix resizing down https://github.com/recharts/recharts/issues/172
         <ResponsiveContainer width="99%" height="99%">
-            <BarChart
-                data={data}
-                layout="vertical"
-                barCategoryGap="20%"
-                barSize={40}
-            >
+            <BarChart data={data} layout="vertical" barCategoryGap="20%" barSize={40}>
                 <YAxis type="category" dataKey="name" hide />
                 <XAxis type="number" domain={[0, "dataMax + 1000"]} hide />
                 <Bar
@@ -32,8 +19,8 @@ const PPChart = observer((props: PPChartProps) => {
                     dataKey="pp"
                     label={{
                         position: "right",
-                        formatter: (value: number) =>
-                            `${value.toLocaleString("en", {
+                        formatter: (value) =>
+                            `${(value ?? 0).toLocaleString("en", {
                                 maximumFractionDigits: 0,
                             })}pp`,
                         style: {
@@ -49,7 +36,7 @@ const PPChart = observer((props: PPChartProps) => {
                         fontSize={"1.5em"}
                         fill="#fff"
                     />
-                    {data.map((entry, index) => (
+                    {data.map((_entry, index) => (
                         <Cell key={`cell-${index}`} fill={TeamColours[index]} />
                     ))}
                 </Bar>

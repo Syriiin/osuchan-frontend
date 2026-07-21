@@ -1,17 +1,10 @@
 import { Tooltip } from "./Tooltip";
 
-export const AbsoluteDate = (props: AbsoluteDateProps) => {
-    const id = `absolutedate-${props.date.getTime()}`;
-
-    return (
-        <>
-            <span data-tip={props.date.toLocaleString()} data-for={id}>
-                {props.date.toLocaleDateString()}
-            </span>
-            <Tooltip id={id} />
-        </>
-    );
-};
+export const AbsoluteDate = (props: AbsoluteDateProps) => (
+    <Tooltip content={props.date.toLocaleString()}>
+        <span>{props.date.toLocaleDateString()}</span>
+    </Tooltip>
+);
 
 interface AbsoluteDateProps {
     date: Date;

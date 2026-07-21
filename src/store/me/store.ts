@@ -3,15 +3,12 @@ import { observable, makeAutoObservable, flow } from "mobx";
 import http from "../../http";
 import notify from "../../notifications";
 
-import { ScoreFilter } from "../models/profiles/types";
-import { Invite } from "../models/leaderboards/types";
+import type { ScoreFilter } from "../models/profiles/types";
+import type { Invite } from "../models/leaderboards/types";
 import { inviteFromJson } from "../models/leaderboards/deserialisers";
 import { Gamemode } from "../models/common/enums";
-import { User, ScoreFilterPreset } from "../models/users/types";
-import {
-    userFromJson,
-    scoreFilterPresetFromJson,
-} from "../models/users/deserialisers";
+import type { User, ScoreFilterPreset } from "../models/users/types";
+import { userFromJson, scoreFilterPresetFromJson } from "../models/users/deserialisers";
 import { ResourceStatus } from "../status";
 
 export class MeStore {
@@ -55,17 +52,16 @@ export class MeStore {
 
             if (user.osuUser !== null) {
                 const invitesResponse = yield http.get(`/api/users/me/invites`);
-                const invites: Invite[] = invitesResponse.data.map(
-                    (data: any) => inviteFromJson(data)
+                const invites: Invite[] = invitesResponse.data.map((data: any) =>
+                    inviteFromJson(data),
                 );
 
                 const scoreFilterPresetsResponse = yield http.get(
-                    `/api/users/me/scorefilterpresets`
+                    `/api/users/me/scorefilterpresets`,
                 );
-                const scoreFilterPresets: ScoreFilterPreset[] =
-                    scoreFilterPresetsResponse.data.map((data: any) =>
-                        scoreFilterPresetFromJson(data)
-                    );
+                const scoreFilterPresets: ScoreFilterPreset[] = scoreFilterPresetsResponse.data.map(
+                    (data: any) => scoreFilterPresetFromJson(data),
+                );
 
                 this.invites.replace(invites);
                 this.scoreFilterPresets.replace(scoreFilterPresets);
@@ -83,12 +79,9 @@ export class MeStore {
         this.isAddingScores = true;
 
         try {
-            yield http.post(
-                `/api/profiles/users/${userId}/stats/${gamemodeId}/scores`,
-                {
-                    beatmap_ids: beatmapIds,
-                }
-            );
+            yield http.post(`/api/profiles/users/${userId}/stats/${gamemodeId}/scores`, {
+                beatmap_ids: beatmapIds,
+            });
 
             notify.positive("New scores added");
         } catch (error: any) {
@@ -111,14 +104,10 @@ export class MeStore {
 
         try {
             yield http.delete(
-                `/api/leaderboards/leaderboards/${leaderboardId}/invites/${
-                    this.user!.osuUserId
-                }`
+                `/api/leaderboards/leaderboards/${leaderboardId}/invites/${this.user!.osuUserId}`,
             );
 
-            this.invites.replace(
-                this.invites.filter((i) => i.leaderboardId !== leaderboardId)
-            );
+            this.invites.replace(this.invites.filter((i) => i.leaderboardId !== leaderboardId));
 
             notify.positive("Invite declined");
         } catch (error: any) {
@@ -140,36 +129,30 @@ export class MeStore {
         this.isCreatingScoreFilterPreset = true;
 
         try {
-            const scoreFilterPresetResponse = yield http.post(
-                `/api/users/me/scorefilterpresets`,
-                {
-                    name: name,
-                    score_filter: {
-                        allowed_beatmap_status:
-                            scoreFilter.allowedBeatmapStatus,
-                        oldest_beatmap_date: scoreFilter.oldestBeatmapDate,
-                        newest_beatmap_date: scoreFilter.newestBeatmapDate,
-                        oldest_score_date: scoreFilter.oldestScoreDate,
-                        newest_score_date: scoreFilter.newestScoreDate,
-                        lowest_ar: scoreFilter.lowestAr,
-                        highest_ar: scoreFilter.highestAr,
-                        lowest_od: scoreFilter.lowestOd,
-                        highest_od: scoreFilter.highestOd,
-                        lowest_cs: scoreFilter.lowestCs,
-                        highest_cs: scoreFilter.highestCs,
-                        required_mods_json: scoreFilter.requiredModsJson,
-                        disqualified_mods_json: scoreFilter.disqualifiedModsJson,
-                        lowest_accuracy: scoreFilter.lowestAccuracy,
-                        highest_accuracy: scoreFilter.highestAccuracy,
-                        lowest_length: scoreFilter.lowestLength,
-                        highest_length: scoreFilter.highestLength,
-                    },
-                }
-            );
+            const scoreFilterPresetResponse = yield http.post(`/api/users/me/scorefilterpresets`, {
+                name: name,
+                score_filter: {
+                    allowed_beatmap_status: scoreFilter.allowedBeatmapStatus,
+                    oldest_beatmap_date: scoreFilter.oldestBeatmapDate,
+                    newest_beatmap_date: scoreFilter.newestBeatmapDate,
+                    oldest_score_date: scoreFilter.oldestScoreDate,
+                    newest_score_date: scoreFilter.newestScoreDate,
+                    lowest_ar: scoreFilter.lowestAr,
+                    highest_ar: scoreFilter.highestAr,
+                    lowest_od: scoreFilter.lowestOd,
+                    highest_od: scoreFilter.highestOd,
+                    lowest_cs: scoreFilter.lowestCs,
+                    highest_cs: scoreFilter.highestCs,
+                    required_mods_json: scoreFilter.requiredModsJson,
+                    disqualified_mods_json: scoreFilter.disqualifiedModsJson,
+                    lowest_accuracy: scoreFilter.lowestAccuracy,
+                    highest_accuracy: scoreFilter.highestAccuracy,
+                    lowest_length: scoreFilter.lowestLength,
+                    highest_length: scoreFilter.highestLength,
+                },
+            });
 
-            const scoreFilterPreset = scoreFilterPresetFromJson(
-                scoreFilterPresetResponse.data
-            );
+            const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
             this.scoreFilterPresets.push(scoreFilterPreset);
 
@@ -180,9 +163,7 @@ export class MeStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(
-                    `Failed to create score filter preset: ${errorMessage}`
-                );
+                notify.negative(`Failed to create score filter preset: ${errorMessage}`);
             } else {
                 notify.negative("Failed to create score filter preset");
             }
@@ -194,7 +175,7 @@ export class MeStore {
     *updateScoreFilterPreset(
         scoreFilterPresetId: number,
         name: string,
-        scoreFilter: ScoreFilter
+        scoreFilter: ScoreFilter,
     ): any {
         this.isUpdatingScoreFilterPreset = true;
 
@@ -204,8 +185,7 @@ export class MeStore {
                 {
                     name: name,
                     score_filter: {
-                        allowed_beatmap_status:
-                            scoreFilter.allowedBeatmapStatus,
+                        allowed_beatmap_status: scoreFilter.allowedBeatmapStatus,
                         oldest_beatmap_date: scoreFilter.oldestBeatmapDate,
                         newest_beatmap_date: scoreFilter.newestBeatmapDate,
                         oldest_score_date: scoreFilter.oldestScoreDate,
@@ -223,19 +203,15 @@ export class MeStore {
                         lowest_length: scoreFilter.lowestLength,
                         highest_length: scoreFilter.highestLength,
                     },
-                }
+                },
             );
 
-            const scoreFilterPreset = scoreFilterPresetFromJson(
-                scoreFilterPresetResponse.data
-            );
+            const scoreFilterPreset = scoreFilterPresetFromJson(scoreFilterPresetResponse.data);
 
             this.scoreFilterPresets.replace(
                 this.scoreFilterPresets.map((preset) =>
-                    preset.id === scoreFilterPresetId
-                        ? scoreFilterPreset
-                        : preset
-                )
+                    preset.id === scoreFilterPresetId ? scoreFilterPreset : preset,
+                ),
             );
 
             notify.positive("Score filter preset updated");
@@ -245,9 +221,7 @@ export class MeStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(
-                    `Failed to update score filter preset: ${errorMessage}`
-                );
+                notify.negative(`Failed to update score filter preset: ${errorMessage}`);
             } else {
                 notify.negative("Failed to update score filter preset");
             }
@@ -260,14 +234,10 @@ export class MeStore {
         this.isDeletingScoreFilterPreset = true;
 
         try {
-            yield http.delete(
-                `/api/users/me/scorefilterpresets/${scoreFilterPresetId}`
-            );
+            yield http.delete(`/api/users/me/scorefilterpresets/${scoreFilterPresetId}`);
 
             this.scoreFilterPresets.replace(
-                this.scoreFilterPresets.filter(
-                    (preset) => preset.id !== scoreFilterPresetId
-                )
+                this.scoreFilterPresets.filter((preset) => preset.id !== scoreFilterPresetId),
             );
 
             notify.positive("Score filter preset deleted");
@@ -277,9 +247,7 @@ export class MeStore {
             const errorMessage = error.response.data.detail;
 
             if (errorMessage) {
-                notify.negative(
-                    `Failed to delete score filter preset: ${errorMessage}`
-                );
+                notify.negative(`Failed to delete score filter preset: ${errorMessage}`);
             } else {
                 notify.negative("Failed to delete score filter preset");
             }

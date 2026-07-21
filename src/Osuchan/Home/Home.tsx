@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Helmet } from "react-helmet";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { Button, Surface, TextInput } from "../../components";
 
@@ -55,13 +54,13 @@ const SearchButton = styled(Button)`
 `;
 
 const Home = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [searchValue, setSearchValue] = useState("");
 
-    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSearchSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            history.push(`/users/${searchValue}`);
+            void navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();
@@ -69,12 +68,11 @@ const Home = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Home - osu!chan</title>
-                <meta
-                    name="description"
-                    content="osu!chan - osu! stats, custom leaderboards, and much more!" />
-            </Helmet>
+            <title>Home - osu!chan</title>
+            <meta
+                name="description"
+                content="osu!chan - osu! stats, custom leaderboards, and much more!"
+            />
 
             <HomeWrapper>
                 <Title>
@@ -90,7 +88,8 @@ const Home = () => {
                                 placeholder="osu! username"
                                 autoComplete="off"
                                 onChange={(e) => setSearchValue(e.currentTarget.value)}
-                                value={searchValue} />
+                                value={searchValue}
+                            />
                             <SearchButton type="submit">Search</SearchButton>
                         </SearchContainer>
                     </form>

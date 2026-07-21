@@ -1,4 +1,4 @@
-import { Leaderboard } from "../../store/models/leaderboards/types";
+import type { Leaderboard } from "../../store/models/leaderboards/types";
 import { UnstyledLink, CommunityLeaderboardRow } from "../../components";
 import { formatGamemodeNameShort } from "../../utils/formatting";
 import { observer } from "mobx-react-lite";
@@ -9,7 +9,7 @@ const CommunityLeaderboards = observer((props: CommunityLeaderboardsProps) => (
             <UnstyledLink
                 key={i}
                 to={`/leaderboards/community/${formatGamemodeNameShort(
-                    leaderboard.gamemode
+                    leaderboard.gamemode,
                 )}/${leaderboard.id}`}
             >
                 <CommunityLeaderboardRow leaderboard={leaderboard} />

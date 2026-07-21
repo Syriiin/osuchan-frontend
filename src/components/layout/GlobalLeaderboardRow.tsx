@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { observer } from "mobx-react-lite";
 import { Row } from "./Row";
-import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
 
 const LeaderboardIconContainer = styled.div`
@@ -43,33 +44,26 @@ const MembershipRank = styled.div`
 
 const MembershipPerformance = styled.div``;
 
-export const GlobalLeaderboardRow = (props: GlobalLeaderboardRowProps) => (
-    <Row hoverable>
+export const GlobalLeaderboardRow = observer((props: GlobalLeaderboardRowProps) => (
+    <Row $hoverable>
         <LeaderboardIconContainer>
             <LeaderboardIcon src={props.leaderboard.iconUrl} />
         </LeaderboardIconContainer>
         <LeaderboardTitleContainer>
             <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
-            <LeaderboardSubtitle>
-                {props.leaderboard.description}
-            </LeaderboardSubtitle>
+            <LeaderboardSubtitle>{props.leaderboard.description}</LeaderboardSubtitle>
         </LeaderboardTitleContainer>
         {props.membership && (
             <MembershipInfoContainer>
-                <MembershipRank>
-                    #{props.membership.rank.toLocaleString("en")}
-                </MembershipRank>
+                <MembershipRank>#{props.membership.rank.toLocaleString("en")}</MembershipRank>
                 <MembershipPerformance>
-                    <NumberFormat
-                        value={props.membership.pp}
-                        decimalPlaces={0}
-                    />
+                    <NumberFormat value={props.membership.pp} decimalPlaces={0} />
                     pp
                 </MembershipPerformance>
             </MembershipInfoContainer>
         )}
     </Row>
-);
+));
 
 interface GlobalLeaderboardRowProps {
     leaderboard: Leaderboard;

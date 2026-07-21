@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { IReactionPublic, IAutorunOptions, autorun, runInAction } from "mobx";
+import type { IReactionPublic, IAutorunOptions } from "mobx";
+import { autorun, runInAction } from "mobx";
 import { StoreContext } from "../store";
 
 export const useAction = (fn: () => void, deps: React.DependencyList) => {
@@ -9,12 +10,10 @@ export const useAction = (fn: () => void, deps: React.DependencyList) => {
     }, deps);
 };
 
-export const useAutorun = (
-    view: (r: IReactionPublic) => any,
-    opts?: IAutorunOptions
-) => {
+export const useAutorun = (view: (r: IReactionPublic) => any, opts?: IAutorunOptions) => {
     useEffect(() => {
-        autorun(view, opts);
+        const disposer = autorun(view, opts);
+        return () => disposer();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 };

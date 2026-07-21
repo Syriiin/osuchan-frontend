@@ -1,20 +1,14 @@
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Route, Routes } from "react-router";
 
 import EventList from "./EventList";
 import EventRoot from "./Event";
 
 const EventsRoot = () => {
-    const match = useRouteMatch();
-
     return (
-        <Switch>
-            <Route exact path={match.path}>
-                <EventList />
-            </Route>
-            <Route path={`${match.path}/:slug`}>
-                <EventRoot />
-            </Route>
-        </Switch>
+        <Routes>
+            <Route index element={<EventList />} />
+            <Route path=":slug/*" element={<EventRoot />} />
+        </Routes>
     );
 };
 

@@ -11,7 +11,7 @@ import {
     Select,
 } from "../../../components";
 import { Gamemode } from "../../../store/models/common/enums";
-import { ScoreFilter } from "../../../store/models/profiles/types";
+import type { ScoreFilter } from "../../../store/models/profiles/types";
 import { useStore } from "../../../utils/hooks";
 
 const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
@@ -31,11 +31,11 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
 
     const handleScoreFilterChange = useCallback(
         (scoreFilter: ScoreFilter) => setScoreFilter(scoreFilter),
-        []
+        [],
     );
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted={props.keepMounted}>
             <SimpleModalTitle>Sandbox Settings</SimpleModalTitle>
             <form onSubmit={handleSandboxSettingsSubmit}>
                 <FormLabel>Score Set</FormLabel>
@@ -59,7 +59,7 @@ const SandboxSettingsModal = (props: SandboxSettingsModalProps) => {
                     value={scoreFilter}
                     onChange={handleScoreFilterChange}
                 />
-                <Button positive type="submit">
+                <Button $positive type="submit">
                     Load scores
                 </Button>
             </form>
@@ -71,6 +71,7 @@ interface SandboxSettingsModalProps {
     gamemode: Gamemode;
     open: boolean;
     onClose: () => void;
+    keepMounted?: boolean;
 }
 
 export default SandboxSettingsModal;

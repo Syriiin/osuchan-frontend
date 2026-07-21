@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import { gamemodeIdFromName } from "../../../utils/osu";
 import UserInfo from "./UserInfo";
@@ -38,7 +37,7 @@ const Profile = observer(() => {
     const usersStore = store.usersStore;
 
     // use effect to fetch profile data
-    const { userString } = params;
+    const userString = params.userString!;
     const gamemodeId = gamemodeIdFromName(params.gamemodeName);
     useEffect(() => {
         usersStore.loadUser(userString, gamemodeId);
@@ -56,31 +55,23 @@ const Profile = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && osuUser && (
-                    <title>{osuUser.username} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>User not found - osu!chan</title>
-                )}
-            </Helmet>
-
-            {usersStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && osuUser
+                      ? `${osuUser.username} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "User not found - osu!chan"
+                        : "osu!chan"}
+            </title>
+            {usersStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {userStats && osuUser && (
                 <ProfileGrid>
                     {/* User info */}
                     <UserInfo osuUser={osuUser} />
 
                     {/* Mode switcher */}
-                    <ModeSwitcher
-                        gamemodeId={gamemodeId}
-                        userString={params.userString}
-                    />
+                    <ModeSwitcher gamemodeId={gamemodeId} userString={userString} />
 
                     {/* Sandbox controls */}
                     <SandboxControls
@@ -90,17 +81,10 @@ const Profile = observer(() => {
                     />
 
                     {/* PP/rank info */}
-                    <RankInfo
-                        osuUser={osuUser}
-                        userStats={userStats}
-                        sandboxMode={sandboxMode}
-                    />
+                    <RankInfo osuUser={osuUser} userStats={userStats} sandboxMode={sandboxMode} />
 
                     {/* Score style */}
-                    <ScoreStyle
-                        userStats={userStats}
-                        sandboxMode={sandboxMode}
-                    />
+                    <ScoreStyle userStats={userStats} sandboxMode={sandboxMode} />
 
                     {scores.length > 0 && (
                         <>
@@ -133,7 +117,7 @@ const Profile = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     userString: string;
     gamemodeName?: string;
 }

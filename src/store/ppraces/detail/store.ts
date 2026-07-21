@@ -2,10 +2,10 @@ import { flow, makeAutoObservable } from "mobx";
 
 import http from "../../../http";
 
-import { PPRace } from "../../models/ppraces/types";
+import type { PPRace } from "../../models/ppraces/types";
 import { ResourceStatus } from "../../status";
 import { ppraceFromJson } from "../../models/ppraces/deserialisers";
-import { Score } from "../../models/profiles/types";
+import type { Score } from "../../models/profiles/types";
 import { scoreFromJson } from "../../models/profiles/deserialisers";
 
 export class DetailStore {
@@ -39,20 +39,18 @@ export class DetailStore {
 
             this.pprace = pprace;
 
-            const recentScoresResponse = yield http.get(
-                `/api/ppraces/${ppraceId}/recentscores`
-            );
+            const recentScoresResponse = yield http.get(`/api/ppraces/${ppraceId}/recentscores`);
             const recentScores = recentScoresResponse.data.map((score: any) =>
-                scoreFromJson(score)
+                scoreFromJson(score),
             );
             this.recentScores = recentScores;
 
             for (const team of pprace.teams) {
                 const teamScoresResponse = yield http.get(
-                    `/api/ppraces/${ppraceId}/teams/${team.id}/scores`
+                    `/api/ppraces/${ppraceId}/teams/${team.id}/scores`,
                 );
-                this.teamScores[team.id] = teamScoresResponse.data.map(
-                    (score: any) => scoreFromJson(score)
+                this.teamScores[team.id] = teamScoresResponse.data.map((score: any) =>
+                    scoreFromJson(score),
                 );
             }
 

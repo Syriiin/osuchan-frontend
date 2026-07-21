@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import GlobalLeaderboards from "./GlobalLeaderboards";
 import CommunityLeaderboards from "./CommunityLeaderboards";
@@ -37,19 +36,15 @@ const SwitcherButtonGroup = styled(ButtonGroup)`
 
 const LeaderboardList = observer(() => {
     const params = useParams<RouteParams>();
-    const leaderboardType = params.leaderboardType;
+    const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
 
     const store = useStore();
     const listStore = store.leaderboardsStore.listStore;
     const meStore = store.meStore;
 
-    const {
-        globalLeaderboards,
-        globalMemberships,
-        communityLeaderboards,
-        communityMemberships,
-    } = listStore;
+    const { globalLeaderboards, globalMemberships, communityLeaderboards, communityMemberships } =
+        listStore;
     const { user, isAuthenticated } = meStore;
 
     const localStore = useLocalObservable(() => ({
@@ -64,69 +59,53 @@ const LeaderboardList = observer(() => {
 
     useEffect(() => {
         return () => {
-            listStore.unload();
+            void listStore.unload();
         };
     }, [listStore]);
 
     useAutorun(() => {
-        listStore.unload();
+        void listStore.unload();
 
         // Load community leaderboards
         if (localStore.leaderboardType === "community") {
             listStore.loadCommunityLeaderboards(localStore.gamemode);
 
             if (isAuthenticated) {
-                listStore.loadCommunityMemberships(
-                    localStore.gamemode,
-                    user!.osuUserId
-                );
+                listStore.loadCommunityMemberships(localStore.gamemode, user!.osuUserId);
             }
         }
 
         // Load global leaderboards
         if (localStore.leaderboardType === "global") {
-            listStore.loadGlobalLeaderboards(
-                localStore.gamemode,
-                user?.osuUserId
-            );
+            listStore.loadGlobalLeaderboards(localStore.gamemode, user?.osuUserId);
         }
     });
 
     const loadNextGlobalLeaderboardPage = () => {
-        if (
-            listStore.globalLeaderboardsStatus ===
-            PaginatedResourceStatus.PartiallyLoaded
-        ) {
+        if (listStore.globalLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {
             listStore.loadNextGlobalLeaderboardsPage(user?.osuUserId);
         }
     };
 
     const loadNextCommunityLeaderboardPage = () => {
-        if (
-            listStore.communityLeaderboardsStatus ===
-            PaginatedResourceStatus.PartiallyLoaded
-        ) {
+        if (listStore.communityLeaderboardsStatus === PaginatedResourceStatus.PartiallyLoaded) {
             listStore.loadNextCommunityLeaderboardsPage();
         }
     };
 
-    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] =
-        useState(false);
+    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] = useState(false);
 
     return (
         <>
-            <Helmet>
-                {leaderboardType === "global" && (
-                    <title>Global Leaderboards - osu!chan</title>
-                )}
-                {leaderboardType === "community" && (
-                    <title>Community Leaderboards - osu!chan</title>
-                )}
-                <meta
-                    name="description"
-                    content="osu!chan Leaderboards - Custom global and community leaderboards for osu!"
-                />
-            </Helmet>
+            <title>
+                {leaderboardType === "global"
+                    ? "Global Leaderboards - osu!chan"
+                    : "Community Leaderboards - osu!chan"}
+            </title>
+            <meta
+                name="description"
+                content="osu!chan Leaderboards - Custom global and community leaderboards for osu!"
+            />
 
             <LeaderboardsSurface>
                 <SurfaceHeaderContainer>
@@ -183,62 +162,50 @@ const LeaderboardList = observer(() => {
                     <>
                         {hasFlag(
                             listStore.globalLeaderboardsStatus,
-                            PaginatedResourceStatus.ContentAvailable
+                            PaginatedResourceStatus.ContentAvailable,
                         ) && (
                             <>
                                 {/* NOTE: ideally we want to defer loading leaderboards until we are logged in so we dont needlessly load the leaderboards and then memberships straight after */}
                                 <BottomScrollDetector
-                                    onBottomScrolled={
-                                        loadNextGlobalLeaderboardPage
-                                    }
+                                    onBottomScrolled={loadNextGlobalLeaderboardPage}
                                 >
                                     {globalMemberships.length > 0 ? (
-                                        <GlobalLeaderboards
-                                            memberships={globalMemberships}
-                                        />
+                                        <GlobalLeaderboards memberships={globalMemberships} />
                                     ) : (
-                                        <GlobalLeaderboards
-                                            leaderboards={globalLeaderboards}
-                                        />
+                                        <GlobalLeaderboards leaderboards={globalLeaderboards} />
                                     )}
                                 </BottomScrollDetector>
                             </>
                         )}
                         {listStore.globalLeaderboardsStatus ===
-                            PaginatedResourceStatus.LoadingInitial && (
-                            <LoadingSection />
-                        )}
+                            PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
                     </>
                 )}
                 {params.leaderboardType === "community" && (
                     <>
                         {isAuthenticated && (
                             <>
-                                <SurfaceSubtitle>
-                                    Joined Leaderboards
-                                </SurfaceSubtitle>
+                                <SurfaceSubtitle>Joined Leaderboards</SurfaceSubtitle>
                                 {hasFlag(
                                     listStore.communityMembershipsStatus,
-                                    PaginatedResourceStatus.ContentAvailable
+                                    PaginatedResourceStatus.ContentAvailable,
                                 ) && (
                                     <>
-                                        <JoinedLeaderboards
-                                            memberships={communityMemberships}
-                                        />
+                                        <JoinedLeaderboards memberships={communityMemberships} />
 
                                         {hasFlag(
                                             listStore.communityMembershipsStatus,
-                                            PaginatedResourceStatus.MoreToLoad
+                                            PaginatedResourceStatus.MoreToLoad,
                                         ) && (
                                             <Button
-                                                fullWidth
+                                                $fullWidth
                                                 isLoading={
                                                     listStore.communityMembershipsStatus ===
                                                     PaginatedResourceStatus.LoadingMore
                                                 }
                                                 action={() =>
                                                     listStore.loadNextCommunityMembershipsPage(
-                                                        user!.osuUserId
+                                                        user!.osuUserId,
                                                     )
                                                 }
                                             >
@@ -248,32 +215,26 @@ const LeaderboardList = observer(() => {
 
                                         {communityMemberships.length === 0 && (
                                             <p>
-                                                You have not joined any
-                                                community leaderboards yet...
+                                                You have not joined any community leaderboards
+                                                yet...
                                             </p>
                                         )}
 
-                                        <Divider spacingScale={5} />
+                                        <Divider $spacingScale={5} />
                                     </>
                                 )}
                                 {listStore.communityMembershipsStatus ===
-                                    PaginatedResourceStatus.LoadingInitial && (
-                                    <LoadingSection />
-                                )}
+                                    PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
                             </>
                         )}
 
                         <SurfaceHeaderContainer>
-                            <SurfaceSubtitle>
-                                Popular Leaderboards
-                            </SurfaceSubtitle>
+                            <SurfaceSubtitle>Popular Leaderboards</SurfaceSubtitle>
                             {user?.osuUser && (
                                 <div>
                                     <Button
-                                        fullWidth
-                                        action={() =>
-                                            setCreateLeaderboardModalOpen(true)
-                                        }
+                                        $fullWidth
+                                        action={() => setCreateLeaderboardModalOpen(true)}
                                     >
                                         Create New Leaderboard
                                     </Button>
@@ -282,21 +243,17 @@ const LeaderboardList = observer(() => {
                         </SurfaceHeaderContainer>
                         {hasFlag(
                             listStore.communityLeaderboardsStatus,
-                            PaginatedResourceStatus.ContentAvailable
+                            PaginatedResourceStatus.ContentAvailable,
                         ) && (
                             <BottomScrollDetector
-                                onBottomScrolled={
-                                    loadNextCommunityLeaderboardPage
-                                }
+                                onBottomScrolled={loadNextCommunityLeaderboardPage}
                             >
-                                <CommunityLeaderboards
-                                    leaderboards={communityLeaderboards}
-                                />
+                                <CommunityLeaderboards leaderboards={communityLeaderboards} />
                             </BottomScrollDetector>
                         )}
                         {hasFlag(
                             listStore.communityLeaderboardsStatus,
-                            PaginatedResourceStatus.Loading
+                            PaginatedResourceStatus.Loading,
                         ) && <LoadingSection />}
                         <CreateLeaderboardModal
                             open={createLeaderboardModalOpen}
@@ -309,7 +266,7 @@ const LeaderboardList = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     leaderboardType: "global" | "community";
     gamemode: "osu" | "taiko" | "catch" | "mania";
 }

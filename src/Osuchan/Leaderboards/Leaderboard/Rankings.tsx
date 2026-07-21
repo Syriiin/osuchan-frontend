@@ -1,16 +1,8 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { useRouteMatch } from "react-router-dom";
 
-import {
-    Surface,
-    Row,
-    SurfaceTitle,
-    UnstyledLink,
-    NumberFormat,
-    Flag,
-} from "../../../components";
-import { Membership } from "../../../store/models/leaderboards/types";
+import { Surface, Row, SurfaceTitle, UnstyledLink, NumberFormat, Flag } from "../../../components";
+import type { Membership } from "../../../store/models/leaderboards/types";
 
 const RankingsSurface = styled(Surface)`
     margin: 20px auto;
@@ -62,7 +54,7 @@ const ScoreCount = styled.span`
 `;
 
 const RankingRow = observer((props: RankingRowProps) => (
-    <Row hoverable>
+    <Row $hoverable>
         <Rank>#{props.rank.toLocaleString("en")}</Rank>
         <PlayerInfo>
             <Avatar src={`https://a.ppy.sh/${props.membership.osuUserId}`} />
@@ -87,16 +79,11 @@ interface RankingRowProps {
 }
 
 const Rankings = observer((props: TopScoresProps) => {
-    const match = useRouteMatch();
-
     return (
         <RankingsSurface>
             <SurfaceTitle>Rankings</SurfaceTitle>
             {props.memberships.map((membership, i) => (
-                <UnstyledLink
-                    key={i}
-                    to={`${match.url}/members/${membership.osuUserId}`}
-                >
+                <UnstyledLink key={i} to={`members/${membership.osuUserId}`}>
                     <RankingRow membership={membership} rank={i + 1} />
                 </UnstyledLink>
             ))}

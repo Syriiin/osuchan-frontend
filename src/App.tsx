@@ -1,16 +1,9 @@
 import { configure } from "mobx";
-import { useEffect } from "react";
-import ReactGA from "react-ga";
-import { Route, Router, Switch, useLocation } from "react-router-dom";
-import {
-    ThemeProvider as StyledThemeProvider,
-    createGlobalStyle,
-} from "styled-components";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "react-toastify/dist/ReactToastify.css";
 
-import history from "./history";
 import { NotificationContainer } from "./notifications";
 import { osuchanTheme } from "./osuchanTheme";
 
@@ -19,10 +12,6 @@ import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
 import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
-
-if (process.env.NODE_ENV === "production") {
-    ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
-}
 
 configure({
     enforceActions: "always",
@@ -54,44 +43,26 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-const AppWithContext = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-        if (process.env.NODE_ENV === "production") {
-            ReactGA.pageview(location.pathname + location.search);
-        }
-    }, [location]);
-
-    return (
-        <Switch>
-            <Route
-                exact
-                path="/leaderboards/:leaderboardType(global|community)/:gamemode(osu|taiko|catch|mania)/:leaderboardId(\d+)/dashboard"
-            >
-                <LeaderboardDashboard />
-            </Route>
-            <Route exact path="/ppraces/:ppraceId(\d+)/dashboard">
-                <PPRaceDashboard />
-            </Route>
-            <Route exact path="/ppraces/:ppraceId(\d+)/coe-dashboard">
-                <COEPPRaceDashboard />
-            </Route>
-            <Route>
-                <Osuchan />
-            </Route>
-        </Switch>
-    );
-};
+const AppWithContext = () => (
+    <Routes>
+        <Route
+            path="/leaderboards/:leaderboardType/:gamemode/:leaderboardId/dashboard"
+            element={<LeaderboardDashboard />}
+        />
+        <Route path="/ppraces/:ppraceId/dashboard" element={<PPRaceDashboard />} />
+        <Route path="/ppraces/:ppraceId/coe-dashboard" element={<COEPPRaceDashboard />} />
+        <Route path="*" element={<Osuchan />} />
+    </Routes>
+);
 
 const App = () => (
     <StoreContext.Provider value={new RootStore()}>
         <StyledThemeProvider theme={osuchanTheme}>
-            <Router history={history}>
+            <BrowserRouter>
                 <GlobalStyle />
                 <NotificationContainer hideProgressBar />
                 <AppWithContext />
-            </Router>
+            </BrowserRouter>
         </StyledThemeProvider>
     </StoreContext.Provider>
 );

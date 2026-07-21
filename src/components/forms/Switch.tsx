@@ -1,19 +1,17 @@
-import { useContext } from "react";
-import ReactSwitch, { ReactSwitchProps } from "react-switch";
-import { ThemeContext } from "styled-components";
+import ReactSwitch, { type ReactSwitchProps } from "react-switch";
 
 export const Switch = (props: SwitchProps) => {
-    const theme = useContext(ThemeContext);
+    const { mini, ...rest } = props;
 
     return (
         <ReactSwitch
-            {...props}
+            {...rest}
             uncheckedIcon={false}
             checkedIcon={false}
-            height={props.mini ? 20 : 30}
-            width={props.mini ? 45 : 58}
-            offColor={theme.colours.currant}
-            onColor={theme.colours.mystic}
+            height={mini ? 20 : 30}
+            width={mini ? 45 : 58}
+            offColor="#574566"
+            onColor="#A02EFF"
         />
     );
 };

@@ -28,12 +28,10 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
     const { leaderboard } = detailStore;
 
     const [accessType, setAccessType] = useState(
-        leaderboard?.accessType ?? LeaderboardAccessType.Public
+        leaderboard?.accessType ?? LeaderboardAccessType.Public,
     );
     const [name, setName] = useState(leaderboard?.name ?? "");
-    const [description, setDescription] = useState(
-        leaderboard?.description ?? ""
-    );
+    const [description, setDescription] = useState(leaderboard?.description ?? "");
     const [iconUrl, setIconUrl] = useState(leaderboard?.iconUrl ?? "");
 
     // Timeout updated icon url so we don't spam preview image requests on every character change
@@ -58,13 +56,13 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Edit Leaderboard</SimpleModalTitle>
             <form onSubmit={handleUpdateLeaderboardSubmit}>
                 {/* Basic details */}
                 <FormLabel>Name</FormLabel>
                 <TextInput
-                    fullWidth
+                    $fullWidth
                     required
                     value={name}
                     onChange={(e) => setName(e.currentTarget.value)}
@@ -92,14 +90,14 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
                 </FormControl>
                 <FormLabel>Description</FormLabel>
                 <TextField
-                    fullWidth
+                    $fullWidth
                     value={description}
                     onChange={(e) => setDescription(e.currentTarget.value)}
                 />
                 <FormLabel>Icon URL</FormLabel>
                 <FormControl>
                     <TextInput
-                        fullWidth
+                        $fullWidth
                         placeholder={`${window.location.origin}/static/icon-64.png`}
                         value={iconUrl}
                         onChange={(e) => setIconUrl(e.currentTarget.value)}
@@ -107,10 +105,7 @@ const EditLeaderboardModal = observer((props: EditLeaderboardModalProps) => {
                     <LeaderboardIcon src={delayedIconUrl} />
                 </FormControl>
 
-                <Button
-                    isLoading={detailStore.isUpdatingLeaderboard}
-                    type="submit"
-                >
+                <Button isLoading={detailStore.isUpdatingLeaderboard} type="submit">
                     Update
                 </Button>
             </form>

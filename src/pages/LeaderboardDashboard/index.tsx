@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled, { ThemeProvider } from "styled-components";
 import { LoadingPage } from "../../components";
 import { ResourceStatus } from "../../store/status";
@@ -60,64 +59,55 @@ const ScoreRankingsContainer = styled.div`
 
 const LeaderboardDashboard = observer(() => {
     const params = useParams<RouteParams>();
-    const leaderboardType = params.leaderboardType;
+    const leaderboardType = params.leaderboardType!;
     const gamemode = gamemodeIdFromName(params.gamemode);
-    const leaderboardId = parseInt(params.leaderboardId);
+    const leaderboardId = parseInt(params.leaderboardId!);
 
     const store = useStore();
     const detailStore = store.leaderboardsStore.detailStore;
 
-    const { loadingStatus, leaderboard, rankings, leaderboardScores } =
-        detailStore;
+    const { loadingStatus, leaderboard, rankings, leaderboardScores } = detailStore;
 
     useEffect(() => {
-        detailStore.loadLeaderboard(
-            leaderboardType,
-            gamemode,
-            leaderboardId,
-            true
-        );
+        void detailStore.loadLeaderboard(leaderboardType, gamemode, leaderboardId, true);
     }, [detailStore, leaderboardType, gamemode, leaderboardId]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            detailStore.reloadLeaderboard(true);
+            void detailStore.reloadLeaderboard(true);
         }, 60 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && leaderboard && (
-                    <title>{leaderboard.name} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>Leaderboard not found - osu!chan</title>
-                )}
-            </Helmet>
-
-            {leaderboard === null &&
-                detailStore.loadingStatus === ResourceStatus.Loading && (
-                    <LoadingPage />
-                )}
-
-            {detailStore.loadingStatus === ResourceStatus.Error && (
-                <h3>Leaderboard not found!</h3>
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && leaderboard
+                      ? `${leaderboard.name} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "Leaderboard not found - osu!chan"
+                        : "osu!chan"}
+            </title>
+            {leaderboard === null && detailStore.loadingStatus === ResourceStatus.Loading && (
+                <LoadingPage />
             )}
+
+            {detailStore.loadingStatus === ResourceStatus.Error && <h3>Leaderboard not found!</h3>}
 
             {leaderboard && (
                 <ThemeProvider
-                    theme={(theme) => ({
-                        ...theme,
-                        colours: {
-                            ...theme.colours,
-                            ...leaderboard.customColours,
-                        },
-                    })}
+                    theme={(osuchanTheme) => {
+                        const theme = osuchanTheme!;
+                        return {
+                            ...theme,
+                            colours: {
+                                ...theme.colours,
+                                ...leaderboard.customColours,
+                            },
+                        };
+                    }}
                 >
                     <DashboardWrapper>
                         <Header>
@@ -141,7 +131,7 @@ const LeaderboardDashboard = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     leaderboardType: "global" | "community";
     gamemode: "osu" | "taiko" | "catch" | "mania";
     leaderboardId: string;

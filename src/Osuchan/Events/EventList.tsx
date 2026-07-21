@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import {
@@ -61,48 +60,35 @@ const EventList = observer(() => {
 
     return (
         <>
-            <Helmet>
-                <title>Events - osu!chan</title>
-            </Helmet>
+            <title>Events - osu!chan</title>
             <EventsSurface>
                 <SurfaceHeaderContainer>
                     <SurfaceTitle>Events</SurfaceTitle>
                 </SurfaceHeaderContainer>
 
-                {eventsStatus === PaginatedResourceStatus.LoadingInitial && (
-                    <LoadingSection />
-                )}
+                {eventsStatus === PaginatedResourceStatus.LoadingInitial && <LoadingSection />}
 
                 {eventsStatus === PaginatedResourceStatus.Loaded &&
                     events.map((event) => (
-                        <UnstyledLink
-                            key={event.id}
-                            to={`/events/${event.slug}`}
-                        >
-                            <Row hoverable>
+                        <UnstyledLink key={event.id} to={`/events/${event.slug}`}>
+                            <Row $hoverable>
                                 <EventIconContainer>
-                                    <EventIcon
-                                        src={
-                                            event.logo ||
-                                            "/static/icon-64.png"
-                                        }
-                                    />
+                                    <EventIcon src={event.logo || "/static/icon-64.png"} />
                                 </EventIconContainer>
                                 <EventTitleContainer>
                                     <EventTitle>{event.name}</EventTitle>
                                     <EventSubtitle>
-                                        <AbsoluteDate
-                                            date={event.startDate}
-                                        />{" "}
-                                        - <AbsoluteDate date={event.endDate} />
+                                        <AbsoluteDate date={event.startDate} /> -{" "}
+                                        <AbsoluteDate date={event.endDate} />
                                     </EventSubtitle>
                                 </EventTitleContainer>
                             </Row>
                         </UnstyledLink>
                     ))}
 
-                {eventsStatus === PaginatedResourceStatus.Loaded &&
-                    events.length === 0 && <p>No events found.</p>}
+                {eventsStatus === PaginatedResourceStatus.Loaded && events.length === 0 && (
+                    <p>No events found.</p>
+                )}
             </EventsSurface>
         </>
     );

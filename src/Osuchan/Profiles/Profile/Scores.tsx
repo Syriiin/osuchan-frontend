@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { Surface, SurfaceTitle, ScoreRow, Button } from "../../../components";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 import ScoreEditModal from "./ScoreEditModal";
 import { observer } from "mobx-react-lite";
 import { Gamemode } from "../../../store/models/common/enums";
@@ -12,7 +12,7 @@ const ScoresSurface = styled(Surface)`
     grid-area: scores;
 `;
 
-const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
+const ProfileScoreRow = (props: ProfileScoreRowProps) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
 
     const score = props.score;
@@ -36,7 +36,7 @@ const ProfileScoreRow = observer((props: ProfileScoreRowProps) => {
             />
         </>
     );
-});
+};
 
 interface ProfileScoreRowProps {
     score: Score;
@@ -50,22 +50,16 @@ const Scores = observer((props: ScoresProps) => {
     return (
         <ScoresSurface>
             <SurfaceTitle>Scores</SurfaceTitle>
-            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map(
-                (score, i) => (
-                    <ProfileScoreRow
-                        key={i}
-                        score={score}
-                        gamemode={props.gamemode}
-                        sandboxMode={props.sandboxMode}
-                    />
-                )
-            )}
+            {(showAllScores ? props.scores : props.scores.slice(0, 5)).map((score) => (
+                <ProfileScoreRow
+                    key={score.id}
+                    score={score}
+                    gamemode={props.gamemode}
+                    sandboxMode={props.sandboxMode}
+                />
+            ))}
             {props.scores.length <= 5 || showAllScores || (
-                <Button
-                    type="button"
-                    fullWidth
-                    action={() => setShowAllScores(true)}
-                >
+                <Button type="button" $fullWidth action={() => setShowAllScores(true)}>
                     Show More
                 </Button>
             )}

@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, Row, TimeAgo } from "../../components";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
 
 const TeamScoreDetailsWrapper = styled.div`
@@ -24,21 +24,22 @@ const TeamScores = styled.div`
 
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     display: grid;
-    grid-template-columns: 70px 150px 1fr 100px 100px;
+    grid-template-columns: 70px 150px 1fr 110px 100px;
     grid-template-areas: "rank player beatmap details performance";
     grid-gap: 10px;
     padding: 10px;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
-            `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+            `url("https://assets.ppy.sh/beatmaps/${props.$beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     height: 60px;
 `;
 
 interface ScoreRowWrapperProps {
-    beatmapSetId: number;
+    $beatmapSetId: number;
 }
 
 const Rank = styled.div`
@@ -163,11 +164,11 @@ const ScoreRow = observer((props: ScoreRowProps) => {
     const beatmap = score.beatmap!;
 
     return (
-        <ScoreRowWrapper beatmapSetId={beatmap.setId}>
+        <ScoreRowWrapper $beatmapSetId={beatmap.setId}>
             <Rank>#{props.rank}</Rank>
             <PlayerInfo>
                 <FlagContainer>
-                    <Flag countryCode={user.country} large />
+                    <Flag countryCode={user.country} $large />
                 </FlagContainer>
                 <Username>{user.username}</Username>
             </PlayerInfo>
@@ -191,10 +192,7 @@ const ScoreRow = observer((props: ScoreRowProps) => {
             </AccuracyContainer>
             <PerformanceContainer>
                 <Performance>
-                    <NumberFormat
-                        value={score.performanceTotal}
-                        decimalPlaces={0}
-                    />
+                    <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                     pp
                 </Performance>
                 <Result>{formatScoreResult(score.result)}</Result>
@@ -210,20 +208,13 @@ interface ScoreRowProps {
 
 const ScoreChart = observer((props: ScoreChartProps) => {
     const scoreValues = props.topScores.map((score) => score.performanceTotal);
-    const weightedScores = scoreValues.map(
-        (value, index) => value * props.ppDecayBase ** index
-    );
+    const weightedScores = scoreValues.map((value, index) => value * props.ppDecayBase ** index);
     const topScoreTotal = weightedScores.reduce((acc, value) => acc + value, 0);
     const missingPp = props.teamPpTotal - topScoreTotal;
 
-    const mainScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal > 0.02
-    );
-    const otherScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal <= 0.02
-    );
-    const otherScoresContribution =
-        otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
+    const mainScores = weightedScores.filter((score) => score / props.teamPpTotal > 0.02);
+    const otherScores = weightedScores.filter((score) => score / props.teamPpTotal <= 0.02);
+    const otherScoresContribution = otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
     const data = mainScores
         .sort((a, b) => b - a)
         .map((score) => ({
@@ -250,22 +241,15 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${(percent * 100).toLocaleString(
-                            "en",
-                            {
-                                maximumFractionDigits: 0,
-                            }
-                        )}%`;
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString("en", {
+                            maximumFractionDigits: 0,
+                        })}%`;
                     }}
                 >
-                    {data.map((entry, index) => (
+                    {data.map((_entry, index) => (
                         <Cell
                             key={`cell-${index}`}
-                            fill={
-                                index % 2 === 0
-                                    ? props.teamColour
-                                    : props.teamColour + "bb"
-                            }
+                            fill={index % 2 === 0 ? props.teamColour : props.teamColour + "bb"}
                         />
                     ))}
                 </Pie>

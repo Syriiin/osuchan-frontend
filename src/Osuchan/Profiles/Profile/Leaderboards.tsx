@@ -29,18 +29,14 @@ const Leaderboards = observer(() => {
 
     const globalMemberships = usersStore.globalMemberships;
     const communityMemberships = usersStore.communityMemberships;
+    const communityMembershipsStatus = usersStore.communityMembershipsStatus;
 
-    const [leaderboardType, setLeaderboardType] = useState<
-        "global" | "community"
-    >("global");
+    const [leaderboardType, setLeaderboardType] = useState<"global" | "community">("global");
 
     const handleGlobalClick = () => setLeaderboardType("global");
     const handleCommunityClick = () => {
         setLeaderboardType("community");
-        if (
-            usersStore.communityMembershipsStatus ===
-            PaginatedResourceStatus.NotLoaded
-        ) {
+        if (communityMembershipsStatus === PaginatedResourceStatus.NotLoaded) {
             usersStore.loadCommunityMemberships();
         }
     };
@@ -50,16 +46,10 @@ const Leaderboards = observer(() => {
             <SurfaceHeaderContainer>
                 <SurfaceTitle>Leaderboards</SurfaceTitle>
                 <ButtonGroup>
-                    <Button
-                        $active={leaderboardType === "global"}
-                        action={handleGlobalClick}
-                    >
+                    <Button $active={leaderboardType === "global"} action={handleGlobalClick}>
                         Global
                     </Button>
-                    <Button
-                        $active={leaderboardType === "community"}
-                        action={handleCommunityClick}
-                    >
+                    <Button $active={leaderboardType === "community"} action={handleCommunityClick}>
                         Community
                     </Button>
                 </ButtonGroup>
@@ -69,10 +59,8 @@ const Leaderboards = observer(() => {
                     <UnstyledLink
                         key={i}
                         to={`/leaderboards/global/${formatGamemodeNameShort(
-                            membership.leaderboard!.gamemode
-                        )}/${membership.leaderboardId}/members/${
-                            membership.osuUserId
-                        }`}
+                            membership.leaderboard!.gamemode,
+                        )}/${membership.leaderboardId}/members/${membership.osuUserId}`}
                     >
                         <GlobalLeaderboardRow
                             leaderboard={membership.leaderboard!}
@@ -83,18 +71,16 @@ const Leaderboards = observer(() => {
             {leaderboardType === "community" && (
                 <>
                     {hasFlag(
-                        usersStore.communityMembershipsStatus,
-                        PaginatedResourceStatus.ContentAvailable
+                        communityMembershipsStatus,
+                        PaginatedResourceStatus.ContentAvailable,
                     ) && (
                         <>
                             {communityMemberships.map((membership, i) => (
                                 <UnstyledLink
                                     key={i}
                                     to={`/leaderboards/community/${formatGamemodeNameShort(
-                                        membership.leaderboard!.gamemode
-                                    )}/${membership.leaderboardId}/members/${
-                                        membership.osuUserId
-                                    }`}
+                                        membership.leaderboard!.gamemode,
+                                    )}/${membership.leaderboardId}/members/${membership.osuUserId}`}
                                 >
                                     <CommunityLeaderboardRow
                                         leaderboard={membership.leaderboard!}
@@ -103,32 +89,26 @@ const Leaderboards = observer(() => {
                                 </UnstyledLink>
                             ))}
                             {hasFlag(
-                                usersStore.communityMembershipsStatus,
-                                PaginatedResourceStatus.MoreToLoad
+                                communityMembershipsStatus,
+                                PaginatedResourceStatus.MoreToLoad,
                             ) && (
                                 <Button
-                                    fullWidth
+                                    $fullWidth
                                     isLoading={
-                                        usersStore.communityMembershipsStatus ===
+                                        communityMembershipsStatus ===
                                         PaginatedResourceStatus.LoadingMore
                                     }
-                                    action={() =>
-                                        usersStore.loadNextCommunityMembershipsPage()
-                                    }
+                                    action={() => usersStore.loadNextCommunityMembershipsPage()}
                                 >
                                     Load More
                                 </Button>
                             )}
                             {communityMemberships.length === 0 && (
-                                <p>
-                                    This user has not joined any community
-                                    leaderboards yet...
-                                </p>
+                                <p>This user has not joined any community leaderboards yet...</p>
                             )}
                         </>
                     )}
-                    {usersStore.communityMembershipsStatus ===
-                        PaginatedResourceStatus.LoadingInitial && (
+                    {communityMembershipsStatus === PaginatedResourceStatus.LoadingInitial && (
                         <LoadingSection />
                     )}
                 </>

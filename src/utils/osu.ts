@@ -1,5 +1,5 @@
 import { Gamemode, ModAcronym, BitMods } from "../store/models/common/enums";
-import { ModsJson } from "../store/models/profiles/types";
+import type { ModsJson } from "../store/models/profiles/types";
 
 export function gamemodeIdFromName(gamemodeName: string | undefined) {
     switch (gamemodeName) {
@@ -16,39 +16,39 @@ export function gamemodeIdFromName(gamemodeName: string | undefined) {
     }
 }
 
-const modBitValues: { [name: string]: BitMods } = {
-    "NF": BitMods.NoFail,
-    "EZ": BitMods.Easy,
-    "TD": BitMods.TouchDevice,
-    "HD": BitMods.Hidden,
-    "HR": BitMods.HardRock,
-    "SD": BitMods.SuddenDeath,
-    "DT": BitMods.DoubleTime,
-    "RX": BitMods.Relax,
-    "HT": BitMods.HalfTime,
-    "NC": BitMods.Nightcore,
-    "FL": BitMods.Flashlight,
-    "AUTO": BitMods.Auto,
-    "SO": BitMods.SpunOut,
-    "AP": BitMods.Autopilot,
-    "PF": BitMods.Perfect,
+const modBitValues: { [name: string]: number } = {
+    NF: BitMods.NoFail,
+    EZ: BitMods.Easy,
+    TD: BitMods.TouchDevice,
+    HD: BitMods.Hidden,
+    HR: BitMods.HardRock,
+    SD: BitMods.SuddenDeath,
+    DT: BitMods.DoubleTime,
+    RX: BitMods.Relax,
+    HT: BitMods.HalfTime,
+    NC: BitMods.Nightcore,
+    FL: BitMods.Flashlight,
+    AUTO: BitMods.Auto,
+    SO: BitMods.SpunOut,
+    AP: BitMods.Autopilot,
+    PF: BitMods.Perfect,
     "4K": BitMods.Key4,
     "5K": BitMods.Key5,
     "6K": BitMods.Key6,
     "7K": BitMods.Key7,
     "8K": BitMods.Key8,
-    "FI": BitMods.FadeIn,
-    "RN": BitMods.Random,
-    "CN": BitMods.Cinema,
-    "TP": BitMods.TargetPractice,
+    FI: BitMods.FadeIn,
+    RN: BitMods.Random,
+    CN: BitMods.Cinema,
+    TP: BitMods.TargetPractice,
     "9K": BitMods.Key9,
-    "COOP": BitMods.KeyCoop,
+    COOP: BitMods.KeyCoop,
     "1K": BitMods.Key1,
     "2K": BitMods.Key2,
     "3K": BitMods.Key3,
-    "V2": BitMods.ScoreV2,
-    "MI": BitMods.Mirror,
-    "CL": Infinity, // Hacky solution for just CL
+    V2: BitMods.ScoreV2,
+    MI: BitMods.Mirror,
+    CL: Infinity, // Hacky solution for just CL
 };
 
 export function bitmodsFromJsonMods(mods: ModsJson): number {
@@ -56,7 +56,9 @@ export function bitmodsFromJsonMods(mods: ModsJson): number {
 }
 
 function bitmodsFromModAcronyms(modAcronym: string[]): number {
-    return modAcronym.map((modAcronym) => modBitValues[modAcronym]).reduce((acc, mod) => acc | mod, 0);
+    return modAcronym
+        .map((modAcronym) => modBitValues[modAcronym])
+        .reduce((acc, mod) => acc | mod, 0);
 }
 
 export function modsJsonFromModAcronyms(modAcronym: string[]): ModsJson {
@@ -78,7 +80,10 @@ function sortModAcronyms(modAcronyms: string[]) {
     });
 }
 
-export function calculateClassicAccuracy(statistics: Record<string, number>, gamemode: Gamemode): number {
+export function calculateClassicAccuracy(
+    statistics: Record<string, number>,
+    gamemode: Gamemode,
+): number {
     let maxPoints: number;
     let points: number;
 
@@ -95,12 +100,12 @@ export function calculateClassicAccuracy(statistics: Record<string, number>, gam
     switch (gamemode) {
         case Gamemode.Standard:
             maxPoints = 300 * (great + ok + meh + miss);
-            points = (50 * meh) + (100 * ok) + (300 * great);
+            points = 50 * meh + 100 * ok + 300 * great;
             break;
 
         case Gamemode.Taiko:
             maxPoints = 300 * (great + ok + miss);
-            points = 300 * ((0.5 * ok) + great);
+            points = 300 * (0.5 * ok + great);
             break;
 
         case Gamemode.Catch:
@@ -110,11 +115,11 @@ export function calculateClassicAccuracy(statistics: Record<string, number>, gam
 
         case Gamemode.Mania:
             maxPoints = 300 * (meh + ok + good + great + perfect + miss);
-            points = (50 * meh) + (100 * ok) + (200 * good) + (300 * great) + (300 * perfect);
+            points = 50 * meh + 100 * ok + 200 * good + 300 * great + 300 * perfect;
             break;
 
         default:
-            throw new Error(`${gamemode} is not a valid gamemode`);
+            throw new Error(`${String(gamemode)} is not a valid gamemode`);
     }
 
     return 100 * (points / maxPoints);
@@ -140,11 +145,7 @@ export function calculateLength(length: number, mods: ModsJson) {
     return length;
 }
 
-export function calculateCircleSize(
-    circleSize: number,
-    mods: ModsJson,
-    gamemode: Gamemode
-) {
+export function calculateCircleSize(circleSize: number, mods: ModsJson, gamemode: Gamemode) {
     if (gamemode & Gamemode.Mania) {
         if (ModAcronym.Key1 in mods) {
             return 1;
@@ -185,10 +186,8 @@ export function calculateCircleSize(
 }
 
 export function calculateApproachRate(approachRate: number, mods: ModsJson) {
-    const arToMs = (ar: number) =>
-        ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950;
-    const msToAr = (ms: number) =>
-        ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150;
+    const arToMs = (ar: number) => (ar <= 5 ? -120 * ar + 1800 : -150 * ar + 1950);
+    const msToAr = (ms: number) => (ms >= 1200 ? (ms - 1800) / -120 : (ms - 1950) / -150);
 
     if (ModAcronym.HardRock in mods) {
         approachRate *= 1.4;
@@ -211,10 +210,7 @@ export function calculateApproachRate(approachRate: number, mods: ModsJson) {
     return approachRate;
 }
 
-export function calculateOverallDifficulty(
-    overallDifficulty: number,
-    mods: ModsJson
-) {
+export function calculateOverallDifficulty(overallDifficulty: number, mods: ModsJson) {
     const odToMs = (od: number) => -6 * od + 79.5;
     const msToOd = (ms: number) => (ms - 79.5) / -6;
 

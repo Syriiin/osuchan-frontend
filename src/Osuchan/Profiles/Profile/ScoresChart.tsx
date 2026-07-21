@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
     XAxis,
     YAxis,
@@ -11,7 +10,7 @@ import {
 } from "recharts";
 
 import { Surface } from "../../../components";
-import { Score } from "../../../store/models/profiles/types";
+import type { Score } from "../../../store/models/profiles/types";
 import { observer } from "mobx-react-lite";
 
 const ScoresChartSurface = styled(Surface)`
@@ -21,35 +20,26 @@ const ScoresChartSurface = styled(Surface)`
 `;
 
 const ScoresChart = observer((props: ScoresChartProps) => {
-    const theme = useContext(ThemeContext);
+    const theme = useTheme();
 
+    const sandboxScores = props.sandboxScores;
     const scoresData = props.scores.map((score, i) => ({
         x: i + 1,
         pp: score.performanceTotal,
-        sandboxPp: props.sandboxScores[i]?.performanceTotal,
+        sandboxPp: i < sandboxScores.length ? sandboxScores[i]?.performanceTotal : undefined,
     }));
 
     return (
         <ScoresChartSurface>
             <ResponsiveContainer>
                 <LineChart data={scoresData}>
-                    <XAxis
-                        type="number"
-                        dataKey="x"
-                        name="#"
-                        domain={[0, 100]}
-                    />
-                    <YAxis
-                        type="number"
-                        name="PP"
-                        unit="pp"
-                        domain={["auto", "auto"]}
-                    />
+                    <XAxis type="number" dataKey="x" name="#" domain={[0, 100]} />
+                    <YAxis type="number" name="PP" unit="pp" domain={["auto", "auto"]} />
                     <CartesianGrid vertical={false} />
                     <Tooltip
                         labelFormatter={(label) => `# ${label}`}
-                        formatter={(value: number) =>
-                            value.toLocaleString("en", {
+                        formatter={(value) =>
+                            (value ?? 0).toLocaleString("en", {
                                 maximumFractionDigits: 0,
                             })
                         }

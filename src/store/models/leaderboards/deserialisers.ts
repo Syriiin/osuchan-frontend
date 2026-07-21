@@ -1,8 +1,5 @@
-import {
-    osuUserFromJson,
-    scoreFilterFromJson,
-} from "../profiles/deserialisers";
-import { Invite, Leaderboard, Membership } from "./types";
+import { osuUserFromJson, scoreFilterFromJson } from "../profiles/deserialisers";
+import type { Invite, Leaderboard, Membership } from "./types";
 
 export function leaderboardFromJson(data: any): Leaderboard {
     return {
@@ -23,26 +20,26 @@ export function leaderboardFromJson(data: any): Leaderboard {
             data["score_filter"] === null
                 ? null
                 : typeof data["score_filter"] === "object"
-                    ? scoreFilterFromJson(data["score_filter"])
-                    : null,
+                  ? scoreFilterFromJson(data["score_filter"])
+                  : null,
         scoreFilterId:
             data["score_filter"] === null
                 ? null
                 : typeof data["score_filter"] === "object"
-                    ? data["score_filter"]["id"]
-                    : data["score_filter"],
+                  ? data["score_filter"]["id"]
+                  : data["score_filter"],
         owner:
             data["owner"] === null
                 ? null
                 : typeof data["owner"] === "object"
-                    ? osuUserFromJson(data["owner"])
-                    : null,
+                  ? osuUserFromJson(data["owner"])
+                  : null,
         ownerId:
             data["owner"] === null
                 ? null
                 : typeof data["owner"] === "object"
-                    ? data["owner"]["id"]
-                    : data["owner"],
+                  ? data["owner"]["id"]
+                  : data["owner"],
         creationTime: new Date(data["creation_time"]),
         isEvent: data["is_event"],
     };
@@ -62,14 +59,8 @@ export function membershipFromJson(data: any): Membership {
             typeof data["leaderboard"] === "object"
                 ? data["leaderboard"]["id"]
                 : data["leaderboard"],
-        osuUser:
-            typeof data["user"] === "object"
-                ? osuUserFromJson(data["user"])
-                : null,
-        osuUserId:
-            typeof data["user"] === "object"
-                ? data["user"]["id"]
-                : data["user"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
         joinDate: new Date(data["join_date"]),
     };
 }
@@ -86,14 +77,8 @@ export function inviteFromJson(data: any): Invite {
             typeof data["leaderboard"] === "object"
                 ? data["leaderboard"]["id"]
                 : data["leaderboard"],
-        osuUser:
-            typeof data["user"] === "object"
-                ? osuUserFromJson(data["user"])
-                : null,
-        osuUserId:
-            typeof data["user"] === "object"
-                ? data["user"]["id"]
-                : data["user"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
         inviteDate: new Date(data["invite_date"]),
     };
 }

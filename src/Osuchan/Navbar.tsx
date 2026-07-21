@@ -1,14 +1,8 @@
-import { faEnvelope, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import {
-    Link,
-    LinkProps,
-    matchPath,
-    useHistory,
-    useLocation,
-} from "react-router-dom";
+import { Link, type LinkProps, useMatch, useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 
 import {
@@ -48,24 +42,20 @@ const LinksContainer = styled.div`
     align-items: center;
 `;
 
-const NavbarLink = styled(Link) <NavbarLinkProps>`
+const NavbarLink = styled(Link)<NavbarLinkProps>`
     margin: 10px;
     font-size: 1.1em;
     font-weight: normal;
     color: ${(props) => (props.$active ? props.theme.colours.mango : "#fff")};
     text-decoration: none;
     border-bottom: ${(props) =>
-        props.$active
-            ? `2px solid ${props.theme.colours.mango}`
-            : "2px solid transparent"};
+        props.$active ? `2px solid ${props.theme.colours.mango}` : "2px solid transparent"};
     padding-bottom: 2px;
 
     &:hover {
         text-decoration: none;
         color: ${(props) =>
-        props.$active
-            ? props.theme.colours.mango
-            : props.theme.colours.timber};
+            props.$active ? props.theme.colours.mango : props.theme.colours.timber};
     }
 `;
 
@@ -176,7 +166,7 @@ const UserAvatar = styled.img`
 `;
 
 const Navbar = observer(() => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
 
     const store = useStore();
@@ -190,16 +180,13 @@ const Navbar = observer(() => {
 
     // Use effect to initialse form values
     useAutorun(() => {
-        setAddScoreUserUrl(
-            `https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}` ||
-            ""
-        );
+        setAddScoreUserUrl(`https://osu.ppy.sh/users/${meStore.user?.osuUserId.toString()}`);
     });
 
     // Handlers
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (searchValue.length >= 2) {
-            history.push(`/users/${searchValue}`);
+            void navigate(`/users/${searchValue}`);
             setSearchValue("");
         }
         event.preventDefault();
@@ -211,7 +198,7 @@ const Navbar = observer(() => {
         const userUrlMatch = addScoreUserUrl.match(userUrlRe);
         const beatmapUrlRe = new RegExp(
             /osu.ppy.sh\/beatmapsets\/\d+#(osu|taiko|fruits|mania)\/(\d+)/,
-            "g"
+            "g",
         );
 
         let match;
@@ -235,9 +222,7 @@ const Navbar = observer(() => {
     const handleAddScoreModalClose = () => {
         setAddScoreModalOpen(false);
         setAddScoreUserUrl(
-            osuUserId !== undefined
-                ? `https://osu.ppy.sh/users/${osuUserId.toString()}`
-                : ""
+            osuUserId !== undefined ? `https://osu.ppy.sh/users/${osuUserId.toString()}` : "",
         );
         setAddScoreBeatmapUrl("");
     };
@@ -245,9 +230,7 @@ const Navbar = observer(() => {
     // Variables
     const { user, invites, isAuthenticated } = meStore;
 
-    const leaderboardsMatch = matchPath(location.pathname, {
-        path: "/leaderboards/:leaderboardType/:gamemode",
-    });
+    const leaderboardsMatch = useMatch("/leaderboards/:leaderboardType/:gamemode/*");
 
     return (
         <NavbarWrapper>
@@ -264,11 +247,20 @@ const Navbar = observer(() => {
 
                 <LinksContainer>
                     {/* Links */}
-                    <NavbarLink to="/" $active={location.pathname === "/" || location.pathname.startsWith("/users")}>
+                    <NavbarLink
+                        to="/"
+                        $active={
+                            location.pathname === "/" || location.pathname.startsWith("/users")
+                        }
+                    >
                         profiles
                     </NavbarLink>
                     <NavbarLink
-                        to={leaderboardsMatch?.url ?? "/leaderboards/global/osu"}
+                        to={
+                            leaderboardsMatch != null
+                                ? `/leaderboards/${leaderboardsMatch.params.leaderboardType}/${leaderboardsMatch.params.gamemode}`
+                                : "/leaderboards/global/osu"
+                        }
                         $active={leaderboardsMatch !== null}
                     >
                         leaderboards
@@ -288,7 +280,7 @@ const Navbar = observer(() => {
                                 onChange={(e) => setSearchValue(e.currentTarget.value)}
                                 value={searchValue}
                             />
-                            <FontAwesomeIcon icon={faSearch} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </SearchWrapper>
                     </form>
 
@@ -304,10 +296,7 @@ const Navbar = observer(() => {
                                                 {invites.length}
                                             </NotificationNumber>
                                         )}
-                                        <FontAwesomeIcon
-                                            icon={faEnvelope}
-                                            size="lg"
-                                        />
+                                        <FontAwesomeIcon icon={faEnvelope} size="lg" />
                                     </InviteIconWrapper>
                                 }
                             >
@@ -315,31 +304,25 @@ const Navbar = observer(() => {
                                     <Link
                                         key={i}
                                         to={`/leaderboards/community/${formatGamemodeNameShort(
-                                            invite.leaderboard!.gamemode
+                                            invite.leaderboard!.gamemode,
                                         )}/${invite.leaderboardId}`}
                                     >
                                         <SimpleMenuItem>
                                             <InviteWrapper>
                                                 <InviteLeaderboardImage
-                                                    src={
-                                                        invite.leaderboard!.iconUrl
-                                                    }
+                                                    src={invite.leaderboard!.iconUrl}
                                                     alt="Leaderboard icon"
                                                 />
-                                                <div>
-                                                    {invite.leaderboard!.name}
-                                                </div>
+                                                <div>{invite.leaderboard!.name}</div>
                                             </InviteWrapper>
                                         </SimpleMenuItem>
                                     </Link>
                                 ))}
                                 {invites.length === 0 && (
-                                    <SimpleMenuItem disabled>
-                                        No pending invites
-                                    </SimpleMenuItem>
+                                    <SimpleMenuItem $disabled>No pending invites</SimpleMenuItem>
                                 )}
                                 {invites.length > 5 && (
-                                    <SimpleMenuItem disabled>
+                                    <SimpleMenuItem $disabled>
                                         and {invites.length - 5} more
                                     </SimpleMenuItem>
                                 )}
@@ -352,19 +335,14 @@ const Navbar = observer(() => {
                                 width={150}
                                 triggerElement={
                                     <UserAvatarWrapper>
-                                        <UserAvatar
-                                            src={`https://a.ppy.sh/${user!.osuUserId
-                                                }`}
-                                        />
+                                        <UserAvatar src={`https://a.ppy.sh/${user!.osuUserId}`} />
                                     </UserAvatarWrapper>
                                 }
                             >
                                 <Link to={`/users/${user!.osuUser!.username}`}>
                                     <SimpleMenuItem>My Profile</SimpleMenuItem>
                                 </Link>
-                                <SimpleMenuItem
-                                    onClick={() => setAddScoreModalOpen(true)}
-                                >
+                                <SimpleMenuItem onClick={() => setAddScoreModalOpen(true)}>
                                     Add Scores
                                 </SimpleMenuItem>
                                 <SimpleMenuDivider />
@@ -377,26 +355,24 @@ const Navbar = observer(() => {
                             <SimpleModal
                                 open={addScoreModalOpen}
                                 onClose={handleAddScoreModalClose}
+                                keepMounted
                             >
                                 <SimpleModalTitle>Add Scores</SimpleModalTitle>
                                 <p>
-                                    Enter a player's osu! profile URL and beatmap
-                                    URL(s) to add scores from those beatmaps.
+                                    Enter a player's osu! profile URL and beatmap URL(s) to add
+                                    scores from those beatmaps.
                                     <br />
-                                    URLs must be from the new site so they match the
-                                    format below.
+                                    URLs must be from the new site so they match the format below.
                                 </p>
                                 <form onSubmit={handleAddScoreSubmit}>
                                     <label>
                                         osu! Profile URL
                                         <TextInput
-                                            fullWidth
+                                            $fullWidth
                                             required
                                             placeholder="https://osu.ppy.sh/users/5701575"
                                             onChange={(e) =>
-                                                setAddScoreUserUrl(
-                                                    e.currentTarget.value
-                                                )
+                                                setAddScoreUserUrl(e.currentTarget.value)
                                             }
                                             value={addScoreUserUrl}
                                         />
@@ -404,18 +380,16 @@ const Navbar = observer(() => {
                                     <label>
                                         Beatmap URL(s)
                                         <TextField
-                                            fullWidth
+                                            $fullWidth
                                             required
                                             placeholder="https://osu.ppy.sh/beatmapsets/235836#osu/546514"
                                             onChange={(e) =>
-                                                setAddScoreBeatmapUrl(
-                                                    e.currentTarget.value
-                                                )
+                                                setAddScoreBeatmapUrl(e.currentTarget.value)
                                             }
                                             value={addScoreBeatmapUrl}
                                         />
                                     </label>
-                                    <Button positive type="submit">
+                                    <Button $positive type="submit">
                                         Submit
                                     </Button>
                                 </form>

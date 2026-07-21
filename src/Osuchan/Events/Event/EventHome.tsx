@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
-import { Helmet } from "react-helmet";
-import { useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import {
@@ -77,11 +76,11 @@ const AvatarStack = styled.div`
     align-items: center;
 `;
 
-const AvatarWrapper = styled.div<{ index: number }>`
+const AvatarWrapper = styled.div<{ $index: number }>`
     width: 40px;
     height: 40px;
-    margin-left: ${(props) => (props.index === 0 ? "0" : "-10px")};
-    opacity: ${(props) => Math.max(0.3, 1 - props.index / MAX_VISIBLE_AVATARS)};
+    margin-left: ${(props) => (props.$index === 0 ? "0" : "-10px")};
+    opacity: ${(props) => Math.max(0.3, 1 - props.$index / MAX_VISIBLE_AVATARS)};
     transition: opacity 0.2s;
 
     &:hover {
@@ -117,8 +116,7 @@ const LeaderboardRow = styled.div`
 
 const EventHome = observer(() => {
     const params = useParams<{ slug: string }>();
-    const slug = params.slug;
-    const { url } = useRouteMatch();
+    const slug = params.slug!;
 
     const store = useStore();
     const {
@@ -134,8 +132,7 @@ const EventHome = observer(() => {
     const meStore = store.meStore;
 
     const [addAttendeeModalOpen, setAddAttendeeModalOpen] = useState(false);
-    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] =
-        useState(false);
+    const [createLeaderboardModalOpen, setCreateLeaderboardModalOpen] = useState(false);
 
     useEffect(() => {
         store.eventsStore.loadEvent(slug);
@@ -151,7 +148,7 @@ const EventHome = observer(() => {
 
     const themeColours = useMemo(
         () => (event?.themeColours ? { ...event.themeColours } : undefined),
-        [event]
+        [event],
     );
     useEffect(() => {
         if (themeColours) {
@@ -176,36 +173,28 @@ const EventHome = observer(() => {
         : outerTheme;
 
     const isOrganiser =
-        meStore.user &&
-        event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
+        meStore.user && event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && event && (
-                    <title>{event.name} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>Event not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && event
+                      ? `${event.name} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "Event not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {loadingStatus === ResourceStatus.Error && (
-                <h3>Event not found!</h3>
-            )}
+            {loadingStatus === ResourceStatus.Error && <h3>Event not found!</h3>}
 
             {loadingStatus === ResourceStatus.Loaded && event && (
                 <ThemeProvider theme={mergedTheme}>
                     <EventSurface>
                         <EventHeader>
-                            {event.logo && (
-                                <EventLogo src={event.logo} alt={event.name} />
-                            )}
+                            {event.logo && <EventLogo src={event.logo} alt={event.name} />}
                             <EventInfo>
                                 <EventName>{event.name}</EventName>
                                 <EventDates>
@@ -213,9 +202,7 @@ const EventHome = observer(() => {
                                     <AbsoluteDate date={event.endDate} />
                                 </EventDates>
                                 {event.description && (
-                                    <EventDescription>
-                                        {event.description}
-                                    </EventDescription>
+                                    <EventDescription>{event.description}</EventDescription>
                                 )}
                             </EventInfo>
                         </EventHeader>
@@ -223,33 +210,21 @@ const EventHome = observer(() => {
 
                     <EventSurface>
                         <SectionHeader>
-                            <SectionTitle>
-                                Attendees ({attendeesCount})
-                            </SectionTitle>
+                            <SectionTitle>Attendees ({attendeesCount})</SectionTitle>
                             {isOrganiser && (
-                                <Button
-                                    type="button"
-                                    action={() => setAddAttendeeModalOpen(true)}
-                                >
+                                <Button type="button" action={() => setAddAttendeeModalOpen(true)}>
                                     Add Attendee
                                 </Button>
                             )}
                         </SectionHeader>
-                        {loadingAttendeesStatus === ResourceStatus.Loading && (
-                            <LoadingPage />
-                        )}
+                        {loadingAttendeesStatus === ResourceStatus.Loading && <LoadingPage />}
                         {loadingAttendeesStatus === ResourceStatus.Loaded && (
                             <AvatarStack>
                                 {eventAttendees
                                     .slice(0, MAX_VISIBLE_AVATARS)
                                     .map((attendee, index) => (
-                                        <AvatarWrapper
-                                            key={attendee.id}
-                                            index={index}
-                                        >
-                                            <UnstyledLink
-                                                to={`/users/${attendee.user.username}`}
-                                            >
+                                        <AvatarWrapper key={attendee.id} $index={index}>
+                                            <UnstyledLink to={`/users/${attendee.user.username}`}>
                                                 <AvatarImage
                                                     src={`https://a.ppy.sh/${attendee.user.id}`}
                                                     alt={attendee.user.username}
@@ -258,14 +233,14 @@ const EventHome = observer(() => {
                                         </AvatarWrapper>
                                     ))}
                                 {attendeesCount > MAX_VISIBLE_AVATARS && (
-                                    <UnstyledLink to={`${url}/attendees`}>
+                                    <UnstyledLink to="attendees">
                                         <ExtraCount>
                                             +{attendeesCount - MAX_VISIBLE_AVATARS} more
                                         </ExtraCount>
                                     </UnstyledLink>
                                 )}
                                 {attendeesCount > 0 && attendeesCount <= MAX_VISIBLE_AVATARS && (
-                                    <UnstyledLink to={`${url}/attendees`}>
+                                    <UnstyledLink to="attendees">
                                         <ExtraCount>View all</ExtraCount>
                                     </UnstyledLink>
                                 )}
@@ -281,38 +256,30 @@ const EventHome = observer(() => {
                             {isOrganiser && (
                                 <Button
                                     type="button"
-                                    action={() =>
-                                        setCreateLeaderboardModalOpen(true)
-                                    }
+                                    action={() => setCreateLeaderboardModalOpen(true)}
                                 >
                                     Create Leaderboard
                                 </Button>
                             )}
                         </SectionHeader>
-                        {loadingLeaderboardsStatus ===
-                            ResourceStatus.Loading && <LoadingPage />}
+                        {loadingLeaderboardsStatus === ResourceStatus.Loading && <LoadingPage />}
                         {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
                             eventLeaderboards.map((lb) => (
                                 <LeaderboardRow key={lb.id}>
                                     <UnstyledLink
                                         to={`/leaderboards/community/${formatGamemodeNameShort(
-                                            lb.leaderboard.gamemode
+                                            lb.leaderboard.gamemode,
                                         )}/${lb.leaderboard.id}`}
                                     >
-                                        <CommunityLeaderboardRow
-                                            leaderboard={lb.leaderboard}
-                                        />
+                                        <CommunityLeaderboardRow leaderboard={lb.leaderboard} />
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
-                                            negative
+                                            $negative
                                             type="button"
                                             isLoading={isDeletingLeaderboard}
                                             action={() =>
-                                                store.eventsStore.deleteLeaderboard(
-                                                    slug,
-                                                    lb.id
-                                                )
+                                                store.eventsStore.deleteLeaderboard(slug, lb.id)
                                             }
                                             confirmationMessage={`Delete leaderboard "${lb.leaderboard.name}"?`}
                                         >
@@ -321,11 +288,8 @@ const EventHome = observer(() => {
                                     )}
                                 </LeaderboardRow>
                             ))}
-                        {loadingLeaderboardsStatus ===
-                            ResourceStatus.Loaded &&
-                            eventLeaderboards.length === 0 && (
-                                <p>No leaderboards yet.</p>
-                            )}
+                        {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
+                            eventLeaderboards.length === 0 && <p>No leaderboards yet.</p>}
                     </EventSurface>
 
                     <AddAttendeeModal

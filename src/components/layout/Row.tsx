@@ -7,16 +7,14 @@ export const Row = styled.div<RowProps>`
     padding: 5px;
     border-radius: 5px;
     background-color: ${(props) => props.theme.colours.foreground};
-    cursor: ${(props) => (props.hoverable ? "pointer" : "unset")};
+    cursor: ${(props) => (props.$hoverable ? "pointer" : "unset")};
 
     &:hover {
         background-color: ${(props) =>
-            props.hoverable
-                ? props.theme.colours.pillow
-                : props.theme.colours.foreground};
+            props.$hoverable ? props.theme.colours.pillow : props.theme.colours.foreground};
     }
 `;
 
 interface RowProps {
-    hoverable?: boolean;
+    $hoverable?: boolean;
 }

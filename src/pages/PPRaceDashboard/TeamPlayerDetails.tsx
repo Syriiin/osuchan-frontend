@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { PPRacePlayer } from "../../store/models/ppraces/types";
+import type { PPRacePlayer } from "../../store/models/ppraces/types";
 import styled from "styled-components";
 import { Flag, NumberFormat, Row } from "../../components";
 import { Pie, PieChart, ResponsiveContainer } from "recharts";
@@ -10,10 +10,10 @@ const TeamPlayers = styled.div`
     height: 26em;
 `;
 
-const PlayerRowWrapper = styled(Row)<{ teamColour: string }>`
+const PlayerRowWrapper = styled(Row)<{ $teamColour: string }>`
     padding: 0;
     align-items: unset;
-    background-color: ${(props) => props.teamColour + "77"};
+    background-color: ${(props) => props.$teamColour + "77"};
     font-size: 0.9em;
 `;
 
@@ -90,12 +90,12 @@ const PlayerRow = observer((props: PlayerRowProps) => {
     const user = props.player.user;
 
     return (
-        <PlayerRowWrapper teamColour={props.teamColour}>
+        <PlayerRowWrapper $teamColour={props.teamColour}>
             <LeftContainer>
                 <PlayerInfo>
                     <Avatar src={`https://a.ppy.sh/${user.id}`} />
                     <FlagContainer>
-                        <Flag countryCode={user.country} large />
+                        <Flag countryCode={user.country} $large />
                     </FlagContainer>
                     <Username>{user.username}</Username>
                 </PlayerInfo>
@@ -103,15 +103,11 @@ const PlayerRow = observer((props: PlayerRowProps) => {
             <PlayerInfo>
                 <PerformanceContainer>
                     <PerformanceContribution>
-                        <NumberFormat
-                            value={player.ppContribution}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={player.ppContribution} decimalPlaces={0} />
                         pp <ContributionText>contributed</ContributionText>
                     </PerformanceContribution>
                     <ScoreCount>
-                        {player.scoreCount}{" "}
-                        {player.scoreCount === 1 ? "score" : "scores"} /{" "}
+                        {player.scoreCount} {player.scoreCount === 1 ? "score" : "scores"} /{" "}
                         <NumberFormat value={player.pp} decimalPlaces={0} />
                         pp total
                     </ScoreCount>
@@ -127,19 +123,12 @@ interface PlayerRowProps {
 }
 
 const PlayerChart = observer((props: PlayerChartProps) => {
-    const total = props.players.reduce(
-        (acc, player) => acc + player.ppContribution,
-        0
-    );
-    const mainPlayers = props.players.filter(
-        (player) => player.ppContribution / total > 0.01
-    );
-    const otherPlayers = props.players.filter(
-        (player) => player.ppContribution / total <= 0.01
-    );
+    const total = props.players.reduce((acc, player) => acc + player.ppContribution, 0);
+    const mainPlayers = props.players.filter((player) => player.ppContribution / total > 0.01);
+    const otherPlayers = props.players.filter((player) => player.ppContribution / total <= 0.01);
     const otherPlayersContribution = otherPlayers.reduce(
         (acc, player) => acc + player.ppContribution,
-        0
+        0,
     );
     const data = mainPlayers
         .sort((a, b) => b.ppContribution - a.ppContribution)
@@ -167,12 +156,9 @@ const PlayerChart = observer((props: PlayerChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${(percent * 100).toLocaleString(
-                            "en",
-                            {
-                                maximumFractionDigits: 0,
-                            }
-                        )}%`;
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString("en", {
+                            maximumFractionDigits: 0,
+                        })}%`;
                     }}
                 />
             </PieChart>
@@ -186,24 +172,16 @@ interface PlayerChartProps {
 }
 
 const TeamPlayerDetails = observer((props: TeamPlayerDetailsProps) => {
-    const players = props.players
-        .slice()
-        .sort((a, b) => b.ppContribution - a.ppContribution);
+    const players = props.players.slice().sort((a, b) => b.ppContribution - a.ppContribution);
 
     return (
         <>
             <TeamPlayers>
                 {players.slice(0, 3).map((player) => (
-                    <PlayerRow
-                        key={player.id}
-                        player={player}
-                        teamColour={props.teamColour}
-                    />
+                    <PlayerRow key={player.id} player={player} teamColour={props.teamColour} />
                 ))}
                 {players.length > 3 && (
-                    <PlayerCount>
-                        ...and {players.length - 3} more players
-                    </PlayerCount>
+                    <PlayerCount>...and {players.length - 3} more players</PlayerCount>
                 )}
             </TeamPlayers>
             <PlayerChartContainer>

@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styled from "styled-components";
 import { LoadingPage, Surface } from "../../components";
 import { ResourceStatus } from "../../store/status";
@@ -42,11 +41,11 @@ const TeamDetailsContainer = styled.div`
     gap: 10px;
 `;
 
-const TeamSurface = styled(Surface)<{ teamColour: string }>`
+const TeamSurface = styled(Surface)<{ $teamColour: string }>`
     flex: 1;
     padding: 10px;
-    border: 5px solid ${(props) => props.teamColour};
-    background-color: ${(props) => props.teamColour + "33"};
+    border: 5px solid ${(props) => props.$teamColour};
+    background-color: ${(props) => props.$teamColour + "33"};
     display: flex;
 `;
 
@@ -75,7 +74,7 @@ const Finalising = styled.span`
 
 const PPRaceDashboard = observer(() => {
     const params = useParams<RouteParams>();
-    const ppraceId = parseInt(params.ppraceId);
+    const ppraceId = parseInt(params.ppraceId!);
 
     const store = useStore();
     const detailStore = store.ppracesStore.detailStore;
@@ -83,41 +82,32 @@ const PPRaceDashboard = observer(() => {
     const { loadingStatus, pprace, teamScores, recentScores } = detailStore;
 
     useEffect(() => {
-        detailStore.loadPPRace(ppraceId);
+        void detailStore.loadPPRace(ppraceId);
     }, [detailStore, ppraceId]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            detailStore.reloadPPRace();
+            void detailStore.reloadPPRace();
         }, 15 * 1000);
         return () => clearInterval(interval);
     }, [detailStore]);
 
-    const [teamDetailsMode, setTeamDetailsMode] = useState<
-        "players" | "scores"
-    >("players");
+    const [teamDetailsMode, setTeamDetailsMode] = useState<"players" | "scores">("players");
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && pprace && (
-                    <title>{pprace.name} - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>PP Race not found - osu!chan</title>
-                )}
-            </Helmet>
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && pprace
+                      ? `${pprace.name} - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "PP Race not found - osu!chan"
+                        : "osu!chan"}
+            </title>
+            {detailStore.loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {detailStore.loadingStatus === ResourceStatus.Loading && (
-                <LoadingPage />
-            )}
-
-            {detailStore.loadingStatus === ResourceStatus.Error && (
-                <h3>PP Race not found!</h3>
-            )}
+            {detailStore.loadingStatus === ResourceStatus.Error && <h3>PP Race not found!</h3>}
 
             {detailStore.loadingStatus === ResourceStatus.Loaded && pprace && (
                 <DashboardWrapper>
@@ -127,21 +117,16 @@ const PPRaceDashboard = observer(() => {
                     <TeamDetailsContainer
                         onClick={() => {
                             setTeamDetailsMode(
-                                teamDetailsMode === "players"
-                                    ? "scores"
-                                    : "players"
+                                teamDetailsMode === "players" ? "scores" : "players",
                             );
                         }}
                     >
                         {pprace.teams.map((team, index) => (
-                            <TeamSurface
-                                teamColour={TeamColours[index]}
-                                key={team.id}
-                            >
+                            <TeamSurface $teamColour={TeamColours[index]} key={team.id}>
                                 <TeamDetails
                                     team={team}
                                     scores={teamScores[team.id]}
-                                    teamColour={TeamColours[index]}
+                                    $teamColour={TeamColours[index]}
                                     mode={teamDetailsMode}
                                     ppDecayBase={pprace.ppDecayBase}
                                 ></TeamDetails>
@@ -151,28 +136,19 @@ const PPRaceDashboard = observer(() => {
                     <RightContainer>
                         <CountdownSurface>
                             {pprace.status === PPRaceStatus.InProgress && (
-                                <Countdown
-                                    endTime={pprace.endTime ?? undefined}
-                                />
+                                <Countdown endTime={pprace.endTime ?? undefined} />
                             )}
                             {pprace.status === PPRaceStatus.WaitingToStart && (
-                                <Countdown
-                                    endTime={pprace.startTime ?? undefined}
-                                />
+                                <Countdown endTime={pprace.startTime ?? undefined} />
                             )}
                             {pprace.status === PPRaceStatus.Finalising && (
                                 <Finalising>Finalising scores...</Finalising>
                             )}
                             {pprace.status === PPRaceStatus.Finished && (
-                                <Countdown
-                                    endTime={pprace.endTime ?? undefined}
-                                />
+                                <Countdown endTime={pprace.endTime ?? undefined} />
                             )}
                         </CountdownSurface>
-                        <RecentScores
-                            recentScores={recentScores}
-                            teams={pprace.teams}
-                        />
+                        <RecentScores recentScores={recentScores} teams={pprace.teams} />
                     </RightContainer>
                 </DashboardWrapper>
             )}
@@ -180,7 +156,7 @@ const PPRaceDashboard = observer(() => {
     );
 });
 
-interface RouteParams {
+interface RouteParams extends Record<string, string | undefined> {
     ppraceId: string;
 }
 

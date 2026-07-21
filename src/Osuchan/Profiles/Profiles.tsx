@@ -1,17 +1,13 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router";
 
 import Profile from "./Profile/Profile";
 
 const Profiles = () => (
-    <Switch>
-        <Route exact path="/users/:userString">
-            <Profile />
-        </Route>
-        <Route path="/users/:userString/:gamemodeName">
-            <Profile />
-        </Route>
-        <Redirect to="/" />
-    </Switch>
+    <Routes>
+        <Route path=":userString" element={<Profile />} />
+        <Route path=":userString/:gamemodeName" element={<Profile />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
 );
 
 export default Profiles;

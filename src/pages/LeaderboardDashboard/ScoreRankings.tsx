@@ -1,22 +1,23 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, Row, TimeAgo } from "../../components";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
 
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     padding: 0;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
-            `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+            `url("https://assets.ppy.sh/beatmaps/${props.$beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     font-size: 0.3em;
 `;
 
 interface ScoreRowWrapperProps {
-    beatmapSetId: number;
+    $beatmapSetId: number;
 }
 
 const LeftContainer = styled.div`
@@ -109,7 +110,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
     const beatmap = score.beatmap!;
 
     return (
-        <ScoreRowWrapper beatmapSetId={beatmap.setId}>
+        <ScoreRowWrapper $beatmapSetId={beatmap.setId}>
             <LeftContainer>
                 <PlayerInfo>
                     <Avatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
@@ -132,11 +133,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
             <ScoreInfo>
                 <AccuracyContainer>
                     <Accuracy>
-                        <NumberFormat
-                            value={score.accuracy}
-                            decimalPlaces={2}
-                        />
-                        %
+                        <NumberFormat value={score.accuracy} decimalPlaces={2} />%
                     </Accuracy>
                     <ScoreDate>
                         <TimeAgo datetime={score.date} />
@@ -144,10 +141,7 @@ export const ScoreRow = observer((props: ScoreRowProps) => {
                 </AccuracyContainer>
                 <PerformanceContainer>
                     <Performance>
-                        <NumberFormat
-                            value={score.performanceTotal}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                         pp
                     </Performance>
                     <Result>{formatScoreResult(score.result)}</Result>

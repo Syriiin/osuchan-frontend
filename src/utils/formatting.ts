@@ -6,9 +6,7 @@ export function formatTime(seconds: number) {
     seconds = Math.round(seconds);
     const minutesString = String(Math.floor(seconds / 60));
     const secondsString = String(seconds % 60);
-    return `${minutesString}:${("00" + secondsString).substring(
-        secondsString.length
-    )}`;
+    return `${minutesString}:${("00" + secondsString).substring(secondsString.length)}`;
 }
 
 export function formatModName(modAcronym: string) {

@@ -1,12 +1,7 @@
 import styled from "styled-components";
 
-import {
-    Surface,
-    DataTable,
-    DataCell,
-    NumberFormat,
-} from "../../../components";
-import { UserStats } from "../../../store/models/profiles/types";
+import { Surface, DataTable, DataCell, NumberFormat } from "../../../components";
+import type { UserStats } from "../../../store/models/profiles/types";
 import { formatTime } from "../../../utils/formatting";
 import { observer } from "mobx-react-lite";
 import { Gamemode } from "../../../store/models/common/enums";
@@ -28,7 +23,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>Accuracy</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
                                 value={usersStore.sandboxScoreStyleAccuracy}
                                 decimalPlaces={2}
@@ -47,7 +42,7 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                 <tr>
                     <td>BPM</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
                                 value={usersStore.sandboxScoreStyleBpm}
                                 decimalPlaces={0}
@@ -55,90 +50,64 @@ const ScoreStyle = observer((props: ScoreStyleProps) => {
                         </DataCell>
                     )}
                     <DataCell>
-                        <NumberFormat
-                            value={props.userStats.scoreStyleBpm}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={props.userStats.scoreStyleBpm} decimalPlaces={0} />
                     </DataCell>
                 </tr>
                 <tr>
                     <td>Length</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             {formatTime(usersStore.sandboxScoreStyleLength)}
                         </DataCell>
                     )}
-                    <DataCell>
-                        {formatTime(props.userStats.scoreStyleLength)}
-                    </DataCell>
+                    <DataCell>{formatTime(props.userStats.scoreStyleLength)}</DataCell>
                 </tr>
                 {[Gamemode.Standard, Gamemode.Catch, Gamemode.Mania].includes(
-                    userStats.gamemode
+                    userStats.gamemode,
                 ) && (
                     <tr>
-                        <td>
-                            {userStats.gamemode === Gamemode.Mania
-                                ? "Keys"
-                                : "Circle Size"}
-                        </td>
+                        <td>{userStats.gamemode === Gamemode.Mania ? "Keys" : "Circle Size"}</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>
+                            <DataCell $highlighted>
                                 <NumberFormat
-                                    value={
-                                        usersStore.sandboxScoreStyleCircleSize
-                                    }
+                                    value={usersStore.sandboxScoreStyleCircleSize}
                                     decimalPlaces={1}
                                 />
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat
-                                value={props.userStats.scoreStyleCs}
-                                decimalPlaces={1}
-                            />
+                            <NumberFormat value={props.userStats.scoreStyleCs} decimalPlaces={1} />
                         </DataCell>
                     </tr>
                 )}
-                {[Gamemode.Standard, Gamemode.Catch].includes(
-                    userStats.gamemode
-                ) && (
+                {[Gamemode.Standard, Gamemode.Catch].includes(userStats.gamemode) && (
                     <tr>
                         <td>Approach Rate</td>
                         {props.sandboxMode && (
-                            <DataCell highlighted>
+                            <DataCell $highlighted>
                                 <NumberFormat
-                                    value={
-                                        usersStore.sandboxScoreStyleApproachRate
-                                    }
+                                    value={usersStore.sandboxScoreStyleApproachRate}
                                     decimalPlaces={1}
                                 />
                             </DataCell>
                         )}
                         <DataCell>
-                            <NumberFormat
-                                value={props.userStats.scoreStyleAr}
-                                decimalPlaces={1}
-                            />
+                            <NumberFormat value={props.userStats.scoreStyleAr} decimalPlaces={1} />
                         </DataCell>
                     </tr>
                 )}
                 <tr>
                     <td>Overall Difficulty</td>
                     {props.sandboxMode && (
-                        <DataCell highlighted>
+                        <DataCell $highlighted>
                             <NumberFormat
-                                value={
-                                    usersStore.sandboxScoreStyleOverallDifficulty
-                                }
+                                value={usersStore.sandboxScoreStyleOverallDifficulty}
                                 decimalPlaces={1}
                             />
                         </DataCell>
                     )}
                     <DataCell>
-                        <NumberFormat
-                            value={props.userStats.scoreStyleOd}
-                            decimalPlaces={1}
-                        />
+                        <NumberFormat value={props.userStats.scoreStyleOd} decimalPlaces={1} />
                     </DataCell>
                 </tr>
             </DataTable>

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 import { BasicModal } from "./BasicModal";
@@ -12,7 +12,7 @@ export const SimpleModalTitle = styled.h1`
 `;
 
 export const SimpleModal = (props: SimpleModalProps) => (
-    <BasicModal open={props.open} onClose={props.onClose}>
+    <BasicModal open={props.open} onClose={props.onClose} keepMounted={props.keepMounted}>
         <SimpleModalWrapper>{props.children}</SimpleModalWrapper>
     </BasicModal>
 );
@@ -21,4 +21,5 @@ export interface SimpleModalProps {
     children: ReactNode;
     open: boolean;
     onClose: () => void;
+    keepMounted?: boolean;
 }

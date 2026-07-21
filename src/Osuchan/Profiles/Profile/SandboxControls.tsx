@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -33,9 +32,7 @@ const ControlsStatusContainer = styled.div`
 
 const ControlsStatus = styled.span<ControlsStatusProps>`
     color: ${(props) =>
-        props.enabled
-            ? props.theme.colours.timber
-            : props.theme.colours.currant};
+        props.$enabled ? props.theme.colours.timber : props.theme.colours.currant};
     width: 100%;
     font-size: 2em;
     font-weight: bolder;
@@ -43,12 +40,11 @@ const ControlsStatus = styled.span<ControlsStatusProps>`
 `;
 
 interface ControlsStatusProps {
-    enabled: boolean;
+    $enabled: boolean;
 }
 
-const SandboxControls = observer((props: SandboxControlsProps) => {
-    const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] =
-        useState(false);
+const SandboxControls = (props: SandboxControlsProps) => {
+    const [sandboxSettingsModalOpen, setSandboxSettingsModalOpen] = useState(false);
 
     return (
         <SandboxControlsSurface>
@@ -60,15 +56,12 @@ const SandboxControls = observer((props: SandboxControlsProps) => {
                 />
             </SandboxModeSwitchContainer>
             <ControlsStatusContainer>
-                <ControlsStatus enabled={props.sandboxMode}>
+                <ControlsStatus $enabled={props.sandboxMode}>
                     {props.sandboxMode ? "ENABLED" : "DISABLED"}
                 </ControlsStatus>
             </ControlsStatusContainer>
             {props.sandboxMode && (
-                <Button
-                    type="button"
-                    action={() => setSandboxSettingsModalOpen(true)}
-                >
+                <Button type="button" action={() => setSandboxSettingsModalOpen(true)}>
                     Settings
                 </Button>
             )}
@@ -76,10 +69,11 @@ const SandboxControls = observer((props: SandboxControlsProps) => {
                 gamemode={props.gamemode}
                 open={sandboxSettingsModalOpen}
                 onClose={() => setSandboxSettingsModalOpen(false)}
+                keepMounted
             />
         </SandboxControlsSurface>
     );
-});
+};
 
 interface SandboxControlsProps {
     gamemode: Gamemode;

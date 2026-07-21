@@ -1,21 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 
 import { observer } from "mobx-react-lite";
-import {
-    Row,
-    NumberFormat,
-    ScoreModal,
-    ShortTimeAgo,
-    Surface,
-} from "../../components";
+import { Row, NumberFormat, ScoreModal, ShortTimeAgo, Surface } from "../../components";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { TeamColours } from ".";
-import { PPRaceTeam } from "../../store/models/ppraces/types";
+import type { PPRaceTeam } from "../../store/models/ppraces/types";
 
-const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
-    background-color: ${(props) => props.teamColour};
+const ScoreRowWrapper = styled(Row)<{ $teamColour: string }>`
+    background-color: ${(props) => props.$teamColour};
 
     &.slide-enter {
         opacity: 0;
@@ -24,7 +18,9 @@ const ScoreRowWrapper = styled(Row)<{ teamColour: string }>`
     &.slide-enter-active {
         opacity: 1;
         transform: translateX(0);
-        transition: opacity 300ms, transform 300ms;
+        transition:
+            opacity 300ms,
+            transform 300ms;
     }
     &.slide-enter-done {
         opacity: 1;
@@ -59,18 +55,13 @@ const RecentScoreRow = observer((props: RecentScoreRowProps) => {
     return (
         <>
             <ScoreRowWrapper
-                hoverable
-                onClick={
-                    props.onClickOverride || (() => setDetailsModalOpen(true))
-                }
-                teamColour={props.teamColour}
+                $hoverable
+                onClick={props.onClickOverride || (() => setDetailsModalOpen(true))}
+                $teamColour={props.teamColour}
             >
                 <Player>{props.score.userStats!.osuUser!.username}</Player>
                 <Performance>
-                    <NumberFormat
-                        value={score.performanceTotal}
-                        decimalPlaces={0}
-                    />
+                    <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                     pp
                 </Performance>
                 <ScoreTimeAgo>
@@ -104,21 +95,13 @@ const RecentScores = observer((props: RecentScoresProps) => {
             <TransitionGroup>
                 {props.recentScores.slice(0, 50).map((score) => {
                     const team = props.teams.find((t) =>
-                        t.players.some(
-                            (p) => p.user.id === score.userStats!.osuUserId
-                        )
+                        t.players.some((p) => p.user.id === score.userStats!.osuUserId),
                     );
                     return (
-                        <CSSTransition
-                            key={score.id}
-                            timeout={300}
-                            classNames="slide"
-                        >
+                        <CSSTransition key={score.id} timeout={300} classNames="slide">
                             <RecentScoreRow
                                 score={score}
-                                teamColour={
-                                    TeamColours[props.teams.indexOf(team!)]
-                                }
+                                teamColour={TeamColours[props.teams.indexOf(team!)]}
                             />
                         </CSSTransition>
                     );

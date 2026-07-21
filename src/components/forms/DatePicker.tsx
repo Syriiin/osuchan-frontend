@@ -1,4 +1,4 @@
-import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
+import ReactDatePicker from "react-datepicker";
 import styled from "styled-components";
 
 const DatePickerWrapper = styled.div`
@@ -24,10 +24,13 @@ const DatePickerWrapper = styled.div`
     .react-datepicker__header {
         background-color: ${(props) => props.theme.colours.foreground};
 
-        .react-datepicker__day-name,
         .react-datepicker__current-month {
             color: #fff;
         }
+    }
+
+    .react-datepicker__day-names .react-datepicker__day-name {
+        color: #fff;
     }
 
     .react-datepicker__month-container {
@@ -70,7 +73,7 @@ const DatePickerWrapper = styled.div`
     }
 `;
 
-export const DatePicker = (props: DatePickerProps) => (
+export const DatePicker = (props: React.ComponentProps<typeof ReactDatePicker>) => (
     <DatePickerWrapper>
         <ReactDatePicker
             {...props}
@@ -80,5 +83,3 @@ export const DatePicker = (props: DatePickerProps) => (
         />
     </DatePickerWrapper>
 );
-
-interface DatePickerProps extends ReactDatePickerProps {}

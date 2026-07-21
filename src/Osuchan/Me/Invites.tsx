@@ -1,17 +1,9 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { Helmet } from "react-helmet";
 
-import {
-    LoadingPage,
-    Surface,
-    SurfaceTitle,
-    Row,
-    UnstyledLink,
-    Button,
-} from "../../components";
-import { Invite } from "../../store/models/leaderboards/types";
+import { LoadingPage, Surface, SurfaceTitle, Row, UnstyledLink, Button } from "../../components";
+import type { Invite } from "../../store/models/leaderboards/types";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { formatGamemodeNameShort } from "../../utils/formatting";
 import { ResourceStatus } from "../../store/status";
@@ -80,27 +72,24 @@ const InviteRow = observer((props: InviteRowProps) => {
             <LeaderboardTitleContainer>
                 <LeaderboardTitle>{invite.leaderboard!.name}</LeaderboardTitle>
                 <LeaderboardType>
-                    {invite.leaderboard!.accessType ===
-                        LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                    {invite.leaderboard!.accessType ===
-                        LeaderboardAccessType.Private && "PRIVATE"}
+                    {invite.leaderboard!.accessType === LeaderboardAccessType.PublicInviteOnly &&
+                        "INVITE-ONLY"}
+                    {invite.leaderboard!.accessType === LeaderboardAccessType.Private && "PRIVATE"}
                 </LeaderboardType>
-                <LeaderboardSubtitle>
-                    {invite.leaderboard!.memberCount} members
-                </LeaderboardSubtitle>
+                <LeaderboardSubtitle>{invite.leaderboard!.memberCount} members</LeaderboardSubtitle>
             </LeaderboardTitleContainer>
             <InviteMessage>{invite.message}</InviteMessage>
             <Button
                 as={UnstyledLink}
                 to={`/leaderboards/community/${formatGamemodeNameShort(
-                    invite.leaderboard!.gamemode
+                    invite.leaderboard!.gamemode,
                 )}/${invite.leaderboardId}`}
                 type="button"
             >
                 View Leaderboard
             </Button>
             <DeclineButton
-                negative
+                $negative
                 isLoading={meStore.isDecliningInvite}
                 action={() => meStore.declineInvite(invite.leaderboardId)}
                 confirmationMessage="Are you sure you want to decline this invite?"
@@ -127,15 +116,9 @@ const Invites = observer(() => {
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && (
-                    <title>Invites - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading ? "Loading..." : "Invites - osu!chan"}
+            </title>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {loadingStatus === ResourceStatus.Loaded && (
                 <InvitesSurface>
@@ -143,9 +126,7 @@ const Invites = observer(() => {
                     {invites.map((invite) => (
                         <InviteRow invite={invite} />
                     ))}
-                    {invites.length === 0 && (
-                        <p>You currently have no pending invites...</p>
-                    )}
+                    {invites.length === 0 && <p>You currently have no pending invites...</p>}
                 </InvitesSurface>
             )}
         </>

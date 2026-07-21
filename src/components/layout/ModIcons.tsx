@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Tooltip } from "./Tooltip";
 import { formatModName } from "../../utils/formatting";
-import { ModsJson } from "../../store/models/profiles/types";
+import type { ModsJson } from "../../store/models/profiles/types";
 import { modAcronymsFromJsonMods } from "../../utils/osu";
 import { ModAcronym } from "../../store/models/common/enums";
 import { observer } from "mobx-react-lite";
@@ -12,10 +12,7 @@ const ModImage = styled.img`
     max-height: 100%;
 `;
 
-const DIFFICULTY_INCREASING_BLANKS = [
-    ModAcronym.Blinds,
-    ModAcronym.AccuracyChallenge,
-];
+const DIFFICULTY_INCREASING_BLANKS = [ModAcronym.Blinds, ModAcronym.AccuracyChallenge];
 
 const DIFFICULTY_DECREASING_BLANKS = [ModAcronym.Daycore];
 
@@ -26,60 +23,40 @@ const ModIcon = (props: ModIconProps) => {
 
     if (DIFFICULTY_INCREASING_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
+            <Tooltip content={formatModName(acronym)}>
                 <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
                     src={`/static/images/mods/blanks/DifficultyIncrease${
                         props.small ? "" : "@2x"
                     }.png`}
                 />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            </Tooltip>
         );
     }
 
     if (DIFFICULTY_DECREASING_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
+            <Tooltip content={formatModName(acronym)}>
                 <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
                     src={`/static/images/mods/blanks/DifficultyReduction${
                         props.small ? "" : "@2x"
                     }.png`}
                 />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            </Tooltip>
         );
     }
 
     if (FUN_BLANKS.includes(acronym as ModAcronym)) {
         return (
-            <>
-                <ModImage
-                    data-tip={formatModName(acronym)}
-                    data-for={`mod-${acronym}`}
-                    src={`/static/images/mods/blanks/Fun${
-                        props.small ? "" : "@2x"
-                    }.png`}
-                />
-                <Tooltip id={`mod-${acronym}`} />
-            </>
+            <Tooltip content={formatModName(acronym)}>
+                <ModImage src={`/static/images/mods/blanks/Fun${props.small ? "" : "@2x"}.png`} />
+            </Tooltip>
         );
     }
 
     return (
-        <>
-            <ModImage
-                data-tip={formatModName(acronym)}
-                data-for={`mod-${acronym}`}
-                src={`/static/images/mods/mod_${acronym}${
-                    props.small ? "" : "@2x"
-                }.png`}
-            />
-            <Tooltip id={`mod-${acronym}`} />
-        </>
+        <Tooltip content={formatModName(acronym)}>
+            <ModImage src={`/static/images/mods/mod_${acronym}${props.small ? "" : "@2x"}.png`} />
+        </Tooltip>
     );
 };
 

@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, Row, TimeAgo } from "../../components";
 import { Pie, PieChart, ResponsiveContainer } from "recharts";
-import { Score } from "../../store/models/profiles/types";
+import type { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
 
 const TeamScores = styled.div`
@@ -14,16 +14,17 @@ const TeamScores = styled.div`
 const ScoreRowWrapper = styled(Row)<ScoreRowWrapperProps>`
     padding: 0;
     align-items: unset;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         ${(props) =>
-            `url("https://assets.ppy.sh/beatmaps/${props.beatmapSetId}/covers/cover.jpg")`};
+            `url("https://assets.ppy.sh/beatmaps/${props.$beatmapSetId}/covers/cover.jpg")`};
     background-size: cover;
     text-shadow: 0 0 0.5em black;
     font-size: 0.9em;
 `;
 
 interface ScoreRowWrapperProps {
-    beatmapSetId: number;
+    $beatmapSetId: number;
 }
 
 const LeftContainer = styled.div`
@@ -153,12 +154,12 @@ const ScoreRow = observer((props: ScoreRowProps) => {
     const beatmap = score.beatmap!;
 
     return (
-        <ScoreRowWrapper beatmapSetId={beatmap.setId}>
+        <ScoreRowWrapper $beatmapSetId={beatmap.setId}>
             <LeftContainer>
                 <PlayerInfo>
                     <Avatar src={`https://a.ppy.sh/${user.id}`} />
                     <FlagContainer>
-                        <Flag countryCode={user.country} large />
+                        <Flag countryCode={user.country} $large />
                     </FlagContainer>
                     <Username>{user.username}</Username>
                 </PlayerInfo>
@@ -168,9 +169,7 @@ const ScoreRow = observer((props: ScoreRowProps) => {
                         <Artist>
                             <small>by</small> {beatmap.artist}
                         </Artist>
-                        <DifficultyName>
-                            {beatmap.difficultyName}
-                        </DifficultyName>
+                        <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     </MetadataContainer>
                     <ModsContainer>
                         <ModIcons small mods={score.modsJson} />
@@ -180,11 +179,7 @@ const ScoreRow = observer((props: ScoreRowProps) => {
             <ScoreInfo>
                 <AccuracyContainer>
                     <Accuracy>
-                        <NumberFormat
-                            value={score.accuracy}
-                            decimalPlaces={2}
-                        />
-                        %
+                        <NumberFormat value={score.accuracy} decimalPlaces={2} />%
                     </Accuracy>
                     <ScoreDate>
                         <TimeAgo datetime={score.date} />
@@ -192,10 +187,7 @@ const ScoreRow = observer((props: ScoreRowProps) => {
                 </AccuracyContainer>
                 <PerformanceContainer>
                     <Performance>
-                        <NumberFormat
-                            value={score.performanceTotal}
-                            decimalPlaces={0}
-                        />
+                        <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
                         pp
                     </Performance>
                     <Result>{formatScoreResult(score.result)}</Result>
@@ -211,20 +203,13 @@ interface ScoreRowProps {
 
 const ScoreChart = observer((props: ScoreChartProps) => {
     const scoreValues = props.topScores.map((score) => score.performanceTotal);
-    const weightedScores = scoreValues.map(
-        (value, index) => value * props.ppDecayBase ** index
-    );
+    const weightedScores = scoreValues.map((value, index) => value * props.ppDecayBase ** index);
     const topScoreTotal = weightedScores.reduce((acc, value) => acc + value, 0);
     const missingPp = props.teamPpTotal - topScoreTotal;
 
-    const mainScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal > 0.01
-    );
-    const otherScores = weightedScores.filter(
-        (score) => score / props.teamPpTotal <= 0.01
-    );
-    const otherScoresContribution =
-        otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
+    const mainScores = weightedScores.filter((score) => score / props.teamPpTotal > 0.01);
+    const otherScores = weightedScores.filter((score) => score / props.teamPpTotal <= 0.01);
+    const otherScoresContribution = otherScores.reduce((acc, score) => acc + score, 0) + missingPp;
     const data = mainScores
         .sort((a, b) => b - a)
         .map((score) => ({
@@ -251,12 +236,9 @@ const ScoreChart = observer((props: ScoreChartProps) => {
                     endAngle={-270}
                     label={(props) => {
                         const { name, percent } = props;
-                        return `${name}: ${(percent * 100).toLocaleString(
-                            "en",
-                            {
-                                maximumFractionDigits: 0,
-                            }
-                        )}%`;
+                        return `${name}: ${((percent ?? 0) * 100).toLocaleString("en", {
+                            maximumFractionDigits: 0,
+                        })}%`;
                     }}
                 />
             </PieChart>
@@ -281,9 +263,7 @@ const TeamScoreDetails = observer((props: TeamScoreDetailsProps) => {
                     <ScoreRow key={score.id} score={score} />
                 ))}
                 {props.scoresCount > 3 && (
-                    <ScoreCount>
-                        ...and {props.scoresCount - 3} more scores
-                    </ScoreCount>
+                    <ScoreCount>...and {props.scoresCount - 3} more scores</ScoreCount>
                 )}
             </TeamScores>
             <ScoreChartContainer>

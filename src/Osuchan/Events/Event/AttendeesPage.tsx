@@ -1,15 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Helmet } from "react-helmet";
-import { useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
-import {
-    Button,
-    LoadingPage,
-    Surface,
-    UnstyledLink,
-} from "../../../components";
+import { Button, LoadingPage, Surface, UnstyledLink } from "../../../components";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
 import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
@@ -55,8 +49,6 @@ const AttendeeAvatar = styled.img`
     border: 2px solid ${(props) => props.theme.colours.midground};
 `;
 
-
-
 const PaginationBar = styled.div`
     display: flex;
     align-items: center;
@@ -74,7 +66,6 @@ const PAGE_SIZE = 50;
 
 const AttendeesPage = observer(() => {
     const { slug } = useParams<{ slug: string }>();
-    const { url } = useRouteMatch();
     const store = useStore();
     const {
         event,
@@ -89,11 +80,11 @@ const AttendeesPage = observer(() => {
     const [offset, setOffset] = useState(0);
 
     useEffect(() => {
-        store.eventsStore.loadEvent(slug);
+        store.eventsStore.loadEvent(slug!);
     }, [store.eventsStore, slug]);
 
     useEffect(() => {
-        store.eventsStore.loadAttendees(slug, PAGE_SIZE, offset);
+        store.eventsStore.loadAttendees(slug!, PAGE_SIZE, offset);
     }, [store.eventsStore, slug, offset]);
 
     const outerTheme = useTheme();
@@ -109,7 +100,7 @@ const AttendeesPage = observer(() => {
 
     const themeColours = useMemo(
         () => (event?.themeColours ? { ...event.themeColours } : undefined),
-        [event]
+        [event],
     );
     useEffect(() => {
         if (themeColours) {
@@ -123,68 +114,54 @@ const AttendeesPage = observer(() => {
     }, [themeColours]);
 
     const isOrganiser =
-        meStore.user &&
-        event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
-
-    const eventUrl = url.replace(/\/attendees$/, "");
+        meStore.user && event?.organisers?.some((o) => o.id === meStore.user?.osuUserId);
 
     return (
         <>
-            <Helmet>
-                {loadingStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingStatus === ResourceStatus.Loaded && event && (
-                    <title>{event.name} - Attendees - osu!chan</title>
-                )}
-                {loadingStatus === ResourceStatus.Error && (
-                    <title>Event not found - osu!chan</title>
-                )}
-            </Helmet>
-
+            <title>
+                {loadingStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingStatus === ResourceStatus.Loaded && event
+                      ? `${event.name} - Attendees - osu!chan`
+                      : loadingStatus === ResourceStatus.Error
+                        ? "Event not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
 
-            {loadingStatus === ResourceStatus.Error && (
-                <h3>Event not found!</h3>
-            )}
+            {loadingStatus === ResourceStatus.Error && <h3>Event not found!</h3>}
 
             {loadingStatus === ResourceStatus.Loaded && event && (
                 <ThemeProvider theme={mergedTheme}>
                     <AttendeesSurface>
                         <PageHeader>
                             <Title>Attendees ({attendeesCount})</Title>
-                            <UnstyledLink to={eventUrl}>
+                            <UnstyledLink to="..">
                                 <Button type="button">&larr; Back to Event</Button>
                             </UnstyledLink>
                         </PageHeader>
 
-                        {loadingAttendeesStatus === ResourceStatus.Loading && (
-                            <LoadingPage />
-                        )}
+                        {loadingAttendeesStatus === ResourceStatus.Loading && <LoadingPage />}
 
                         {loadingAttendeesStatus === ResourceStatus.Loaded &&
                             eventAttendees.map((attendee) => (
                                 <AttendeeRow key={attendee.id}>
-                                    <UnstyledLink
-                                        to={`/users/${attendee.user.username}`}
-                                    >
+                                    <UnstyledLink to={`/users/${attendee.user.username}`}>
                                         <AttendeeAvatar
                                             src={`https://a.ppy.sh/${attendee.user.id}`}
                                             alt={attendee.user.username}
                                         />
-                                        <span>
-                                            {attendee.user.username}
-                                        </span>
+                                        <span>{attendee.user.username}</span>
                                     </UnstyledLink>
                                     {isOrganiser && (
                                         <Button
-                                            negative
+                                            $negative
                                             type="button"
                                             isLoading={isRemovingAttendee}
                                             action={() =>
                                                 store.eventsStore.removeAttendee(
-                                                    slug,
-                                                    attendee.user.id
+                                                    slug!,
+                                                    attendee.user.id,
                                                 )
                                             }
                                             confirmationMessage={`Remove ${attendee.user.username}?`}
@@ -197,31 +174,22 @@ const AttendeesPage = observer(() => {
 
                         <PaginationBar>
                             <CountInfo>
-                                Showing {offset + 1}–
-                                {Math.min(offset + PAGE_SIZE, attendeesCount)} of{" "}
-                                {attendeesCount}
+                                Showing {offset + 1}–{Math.min(offset + PAGE_SIZE, attendeesCount)}{" "}
+                                of {attendeesCount}
                             </CountInfo>
                             {attendeesCount > PAGE_SIZE && (
                                 <div style={{ display: "flex", gap: "8px" }}>
                                     <Button
                                         type="button"
                                         disabled={offset === 0}
-                                        action={() =>
-                                            setOffset(
-                                                Math.max(0, offset - PAGE_SIZE)
-                                            )
-                                        }
+                                        action={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
                                     >
                                         Previous
                                     </Button>
                                     <Button
                                         type="button"
-                                        disabled={
-                                            offset + PAGE_SIZE >= attendeesCount
-                                        }
-                                        action={() =>
-                                            setOffset(offset + PAGE_SIZE)
-                                        }
+                                        disabled={offset + PAGE_SIZE >= attendeesCount}
+                                        action={() => setOffset(offset + PAGE_SIZE)}
                                     >
                                         Next
                                     </Button>

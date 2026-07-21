@@ -1,5 +1,15 @@
 import { Gamemode } from "../common/enums";
-import { Beatmap, DifficultyCalculation, DifficultyValue, OsuUser, PerformanceCalculation, PerformanceValue, Score, ScoreFilter, UserStats } from "./types";
+import type {
+    Beatmap,
+    DifficultyCalculation,
+    DifficultyValue,
+    OsuUser,
+    PerformanceCalculation,
+    PerformanceValue,
+    Score,
+    ScoreFilter,
+    UserStats,
+} from "./types";
 
 export function osuUserFromJson(data: any): OsuUser {
     return {
@@ -13,14 +23,8 @@ export function osuUserFromJson(data: any): OsuUser {
 export function userStatsFromJson(data: any): UserStats {
     return {
         id: data["id"],
-        osuUser:
-            typeof data["user"] === "object"
-                ? osuUserFromJson(data["user"])
-                : null,
-        osuUserId:
-            typeof data["user"] === "object"
-                ? data["user"]["id"]
-                : data["user"],
+        osuUser: typeof data["user"] === "object" ? osuUserFromJson(data["user"]) : null,
+        osuUserId: typeof data["user"] === "object" ? data["user"]["id"] : data["user"],
         gamemode: data["gamemode"],
         playcount: data["playcount"],
         playtime: data["playtime"],
@@ -49,14 +53,8 @@ export function beatmapFromJson(data: any): Beatmap {
         gamemode: data["gamemode"],
         status: data["status"],
         creatorName: data["creator_name"],
-        creator:
-            typeof data["creator"] === "object"
-                ? osuUserFromJson(data["creator"])
-                : null,
-        creatorId:
-            typeof data["creator"] === "object"
-                ? data["creator"]["id"]
-                : data["creator"],
+        creator: typeof data["creator"] === "object" ? osuUserFromJson(data["creator"]) : null,
+        creatorId: typeof data["creator"] === "object" ? data["creator"]["id"] : data["creator"],
         bpm: data["bpm"],
         drainTime: data["drain_time"],
         totalTime: data["total_time"],
@@ -71,7 +69,11 @@ export function beatmapFromJson(data: any): Beatmap {
     };
 }
 
-export function scoreFromJson(data: any, defaultEngine: string | null = null, primaryPerformanceValue: string = "total"): Score {
+export function scoreFromJson(
+    data: any,
+    defaultEngine: string | null = null,
+    primaryPerformanceValue: string = "total",
+): Score {
     if (defaultEngine === null) {
         switch (data["gamemode"]) {
             case Gamemode.Standard:
@@ -88,7 +90,9 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
                 break;
         }
     }
-    const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(performanceCalculationFromJson);
+    const performanceCalculations: PerformanceCalculation[] = data["performance_calculations"].map(
+        performanceCalculationFromJson,
+    );
     performanceCalculations.sort((a, b) => {
         if (a.calculatorEngine === defaultEngine) {
             // If a is the default engine, sort it before b
@@ -104,22 +108,12 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
 
     return {
         id: data["id"],
-        beatmap:
-            typeof data["beatmap"] === "object"
-                ? beatmapFromJson(data["beatmap"])
-                : null,
-        beatmapId:
-            typeof data["beatmap"] === "object"
-                ? data["beatmap"]["id"]
-                : data["beatmap"],
+        beatmap: typeof data["beatmap"] === "object" ? beatmapFromJson(data["beatmap"]) : null,
+        beatmapId: typeof data["beatmap"] === "object" ? data["beatmap"]["id"] : data["beatmap"],
         userStats:
-            typeof data["user_stats"] === "object"
-                ? userStatsFromJson(data["user_stats"])
-                : null,
+            typeof data["user_stats"] === "object" ? userStatsFromJson(data["user_stats"]) : null,
         userStatsId:
-            typeof data["user_stats"] === "object"
-                ? data["user_stats"]["id"]
-                : data["user_stats"],
+            typeof data["user_stats"] === "object" ? data["user_stats"]["id"] : data["user_stats"],
         score: data["score"],
         statistics: data["statistics"],
         bestCombo: data["best_combo"],
@@ -134,8 +128,16 @@ export function scoreFromJson(data: any, defaultEngine: string | null = null, pr
         approachRate: data["approach_rate"],
         overallDifficulty: data["overall_difficulty"],
         result: data["result"],
-        performanceTotal: performanceCalculations.at(0)?.performanceValues.find((value) => value["name"] === primaryPerformanceValue)?.value ?? 0,
-        difficultyTotal: performanceCalculations.at(0)?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")?.value ?? 0,
+        performanceTotal:
+            performanceCalculations
+                .at(0)
+                ?.performanceValues.find((value) => value["name"] === primaryPerformanceValue)
+                ?.value ?? 0,
+        difficultyTotal:
+            performanceCalculations
+                .at(0)
+                ?.difficultyCalculation.difficultyValues.find((value) => value["name"] === "total")
+                ?.value ?? 0,
         performanceCalculations: performanceCalculations,
     };
 }
@@ -149,12 +151,8 @@ export function scoreFilterFromJson(data: any): ScoreFilter {
         newestBeatmapDate: data["newest_beatmap_date"]
             ? new Date(data["newest_beatmap_date"])
             : null,
-        oldestScoreDate: data["oldest_score_date"]
-            ? new Date(data["oldest_score_date"])
-            : null,
-        newestScoreDate: data["newest_score_date"]
-            ? new Date(data["newest_score_date"])
-            : null,
+        oldestScoreDate: data["oldest_score_date"] ? new Date(data["oldest_score_date"]) : null,
+        newestScoreDate: data["newest_score_date"] ? new Date(data["newest_score_date"]) : null,
         lowestAr: data["lowest_ar"],
         highestAr: data["highest_ar"],
         lowestOd: data["lowest_od"],

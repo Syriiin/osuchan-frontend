@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import {
     SimpleModal,
@@ -14,8 +13,8 @@ import {
     LoadingSection,
     Flag,
 } from "../../../components";
-import { OsuUser } from "../../../store/models/profiles/types";
-import { Invite } from "../../../store/models/leaderboards/types";
+import type { OsuUser } from "../../../store/models/profiles/types";
+import type { Invite } from "../../../store/models/leaderboards/types";
 import { ResourceStatus } from "../../../store/status";
 import { useAction, useAutorun, useStore } from "../../../utils/hooks";
 
@@ -60,7 +59,7 @@ const InviteRow = observer((props: InviteRowProps) => {
             <InviteMessage>{props.invite.message}</InviteMessage>
             <Button
                 type="button"
-                negative
+                $negative
                 isLoading={detailStore.isCancellingInvite}
                 action={() => detailStore.cancelInvite(osuUser.id)}
                 confirmationMessage="Are you sure you want to cancel this invite?"
@@ -99,7 +98,7 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
     };
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
             <SimpleModalTitle>Invite Players</SimpleModalTitle>
             <p>
                 Enter osu!profile URLs to invite players.
@@ -110,26 +109,22 @@ const InvitePlayerModal = (props: InvitePlayerModalProps) => {
                 <FormLabel>osu! Profile URL(s)</FormLabel>
                 <FormControl>
                     <TextField
-                        fullWidth
+                        $fullWidth
                         required
                         placeholder="https://osu.ppy.sh/users/5701575"
-                        onChange={(e) =>
-                            setInviteUserUrl(e.currentTarget.value)
-                        }
+                        onChange={(e) => setInviteUserUrl(e.currentTarget.value)}
                         value={inviteUserUrl}
                     />
                 </FormControl>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
                     <TextField
-                        fullWidth
-                        onChange={(e) =>
-                            setInviteMessage(e.currentTarget.value)
-                        }
+                        $fullWidth
+                        onChange={(e) => setInviteMessage(e.currentTarget.value)}
                         value={inviteMessage}
                     />
                 </FormControl>
-                <Button positive type="submit">
+                <Button $positive type="submit">
                     Invite
                 </Button>
             </form>
@@ -165,21 +160,16 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
 
     return (
-        <SimpleModal open={props.open} onClose={props.onClose}>
-            <Helmet>
-                {loadingInvitesStatus === ResourceStatus.Loading && (
-                    <title>Loading...</title>
-                )}
-                {loadingInvitesStatus === ResourceStatus.Loaded &&
-                    leaderboard && (
-                        <title>
-                            Manage Invites - {leaderboard.name} - osu!chan
-                        </title>
-                    )}
-                {loadingInvitesStatus === ResourceStatus.Error && (
-                    <title>Leaderboard not found - osu!chan</title>
-                )}
-            </Helmet>
+        <SimpleModal open={props.open} onClose={props.onClose} keepMounted>
+            <title>
+                {loadingInvitesStatus === ResourceStatus.Loading
+                    ? "Loading..."
+                    : loadingInvitesStatus === ResourceStatus.Loaded && leaderboard
+                      ? `Manage Invites - ${leaderboard.name} - osu!chan`
+                      : loadingInvitesStatus === ResourceStatus.Error
+                        ? "Leaderboard not found - osu!chan"
+                        : "osu!chan"}
+            </title>
             <SimpleModalTitle>Manage Invites</SimpleModalTitle>
 
             <Button
@@ -196,19 +186,13 @@ const ManageInvitesModal = observer((props: ManageInvitesModalProps) => {
                 ))}
             </InvitesList>
 
-            {loadingInvitesStatus === ResourceStatus.Loaded &&
-                invites.length === 0 && (
-                    <p>There are no pending invites for this leaderboard...</p>
-                )}
-
-            {loadingInvitesStatus === ResourceStatus.Loading && (
-                <LoadingSection />
+            {loadingInvitesStatus === ResourceStatus.Loaded && invites.length === 0 && (
+                <p>There are no pending invites for this leaderboard...</p>
             )}
 
-            <InvitePlayerModal
-                open={inviteModalOpen}
-                onClose={() => setInviteModalOpen(false)}
-            />
+            {loadingInvitesStatus === ResourceStatus.Loading && <LoadingSection />}
+
+            <InvitePlayerModal open={inviteModalOpen} onClose={() => setInviteModalOpen(false)} />
         </SimpleModal>
     );
 });

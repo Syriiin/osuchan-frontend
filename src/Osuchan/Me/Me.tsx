@@ -1,14 +1,12 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router";
 
 import Invites from "./Invites";
 
 const Me = () => (
-    <Switch>
-        <Route exact path="/me/invites">
-            <Invites />
-        </Route>
-        <Redirect to="/" />
-    </Switch>
+    <Routes>
+        <Route path="invites" element={<Invites />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
 );
 
 export default Me;

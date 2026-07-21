@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { LeaderboardAccessType } from "../../store/models/leaderboards/enums";
 import { Row } from "./Row";
-import { Leaderboard, Membership } from "../../store/models/leaderboards/types";
+import type { Leaderboard, Membership } from "../../store/models/leaderboards/types";
 import { NumberFormat } from "./NumberFormat";
 import { observer } from "mobx-react-lite";
 
@@ -50,43 +50,32 @@ const MembershipRank = styled.div`
 
 const MembershipPerformance = styled.div``;
 
-export const CommunityLeaderboardRow = observer(
-    (props: CommunityLeaderboardRowProps) => (
-        <Row hoverable>
-            <LeaderboardIconContainer>
-                <LeaderboardIcon src={props.leaderboard.iconUrl} />
-            </LeaderboardIconContainer>
-            <LeaderboardTitleContainer>
-                <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
-                <LeaderboardType>
-                    {props.leaderboard.accessType ===
-                        LeaderboardAccessType.Public && "PUBLIC"}
-                    {props.leaderboard.accessType ===
-                        LeaderboardAccessType.PublicInviteOnly && "INVITE-ONLY"}
-                    {props.leaderboard.accessType ===
-                        LeaderboardAccessType.Private && "PRIVATE"}
-                </LeaderboardType>
-                <LeaderboardSubtitle>
-                    {props.leaderboard.memberCount} members
-                </LeaderboardSubtitle>
-            </LeaderboardTitleContainer>
-            {props.membership && (
-                <MembershipInfoContainer>
-                    <MembershipRank>
-                        #{props.membership.rank.toLocaleString("en")}
-                    </MembershipRank>
-                    <MembershipPerformance>
-                        <NumberFormat
-                            value={props.membership.pp}
-                            decimalPlaces={0}
-                        />
-                        pp
-                    </MembershipPerformance>
-                </MembershipInfoContainer>
-            )}
-        </Row>
-    )
-);
+export const CommunityLeaderboardRow = observer((props: CommunityLeaderboardRowProps) => (
+    <Row $hoverable>
+        <LeaderboardIconContainer>
+            <LeaderboardIcon src={props.leaderboard.iconUrl} />
+        </LeaderboardIconContainer>
+        <LeaderboardTitleContainer>
+            <LeaderboardTitle>{props.leaderboard.name}</LeaderboardTitle>
+            <LeaderboardType>
+                {props.leaderboard.accessType === LeaderboardAccessType.Public && "PUBLIC"}
+                {props.leaderboard.accessType === LeaderboardAccessType.PublicInviteOnly &&
+                    "INVITE-ONLY"}
+                {props.leaderboard.accessType === LeaderboardAccessType.Private && "PRIVATE"}
+            </LeaderboardType>
+            <LeaderboardSubtitle>{props.leaderboard.memberCount} members</LeaderboardSubtitle>
+        </LeaderboardTitleContainer>
+        {props.membership && (
+            <MembershipInfoContainer>
+                <MembershipRank>#{props.membership.rank.toLocaleString("en")}</MembershipRank>
+                <MembershipPerformance>
+                    <NumberFormat value={props.membership.pp} decimalPlaces={0} />
+                    pp
+                </MembershipPerformance>
+            </MembershipInfoContainer>
+        )}
+    </Row>
+));
 
 interface CommunityLeaderboardRowProps {
     leaderboard: Leaderboard;
