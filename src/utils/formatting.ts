@@ -136,6 +136,19 @@ export function formatGamemodeNameShort(gamemodeId: Gamemode) {
     }
 }
 
+export function gamemodeIcon(gamemode: Gamemode): string {
+    switch (gamemode) {
+        case Gamemode.Standard:
+            return "/static/images/gamemodes/mode-osu.svg";
+        case Gamemode.Taiko:
+            return "/static/images/gamemodes/mode-taiko.svg";
+        case Gamemode.Catch:
+            return "/static/images/gamemodes/mode-catch.svg";
+        case Gamemode.Mania:
+            return "/static/images/gamemodes/mode-mania.svg";
+    }
+}
+
 export function formatCalculatorEngine(calculatorEngine: string) {
     switch (calculatorEngine) {
         case "osu.Game.Rulesets.Osu":

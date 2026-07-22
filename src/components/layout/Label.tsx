@@ -13,8 +13,6 @@ export const Label = styled.span<LabelProps>`
               : props.$positive
                 ? props.theme.colours.positive
                 : "#fff"};
-    margin-right: 5px;
-    margin-bottom: 5px;
 `;
 
 interface LabelProps {
@@ -26,4 +24,5 @@ interface LabelProps {
 export const LabelGroup = styled.div`
     display: flex;
     flex-wrap: wrap;
+    gap: 5px;
 `;
