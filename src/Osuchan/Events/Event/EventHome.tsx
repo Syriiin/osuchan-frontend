@@ -16,6 +16,7 @@ import { useStore } from "../../../utils/hooks";
 import { formatGamemodeNameShort } from "../../../utils/formatting";
 import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 import AddAttendeeModal from "./AddAttendeeModal";
+import ChallengesSection from "./ChallengesSection";
 import CreateLeaderboardModal from "./CreateLeaderboardModal";
 
 const EventSurface = styled(Surface)`
@@ -127,6 +128,9 @@ const EventHome = observer(() => {
         attendeesCount,
         eventLeaderboards,
         loadingLeaderboardsStatus,
+        challenges,
+        challengeScores,
+        loadingChallengesStatus,
         isDeletingLeaderboard,
     } = store.eventsStore;
     const meStore = store.meStore;
@@ -138,6 +142,7 @@ const EventHome = observer(() => {
         store.eventsStore.loadEvent(slug);
         store.eventsStore.loadAttendees(slug, MAX_VISIBLE_AVATARS);
         store.eventsStore.loadLeaderboards(slug);
+        store.eventsStore.loadChallenges(slug);
     }, [store.eventsStore, slug]);
 
     useEffect(() => {
@@ -291,6 +296,12 @@ const EventHome = observer(() => {
                         {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
                             eventLeaderboards.length === 0 && <p>No leaderboards yet.</p>}
                     </EventSurface>
+
+                    <ChallengesSection
+                        challenges={challenges}
+                        challengeScores={challengeScores}
+                        loadingStatus={loadingChallengesStatus}
+                    />
 
                     <AddAttendeeModal
                         open={addAttendeeModalOpen}

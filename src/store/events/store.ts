@@ -4,11 +4,19 @@ import http from "../../http";
 import notify from "../../notifications";
 
 import {
+    beatmapChallengeFromJson,
     eventFromJson,
     eventAttendeeFromJson,
     eventLeaderboardFromJson,
 } from "../models/events/deserialisers";
-import type { Event, EventAttendee, EventLeaderboard } from "../models/events/types";
+import { scoreFromJson } from "../models/profiles/deserialisers";
+import type {
+    BeatmapChallenge,
+    Event,
+    EventAttendee,
+    EventLeaderboard,
+} from "../models/events/types";
+import type { Score } from "../models/profiles/types";
 import { ResourceStatus, PaginatedResourceStatus } from "../status";
 
 export class EventsStore {
@@ -16,6 +24,8 @@ export class EventsStore {
     loadingAttendeesStatus = ResourceStatus.NotLoaded;
     attendeesCount = 0;
     loadingLeaderboardsStatus = ResourceStatus.NotLoaded;
+    loadingChallengesStatus = ResourceStatus.NotLoaded;
+    loadingChallengeScoresStatus = ResourceStatus.NotLoaded;
     isAddingAttendee = false;
     isRemovingAttendee = false;
     isUpdatingEvent = false;
@@ -29,6 +39,8 @@ export class EventsStore {
     readonly events = observable<Event>([]);
     readonly eventAttendees = observable<EventAttendee>([]);
     readonly eventLeaderboards = observable<EventLeaderboard>([]);
+    readonly challenges = observable<BeatmapChallenge>([]);
+    readonly challengeScores = observable.map<number, Score[]>();
 
     constructor() {
         makeAutoObservable(this, {
@@ -42,6 +54,8 @@ export class EventsStore {
             loadLeaderboards: flow,
             createLeaderboard: flow,
             deleteLeaderboard: flow,
+            loadChallenges: flow,
+            loadChallengeScores: flow,
         });
     }
 
@@ -52,6 +66,8 @@ export class EventsStore {
         this.eventAttendees.clear();
         this.attendeesCount = 0;
         this.eventLeaderboards.clear();
+        this.challenges.clear();
+        this.challengeScores.clear();
     };
 
     *loadEvents(): any {
@@ -228,5 +244,42 @@ export class EventsStore {
         }
 
         this.isDeletingLeaderboard = false;
+    }
+
+    *loadChallenges(slug: string): any {
+        this.loadingChallengesStatus = ResourceStatus.Loading;
+        this.challenges.clear();
+
+        try {
+            const response = yield http.get(`/api/events/${slug}/challenges`);
+            const challenges: BeatmapChallenge[] = response.data.map((data: any) =>
+                beatmapChallengeFromJson(data),
+            );
+            this.challenges.replace(challenges);
+            this.loadingChallengesStatus = ResourceStatus.Loaded;
+
+            yield Promise.all(challenges.map((c) => this.loadChallengeScores(slug, c.id)));
+        } catch (error: any) {
+            console.log(error);
+            this.loadingChallengesStatus = ResourceStatus.Error;
+        }
+    }
+
+    *loadChallengeScores(slug: string, challengeId: number): any {
+        try {
+            const response = yield http.get(`/api/events/${slug}/challenges/${challengeId}/scores`);
+            const challenge = this.challenges.find((c) => c.id === challengeId);
+            const beatmap = challenge?.beatmap ?? null;
+            const scores: Score[] = response.data.map((data: any) => {
+                const score = scoreFromJson(data);
+                if (beatmap) {
+                    score.beatmap = beatmap;
+                }
+                return score;
+            });
+            this.challengeScores.set(challengeId, scores);
+        } catch (error: any) {
+            console.log(error);
+        }
     }
 }

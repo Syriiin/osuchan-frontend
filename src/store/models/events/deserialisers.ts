@@ -1,6 +1,6 @@
-import { osuUserFromJson } from "../profiles/deserialisers";
+import { beatmapFromJson, osuUserFromJson } from "../profiles/deserialisers";
 import { leaderboardFromJson } from "../leaderboards/deserialisers";
-import type { Event, EventAttendee, EventLeaderboard } from "./types";
+import type { BeatmapChallenge, Event, EventAttendee, EventLeaderboard } from "./types";
 
 export function eventFromJson(data: any): Event {
     return {
@@ -31,5 +31,15 @@ export function eventLeaderboardFromJson(data: any): EventLeaderboard {
     return {
         id: data["id"],
         leaderboard: leaderboardFromJson(data["leaderboard"]),
+    };
+}
+
+export function beatmapChallengeFromJson(data: any): BeatmapChallenge {
+    return {
+        id: data["id"],
+        description: data["description"],
+        gamemode: data["gamemode"],
+        challengeType: data["challenge_type"],
+        beatmap: beatmapFromJson(data["beatmap"]),
     };
 }

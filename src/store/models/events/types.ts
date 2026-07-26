@@ -1,5 +1,6 @@
 import type { OsuUser } from "../profiles/types";
 import type { Leaderboard } from "../leaderboards/types";
+import type { Beatmap } from "../profiles/types";
 
 export interface Event {
     id: number;
@@ -27,4 +28,12 @@ export interface EventAttendeesPage {
 export interface EventLeaderboard {
     id: number;
     leaderboard: Leaderboard;
+}
+
+export interface BeatmapChallenge {
+    id: number;
+    description: string;
+    gamemode: number;
+    challengeType: string;
+    beatmap: Beatmap;
 }
