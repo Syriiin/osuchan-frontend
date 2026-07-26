@@ -6,6 +6,7 @@ import { LoadingPage, NumberFormat, ScoreModal, ShortTimeAgo, Surface } from "..
 import type { BeatmapChallenge } from "../../../store/models/events/types";
 import type { Score } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
+import { formatGamemodeName, formatGamemodeNameShort, gamemodeIcon } from "../../../utils/formatting";
 
 const EventSurface = styled(Surface)`
     margin: 20px auto;
@@ -45,11 +46,17 @@ const CardBody = styled.div`
     background-color: ${(props) => props.theme.colours.foreground};
 `;
 
-const BeatmapInfo = styled.div`
+const BeatmapInfo = styled.a`
+    display: block;
     font-size: 0.95em;
     font-weight: 600;
     line-height: 1.3;
     color: #fff;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const BeatmapCreator = styled.div`
@@ -61,6 +68,19 @@ const ChallengeMetaRow = styled.div`
     align-items: center;
     gap: 10px;
     margin-top: 6px;
+`;
+
+const GamemodeIcon = styled.img`
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+    vertical-align: middle;
+`;
+
+const GamemodeName = styled.span`
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.8em;
+    line-height: 1;
 `;
 
 const ChallengeTypeBadge = styled.span`
@@ -218,7 +238,11 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                         return (
                             <ChallengeCard key={challenge.id}>
                                 <CardBanner $setId={challenge.beatmap.setId}>
-                                    <BeatmapInfo>
+                                    <BeatmapInfo
+                                        href={`https://osu.ppy.sh/beatmapsets/${challenge.beatmap.setId}#${formatGamemodeNameShort(challenge.gamemode)}/${challenge.beatmap.id}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         {challenge.beatmap.artist} - {challenge.beatmap.title} [
                                         {challenge.beatmap.difficultyName}]
                                     </BeatmapInfo>
@@ -231,6 +255,13 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                                                 {challenge.description}
                                             </ChallengeDescription_>
                                         )}
+                                        <GamemodeIcon
+                                            src={gamemodeIcon(challenge.gamemode)}
+                                            alt=""
+                                        />
+                                        <GamemodeName>
+                                            {formatGamemodeName(challenge.gamemode)}
+                                        </GamemodeName>
                                         <ChallengeTypeBadge>
                                             {formatChallengeType(challenge.challengeType)}
                                         </ChallengeTypeBadge>
