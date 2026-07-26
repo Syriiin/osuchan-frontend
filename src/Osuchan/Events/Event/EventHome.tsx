@@ -3,17 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
-import {
-    AbsoluteDate,
-    Button,
-    CommunityLeaderboardRow,
-    LoadingPage,
-    Surface,
-    UnstyledLink,
-} from "../../../components";
+import { AbsoluteDate, Button, LoadingPage, Surface, UnstyledLink } from "../../../components";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
-import { formatGamemodeNameShort } from "../../../utils/formatting";
+import {
+    formatGamemodeName,
+    formatGamemodeNameShort,
+    gamemodeIcon,
+} from "../../../utils/formatting";
 import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 import AddAttendeeModal from "./AddAttendeeModal";
 import ChallengesSection from "./ChallengesSection";
@@ -103,16 +100,90 @@ const ExtraCount = styled.div`
     white-space: nowrap;
 `;
 
-const LeaderboardRow = styled.div`
+const LeaderboardCardGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    @media (min-width: 600px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: 900px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+`;
+
+const LeaderboardCard = styled.div`
+    background-color: ${(props) => props.theme.colours.foreground};
+    border-radius: 8px;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 5px 0;
+    flex-direction: column;
+    transition: background-color 0.15s;
+
+    &:hover {
+        background-color: ${(props) => props.theme.colours.pillow};
+    }
 
     > a {
         flex: 1;
+        display: flex;
+        flex-direction: column;
         text-decoration: none;
+        color: unset;
     }
+`;
+
+const LeaderboardCardIconWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    padding: 16px 16px 8px;
+`;
+
+const LeaderboardCardIcon = styled.img`
+    width: 64px;
+    height: 64px;
+    border-radius: 5px;
+    object-fit: contain;
+`;
+
+const LeaderboardCardBody = styled.div`
+    padding: 0 12px 12px;
+    text-align: center;
+    flex: 1;
+`;
+
+const LeaderboardCardName = styled.div`
+    font-weight: 700;
+    font-size: 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
+const LeaderboardGamemodeRow = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 4px;
+`;
+
+const LeaderboardGamemodeIcon = styled.img`
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
+`;
+
+const LeaderboardGamemodeName = styled.span`
+    font-size: 0.85em;
+    color: ${(props) => props.theme.colours.timber};
+`;
+
+const LeaderboardDeleteWrapper = styled.div`
+    padding: 8px 12px 12px;
+    text-align: center;
 `;
 
 const EventHome = observer(() => {
@@ -268,31 +339,66 @@ const EventHome = observer(() => {
                             )}
                         </SectionHeader>
                         {loadingLeaderboardsStatus === ResourceStatus.Loading && <LoadingPage />}
-                        {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
-                            eventLeaderboards.map((lb) => (
-                                <LeaderboardRow key={lb.id}>
-                                    <UnstyledLink
-                                        to={`/leaderboards/community/${formatGamemodeNameShort(
-                                            lb.leaderboard.gamemode,
-                                        )}/${lb.leaderboard.id}`}
-                                    >
-                                        <CommunityLeaderboardRow leaderboard={lb.leaderboard} />
-                                    </UnstyledLink>
-                                    {isOrganiser && (
-                                        <Button
-                                            $negative
-                                            type="button"
-                                            isLoading={isDeletingLeaderboard}
-                                            action={() =>
-                                                store.eventsStore.deleteLeaderboard(slug, lb.id)
-                                            }
-                                            confirmationMessage={`Delete leaderboard "${lb.leaderboard.name}"?`}
-                                        >
-                                            Delete
-                                        </Button>
-                                    )}
-                                </LeaderboardRow>
-                            ))}
+                        {loadingLeaderboardsStatus === ResourceStatus.Loaded && (
+                            <LeaderboardCardGrid>
+                                {[...eventLeaderboards]
+                                    .sort((a, b) => a.id - b.id)
+                                    .map((lb) => (
+                                        <LeaderboardCard key={lb.id}>
+                                            <UnstyledLink
+                                                to={`/leaderboards/community/${formatGamemodeNameShort(
+                                                    lb.leaderboard.gamemode,
+                                                )}/${lb.leaderboard.id}`}
+                                            >
+                                                <LeaderboardCardIconWrapper>
+                                                    <LeaderboardCardIcon
+                                                        src={
+                                                            lb.leaderboard.iconUrl ||
+                                                            "/static/icon.svg"
+                                                        }
+                                                    />
+                                                </LeaderboardCardIconWrapper>
+                                                <LeaderboardCardBody>
+                                                    <LeaderboardCardName>
+                                                        {lb.leaderboard.name}
+                                                    </LeaderboardCardName>
+                                                    <LeaderboardGamemodeRow>
+                                                        <LeaderboardGamemodeIcon
+                                                            src={gamemodeIcon(
+                                                                lb.leaderboard.gamemode,
+                                                            )}
+                                                            alt=""
+                                                        />
+                                                        <LeaderboardGamemodeName>
+                                                            {formatGamemodeName(
+                                                                lb.leaderboard.gamemode,
+                                                            )}
+                                                        </LeaderboardGamemodeName>
+                                                    </LeaderboardGamemodeRow>
+                                                </LeaderboardCardBody>
+                                            </UnstyledLink>
+                                            {isOrganiser && (
+                                                <LeaderboardDeleteWrapper>
+                                                    <Button
+                                                        $negative
+                                                        type="button"
+                                                        isLoading={isDeletingLeaderboard}
+                                                        action={() =>
+                                                            store.eventsStore.deleteLeaderboard(
+                                                                slug,
+                                                                lb.id,
+                                                            )
+                                                        }
+                                                        confirmationMessage={`Delete leaderboard "${lb.leaderboard.name}"?`}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                </LeaderboardDeleteWrapper>
+                                            )}
+                                        </LeaderboardCard>
+                                    ))}
+                            </LeaderboardCardGrid>
+                        )}
                         {loadingLeaderboardsStatus === ResourceStatus.Loaded &&
                             eventLeaderboards.length === 0 && <p>No leaderboards yet.</p>}
                     </EventSurface>
