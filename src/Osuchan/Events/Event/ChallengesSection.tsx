@@ -2,10 +2,23 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import styled from "styled-components";
 
-import { LoadingPage, NumberFormat, ScoreModal, ShortTimeAgo, Surface } from "../../../components";
+import {
+    Button,
+    LoadingPage,
+    NumberFormat,
+    ScoreModal,
+    ShortTimeAgo,
+    Surface,
+} from "../../../components";
 import type { BeatmapChallenge } from "../../../store/models/events/types";
 import type { Score } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
+import {
+    formatGamemodeName,
+    formatGamemodeNameShort,
+    gamemodeIcon,
+} from "../../../utils/formatting";
+import CreateChallengeModal from "./CreateChallengeModal";
 
 const EventSurface = styled(Surface)`
     margin: 20px auto;
@@ -13,8 +26,15 @@ const EventSurface = styled(Surface)`
     padding: 20px;
 `;
 
+const SectionHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+`;
+
 const SectionTitle = styled.h3`
-    margin: 0 0 15px 0;
+    margin: 0;
     font-size: 1.5em;
     font-weight: 700;
 `;
@@ -26,7 +46,7 @@ const CardGrid = styled.div`
 `;
 
 const ChallengeCard = styled.div`
-    background-color: ${(props) => props.theme.colours.pillow};
+    background-color: ${(props) => props.theme.colours.foreground};
     border-radius: 8px;
     overflow: hidden;
 `;
@@ -42,14 +62,19 @@ const CardBanner = styled.div<{ $setId: number }>`
 
 const CardBody = styled.div`
     padding: 10px 14px 14px;
-    background-color: ${(props) => props.theme.colours.foreground};
 `;
 
-const BeatmapInfo = styled.div`
+const BeatmapInfo = styled.a`
+    display: block;
     font-size: 0.95em;
     font-weight: 600;
     line-height: 1.3;
     color: #fff;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const BeatmapCreator = styled.div`
@@ -61,6 +86,32 @@ const ChallengeMetaRow = styled.div`
     align-items: center;
     gap: 10px;
     margin-top: 6px;
+`;
+
+const ModeTypeRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+`;
+
+const ModeGroup = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+`;
+
+const GamemodeIcon = styled.img`
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+    vertical-align: middle;
+`;
+
+const GamemodeName = styled.span`
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.8em;
+    line-height: 1;
 `;
 
 const ChallengeTypeBadge = styled.span`
@@ -185,10 +236,13 @@ const MiniScoreRow = observer(
                                 </>
                             )
                         ) : (
-                            <NumberFormat
-                                value={metricValue(score, challengeType)}
-                                decimalPlaces={0}
-                            />
+                            <>
+                                <NumberFormat
+                                    value={metricValue(score, challengeType)}
+                                    decimalPlaces={0}
+                                />{" "}
+                                {metricValue(score, challengeType) === 1 ? "miss" : "misses"}
+                            </>
                         )}
                     </MetricValue>
                     <TimeCell>
@@ -202,11 +256,19 @@ const MiniScoreRow = observer(
 );
 
 const ChallengesSection = observer((props: ChallengesSectionProps) => {
-    const { challenges, challengeScores, loadingStatus } = props;
+    const { challenges, challengeScores, loadingStatus, isOrganiser } = props;
+    const [createModalOpen, setCreateModalOpen] = useState(false);
 
     return (
         <EventSurface>
-            <SectionTitle>Challenges</SectionTitle>
+            <SectionHeader>
+                <SectionTitle>Challenges</SectionTitle>
+                {isOrganiser && (
+                    <Button type="button" action={() => setCreateModalOpen(true)}>
+                        Create Challenge
+                    </Button>
+                )}
+            </SectionHeader>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {loadingStatus === ResourceStatus.Loaded && challenges.length === 0 && (
                 <NoScores>No challenges yet.</NoScores>
@@ -218,7 +280,11 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                         return (
                             <ChallengeCard key={challenge.id}>
                                 <CardBanner $setId={challenge.beatmap.setId}>
-                                    <BeatmapInfo>
+                                    <BeatmapInfo
+                                        href={`https://osu.ppy.sh/beatmapsets/${challenge.beatmap.setId}#${formatGamemodeNameShort(challenge.gamemode)}/${challenge.beatmap.id}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         {challenge.beatmap.artist} - {challenge.beatmap.title} [
                                         {challenge.beatmap.difficultyName}]
                                     </BeatmapInfo>
@@ -231,10 +297,21 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                                                 {challenge.description}
                                             </ChallengeDescription_>
                                         )}
+                                    </ChallengeMetaRow>
+                                    <ModeTypeRow>
+                                        <ModeGroup>
+                                            <GamemodeIcon
+                                                src={gamemodeIcon(challenge.gamemode)}
+                                                alt=""
+                                            />
+                                            <GamemodeName>
+                                                {formatGamemodeName(challenge.gamemode)}
+                                            </GamemodeName>
+                                        </ModeGroup>
                                         <ChallengeTypeBadge>
                                             {formatChallengeType(challenge.challengeType)}
                                         </ChallengeTypeBadge>
-                                    </ChallengeMetaRow>
+                                    </ModeTypeRow>
                                 </CardBanner>
                                 <CardBody>
                                     {scores.slice(0, 5).map((score) => (
@@ -251,6 +328,12 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                     })}
                 </CardGrid>
             )}
+
+            <CreateChallengeModal
+                open={createModalOpen}
+                onClose={() => setCreateModalOpen(false)}
+                slug={props.slug}
+            />
         </EventSurface>
     );
 });
@@ -259,6 +342,8 @@ interface ChallengesSectionProps {
     challenges: BeatmapChallenge[];
     challengeScores: Map<number, Score[]>;
     loadingStatus: ResourceStatus;
+    isOrganiser?: boolean | null;
+    slug: string;
 }
 
 export default ChallengesSection;

@@ -163,7 +163,13 @@ export const ScoreModal = observer((props: ScoreModalProps) => {
                     <DifficultyName>{beatmap.difficultyName}</DifficultyName>
                     <Mapper>Mapset by {beatmap.creatorName}</Mapper>
                     <BeatmapDate>
-                        {beatmap.status === BeatmapStatus.Loved ? "Loved" : "Ranked"}{" "}
+                        {beatmap.status === BeatmapStatus.Loved
+                            ? "Loved"
+                            : [BeatmapStatus.Ranked, BeatmapStatus.Approved].includes(
+                                    beatmap.status,
+                                )
+                              ? "Ranked"
+                              : "Last updated"}{" "}
                         <TimeAgo datetime={beatmap.approvalDate} />
                     </BeatmapDate>
                     <ModsContainer>
