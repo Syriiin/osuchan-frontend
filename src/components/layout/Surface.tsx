@@ -7,7 +7,8 @@ export const Surface = styled.div`
 
 export const SurfaceHeaderContainer = styled.div`
     display: flex;
-    align-content: center;
+    align-items: center;
+    gap: 10px;
 `;
 
 export const SurfaceTitle = styled.h3`

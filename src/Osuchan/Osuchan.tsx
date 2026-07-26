@@ -10,6 +10,7 @@ import Me from "./Me/Me";
 import Navbar from "./Navbar";
 import Profiles from "./Profiles/Profiles";
 import EventsRoot from "./Events";
+import MinigamesRoot from "./Minigames";
 
 const OsuchanWrapper = styled.div`
     display: flex;
@@ -43,6 +44,7 @@ const Osuchan = () => {
                     <Route path="/users/*" element={<Profiles />} />
                     <Route path="/leaderboards/*" element={<LeaderboardsRoot />} />
                     <Route path="/events/*" element={<EventsRoot />} />
+                    <Route path="/minigames/*" element={<MinigamesRoot />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ContentWrapper>

@@ -59,6 +59,13 @@ const NavbarLink = styled(Link)<NavbarLinkProps>`
     }
 `;
 
+const BetaBadge = styled.span`
+    font-size: 0.5em;
+    vertical-align: super;
+    margin-left: 3px;
+    color: ${(props) => props.theme.colours.timber};
+`;
+
 interface NavbarLinkProps extends LinkProps {
     $active?: boolean;
 }
@@ -267,6 +274,12 @@ const Navbar = observer(() => {
                     </NavbarLink>
                     <NavbarLink to="/events" $active={location.pathname.startsWith("/events")}>
                         events
+                    </NavbarLink>
+                    <NavbarLink
+                        to="/minigames"
+                        $active={location.pathname.startsWith("/minigames")}
+                    >
+                        minigames<BetaBadge>beta</BetaBadge>
                     </NavbarLink>
                 </LinksContainer>
 

@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { configure } from "mobx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from "styled-components";
@@ -12,6 +13,8 @@ import LeaderboardDashboard from "./pages/LeaderboardDashboard";
 import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
 import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
+
+const queryClient = new QueryClient();
 
 configure({
     enforceActions: "always",
@@ -56,15 +59,17 @@ const AppWithContext = () => (
 );
 
 const App = () => (
-    <StoreContext.Provider value={new RootStore()}>
-        <StyledThemeProvider theme={osuchanTheme}>
-            <BrowserRouter>
-                <GlobalStyle />
-                <NotificationContainer hideProgressBar />
-                <AppWithContext />
-            </BrowserRouter>
-        </StyledThemeProvider>
-    </StoreContext.Provider>
+    <QueryClientProvider client={queryClient}>
+        <StoreContext.Provider value={new RootStore()}>
+            <StyledThemeProvider theme={osuchanTheme}>
+                <BrowserRouter>
+                    <GlobalStyle />
+                    <NotificationContainer hideProgressBar />
+                    <AppWithContext />
+                </BrowserRouter>
+            </StyledThemeProvider>
+        </StoreContext.Provider>
+    </QueryClientProvider>
 );
 
 export default App;
