@@ -88,6 +88,19 @@ const ChallengeMetaRow = styled.div`
     margin-top: 6px;
 `;
 
+const ModeTypeRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+`;
+
+const ModeGroup = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+`;
+
 const GamemodeIcon = styled.img`
     width: 16px;
     height: 16px;
@@ -223,10 +236,13 @@ const MiniScoreRow = observer(
                                 </>
                             )
                         ) : (
-                            <NumberFormat
-                                value={metricValue(score, challengeType)}
-                                decimalPlaces={0}
-                            />
+                            <>
+                                <NumberFormat
+                                    value={metricValue(score, challengeType)}
+                                    decimalPlaces={0}
+                                />{" "}
+                                {metricValue(score, challengeType) === 1 ? "miss" : "misses"}
+                            </>
                         )}
                     </MetricValue>
                     <TimeCell>
@@ -281,17 +297,21 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                                                 {challenge.description}
                                             </ChallengeDescription_>
                                         )}
-                                        <GamemodeIcon
-                                            src={gamemodeIcon(challenge.gamemode)}
-                                            alt=""
-                                        />
-                                        <GamemodeName>
-                                            {formatGamemodeName(challenge.gamemode)}
-                                        </GamemodeName>
+                                    </ChallengeMetaRow>
+                                    <ModeTypeRow>
+                                        <ModeGroup>
+                                            <GamemodeIcon
+                                                src={gamemodeIcon(challenge.gamemode)}
+                                                alt=""
+                                            />
+                                            <GamemodeName>
+                                                {formatGamemodeName(challenge.gamemode)}
+                                            </GamemodeName>
+                                        </ModeGroup>
                                         <ChallengeTypeBadge>
                                             {formatChallengeType(challenge.challengeType)}
                                         </ChallengeTypeBadge>
-                                    </ChallengeMetaRow>
+                                    </ModeTypeRow>
                                 </CardBanner>
                                 <CardBody>
                                     {scores.slice(0, 5).map((score) => (
