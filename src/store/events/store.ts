@@ -31,6 +31,7 @@ export class EventsStore {
     isUpdatingEvent = false;
     isCreatingLeaderboard = false;
     isDeletingLeaderboard = false;
+    isCreatingChallenge = false;
 
     eventsStatus = PaginatedResourceStatus.NotLoaded;
 
@@ -56,6 +57,7 @@ export class EventsStore {
             deleteLeaderboard: flow,
             loadChallenges: flow,
             loadChallengeScores: flow,
+            createChallenge: flow,
         });
     }
 
@@ -281,5 +283,27 @@ export class EventsStore {
         } catch (error: any) {
             console.log(error);
         }
+    }
+
+    *createChallenge(slug: string, data: Record<string, any>): any {
+        this.isCreatingChallenge = true;
+
+        try {
+            const response = yield http.post(`/api/events/${slug}/challenges`, data);
+            const challenge = beatmapChallengeFromJson(response.data);
+            this.challenges.push(challenge);
+            this.loadChallengeScores(slug, challenge.id);
+            notify.positive("Challenge created");
+        } catch (error: any) {
+            console.log(error);
+            const errorMessage = error.response?.data?.detail;
+            if (errorMessage) {
+                notify.negative(`Failed to create challenge: ${errorMessage}`);
+            } else {
+                notify.negative("Failed to create challenge");
+            }
+        }
+
+        this.isCreatingChallenge = false;
     }
 }

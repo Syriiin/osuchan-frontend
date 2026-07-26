@@ -2,11 +2,23 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import styled from "styled-components";
 
-import { LoadingPage, NumberFormat, ScoreModal, ShortTimeAgo, Surface } from "../../../components";
+import {
+    Button,
+    LoadingPage,
+    NumberFormat,
+    ScoreModal,
+    ShortTimeAgo,
+    Surface,
+} from "../../../components";
 import type { BeatmapChallenge } from "../../../store/models/events/types";
 import type { Score } from "../../../store/models/profiles/types";
 import { ResourceStatus } from "../../../store/status";
-import { formatGamemodeName, formatGamemodeNameShort, gamemodeIcon } from "../../../utils/formatting";
+import {
+    formatGamemodeName,
+    formatGamemodeNameShort,
+    gamemodeIcon,
+} from "../../../utils/formatting";
+import CreateChallengeModal from "./CreateChallengeModal";
 
 const EventSurface = styled(Surface)`
     margin: 20px auto;
@@ -14,8 +26,15 @@ const EventSurface = styled(Surface)`
     padding: 20px;
 `;
 
+const SectionHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+`;
+
 const SectionTitle = styled.h3`
-    margin: 0 0 15px 0;
+    margin: 0;
     font-size: 1.5em;
     font-weight: 700;
 `;
@@ -27,7 +46,7 @@ const CardGrid = styled.div`
 `;
 
 const ChallengeCard = styled.div`
-    background-color: ${(props) => props.theme.colours.pillow};
+    background-color: ${(props) => props.theme.colours.foreground};
     border-radius: 8px;
     overflow: hidden;
 `;
@@ -43,7 +62,6 @@ const CardBanner = styled.div<{ $setId: number }>`
 
 const CardBody = styled.div`
     padding: 10px 14px 14px;
-    background-color: ${(props) => props.theme.colours.foreground};
 `;
 
 const BeatmapInfo = styled.a`
@@ -222,11 +240,19 @@ const MiniScoreRow = observer(
 );
 
 const ChallengesSection = observer((props: ChallengesSectionProps) => {
-    const { challenges, challengeScores, loadingStatus } = props;
+    const { challenges, challengeScores, loadingStatus, isOrganiser } = props;
+    const [createModalOpen, setCreateModalOpen] = useState(false);
 
     return (
         <EventSurface>
-            <SectionTitle>Challenges</SectionTitle>
+            <SectionHeader>
+                <SectionTitle>Challenges</SectionTitle>
+                {isOrganiser && (
+                    <Button type="button" action={() => setCreateModalOpen(true)}>
+                        Create Challenge
+                    </Button>
+                )}
+            </SectionHeader>
             {loadingStatus === ResourceStatus.Loading && <LoadingPage />}
             {loadingStatus === ResourceStatus.Loaded && challenges.length === 0 && (
                 <NoScores>No challenges yet.</NoScores>
@@ -282,6 +308,12 @@ const ChallengesSection = observer((props: ChallengesSectionProps) => {
                     })}
                 </CardGrid>
             )}
+
+            <CreateChallengeModal
+                open={createModalOpen}
+                onClose={() => setCreateModalOpen(false)}
+                slug={props.slug}
+            />
         </EventSurface>
     );
 });
@@ -290,6 +322,8 @@ interface ChallengesSectionProps {
     challenges: BeatmapChallenge[];
     challengeScores: Map<number, Score[]>;
     loadingStatus: ResourceStatus;
+    isOrganiser?: boolean | null;
+    slug: string;
 }
 
 export default ChallengesSection;

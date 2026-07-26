@@ -301,6 +301,8 @@ const EventHome = observer(() => {
                         challenges={challenges}
                         challengeScores={challengeScores}
                         loadingStatus={loadingChallengesStatus}
+                        isOrganiser={isOrganiser}
+                        slug={slug}
                     />
 
                     <AddAttendeeModal
