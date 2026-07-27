@@ -232,10 +232,9 @@ const LobbyRow = (props: LobbyRowProps) => {
                             <IconLeft icon={faEye} fixedWidth /> Spectate
                         </Button>
                     </UnstyledLink>
-                    {isJoinable && (
+                    {isJoinable && store.meStore.isAuthenticated ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Button
-                                disabled={!store.meStore.isAuthenticated}
                                 isLoading={
                                     joinMutation.isPending && joinMutation.variables === minigame.id
                                 }
@@ -244,7 +243,11 @@ const LobbyRow = (props: LobbyRowProps) => {
                                 <IconLeft icon={faArrowRightToBracket} fixedWidth /> Join
                             </Button>
                         </div>
-                    )}
+                    ) : isJoinable && !store.meStore.isAuthenticated ? (
+                        <Button as={UnstyledLink} to="/osuauth/login">
+                            <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login to join
+                        </Button>
+                    ) : null}
                 </ButtonRow>
             </LobbyActions>
         </Row>
@@ -300,12 +303,15 @@ const MinigameList = observer(() => {
                             Minigames
                             <BetaBadge>Closed beta for COE 2026</BetaBadge>
                         </SurfaceTitle>
-                        <Button
-                            action={() => setCreateModalOpen(true)}
-                            disabled={!meStore.isAuthenticated}
-                        >
-                            <IconLeft icon={faPlus} fixedWidth /> Create Lobby
-                        </Button>
+                        {meStore.isAuthenticated ? (
+                            <Button action={() => setCreateModalOpen(true)}>
+                                <IconLeft icon={faPlus} fixedWidth /> Create Lobby
+                            </Button>
+                        ) : (
+                            <Button as={UnstyledLink} to="/osuauth/login">
+                                <IconLeft icon={faPlus} fixedWidth /> Login to create a lobby
+                            </Button>
+                        )}
                         <Button as={UnstyledLink} to="/minigames/history">
                             <IconLeft icon={faClockRotateLeft} fixedWidth /> History
                         </Button>

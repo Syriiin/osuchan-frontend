@@ -12,7 +12,14 @@ import {
     faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Button, Label, LoadingSection, ShortTimeAgo, Surface } from "../../components";
+import {
+    Button,
+    Label,
+    LoadingSection,
+    ShortTimeAgo,
+    Surface,
+    UnstyledLink,
+} from "../../components";
 import { ScoreModal } from "../../components/layout/ScoreModal";
 import { ModIcons } from "../../components/layout/ModIcons";
 import {
@@ -418,6 +425,13 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
     const currentGame = useCurrentGame();
     const isInOtherGame = currentGame !== null && currentGame.id !== minigame.id;
     const canJoin =
+        meStore.isAuthenticated &&
+        playerTeamId === null &&
+        !isInOtherGame &&
+        (minigame.status === MinigameStatus.Lobby ||
+            minigame.status === MinigameStatus.WaitingToStart);
+    const couldJoin =
+        !meStore.isAuthenticated &&
         playerTeamId === null &&
         !isInOtherGame &&
         (minigame.status === MinigameStatus.Lobby ||
@@ -474,6 +488,12 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
                                     action={() => joinMutation.mutate(minigame.id)}
                                 >
                                     <IconLeft icon={faArrowRightToBracket} fixedWidth /> Join
+                                </Button>
+                            )}
+                            {couldJoin && (
+                                <Button as={UnstyledLink} to="/osuauth/login">
+                                    <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login to
+                                    join
                                 </Button>
                             )}
                             {canLeave && (
