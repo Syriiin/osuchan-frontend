@@ -187,33 +187,37 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     onChange={(e) => setPresetName(e.currentTarget.value)}
                 />
             </FormControl>
-            <SaveNewButton
-                isLoading={meStore.isCreatingScoreFilterPreset}
-                $positive
-                type="button"
-                action={handleSavePreset}
-            >
-                Save New Preset
-            </SaveNewButton>
-            {preset !== null && (
+            {meStore.isAuthenticated && (
                 <>
-                    <SaveButton
-                        isLoading={meStore.isUpdatingScoreFilterPreset}
+                    <SaveNewButton
+                        isLoading={meStore.isCreatingScoreFilterPreset}
                         $positive
                         type="button"
-                        action={handleUpdatePreset}
+                        action={handleSavePreset}
                     >
-                        Save Preset
-                    </SaveButton>
-                    <DeleteButton
-                        isLoading={meStore.isDeletingScoreFilterPreset}
-                        $negative
-                        type="button"
-                        action={handleDeletePreset}
-                        confirmationMessage="Are you sure you want to delete this preset?"
-                    >
-                        Delete Preset
-                    </DeleteButton>
+                        Save New Preset
+                    </SaveNewButton>
+                    {preset !== null && (
+                        <>
+                            <SaveButton
+                                isLoading={meStore.isUpdatingScoreFilterPreset}
+                                $positive
+                                type="button"
+                                action={handleUpdatePreset}
+                            >
+                                Save Preset
+                            </SaveButton>
+                            <DeleteButton
+                                isLoading={meStore.isDeletingScoreFilterPreset}
+                                $negative
+                                type="button"
+                                action={handleDeletePreset}
+                                confirmationMessage="Are you sure you want to delete this preset?"
+                            >
+                                Delete Preset
+                            </DeleteButton>
+                        </>
+                    )}
                 </>
             )}
 

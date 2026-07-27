@@ -418,6 +418,7 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
     const currentGame = useCurrentGame();
     const isInOtherGame = currentGame !== null && currentGame.id !== minigame.id;
     const canJoin =
+        meStore.isAuthenticated &&
         playerTeamId === null &&
         !isInOtherGame &&
         (minigame.status === MinigameStatus.Lobby ||
