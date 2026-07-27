@@ -16,6 +16,7 @@ import type {
     EventAttendee,
     EventLeaderboard,
 } from "../models/events/types";
+import { Gamemode } from "../models/common/enums";
 import type { Score } from "../models/profiles/types";
 import { ResourceStatus, PaginatedResourceStatus } from "../status";
 
@@ -42,6 +43,7 @@ export class EventsStore {
     readonly eventLeaderboards = observable<EventLeaderboard>([]);
     readonly challenges = observable<BeatmapChallenge>([]);
     readonly challengeScores = observable.map<number, Score[]>();
+    readonly leaderboardScores = observable.map<number, Score[]>();
 
     constructor() {
         makeAutoObservable(this, {
@@ -57,6 +59,7 @@ export class EventsStore {
             deleteLeaderboard: flow,
             loadChallenges: flow,
             loadChallengeScores: flow,
+            loadLeaderboardScores: flow,
             createChallenge: flow,
         });
     }
@@ -70,6 +73,7 @@ export class EventsStore {
         this.eventLeaderboards.clear();
         this.challenges.clear();
         this.challengeScores.clear();
+        this.leaderboardScores.clear();
     };
 
     *loadEvents(): any {
@@ -199,9 +203,40 @@ export class EventsStore {
             );
             this.eventLeaderboards.replace(leaderboards);
             this.loadingLeaderboardsStatus = ResourceStatus.Loaded;
+
+            yield Promise.all(
+                leaderboards.map((lb) =>
+                    this.loadLeaderboardScores(
+                        lb.leaderboard.id,
+                        lb.leaderboard.gamemode,
+                        lb.leaderboard.calculatorEngine,
+                        lb.leaderboard.primaryPerformanceValue,
+                    ),
+                ),
+            );
         } catch (error: any) {
             console.log(error);
             this.loadingLeaderboardsStatus = ResourceStatus.Error;
+        }
+    }
+
+    *loadLeaderboardScores(
+        leaderboardId: number,
+        gamemode: Gamemode,
+        calculatorEngine: string,
+        primaryPerformanceValue: string,
+    ): any {
+        try {
+            const response = yield http.get(
+                `/api/leaderboards/community/${gamemode}/${leaderboardId}/scores`,
+                { params: { limit: 5 } },
+            );
+            const scores: Score[] = response.data.map((data: any) =>
+                scoreFromJson(data, calculatorEngine, primaryPerformanceValue),
+            );
+            this.leaderboardScores.set(leaderboardId, scores);
+        } catch (error: any) {
+            console.log(error);
         }
     }
 
