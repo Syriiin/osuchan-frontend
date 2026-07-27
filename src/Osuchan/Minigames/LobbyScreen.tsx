@@ -413,7 +413,7 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
         )
             return true;
         if (minigame.startTime !== null && minigame.startTime <= new Date()) {
-            const gameLength = (minigame.config.game_length as number) ?? 0;
+            const gameLength = (minigame.config.game_length as number) ?? 3600;
             const endTime = new Date(minigame.startTime.getTime() + gameLength * 1000);
             if (new Date() < endTime) return true;
         }

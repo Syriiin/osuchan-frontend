@@ -9,7 +9,6 @@ import {
     SimpleModal,
     SimpleModalTitle,
     Surface,
-    TextInput,
     Tooltip,
 } from "../../../components";
 import { ScoreModal } from "../../../components/layout/ScoreModal";
@@ -214,9 +213,8 @@ const LockoutBingoGame = (props: LockoutBingoGameProps) => {
     const endTime = useMemo(() => {
         if (minigame.endTime !== null) return minigame.endTime;
         if (minigame.startTime === null) return null;
-        const gameLen = (minigame.config.game_length as number) ?? 0;
-        return new Date(minigame.startTime.getTime() + gameLen * 1000);
-    }, [minigame.startTime, minigame.endTime, minigame.config.game_length]);
+        return new Date(minigame.startTime.getTime() + 3600 * 1000);
+    }, [minigame.startTime, minigame.endTime]);
 
     const [remainingSeconds, setRemainingSeconds] = useState(0);
 
@@ -348,19 +346,17 @@ const LockoutBingoSettings = (props: LockoutBingoSettingsProps) => {
     const { open, onClose, minigame } = props;
     const updateMutation = useUpdateSettings();
 
-    const [gameLength, setGameLength] = useState((minigame.config.game_length as number) ?? 3600);
     const [gridSize, setGridSize] = useState((minigame.config.grid_size as number) ?? 3);
 
     useEffect(() => {
-        setGameLength((minigame.config.game_length as number) ?? 3600);
         setGridSize((minigame.config.grid_size as number) ?? 3);
-    }, [minigame.config.game_length, minigame.config.grid_size]);
+    }, [minigame.config.grid_size]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await updateMutation.mutateAsync({
             id: minigame.id,
-            settings: { game_length: gameLength, grid_size: gridSize },
+            settings: { grid_size: gridSize },
         });
         onClose();
     };
@@ -370,15 +366,6 @@ const LockoutBingoSettings = (props: LockoutBingoSettingsProps) => {
             <SimpleModalTitle>Settings</SimpleModalTitle>
             <SettingsDescription>Minigame: {formatGameType(minigame.gameType)}</SettingsDescription>
             <form onSubmit={handleSubmit}>
-                <FormLabel>Game Length (seconds)</FormLabel>
-                <TextInput
-                    $fullWidth
-                    type="number"
-                    required
-                    value={gameLength}
-                    onChange={(e) => setGameLength(Number(e.currentTarget.value))}
-                />
-
                 <FormLabel>Grid Size</FormLabel>
                 <FormControl>
                     <Select
@@ -405,7 +392,7 @@ const lockoutBingo: MinigameImplementation = {
     label: "Lockout Bingo",
     GameComponent: LockoutBingoGame,
     SettingsComponent: LockoutBingoSettings,
-    defaultSettings: { game_length: 3600, grid_size: 3 },
+    defaultSettings: { grid_size: 3 },
 };
 
 export default lockoutBingo;
