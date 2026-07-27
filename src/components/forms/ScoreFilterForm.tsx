@@ -187,7 +187,7 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                     onChange={(e) => setPresetName(e.currentTarget.value)}
                 />
             </FormControl>
-            {meStore.isAuthenticated && (
+            {meStore.isAuthenticated ? (
                 <>
                     <SaveNewButton
                         isLoading={meStore.isCreatingScoreFilterPreset}
@@ -219,6 +219,10 @@ export const ScoreFilterForm = observer((props: ScoreFilterFormProps) => {
                         </>
                     )}
                 </>
+            ) : (
+                <FormControl>
+                    <a href="/osuauth/login">Login to save score filter presets</a>
+                </FormControl>
             )}
 
             {/* Beatmap status */}
