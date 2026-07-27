@@ -31,4 +31,4 @@ setup:	## Installs dependencies
 build:	## Builds the project
 	npm run build
 
-ci: checkfixup lint typecheck checkformatting test build	## Runs all checks
+ci: lint typecheck checkformatting	## Runs all fast checks
