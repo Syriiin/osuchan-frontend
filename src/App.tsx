@@ -10,6 +10,7 @@ import { osuchanTheme } from "./osuchanTheme";
 
 import Osuchan from "./Osuchan/Osuchan";
 import LeaderboardDashboard from "./pages/LeaderboardDashboard";
+import EventDashboard from "./pages/EventDashboard";
 import { RootStore, StoreContext } from "./store";
 import PPRaceDashboard from "./pages/PPRaceDashboard";
 import COEPPRaceDashboard from "./pages/COEPPRaceDashboard";
@@ -54,6 +55,7 @@ const AppWithContext = () => (
         />
         <Route path="/ppraces/:ppraceId/dashboard" element={<PPRaceDashboard />} />
         <Route path="/ppraces/:ppraceId/coe-dashboard" element={<COEPPRaceDashboard />} />
+        <Route path="/events/:slug/dashboard" element={<EventDashboard />} />
         <Route path="*" element={<Osuchan />} />
     </Routes>
 );
