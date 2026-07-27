@@ -3,7 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
-import { AbsoluteDate, Button, LoadingPage, Surface, UnstyledLink } from "../../../components";
+import {
+    AbsoluteDate,
+    Button,
+    LoadingPage,
+    NumberFormat,
+    ScoreModal,
+    Surface,
+    UnstyledLink,
+} from "../../../components";
+import type { Score } from "../../../store/models/profiles/types";
+import { ShortTimeAgo } from "../../../components/layout/TimeAgo";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
 import {
@@ -120,11 +130,6 @@ const LeaderboardCard = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: background-color 0.15s;
-
-    &:hover {
-        background-color: ${(props) => props.theme.colours.pillow};
-    }
 
     > a {
         flex: 1;
@@ -132,6 +137,11 @@ const LeaderboardCard = styled.div`
         flex-direction: column;
         text-decoration: none;
         color: unset;
+        transition: background-color 0.15s;
+
+        &:hover {
+            background-color: ${(props) => props.theme.colours.pillow};
+        }
     }
 `;
 
@@ -151,7 +161,6 @@ const LeaderboardCardIcon = styled.img`
 const LeaderboardCardBody = styled.div`
     padding: 0 12px 12px;
     text-align: center;
-    flex: 1;
 `;
 
 const LeaderboardCardName = styled.div`
@@ -186,6 +195,85 @@ const LeaderboardDeleteWrapper = styled.div`
     text-align: center;
 `;
 
+const ScoreRow = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+        background-color: ${(props) => props.theme.colours.midground};
+    }
+`;
+
+const ScoreRank = styled.span`
+    font-size: 0.8em;
+    font-weight: 600;
+    color: ${(props) => props.theme.colours.timber};
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+`;
+
+const ScoreAvatar = styled.img`
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    flex-shrink: 0;
+`;
+
+const ScoreUsername = styled.span`
+    font-size: 0.85em;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
+const ScoreTime = styled.span`
+    font-size: 0.8em;
+    color: ${(props) => props.theme.colours.timber};
+    white-space: nowrap;
+`;
+
+const ScorePpValue = styled.span`
+    font-size: 0.85em;
+    font-weight: 600;
+    white-space: nowrap;
+`;
+
+const NoScores = styled.p`
+    color: ${(props) => props.theme.colours.timber};
+    font-size: 0.8em;
+    margin: 4px 12px 8px;
+`;
+
+const LbScoreRow = ({ score, rank }: { score: Score; rank: number }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const userStats = score.userStats!;
+    const osuUser = userStats.osuUser!;
+
+    return (
+        <>
+            <ScoreRow onClick={() => setModalOpen(true)}>
+                <ScoreRank>#{rank}</ScoreRank>
+                <ScoreAvatar src={`https://a.ppy.sh/${userStats.osuUserId}`} />
+                <ScoreUsername>{osuUser.username}</ScoreUsername>
+                <ScoreTime>
+                    <ShortTimeAgo date={score.date} />
+                </ScoreTime>
+                <ScorePpValue>
+                    <NumberFormat value={score.performanceTotal} decimalPlaces={0} />
+                    pp
+                </ScorePpValue>
+            </ScoreRow>
+            <ScoreModal score={score} open={modalOpen} onClose={() => setModalOpen(false)} />
+        </>
+    );
+};
+
 const EventHome = observer(() => {
     const params = useParams<{ slug: string }>();
     const slug = params.slug!;
@@ -203,6 +291,7 @@ const EventHome = observer(() => {
         challengeScores,
         loadingChallengesStatus,
         isDeletingLeaderboard,
+        leaderboardScores,
     } = store.eventsStore;
     const meStore = store.meStore;
 
@@ -377,6 +466,21 @@ const EventHome = observer(() => {
                                                     </LeaderboardGamemodeRow>
                                                 </LeaderboardCardBody>
                                             </UnstyledLink>
+                                            {(leaderboardScores.get(lb.leaderboard.id) ?? [])
+                                                .length > 0 ? (
+                                                leaderboardScores
+                                                    .get(lb.leaderboard.id)!
+                                                    .slice(0, 5)
+                                                    .map((score, i) => (
+                                                        <LbScoreRow
+                                                            key={score.id}
+                                                            score={score}
+                                                            rank={i + 1}
+                                                        />
+                                                    ))
+                                            ) : (
+                                                <NoScores>No scores yet.</NoScores>
+                                            )}
                                             {isOrganiser && (
                                                 <LeaderboardDeleteWrapper>
                                                     <Button
