@@ -7,6 +7,8 @@ export function formatGameType(gameType: string): string {
             return "First to N";
         case "lockout_bingo":
             return "Lockout Bingo";
+        case "battle_royale":
+            return "Battle Royale";
         default:
             return gameType;
     }

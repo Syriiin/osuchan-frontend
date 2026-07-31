@@ -575,9 +575,11 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
                                                         {winnerTeamId === t.id && (
                                                             <WinnerText>Winner</WinnerText>
                                                         )}
-                                                        <PlayerPoints>
-                                                            {player.points} pts
-                                                        </PlayerPoints>
+                                                        {gameActive && (
+                                                            <PlayerPoints>
+                                                                {player.points} pts
+                                                            </PlayerPoints>
+                                                        )}
                                                     </PointsWrapper>
                                                 </PlayerRow>
                                             );
@@ -604,7 +606,9 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
                                             <TeamHeader>
                                                 <TeamName>
                                                     {team.name}
-                                                    <TeamPoints>{team.points} pts</TeamPoints>
+                                                    {gameActive && (
+                                                        <TeamPoints>{team.points} pts</TeamPoints>
+                                                    )}
                                                     {winnerTeamId === team.id && (
                                                         <WinnerText>Winner</WinnerText>
                                                     )}
@@ -657,9 +661,11 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
                                                                     </HostLabel>
                                                                 )}
                                                             </PlayerName>
-                                                            <PlayerPoints>
-                                                                {player.points} pts
-                                                            </PlayerPoints>
+                                                            {gameActive && (
+                                                                <PlayerPoints>
+                                                                    {player.points} pts
+                                                                </PlayerPoints>
+                                                            )}
                                                         </PlayerRow>
                                                     ))}
                                                 {team.players.length === 0 && (
