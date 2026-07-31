@@ -112,6 +112,28 @@ const BeatmapLine = styled.div`
     font-size: 0.95em;
 `;
 
+const BeatmapMods = styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const BeatmapModsInner = styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 16px;
+`;
+
+const FreeModLabel = styled.span`
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+`;
+
 const BeatmapId = styled.span`
     position: absolute;
     right: 0;
@@ -478,10 +500,19 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                                             {viewBeatmap.artist} - {viewBeatmap.title} [
                                             {viewBeatmap.difficultyName}]
                                         </a>
-                                        <ModIcons
-                                            small
-                                            mods={modsJsonFromModAcronyms(viewRound.allowed_mods)}
-                                        />
+                                        {viewRound.allowed_mods.length > 0 && (
+                                            <BeatmapMods>
+                                                <FreeModLabel>FreeMods</FreeModLabel>
+                                                <BeatmapModsInner>
+                                                    <ModIcons
+                                                        small
+                                                        mods={modsJsonFromModAcronyms(
+                                                            viewRound.allowed_mods,
+                                                        )}
+                                                    />
+                                                </BeatmapModsInner>
+                                            </BeatmapMods>
+                                        )}
                                     </>
                                 ) : (
                                     <span>Beatmap {viewRound.beatmap_id}</span>
@@ -677,6 +708,13 @@ const SettingsValidation = styled.p`
     margin: 8px 0 0;
 `;
 
+const SettingsHint = styled.p`
+    font-size: 0.8em;
+    color: ${(props) => props.theme.colours.timber};
+    opacity: 0.7;
+    margin: 6px 0 0;
+`;
+
 const BeatmapsLabel = styled(FormLabel)`
     margin-bottom: 10px;
 `;
@@ -798,6 +836,9 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                                 value={row.mods}
                                 onChange={(mods) => updateRowMods(index, mods)}
                             />
+                            <SettingsHint>
+                                Freemod — these mods are optional, players may use any or none.
+                            </SettingsHint>
                             <SettingsRowPreview>
                                 {preview !== undefined && (
                                     <>
