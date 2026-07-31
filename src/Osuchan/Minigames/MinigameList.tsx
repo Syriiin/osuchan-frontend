@@ -320,7 +320,9 @@ const MinigameList = observer(() => {
                     {isLoading && <LoadingSection />}
 
                     {!isLoading && !hasAny && (
-                        <EmptyState>No lobbies yet. Create one to get started!</EmptyState>
+                        <EmptyState>
+                            No lobbies currently open. Create one to get started!
+                        </EmptyState>
                     )}
 
                     {joinable.length > 0 && (

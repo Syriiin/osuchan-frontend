@@ -110,7 +110,7 @@ const CreateLobbyModal = (props: CreateLobbyModalProps) => {
                         value={gameType}
                         onChange={(value) => setGameType(value)}
                         options={Object.values(registry)
-                            .filter((impl) => impl.gameType === "lockout_bingo")
+                            .filter((impl) => impl.gameType !== "first_to_n")
                             .map((impl) => ({
                                 value: impl.gameType,
                                 label: impl.label,
