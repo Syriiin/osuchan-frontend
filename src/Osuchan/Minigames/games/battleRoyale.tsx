@@ -112,6 +112,15 @@ const BeatmapLine = styled.div`
     font-size: 0.95em;
 `;
 
+const BeatmapId = styled.span`
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 0.75em;
+    opacity: 0.5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+`;
+
 const FinalisingBanner = styled.div`
     text-align: center;
     padding: 15px;
@@ -461,10 +470,14 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                             <BeatmapLine>
                                 {viewBeatmap !== undefined ? (
                                     <>
-                                        <span>
+                                        <a
+                                            href={`https://osu.ppy.sh/beatmapsets/${viewBeatmap.setId}#osu/${viewBeatmap.id}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
                                             {viewBeatmap.artist} - {viewBeatmap.title} [
                                             {viewBeatmap.difficultyName}]
-                                        </span>
+                                        </a>
                                         <ModIcons
                                             small
                                             mods={modsJsonFromModAcronyms(viewRound.allowed_mods)}
@@ -483,13 +496,20 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                                         type="button"
                                         $minWidth={0}
                                         $active
-                                        action={() => setSelectedRoundIndex(null)}
+                                        action={() =>
+                                            setSelectedRoundIndex(
+                                                liveRoundIndex !== -1 ? null : currentRoundIndex,
+                                            )
+                                        }
                                     >
                                         Return to round {currentRoundIndex + 1} ({currentRoundLabel}
                                         )
                                     </Button>
                                 )}
                             </BannerMetaRow>
+                            {viewBeatmap !== undefined && (
+                                <BeatmapId>{viewRound.beatmap_id}</BeatmapId>
+                            )}
                         </RoundCardBannerContent>
                     </RoundCardBanner>
                     {phaseTimer !== null && (
