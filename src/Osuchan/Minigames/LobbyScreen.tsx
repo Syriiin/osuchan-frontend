@@ -12,14 +12,7 @@ import {
     faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {
-    Button,
-    Label,
-    LoadingSection,
-    ShortTimeAgo,
-    Surface,
-    UnstyledLink,
-} from "../../components";
+import { Button, Label, LoadingSection, ShortTimeAgo, Surface } from "../../components";
 import { ScoreModal } from "../../components/layout/ScoreModal";
 import { ModIcons } from "../../components/layout/ModIcons";
 import {
@@ -491,10 +484,12 @@ const LobbyScreen = observer((props: LobbyScreenProps) => {
                                 </Button>
                             )}
                             {couldJoin && (
-                                <Button as={UnstyledLink} to="/osuauth/login">
-                                    <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login to
-                                    join
-                                </Button>
+                                <a href="/osuauth/login">
+                                    <Button>
+                                        <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login
+                                        to join
+                                    </Button>
+                                </a>
                             )}
                             {canLeave && (
                                 <Button

@@ -244,9 +244,11 @@ const LobbyRow = (props: LobbyRowProps) => {
                             </Button>
                         </div>
                     ) : isJoinable && !store.meStore.isAuthenticated ? (
-                        <Button as={UnstyledLink} to="/osuauth/login">
-                            <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login to join
-                        </Button>
+                        <a href="/osuauth/login">
+                            <Button>
+                                <IconLeft icon={faArrowRightToBracket} fixedWidth /> Login to join
+                            </Button>
+                        </a>
                     ) : null}
                 </ButtonRow>
             </LobbyActions>
@@ -308,9 +310,11 @@ const MinigameList = observer(() => {
                                 <IconLeft icon={faPlus} fixedWidth /> Create Lobby
                             </Button>
                         ) : (
-                            <Button as={UnstyledLink} to="/osuauth/login">
-                                <IconLeft icon={faPlus} fixedWidth /> Login to create a lobby
-                            </Button>
+                            <a href="/osuauth/login">
+                                <Button>
+                                    <IconLeft icon={faPlus} fixedWidth /> Login to create a lobby
+                                </Button>
+                            </a>
                         )}
                         <Button as={UnstyledLink} to="/minigames/history">
                             <IconLeft icon={faClockRotateLeft} fixedWidth /> History

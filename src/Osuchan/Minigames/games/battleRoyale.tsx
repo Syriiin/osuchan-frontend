@@ -112,6 +112,37 @@ const BeatmapLine = styled.div`
     font-size: 0.95em;
 `;
 
+const BeatmapMods = styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const BeatmapModsInner = styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 16px;
+`;
+
+const FreeModLabel = styled.span`
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+`;
+
+const BeatmapId = styled.span`
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 0.75em;
+    opacity: 0.5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+`;
+
 const FinalisingBanner = styled.div`
     text-align: center;
     padding: 15px;
@@ -146,6 +177,13 @@ const StandingScore = styled.span`
 
 const SectionTitle = styled.h4`
     margin: 20px 0 10px 0;
+`;
+
+const SectionTitleRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
 `;
 
 const TimelineList = styled.div`
@@ -461,14 +499,27 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                             <BeatmapLine>
                                 {viewBeatmap !== undefined ? (
                                     <>
-                                        <span>
+                                        <a
+                                            href={`https://osu.ppy.sh/beatmapsets/${viewBeatmap.setId}#osu/${viewBeatmap.id}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
                                             {viewBeatmap.artist} - {viewBeatmap.title} [
                                             {viewBeatmap.difficultyName}]
-                                        </span>
-                                        <ModIcons
-                                            small
-                                            mods={modsJsonFromModAcronyms(viewRound.allowed_mods)}
-                                        />
+                                        </a>
+                                        {viewRound.allowed_mods.length > 0 && (
+                                            <BeatmapMods>
+                                                <FreeModLabel>FreeMods</FreeModLabel>
+                                                <BeatmapModsInner>
+                                                    <ModIcons
+                                                        small
+                                                        mods={modsJsonFromModAcronyms(
+                                                            viewRound.allowed_mods,
+                                                        )}
+                                                    />
+                                                </BeatmapModsInner>
+                                            </BeatmapMods>
+                                        )}
                                     </>
                                 ) : (
                                     <span>Beatmap {viewRound.beatmap_id}</span>
@@ -478,18 +529,10 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                                 <TimelineMeta>
                                     {outcomeText(viewRound.target_teams, roundStatus(viewIndex))}
                                 </TimelineMeta>
-                                {currentRoundIndex !== -1 && viewIndex !== currentRoundIndex && (
-                                    <Button
-                                        type="button"
-                                        $minWidth={0}
-                                        $active
-                                        action={() => setSelectedRoundIndex(null)}
-                                    >
-                                        Return to round {currentRoundIndex + 1} ({currentRoundLabel}
-                                        )
-                                    </Button>
-                                )}
                             </BannerMetaRow>
+                            {viewBeatmap !== undefined && (
+                                <BeatmapId>{viewRound.beatmap_id}</BeatmapId>
+                            )}
                         </RoundCardBannerContent>
                     </RoundCardBanner>
                     {phaseTimer !== null && (
@@ -503,7 +546,23 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
 
             {viewRound !== null && (
                 <>
-                    <SectionTitle>Round {viewIndex + 1} standings</SectionTitle>
+                    <SectionTitleRow>
+                        <SectionTitle>Round {viewIndex + 1} standings</SectionTitle>
+                        {currentRoundIndex !== -1 && viewIndex !== currentRoundIndex && (
+                            <Button
+                                type="button"
+                                $minWidth={0}
+                                $active
+                                action={() =>
+                                    setSelectedRoundIndex(
+                                        liveRoundIndex !== -1 ? null : currentRoundIndex,
+                                    )
+                                }
+                            >
+                                Return to round {currentRoundIndex + 1} ({currentRoundLabel})
+                            </Button>
+                        )}
+                    </SectionTitleRow>
                     {roundStatus(viewIndex) === "upcoming" ? (
                         <EmptyState>This round hasn't started yet.</EmptyState>
                     ) : (
@@ -657,6 +716,13 @@ const SettingsValidation = styled.p`
     margin: 8px 0 0;
 `;
 
+const SettingsHint = styled.p`
+    font-size: 0.8em;
+    color: ${(props) => props.theme.colours.timber};
+    opacity: 0.7;
+    margin: 6px 0 0;
+`;
+
 const BeatmapsLabel = styled(FormLabel)`
     margin-bottom: 10px;
 `;
@@ -778,6 +844,9 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                                 value={row.mods}
                                 onChange={(mods) => updateRowMods(index, mods)}
                             />
+                            <SettingsHint>
+                                Freemod — these mods are optional, players may use any or none.
+                            </SettingsHint>
                             <SettingsRowPreview>
                                 {preview !== undefined && (
                                     <>
