@@ -179,6 +179,13 @@ const SectionTitle = styled.h4`
     margin: 20px 0 10px 0;
 `;
 
+const SectionTitleRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+`;
+
 const TimelineList = styled.div`
     display: flex;
     flex-direction: column;
@@ -522,21 +529,6 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                                 <TimelineMeta>
                                     {outcomeText(viewRound.target_teams, roundStatus(viewIndex))}
                                 </TimelineMeta>
-                                {currentRoundIndex !== -1 && viewIndex !== currentRoundIndex && (
-                                    <Button
-                                        type="button"
-                                        $minWidth={0}
-                                        $active
-                                        action={() =>
-                                            setSelectedRoundIndex(
-                                                liveRoundIndex !== -1 ? null : currentRoundIndex,
-                                            )
-                                        }
-                                    >
-                                        Return to round {currentRoundIndex + 1} ({currentRoundLabel}
-                                        )
-                                    </Button>
-                                )}
                             </BannerMetaRow>
                             {viewBeatmap !== undefined && (
                                 <BeatmapId>{viewRound.beatmap_id}</BeatmapId>
@@ -554,7 +546,23 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
 
             {viewRound !== null && (
                 <>
-                    <SectionTitle>Round {viewIndex + 1} standings</SectionTitle>
+                    <SectionTitleRow>
+                        <SectionTitle>Round {viewIndex + 1} standings</SectionTitle>
+                        {currentRoundIndex !== -1 && viewIndex !== currentRoundIndex && (
+                            <Button
+                                type="button"
+                                $minWidth={0}
+                                $active
+                                action={() =>
+                                    setSelectedRoundIndex(
+                                        liveRoundIndex !== -1 ? null : currentRoundIndex,
+                                    )
+                                }
+                            >
+                                Return to round {currentRoundIndex + 1} ({currentRoundLabel})
+                            </Button>
+                        )}
+                    </SectionTitleRow>
                     {roundStatus(viewIndex) === "upcoming" ? (
                         <EmptyState>This round hasn't started yet.</EmptyState>
                     ) : (
