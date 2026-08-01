@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import type { AxiosError } from "axios";
 import {
     Button,
     FormLabel,
@@ -301,9 +302,15 @@ function useNow(intervalMs = 1000): number {
 }
 
 function parseBeatmapId(input: string): number | null {
-    const match = input.trim().match(/(\d+)[^\d]*$/);
+    const trimmed = input.trim();
+    if (trimmed.length === 0) return null;
+    if (/^\d+$/.test(trimmed)) {
+        const id = parseInt(trimmed, 10);
+        return Number.isFinite(id) && id > 0 ? id : null;
+    }
+    const match = trimmed.match(/#[A-Za-z]+\/(\d+)$/) ?? trimmed.match(/\/beatmaps\/(\d+)$/);
     if (match === null) return null;
-    const id = parseInt(match[1]);
+    const id = parseInt(match[1], 10);
     return Number.isFinite(id) && id > 0 ? id : null;
 }
 
@@ -748,12 +755,14 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
     const [intermission, setIntermission] = useState(
         (minigame.config.intermission as number) ?? 60,
     );
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     useEffect(() => {
         setRows(rowsFromConfig(minigame.config));
         setPlayStartWindow((minigame.config.play_start_window as number) ?? 30);
         setSubmissionBuffer((minigame.config.submission_buffer as number) ?? 30);
         setIntermission((minigame.config.intermission as number) ?? 60);
+        setSubmitError(null);
     }, [minigame.config]);
 
     const parsedIds = rows.map((row) => parseBeatmapId(row.id));
@@ -766,6 +775,13 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
         const map = new Map<number, Beatmap>();
         previewQueries.forEach((query, i) => {
             if (query.data !== undefined) map.set(validIds[i], query.data);
+        });
+        return map;
+    }, [previewQueries, validIds]);
+    const settledById = useMemo(() => {
+        const map = new Map<number, boolean>();
+        previewQueries.forEach((query, i) => {
+            map.set(validIds[i], query.isFetched);
         });
         return map;
     }, [previewQueries, validIds]);
@@ -800,20 +816,29 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
         [rows],
     );
     const hasValidBeatmaps = beatmaps.length > 0;
+    const allRowsValid = rows.every(
+        (row) => row.id.trim() === "" || parseBeatmapId(row.id) !== null,
+    );
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!hasValidBeatmaps) return;
-        await updateMutation.mutateAsync({
-            id: minigame.id,
-            settings: {
-                beatmaps,
-                play_start_window: playStartWindow,
-                submission_buffer: submissionBuffer,
-                intermission,
-            },
-        });
-        onClose();
+        if (!hasValidBeatmaps || !allRowsValid) return;
+        setSubmitError(null);
+        try {
+            await updateMutation.mutateAsync({
+                id: minigame.id,
+                settings: {
+                    beatmaps,
+                    play_start_window: playStartWindow,
+                    submission_buffer: submissionBuffer,
+                    intermission,
+                },
+            });
+            onClose();
+        } catch (error) {
+            const detail = (error as AxiosError<{ detail: string }>)?.response?.data?.detail;
+            setSubmitError(detail ?? "Failed to save settings.");
+        }
     };
 
     return (
@@ -825,6 +850,10 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                 {rows.map((row, index) => {
                     const beatmapId = parsedIds[index];
                     const preview = beatmapId !== null ? previewById.get(beatmapId) : undefined;
+                    const unknown =
+                        beatmapId !== null &&
+                        preview === undefined &&
+                        settledById.get(beatmapId) === true;
                     return (
                         <SettingsRow key={index}>
                             <SettingsRowHeader>
@@ -861,6 +890,7 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                                     </>
                                 )}
                             </SettingsRowPreview>
+                            {unknown && <SettingsValidation>Unknown beatmap.</SettingsValidation>}
                         </SettingsRow>
                     );
                 })}
@@ -870,6 +900,11 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                 {!hasValidBeatmaps && (
                     <SettingsValidation>
                         Add at least one beatmap to save settings.
+                    </SettingsValidation>
+                )}
+                {hasValidBeatmaps && !allRowsValid && (
+                    <SettingsValidation>
+                        Fix invalid beatmap inputs to save settings.
                     </SettingsValidation>
                 )}
 
@@ -910,10 +945,11 @@ const BattleRoyaleSettings = (props: BattleRoyaleSettingsProps) => {
                     $positive
                     type="submit"
                     isLoading={updateMutation.isPending}
-                    disabled={!hasValidBeatmaps}
+                    disabled={!hasValidBeatmaps || !allRowsValid}
                 >
                     <IconLeft icon={faCheck} fixedWidth /> Save
                 </BattleRoyaleSubmit>
+                {submitError !== null && <SettingsValidation>{submitError}</SettingsValidation>}
             </form>
         </SimpleModal>
     );
