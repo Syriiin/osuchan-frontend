@@ -2,6 +2,8 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import styled, { ThemeProvider, useTheme } from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import {
     AbsoluteDate,
@@ -10,9 +12,11 @@ import {
     NumberFormat,
     ScoreModal,
     Surface,
+    Tooltip,
     UnstyledLink,
 } from "../../../components";
 import type { Score } from "../../../store/models/profiles/types";
+import type { EventStats } from "../../../store/models/events/types";
 import { ShortTimeAgo } from "../../../components/layout/TimeAgo";
 import { ResourceStatus } from "../../../store/status";
 import { useStore } from "../../../utils/hooks";
@@ -20,6 +24,7 @@ import {
     formatGamemodeName,
     formatGamemodeNameShort,
     gamemodeIcon,
+    formatPlayTime,
 } from "../../../utils/formatting";
 import { setCssCustomProperties, clearCssCustomProperties } from "../../../utils/general";
 import AddAttendeeModal from "./AddAttendeeModal";
@@ -76,6 +81,94 @@ const SectionHeader = styled.div`
     justify-content: space-between;
     margin-bottom: 15px;
 `;
+
+const StatsGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    @media (min-width: 600px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: 900px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+`;
+
+const StatCard = styled.div`
+    background-color: ${(props) => props.theme.colours.foreground};
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+`;
+
+const StatValue = styled.div`
+    font-size: 1.4em;
+    font-weight: 700;
+`;
+
+const StatLabel = styled.div`
+    font-size: 0.8em;
+    color: ${(props) => props.theme.colours.timber};
+    margin-top: 4px;
+`;
+
+const InfoIcon = styled(FontAwesomeIcon)`
+    color: ${(props) => props.theme.colours.timber};
+    cursor: help;
+`;
+
+const EventStatsPanel = ({ stats }: { stats: EventStats }) => (
+    <>
+        <StatsGrid>
+            <StatCard>
+                <StatValue>
+                    <NumberFormat value={stats.totalScores} />
+                </StatValue>
+                <StatLabel>Scores</StatLabel>
+            </StatCard>
+            <StatCard>
+                <StatValue>
+                    <NumberFormat value={stats.totalPp} decimalPlaces={0} />
+                </StatValue>
+                <StatLabel>
+                    Total PP{" "}
+                    <Tooltip content="Sum of the pp of every submitted score, not weighted.">
+                        <InfoIcon icon={faCircleInfo} />
+                    </Tooltip>
+                </StatLabel>
+            </StatCard>
+            <StatCard>
+                <StatValue>
+                    <NumberFormat value={stats.totalRegularHits} />
+                </StatValue>
+                <StatLabel>
+                    Circles Clicked{" "}
+                    <Tooltip content="+ fruits caught, drums hit, keys played.">
+                        <InfoIcon icon={faCircleInfo} />
+                    </Tooltip>
+                </StatLabel>
+            </StatCard>
+            <StatCard>
+                <StatValue>{formatPlayTime(stats.totalPlayTime)}</StatValue>
+                <StatLabel>Played</StatLabel>
+            </StatCard>
+            <StatCard>
+                <StatValue>
+                    <NumberFormat value={stats.uniqueCountries} />
+                </StatValue>
+                <StatLabel>Countries</StatLabel>
+            </StatCard>
+            <StatCard>
+                <StatValue>
+                    <NumberFormat value={stats.uniqueMaps} />
+                </StatValue>
+                <StatLabel>Unique Beatmaps Played</StatLabel>
+            </StatCard>
+        </StatsGrid>
+    </>
+);
 
 const MAX_VISIBLE_AVATARS = 10;
 
@@ -372,6 +465,15 @@ const EventHome = observer(() => {
                             </EventInfo>
                         </EventHeader>
                     </EventSurface>
+
+                    {event.stats && (
+                        <EventSurface>
+                            <SectionHeader>
+                                <SectionTitle>Event Stats</SectionTitle>
+                            </SectionHeader>
+                            <EventStatsPanel stats={event.stats} />
+                        </EventSurface>
+                    )}
 
                     <EventSurface>
                         <SectionHeader>
