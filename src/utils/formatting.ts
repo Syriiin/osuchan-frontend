@@ -9,6 +9,22 @@ export function formatTime(seconds: number) {
     return `${minutesString}:${("00" + secondsString).substring(secondsString.length)}`;
 }
 
+export function formatPlayTime(seconds: number) {
+    // convert seconds to a human-readable duration like "4h 20m" or "2m 15s"
+    seconds = Math.round(seconds);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+    if (minutes > 0) {
+        return `${minutes}m ${remainingSeconds}s`;
+    }
+    return `${remainingSeconds}s`;
+}
+
 export function formatModName(modAcronym: string) {
     switch (modAcronym) {
         case ModAcronym.NoFail:

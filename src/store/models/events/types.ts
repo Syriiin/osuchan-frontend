@@ -13,6 +13,18 @@ export interface Event {
     endDate: Date;
     creationTime: Date;
     organisers: OsuUser[];
+    stats: EventStats | null;
+}
+
+export interface EventStats {
+    totalScores: number;
+    totalRegularHits: number;
+    totalPlayTime: number;
+    totalPp: number;
+    uniquePlayers: number;
+    uniqueCountries: number;
+    uniqueMaps: number;
+    lastUpdated: Date;
 }
 
 export interface EventAttendee {

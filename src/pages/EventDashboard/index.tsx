@@ -7,14 +7,16 @@ import { LoadingPage } from "../../components";
 import { setCssCustomProperties, clearCssCustomProperties } from "../../utils/general";
 import { useEventDashboard } from "../../store/events/api";
 import type { DashboardData, LeaderboardDetailData, ChallengeScores } from "../../store/events/api";
-import type { BeatmapChallenge } from "../../store/models/events/types";
+import type { BeatmapChallenge, EventStats } from "../../store/models/events/types";
 import LeaderboardSlide from "./LeaderboardSlide";
 import ChallengesSlide from "./ChallengesSlide";
+import StatsSlide from "./StatsSlide";
 import SlideIndicator from "./SlideIndicator";
 
 type DashboardSlide =
     | { type: "leaderboard"; data: LeaderboardDetailData }
-    | { type: "challenges"; challenges: BeatmapChallenge[]; challengeScores: ChallengeScores };
+    | { type: "challenges"; challenges: BeatmapChallenge[]; challengeScores: ChallengeScores }
+    | { type: "stats"; stats: EventStats };
 
 const DashboardWrapper = styled.div`
     background-color: ${(props) => props.theme.colours.background};
@@ -166,13 +168,24 @@ const SlideWrapper = styled.div<{ $visible: boolean }>`
 `;
 
 function buildSlides(data: DashboardData): DashboardSlide[] {
+    const slides: DashboardSlide[] = [];
+
+    if (data.event.stats) {
+        slides.push({
+            type: "stats" as const,
+            stats: data.event.stats,
+        });
+    }
+
     const sorted = [...data.leaderboardDetails].sort(
         (a, b) => a.eventLeaderboardId - b.eventLeaderboardId,
     );
-    const slides: DashboardSlide[] = sorted.map((d) => ({
-        type: "leaderboard" as const,
-        data: d,
-    }));
+    sorted.forEach((d) =>
+        slides.push({
+            type: "leaderboard" as const,
+            data: d,
+        }),
+    );
 
     if (data.challenges.length > 0) {
         slides.push({
@@ -227,7 +240,9 @@ const EventDashboard = observer(() => {
     const slideTitle = currentSlide
         ? currentSlide.type === "leaderboard"
             ? currentSlide.data.leaderboard.name
-            : "Challenges"
+            : currentSlide.type === "stats"
+              ? "Event Stats"
+              : "Challenges"
         : "";
 
     useEffect(() => {
@@ -289,7 +304,11 @@ const EventDashboard = observer(() => {
                         <SlideTitle>
                             <SlideTitleText>{slideTitle}</SlideTitleText>
                             <SlideSubtitle>
-                                {currentSlide?.type === "leaderboard" ? "Leaderboard" : ""}
+                                {currentSlide?.type === "leaderboard"
+                                    ? "Leaderboard"
+                                    : currentSlide?.type === "stats"
+                                      ? "Event"
+                                      : ""}
                             </SlideSubtitle>
                         </SlideTitle>
                     </HeaderSection>
@@ -305,6 +324,7 @@ const EventDashboard = observer(() => {
                 <SlideContainer>
                     {slides.map((slide, i) => (
                         <SlideWrapper key={i} $visible={i === currentIndex}>
+                            {slide.type === "stats" && <StatsSlide stats={slide.stats} />}
                             {slide.type === "leaderboard" && <LeaderboardSlide data={slide.data} />}
                             {slide.type === "challenges" && (
                                 <ChallengesSlide

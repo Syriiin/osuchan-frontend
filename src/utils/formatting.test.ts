@@ -2,6 +2,7 @@ import { Gamemode } from "../store/models/common/enums";
 import { ScoreResult } from "../store/models/profiles/enums";
 import {
     formatTime,
+    formatPlayTime,
     formatModName,
     formatScoreResult,
     formatGamemodeName,
@@ -29,6 +30,24 @@ describe("formatTime", () => {
 
     test("rounds fractional seconds", () => {
         expect(formatTime(90.7)).toBe("1:31");
+    });
+});
+
+describe("formatPlayTime", () => {
+    test("formats sub-minute seconds", () => {
+        expect(formatPlayTime(45)).toBe("45s");
+    });
+
+    test("formats minutes and seconds", () => {
+        expect(formatPlayTime(185)).toBe("3m 5s");
+    });
+
+    test("formats hours and minutes", () => {
+        expect(formatPlayTime(15623)).toBe("4h 20m");
+    });
+
+    test("rounds fractional seconds", () => {
+        expect(formatPlayTime(90.7)).toBe("1m 31s");
     });
 });
 

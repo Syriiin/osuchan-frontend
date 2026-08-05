@@ -1,6 +1,6 @@
 import { beatmapFromJson, osuUserFromJson } from "../profiles/deserialisers";
 import { leaderboardFromJson } from "../leaderboards/deserialisers";
-import type { BeatmapChallenge, Event, EventAttendee, EventLeaderboard } from "./types";
+import type { BeatmapChallenge, Event, EventAttendee, EventLeaderboard, EventStats } from "./types";
 
 export function eventFromJson(data: any): Event {
     return {
@@ -17,6 +17,24 @@ export function eventFromJson(data: any): Event {
             data["organisers"] === null
                 ? []
                 : data["organisers"].map((o: any) => osuUserFromJson(o)),
+        stats: eventStatsFromJson(data["stats"]),
+    };
+}
+
+function eventStatsFromJson(data: any): EventStats | null {
+    if (data === null || data === undefined) {
+        return null;
+    }
+
+    return {
+        totalScores: data["total_scores"],
+        totalRegularHits: data["total_regular_hits"],
+        totalPlayTime: data["total_play_time"],
+        totalPp: data["total_pp"],
+        uniquePlayers: data["unique_players"],
+        uniqueCountries: data["unique_countries"],
+        uniqueMaps: data["unique_maps"],
+        lastUpdated: new Date(data["last_updated"]),
     };
 }
 
