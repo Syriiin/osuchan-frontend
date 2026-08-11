@@ -303,7 +303,7 @@ const MinigameList = observer(() => {
                     <SurfaceHeaderContainer>
                         <SurfaceTitle>
                             Minigames
-                            <BetaBadge>Closed beta for COE 2026</BetaBadge>
+                            <BetaBadge>Open beta</BetaBadge>
                         </SurfaceTitle>
                         {meStore.isAuthenticated ? (
                             <Button action={() => setCreateModalOpen(true)}>
