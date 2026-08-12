@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { observer } from "mobx-react-lite";
 import styled, { ThemeProvider, useTheme } from "styled-components";
 
 import { LoadingPage } from "../../components";
-import { setCssCustomProperties, clearCssCustomProperties } from "../../utils/general";
+import type { ChallengeScores, DashboardData, LeaderboardDetailData } from "../../store/events/api";
 import { useEventDashboard } from "../../store/events/api";
-import type { DashboardData, LeaderboardDetailData, ChallengeScores } from "../../store/events/api";
 import type { BeatmapChallenge, EventStats } from "../../store/models/events/types";
-import LeaderboardSlide from "./LeaderboardSlide";
+import { clearCssCustomProperties, setCssCustomProperties } from "../../utils/general";
 import ChallengesSlide from "./ChallengesSlide";
-import StatsSlide from "./StatsSlide";
+import LeaderboardSlide from "./LeaderboardSlide";
 import SlideIndicator from "./SlideIndicator";
+import StatsSlide from "./StatsSlide";
 
 type DashboardSlide =
     | { type: "leaderboard"; data: LeaderboardDetailData }
@@ -198,7 +197,7 @@ function buildSlides(data: DashboardData): DashboardSlide[] {
     return slides;
 }
 
-const EventDashboard = observer(() => {
+const EventDashboard = () => {
     const { slug } = useParams<{ slug: string }>();
 
     const { data, isLoading, error } = useEventDashboard(slug!);
@@ -368,6 +367,6 @@ const EventDashboard = observer(() => {
             </DashboardWrapper>
         </ThemeProvider>
     );
-});
+};
 
 export default EventDashboard;

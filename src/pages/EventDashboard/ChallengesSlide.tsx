@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { ShortTimeAgo, Flag } from "../../components";
 import { formatGamemodeName, gamemodeIcon } from "../../utils/formatting";
@@ -202,7 +201,7 @@ interface ChallengesSlideProps {
     challengeScores: ChallengeScores;
 }
 
-const ChallengesSlide = observer(({ challenges, challengeScores }: ChallengesSlideProps) => (
+const ChallengesSlide = ({ challenges, challengeScores }: ChallengesSlideProps) => (
     <Slide>
         {challenges.length === 0 ? (
             <EmptyText>No challenges yet.</EmptyText>
@@ -273,6 +272,6 @@ const ChallengesSlide = observer(({ challenges, challengeScores }: ChallengesSli
             </CardGrid>
         )}
     </Slide>
-));
+);
 
 export default ChallengesSlide;

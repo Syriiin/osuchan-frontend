@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
@@ -52,7 +51,7 @@ interface StatsSlideProps {
     stats: EventStats;
 }
 
-const StatsSlide = observer(({ stats }: StatsSlideProps) => (
+const StatsSlide = ({ stats }: StatsSlideProps) => (
     <Slide>
         <StatsGrid>
             <StatCard>
@@ -101,6 +100,6 @@ const StatsSlide = observer(({ stats }: StatsSlideProps) => (
             </StatCard>
         </StatsGrid>
     </Slide>
-));
+);
 
 export default StatsSlide;

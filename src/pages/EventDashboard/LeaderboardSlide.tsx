@@ -1,10 +1,9 @@
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { Flag, ModIcons, NumberFormat, TimeAgo } from "../../components";
+import type { LeaderboardDetailData } from "../../store/events/api";
 import type { Membership } from "../../store/models/leaderboards/types";
 import type { Score } from "../../store/models/profiles/types";
 import { formatScoreResult } from "../../utils/formatting";
-import type { LeaderboardDetailData } from "../../store/events/api";
 
 const Slide = styled.div`
     flex: 1;
@@ -220,7 +219,7 @@ interface MemberRankingRowProps {
     rank: number;
 }
 
-const MemberRankingRow = observer(({ membership, rank }: MemberRankingRowProps) => (
+const MemberRankingRow = ({ membership, rank }: MemberRankingRowProps) => (
     <MemberRow>
         <MemberRank>#{rank}</MemberRank>
         <MemberAvatar src={`https://a.ppy.sh/${membership.osuUserId}`} />
@@ -236,13 +235,13 @@ const MemberRankingRow = observer(({ membership, rank }: MemberRankingRowProps) 
             pp
         </MemberPP>
     </MemberRow>
-));
+);
 
 interface ScoreRowDisplayProps {
     score: Score;
 }
 
-const ScoreRowDisplay = observer(({ score }: ScoreRowDisplayProps) => {
+const ScoreRowDisplay = ({ score }: ScoreRowDisplayProps) => {
     const userStats = score.userStats!;
     const beatmap = score.beatmap!;
 
@@ -286,13 +285,13 @@ const ScoreRowDisplay = observer(({ score }: ScoreRowDisplayProps) => {
             </ScoreInfo>
         </ScoreRowWrapper>
     );
-});
+};
 
 interface LeaderboardSlideProps {
     data: LeaderboardDetailData;
 }
 
-const LeaderboardSlide = observer(({ data }: LeaderboardSlideProps) => {
+const LeaderboardSlide = ({ data }: LeaderboardSlideProps) => {
     const displayedRankings = data.rankings.slice(0, 15);
     const displayedScores = data.scores.slice(0, 15);
 
@@ -325,6 +324,6 @@ const LeaderboardSlide = observer(({ data }: LeaderboardSlideProps) => {
             </Panels>
         </Slide>
     );
-});
+};
 
 export default LeaderboardSlide;

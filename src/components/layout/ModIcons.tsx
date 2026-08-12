@@ -6,7 +6,6 @@ import { formatModName } from "../../utils/formatting";
 import type { ModsJson } from "../../store/models/profiles/types";
 import { modAcronymsFromJsonMods } from "../../utils/osu";
 import { ModAcronym } from "../../store/models/common/enums";
-import { observer } from "mobx-react-lite";
 
 const ModImage = styled.img`
     max-height: 100%;
@@ -65,7 +64,7 @@ interface ModIconProps {
     small?: boolean;
 }
 
-export const ModIcons = observer((props: ModIconsProps) => {
+export const ModIcons = (props: ModIconsProps) => {
     const mods = modAcronymsFromJsonMods(props.mods);
     return (
         <>
@@ -76,7 +75,7 @@ export const ModIcons = observer((props: ModIconsProps) => {
             ))}
         </>
     );
-});
+};
 
 interface ModIconsProps {
     mods: ModsJson;
