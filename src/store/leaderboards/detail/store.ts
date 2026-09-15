@@ -31,6 +31,7 @@ export class DetailStore {
     isInviting = false;
     isCancellingInvite = false;
     loadingMembershipStatus = ResourceStatus.NotLoaded;
+    isLoadingMoreMembershipScores = false;
     isJoiningLeaderboard = false;
     isLeavingLeaderboard = false;
     isKickingMember = false;
@@ -53,6 +54,7 @@ export class DetailStore {
             invitePlayers: flow,
             cancelInvite: flow,
             loadMembership: flow,
+            loadMoreMembershipScores: flow,
             joinLeaderboard: flow,
             leaveLeaderboard: flow,
             kickMember: flow,
@@ -321,12 +323,17 @@ export class DetailStore {
     *loadMembership(userId: number): any {
         this.loadingMembershipStatus = ResourceStatus.Loading;
         this.membership = null;
+        this.membershipScores.clear();
 
         try {
             const membershipResponse = yield http.get(`${this.resourceUrl}/members/${userId}`);
             const membership: Membership = membershipFromJson(membershipResponse.data);
 
-            const scoresResponse = yield http.get(`${this.resourceUrl}/members/${userId}/scores`);
+            const scoresResponse = yield http.get(`${this.resourceUrl}/members/${userId}/scores`, {
+                params: {
+                    limit: 5,
+                },
+            });
             const scores: Score[] = scoresResponse.data.map((data: any) =>
                 scoreFromJson(
                     data,
@@ -344,6 +351,40 @@ export class DetailStore {
 
             this.loadingMembershipStatus = ResourceStatus.Error;
         }
+    }
+
+    *loadMoreMembershipScores(): any {
+        if (this.membership === null || this.isLoadingMoreMembershipScores) {
+            return;
+        }
+
+        this.isLoadingMoreMembershipScores = true;
+
+        try {
+            const scoresResponse = yield http.get(
+                `${this.resourceUrl}/members/${this.membership.osuUserId}/scores`,
+                {
+                    params: {
+                        limit: 100,
+                    },
+                },
+            );
+            const scores: Score[] = scoresResponse.data.map((data: any) =>
+                scoreFromJson(
+                    data,
+                    this.leaderboard?.calculatorEngine,
+                    this.leaderboard?.primaryPerformanceValue,
+                ),
+            );
+
+            this.membershipScores.replace(scores);
+        } catch (error: any) {
+            console.log(error);
+
+            notify.negative("Failed to load more scores");
+        }
+
+        this.isLoadingMoreMembershipScores = false;
     }
 
     *joinLeaderboard(): any {

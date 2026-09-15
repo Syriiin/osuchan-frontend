@@ -66,13 +66,14 @@ const MemberInfo = observer((props: { userId?: string }) => {
     const { loadingMembershipStatus, leaderboard, membership, membershipScores } = detailStore;
     const { isAuthenticated, user } = meStore;
 
+    const [showAllScores, setShowAllScores] = useState(false);
+
     useEffect(() => {
         if (leaderboard !== null && !isNaN(userId)) {
+            setShowAllScores(false);
             detailStore.loadMembership(userId);
         }
     }, [userId, leaderboard, detailStore]);
-
-    const [showAllScores, setShowAllScores] = useState(false);
 
     return (
         <>
@@ -139,8 +140,18 @@ const MemberInfo = observer((props: { userId?: string }) => {
                             <ScoreRow key={i} score={score} hidePlayerInfo />
                         ),
                     )}
-                    {membershipScores.length <= 5 || showAllScores || (
-                        <Button type="button" $fullWidth action={() => setShowAllScores(true)}>
+                    {membership.scoreCount <= 5 || showAllScores || (
+                        <Button
+                            type="button"
+                            $fullWidth
+                            isLoading={detailStore.isLoadingMoreMembershipScores}
+                            action={() => {
+                                void (async () => {
+                                    await detailStore.loadMoreMembershipScores();
+                                    setShowAllScores(true);
+                                })();
+                            }}
+                        >
                             Show More
                         </Button>
                     )}
