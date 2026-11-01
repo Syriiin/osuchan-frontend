@@ -51,7 +51,7 @@
         "@types/react-transition-group": "^4.4.12",
         "@vitejs/plugin-react": "^6.0.3",
         "jsdom": "^29.1.1",
-        "oxfmt": "^0.59.0",
+        "oxfmt": "^0.75.0",
         "oxlint": "^1.74.0",
         "oxlint-tsgolint": "^0.25.0",
         "typescript": "~7.0.2",
