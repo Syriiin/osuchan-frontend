@@ -604,7 +604,9 @@ const BattleRoyaleGame = (props: BattleRoyaleGameProps) => {
                             <EliminatedSummary>
                                 {viewRound.eliminated_team_ids.length}{" "}
                                 {minigame.isFreeForAll ? "player" : "team"}
-                                {viewRound.eliminated_team_ids.length > 1 ? "s" : ""} eliminated:{" "}
+                                {viewRound.eliminated_team_ids.length > 1
+                                    ? "s"
+                                    : ""} eliminated:{" "}
                                 {viewRound.eliminated_team_ids
                                     .map((teamId) => teamById.get(teamId)?.name ?? `Team ${teamId}`)
                                     .join(", ")}
