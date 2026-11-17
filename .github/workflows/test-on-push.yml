@@ -4,7 +4,7 @@ jobs:
     checkfixup:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
             - run: make checkfixup
@@ -12,34 +12,34 @@ jobs:
     lint:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - run: make setup
             - run: make lint
 
     typecheck:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - run: make setup
             - run: make typecheck
 
     checkformatting:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - run: make setup
             - run: make checkformatting
 
     test:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - run: make setup
             - run: make test
 
     build:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - run: make setup
             - run: make build
